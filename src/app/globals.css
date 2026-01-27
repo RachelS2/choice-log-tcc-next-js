@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+/* :root {
+  --white: #ffffff;
+  --brown: #6C4430;
+  --background: var(--white);
+  --foreground: var(--white);
+  --darkBlue: #1F3A5F;
+  --darkdarkBlue: #626945;
+  --lightdarkBlue: #909965;
+  --lightBrown: #A06D3E;
+  --beige: #E8D5B7;
+  --mediumBeige: #D9C6A7;
+  --offWhite: #F2F2F2;
+} */
+
+:root {
+  /* Base */
+  --white: #FFFFFF;
+  --offWhite: #F2F2F2;
+  --lightGray: #E5E7EB;
+  --mediumGray: #9CA3AF;
+  --darkGray: #69707c;
+  --superDarkGray: #374151;
+
+  /* Azul principal */
+  --darkBlue: #1F3A5F;
+  --blue: #4273ac;
+  --lightBlue: #EAF0F6;
+
+  /* Estados */
+  --success: #4CAF50;
+  --error: #E57373;
+  --warning: #FBC02D;
+
+  /* Ação / destaque */
+  --accent: #0e2394;
+
+  /* Sistema */
+  --background: var(--offWhite);
+  --foreground: var(--superDarkGray);
+} 
+
+@theme {
+   /* Base */
+  --color-white: #FFFFFF;
+  --color-offWhite: #F2F2F2;
+  --color-lightGray: #E5E7EB;
+  --color-mediumGray: #9CA3AF;
+  --color-darkGray: #69707c;
+  --color-superDarkGray: #374151;
+  --color-darkBlue: #1F3A5F;
+  --color-blue: #4273ac;
+  --color-lightBlue: #EAF0F6;
+  
+  /* Azul principal */
+  --color-darkBlue: #1F3A5F;
+  --color-blue: #4273ac;
+  --color-lightBlue: #EAF0F6;
+
+  --color-success: #4CAF50;
+  --color-error: #E57373;
+  --color-warning: #FBC02D;
+
+    /* Ação / destaque */
+  --color-accent: #3F51B5;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #ededed;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  
+  background: var(--background);
+  color: var(--foreground);
+  color: var(--foreground);
+  font-family: Kaisei_Tokumin, 'Times New Roman', Times, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+main{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--offWhite);
+}
+
+* {
+  box-sizing: border-box;
+  /* padding: 0;
+  margin: 0; */
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
+
+
+/* Remove fundo azul claro do <inpu> quando a pessoa insere o email */
+input:-webkit-autofill {
+  background-color: var(--white) !important;
+  -webkit-box-shadow: 0 0 0 30px var(--white) inset !important;
+  -webkit-text-fill-color: #000 !important;
+}

@@ -1,19 +1,6 @@
 @import "tailwindcss";
 
-/* :root {
-  --white: #ffffff;
-  --brown: #6C4430;
-  --background: var(--white);
-  --foreground: var(--white);
-  --darkBlue: #1F3A5F;
-  --darkdarkBlue: #626945;
-  --lightdarkBlue: #909965;
-  --lightBrown: #A06D3E;
-  --beige: #E8D5B7;
-  --mediumBeige: #D9C6A7;
-  --offWhite: #F2F2F2;
-} */
-
+/* NOTE: :root só está descomentada para eu ter visualização rápida das cores.*/
 :root {
   /* Base */
   --white: #FFFFFF;

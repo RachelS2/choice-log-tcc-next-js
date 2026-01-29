@@ -3,12 +3,14 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import AppLogo from '@/app/ui/app_logo'
+import AppLogo from '@/app/ui/app-logo'
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const linkClass : string=
     "flex items-center justify-center transition-colors hover:brightness-110 aria-disabled:cursor-not-allowed px-3 aria-disabled:opacity-50 rounded-full hover:bg-blue h-10";
+
+  const hamburgerMenuClass: string = "flex items-center justify-center w-[130px] transition-colors hover:brightness-110 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 md:w-[140px] rounded hover:bg-darkBlue h-10";
 
   return (
 
@@ -39,16 +41,13 @@ export function Header() {
 
       {/* Menu mobile dropdown - Hamburguer */}
       {isOpen && (
+        
         <nav className="absolute items-center justify-center top-[100px] w-full right-0 bg-accent flex flex-row items-center gap-4 py-4 px-4 text-lg md:hidden z-40">
-          <Link href="/how-it-works" className="whitespace-nowrap" onClick={() => setIsOpen(false)}>How It Works</Link>
-          <Link href="/resources"  onClick={() => setIsOpen(false)}>Resources</Link>
-          <Link href="/about"  onClick={() => setIsOpen(false)}>About</Link>
-          <Link href="/login" className="flex items-center justify-center w-[80px] transition-colors hover:brightness-110 aria-disabled:cursor-not-allowed aria-disabled:opacity-50
-         md:w-[110px] bg-darkBlue rounded-full hover:bg-[var(--darkdarkBlue)] h-10 ">Log In</Link>
-          {/* <Button className="w-[90px] bg-darkBlue hover:bg-lightdarkBlue">Log In</Button> */}
-          <Link href="/start-now" className="flex items-center justify-center w-[130px] transition-colors hover:brightness-110 aria-disabled:cursor-not-allowed aria-disabled:opacity-50
-         md:w-[140px] bg-darkBlue rounded-full hover:bg-[var(--darkdarkBlue)] h-10 ">Start Now</Link>
-          {/* <Button className="whitespace-nowrap w-[170px] md:w-[180px]  bg-darkBlue hover:bg-lightdarkBlue">Start Now</Button> */}
+          <Link href="/how-it-works" className={`${hamburgerMenuClass} whitespace-nowrap`} onClick={() => setIsOpen(false)}>How It Works</Link>
+          <Link href="/resources" className={`${hamburgerMenuClass}`}  onClick={() => setIsOpen(false)}>Resources</Link>
+          <Link href="/about"  className={`${hamburgerMenuClass}`}  onClick={() => setIsOpen(false)}>About</Link>
+          <Link href="/login" className={`${hamburgerMenuClass}`} >Log In</Link>
+          <Link href="/start-now"  className={`${hamburgerMenuClass}`} >Start Now</Link>
         </nav>
       )}
     </header>

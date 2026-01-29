@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins, Kaisei_Tokumin } from "next/font/google";
 import "./globals.css";
-import {Header} from "@/app/ui/header"
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -40,7 +39,6 @@ export default function RootLayout({
       <body
         className={` ${kaiseiTokumin.variable} ${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
       >
-        <Header />
         {children}
       </body>
     </html>

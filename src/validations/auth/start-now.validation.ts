@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 
-const userNickNameSchema : z.ZodString = z
+const userNameSchema : z.ZodString = z
   .string()
-  .nonempty("Username is required")
-  .min(5, "Username must have at least 5 characters")
-  .max(15, "Username must have at tops 15 characters")
+  .nonempty("Username is required.")
+  .min(5, "Username must have at least 5 characters.")
+  .max(15, "Username must have at tops 15 characters.")
   .regex(
     /^[a-zA-Z0-9_]+$/,
     "Username must contain only letters, numbers and '_'"
@@ -18,55 +18,44 @@ const passwordSchema : z.ZodString = z
 .max(30, "Password must have at tops 30 characters")
 .regex(
   /[a-z]/,
-  "A senha deve conter ao menos uma letra minúscula"
+  "The password must contain at least one lowercase letter."
 )
 .regex(
   /[A-Z]/,
-  "A senha deve conter ao menos uma letra maiúscula"
+  "The password must contain at least one uppercase letter."
 )
 .regex(
   /[0-9]/,
-  "A senha deve conter ao menos um número"
+  "The password must contain at least one number."
 )
 .regex(
   /[^a-zA-Z0-9]/,
-  "A senha deve conter ao menos um caractere especial"
+  "The password must contain at least one special character."
 );
 
-const userNameSchema : z.ZodString = z 
-.string()
-.nonempty("Username is required")
-.min(5, "Username must have at least 5 characters")
-.max(50, "Username must have at tops 50 characters")
-.regex(
-  /^[a-zA-Z0 ]+$/,
-  "Username must contain only letters."
-);
 
 // Schema para validação do formulário de cadastro de usuário:
-export const startNowSchema = z
+export const startNowSchema : z.ZodObject<{
+    email: z.ZodEmail;
+    username: z.ZodString;
+    password: z.ZodString;
+    confirmPassword: z.ZodString;
+}, z.core.$strip> = z
   .object({
     email: z.email("E-mail inválido"),
-    nickname: userNickNameSchema,
+    username: userNameSchema,
     password: passwordSchema,
-    confirmPassword: z.string(),
-    userName: userNameSchema,
+    confirmPassword: z.string().nonempty("Password confirmation is required"),
   })
-  .refine(
-    (data) => data.password === data.confirmPassword,
-    {
-      path: ["confirmPassword"],
-      message: "Passwords do not match",
+  .superRefine((data, ctx) => {
+    const passwordCheck = passwordSchema.safeParse(data.password);
+
+    if (passwordCheck.error) return; // Se a senha não for válida, não faz a verificação de correspondência
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        path: ["confirmPassword"],
+        message: "Passwords do not match",
+        code: z.ZodIssueCode.custom,
+      });
     }
-  );
-
-
-export type UserRegisterState = {
-  errors?: {
-    email?: string;
-    nickname?: string;
-    password?: string;
-    userName?: string;
-  };
-  message?: string | null;
-};
+  });

@@ -1,26 +1,25 @@
-import AppLogo from '@/app/ui/app_logo';
+import AppLogo from '@/app/ui/app-logo';
 import Link from 'next/link';
-import Form from './login_form';
-import { Button } from '../button';
-import { UserRegisterState } from '@/validations/auth/start-now.validation';
+import {LoginForm} from '../../login/login-form';
+import {StartNowForm} from '../../start-now/start-now-form';
+import { Header } from '@/app/header';
+import { AuthFormState } from '@/services/auth/auth-form-state';
 
 type LoginOrStartNowProps = {
   onClick: (
-    prevState: UserRegisterState,
+    prevState: AuthFormState,
     formData: FormData
-  ) => Promise<UserRegisterState>;
+  ) => Promise<AuthFormState>;
   isLoginForm?: boolean;
 };
 
 
-type hrefType = "/start-now" | "/login";
-export default function LoginOrStartNow({ isLoginForm = true, onClick: onFormAction}: LoginOrStartNowProps) {
-    
-    let subTitle: string = "Log in to connect with your family.";
+export default function  ({ isLoginForm = true, onClick}: LoginOrStartNowProps) {
+    let subTitle: string = "Log in to register your shopping decisions.";
     let mainTitle: string = "Welcome back!";
     let callToAction : string = "Still don't have an account?";
     let linkText: string = "Subscribe here";
-    let href: hrefType = "/start-now";
+    let href: "/start-now" | "/login" = "/start-now";
     if (!isLoginForm) {
         
         mainTitle = "Create your account";
@@ -32,7 +31,8 @@ export default function LoginOrStartNow({ isLoginForm = true, onClick: onFormAct
 
     return (
         <main>
-            <div className="flex flex-col items-center fixed w-full max-w-md gap-6">
+            <Header/>
+            <div className="flex flex-col items-center fixed w-full max-w-md mt-15 gap-6">
                 
                 <AppLogo textColor="text-darkBlue" />
 
@@ -41,14 +41,16 @@ export default function LoginOrStartNow({ isLoginForm = true, onClick: onFormAct
                 
                 {/* Título e subtítulo */}
                 <div className="text-center">
-                    <h2 className="text-2xl font-bold text-darkGray">{mainTitle}</h2>
-                    <p className="text-xl text-mediumGray mt-1">
+                    <h2 className="text-2xl font-bold text-blue">{mainTitle}</h2>
+                    <p className="text-xl text-darkGray  mt-1">
                     {subTitle}
                     </p>
                 </div>
 
-                {/* Formulário de login */}
-                <Form isLoginForm={isLoginForm} onFormAction={onFormAction} />
+                {/* Formulário de login ou registro*/}
+                {isLoginForm ? (
+                <LoginForm onFormAction={onClick} />
+                ) : <StartNowForm onFormAction={onClick} />}
 
                 <div className="">
 

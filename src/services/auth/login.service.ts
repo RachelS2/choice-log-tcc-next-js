@@ -1,30 +1,32 @@
 "use server";
 
 import { loginSchema } from "@/validations/auth/login.validation";
-import { UserRegisterState } from "@/validations/auth/start-now.validation";
+import { boolean } from "zod";
+import { AuthFormState } from "./auth-form-state";
 
 export async function loginService(
-  prevState: UserRegisterState,
+  prevState: AuthFormState,
   formData: FormData
-): Promise<UserRegisterState> {
+): Promise<AuthFormState> {
 
-  const data = {
-    username: formData.get("username"),
-    password: formData.get("password"),
-  };
+  // TODO: regra de negócio
+  // verificar usuário, senha, etc.
+  const email : string = formData.get("email")?.toString() ?? "";
+  const password : string = formData.get("password")?.toString() ?? "";
+  const loggedUser: boolean = false;
 
-  const parsed = loginSchema.safeParse(data);
-
-  if (!parsed.success) {
+  if (!loggedUser) {
     return {
-      message: null,
-      errors: parsed.error.flatten().fieldErrors,
+      message: "Falha no login. Verifique suas credenciais.",
+      errors: {
+        email: "E-mail ou senha incorretos",
+        password: "E-mail ou senha incorretos",
+      },
+      fields_values: {
+        email, // retorna o e-mail preenchido
+      },
     };
   }
-
-  // regra de negócio
-  // verificar usuário, senha, etc.
-  console.log("Usuário logado:", parsed.data);
   return {
     message: "Login realizado com sucesso",
     errors: {},

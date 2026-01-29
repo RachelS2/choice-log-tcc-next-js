@@ -14,7 +14,7 @@ export function Header() {
 
   return (
 
-    <header className="fixed top-0 w-full h-[100px] text-[1.25rem] flex items-center justify-between bg-darkBlue text-white border-b-2 border-white z-50">
+    <header className="fixed top-0 w-full h-[100px] flex items-center justify-between bg-darkBlue text-white border-b-2 border-white z-50">
 
       <div className="mx-5">
         <AppLogo textColor="text-white" href='/'/>

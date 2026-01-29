@@ -28,7 +28,7 @@ export function LoginForm({ onFormAction }: LoginFormProps) {
 
 
       {/* Botão */}
-      <div className="flex flex-col items-center mt-4 justify-center">
+      <div className="flex flex-col items-center mt-2 justify-center">
         <input type="hidden" name="redirectTo" />
 
         <Button

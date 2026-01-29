@@ -66,20 +66,20 @@ export function FormInput({ label, marginTop = 0, minLength,  defaultValue }: Fo
     <div className={`mt-${marginTop}`}>
       <label
         htmlFor={id}
-        className="text-[1.2rem] text-darkGray"
+        className="text-[1.2rem] text-superDarkGray"
       >
         {label}
       </label>
 
       <div className="relative">
-        <Icon className="pointer-events-none absolute top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-mediumGray peer-focus:text-darkGray-900" />
+        <Icon className="pointer-events-none absolute top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-mediumGray peer-focus:text-superDarkGray-900" />
 
         <input
           id={id}
           placeholder={placeholder}
           defaultValue={(defaultValue !== null && defaultValue !== undefined) ? defaultValue : ''}
           required
-          className="pl-5 peer block w-full rounded-md text-[1.1rem] text-mediumGray border border-beige placeholder:text-lightGray"
+          className="pl-5 peer block w-full rounded-md text-[1.1rem] text-mediumGray border border-beige placeholder:text-darkGray"
           {...inputProps}
         />
       </div>

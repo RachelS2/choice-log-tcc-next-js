@@ -28,49 +28,54 @@ export default function  ({ isLoginForm = true, onClick}: LoginOrStartNowProps) 
         linkText = "Log in here";
         href = "/login";
     }
-
     return (
-        <main>
-            <Header/>
-            <div className="flex flex-col items-center fixed w-full max-w-md mt-15 gap-6">
-                
+    <>
+        <Header />
+        <main className="flex w-full max-w-md justify-center pt-[100px]">
+            {/* <div className="flex flex-col items-center  w-full gap-6"> */}
+
                 <AppLogo textColor="text-darkBlue" />
 
                 {/* Caixa de login */}
-                <div className="w-full bg-white rounded-xl shadow-lg md:p-4 space-y-6">
-                
-                {/* Título e subtítulo */}
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold text-blue">{mainTitle}</h2>
-                    <p className="text-xl text-darkGray  mt-1">
-                    {subTitle}
-                    </p>
-                </div>
+                <div className="w-full bg-offWhite rounded-xl pt-2 pb-8 shadow-lg md:p-4 space-y-3">
 
-                {/* Formulário de login ou registro*/}
-                {isLoginForm ? (
-                <LoginForm onFormAction={onClick} />
-                ) : <StartNowForm onFormAction={onClick} />}
+                    {/* Título e subtítulo */}
+                    <div className="text-center">
+                        <h2 className="text-2xl font-bold text-blue">{mainTitle}</h2>
+                        <p className="text-xl text-darkGray mt-1">
+                        {subTitle}
+                        </p>
+                    </div>
 
-                <div className="">
+                    {/* Formulário */}
+                    {isLoginForm ? (
+                        <LoginForm onFormAction={onClick} />
+                    ) : (
+                        <StartNowForm onFormAction={onClick} />
+                    )}
 
-                    {/* Link para cadastro do usuário ou login */}
-                    <p className="text-center text-darkBlue">
-                        {callToAction}{" "} 
-                        <Link href={href} className="font-semibold cursor-pointer hover:underline">
+                    {/* Rodapé */}
+                    <div>
+                        <p className="text-center text-darkBlue">
+                        {callToAction}{" "}
+                        <Link
+                            href={href}
+                            className="font-semibold cursor-pointer hover:underline"
+                        >
                             {linkText}
                         </Link>
-                    </p>
+                        </p>
 
-                    {/* Rodapé*/}
-                    <p className="block w-full text-center text-s text-darkBlue border-t pt-2 mt-2">
-                    A safe platform to keep your decisions tracked.
-                    </p>
+                        <p className="block w-full text-center text-s text-darkBlue border-t pt-2 mt-2">
+                        A safe platform to keep your decisions tracked.
+                        </p>
+                    </div>
 
                 </div>
-                </div>
-            </div>
+            {/* </div> */}
         </main>
 
-  );
+    </>
+    );
+
 }

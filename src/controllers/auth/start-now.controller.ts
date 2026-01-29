@@ -1,16 +1,17 @@
 "use server";
 
 import {startNowSchema} from '@/validations/auth/start-now.validation';
-import { AuthFormState } from './auth-form-state';
-import { assert } from 'node:console';
+import { AuthFormStateController } from './auth-form.controller';
+import { ZodSafeParseResult } from 'zod';
 
-export async function userRegisterService(prevState: AuthFormState, form: FormData): Promise<AuthFormState> {
+export async function userRegisterController(prevState: AuthFormStateController, form: FormData): Promise<AuthFormStateController> {
     const EMAIL: string | undefined = form.get('email')?.toString() ?? undefined;
     const USERNAME: string  | undefined = form.get('username')?.toString() ?? undefined;
     const PASSWORD: string  | undefined = form.get('password')?.toString() ?? undefined;
     const CONFIRM_PASSWORD: string | undefined = form.get('confirmPassword')?.toString() ?? undefined;
 
-    const validation= startNowSchema.safeParse({
+    const validation: ZodSafeParseResult<{ email: string; username: string; password: string; confirmPassword: string; }> = 
+    startNowSchema.safeParse({
         email: EMAIL,
         username: USERNAME,
         password: PASSWORD,
@@ -33,19 +34,19 @@ export async function userRegisterService(prevState: AuthFormState, form: FormDa
     // Simulação de chamada a um serviço de backend para registrar o usuário
     const isRegistered: boolean = true; // Suponha que o registro foi bem-sucedido
 
-  // Simulação de chamada a backend
+    // Simulação de chamada a backend
     console.log("Registering user:", { EMAIL, USERNAME, PASSWORD, CONFIRM_PASSWORD });
     if (!isRegistered) {
         return {
         errors: {},
         message: "Failed to register user due to a server error.",
-        fields_values: {
+        fields_values: 
+        {
             email:EMAIL,
             username:USERNAME,
             password:PASSWORD
         }
         };
-
     }
     return {
         errors: {},

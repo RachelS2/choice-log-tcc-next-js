@@ -1,20 +1,20 @@
 
 'use client'
 import { useActionState } from 'react';
-import {FormInput, FieldError} from "@/app/ui/login-or-start-now/form_input";
+import {FormInput, FieldError} from "@/app/ui/login-or-start-now/form-input";
 import { Button } from '../ui/button';
 import { ArrowRightIcon } from 'lucide-react';
-import { AuthFormState } from '@/services/auth/auth-form-state';
+import { AuthFormStateController } from '@/controllers/auth/auth-form.controller';
 
 type StartNowFormProps = {
   onFormAction: (
-    prevState: AuthFormState,
+    prevState: AuthFormStateController,
     formData: FormData
-  ) => Promise<AuthFormState>;
+  ) => Promise<AuthFormStateController>;
 };
 
 export function StartNowForm({ onFormAction }: StartNowFormProps) {
-  const initialState: AuthFormState = { message: null, errors: {} };
+  const initialState: AuthFormStateController = { message: null, errors: {} };
   const [state, action] = useActionState(onFormAction, initialState);
 
   return (

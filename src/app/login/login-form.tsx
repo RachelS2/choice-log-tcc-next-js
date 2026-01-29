@@ -3,18 +3,18 @@
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/app/ui/button';
 import { useActionState } from 'react';
-import { FormInput } from '../ui/login-or-start-now/form_input';
-import { AuthFormState } from '@/services/auth/auth-form-state';
+import { FormInput } from '../ui/login-or-start-now/form-input';
+import { AuthFormStateController } from '@/controllers/auth/auth-form.controller';
 
 type LoginFormProps = {
   onFormAction: (
-    prevState: AuthFormState,
+    prevState: AuthFormStateController,
     formData: FormData
-  ) => Promise<AuthFormState>;
+  ) => Promise<AuthFormStateController>;
 };
 
 export function LoginForm({ onFormAction }: LoginFormProps) {
-  const initialState: AuthFormState = { message: null, errors: {} };
+  const initialState: AuthFormStateController = { message: null, errors: {} };
   const [state, action] = useActionState(onFormAction, initialState);
 
   return (

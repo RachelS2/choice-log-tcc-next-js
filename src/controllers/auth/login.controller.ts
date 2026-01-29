@@ -1,13 +1,12 @@
 "use server";
 
-import { loginSchema } from "@/validations/auth/login.validation";
-import { boolean } from "zod";
-import { AuthFormState } from "./auth-form-state";
 
-export async function loginService(
-  prevState: AuthFormState,
+import { AuthFormStateController } from "./auth-form.controller";
+
+export async function loginController(
+  prevState: AuthFormStateController,
   formData: FormData
-): Promise<AuthFormState> {
+): Promise<AuthFormStateController> {
 
   // TODO: regra de negócio
   // verificar usuário, senha, etc.

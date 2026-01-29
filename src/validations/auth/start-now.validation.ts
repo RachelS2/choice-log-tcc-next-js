@@ -5,17 +5,17 @@ const userNameSchema : z.ZodString = z
   .string()
   .nonempty("Username is required.")
   .min(5, "Username must have at least 5 characters.")
-  .max(15, "Username must have at tops 15 characters.")
+  .max(15, "Username must have at tops 40 characters.")
   .regex(
-    /^[a-zA-Z0-9_]+$/,
-    "Username must contain only letters, numbers and '_'"
+    /^[a-zA-Z0-9_ ]+$/,
+    "Username must contain only letters, white spaces, numbers and '_'"
   );
 
 const passwordSchema : z.ZodString = z
 .string()
-.nonempty("Password is required")
-.min(6, "Password must have at least 6 characters")
-.max(30, "Password must have at tops 30 characters")
+.nonempty("Password is required.")
+.min(6, "Password must have at least 6 characters.")
+.max(30, "Password must have at tops 30 characters.")
 .regex(
   /[a-z]/,
   "The password must contain at least one lowercase letter."
@@ -42,10 +42,10 @@ export const startNowSchema : z.ZodObject<{
     confirmPassword: z.ZodString;
 }, z.core.$strip> = z
   .object({
-    email: z.email("E-mail inválido"),
+    email: z.email("Invalid e-mail format."),
     username: userNameSchema,
     password: passwordSchema,
-    confirmPassword: z.string().nonempty("Password confirmation is required"),
+    confirmPassword: z.string().nonempty("Password confirmation is required."),
   })
   .superRefine((data, ctx) => {
     const passwordCheck = passwordSchema.safeParse(data.password);
@@ -54,7 +54,7 @@ export const startNowSchema : z.ZodObject<{
     if (data.password !== data.confirmPassword) {
       ctx.addIssue({
         path: ["confirmPassword"],
-        message: "Passwords do not match",
+        message: "Passwords do not match.",
         code: z.ZodIssueCode.custom,
       });
     }

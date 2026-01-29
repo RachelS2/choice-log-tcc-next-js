@@ -3,13 +3,13 @@ import Link from 'next/link';
 import {LoginForm} from '../../login/login-form';
 import {StartNowForm} from '../../start-now/start-now-form';
 import { Header } from '@/app/header';
-import { AuthFormState } from '@/services/auth/auth-form-state';
+import { AuthFormStateController } from '@/controllers/auth/auth-form.controller';
 
 type LoginOrStartNowProps = {
   onClick: (
-    prevState: AuthFormState,
+    prevState: AuthFormStateController,
     formData: FormData
-  ) => Promise<AuthFormState>;
+  ) => Promise<AuthFormStateController>;
   isLoginForm?: boolean;
 };
 

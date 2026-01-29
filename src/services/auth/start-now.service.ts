@@ -2,12 +2,13 @@
 
 import {startNowSchema} from '@/validations/auth/start-now.validation';
 import { AuthFormState } from './auth-form-state';
+import { assert } from 'node:console';
 
 export async function userRegisterService(prevState: AuthFormState, form: FormData): Promise<AuthFormState> {
-    const EMAIL: string | null = form.get('email')?.toString() ?? null;
-    const USERNAME: string  | null = form.get('username')?.toString() ?? null;
-    const PASSWORD: string  | null = form.get('password')?.toString() ?? null;
-    const CONFIRM_PASSWORD: string | null = form.get('confirmPassword')?.toString() ?? null;
+    const EMAIL: string | undefined = form.get('email')?.toString() ?? undefined;
+    const USERNAME: string  | undefined = form.get('username')?.toString() ?? undefined;
+    const PASSWORD: string  | undefined = form.get('password')?.toString() ?? undefined;
+    const CONFIRM_PASSWORD: string | undefined = form.get('confirmPassword')?.toString() ?? undefined;
 
     const validation= startNowSchema.safeParse({
         email: EMAIL,

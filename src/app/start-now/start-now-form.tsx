@@ -32,7 +32,7 @@ export function StartNowForm({ onFormAction }: StartNowFormProps) {
       <FieldError message={state.errors?.confirmPassword} />
 
       {/* Botão */}
-      <div className="flex flex-col items-center justify-center mt-5">
+      <div className="flex flex-col items-center justify-center mt-2">
         <input type="hidden" name="redirectTo" />
         <Button
           type="submit"

@@ -23,7 +23,7 @@ export default function Home() {
         
         <Link href="/start-now" className="flex items-center justify-center rounded-full w-[180px] hover:brightness-110
          max-w-[40rem] bg-accent h-10 text-[1.1rem] sm:text-[1.25rem] md:text-[1.35rem]">
-          Start Now
+          <p className="text-offWhite">Start Now</p>
         </Link>
 
         <ol className="w-full flex flex-col sm:flex-row sm:flex-nowrap items-center justify-center gap-15  mt-10 mb-10">

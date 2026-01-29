@@ -9,12 +9,13 @@ import { ForwardRefExoticComponent, RefAttributes, SVGProps } from 'react';
 
 type FormInputProps = {
   label: 'E-mail' | 'Username' | 'Password' | 'Check Password';
+  marginTop?: number,
   minLength?: number;
   defaultValue?: string | null; 
 };
 
 
-export function FormInput({ label, minLength, defaultValue }: FormInputProps) {
+export function FormInput({ label, marginTop = 0, minLength,  defaultValue }: FormInputProps) {
   let placeholder: string = '';
   let id : 'email' | 'username' | 'password' | 'confirmPassword' = 'email';
   let inputProps: React.InputHTMLAttributes<HTMLInputElement> = {};
@@ -62,7 +63,7 @@ export function FormInput({ label, minLength, defaultValue }: FormInputProps) {
   }
 
   return (
-    <div className="mt-4">
+    <div className={`mt-${marginTop}`}>
       <label
         htmlFor={id}
         className="text-[1.2rem] text-darkGray"
@@ -87,12 +88,14 @@ export function FormInput({ label, minLength, defaultValue }: FormInputProps) {
 }
 
 //Shows validation error messages for a form field.
-export function FieldError({ message }: { message?: string | undefined }) {
-  if (!message || message.length === 0) return null;
+export function FieldError({ message }: { message?: string[] }) {
+  let msg : string = " "
+  if (message && message.length >0 ) 
+    msg = message[0] ;
 
   return (
-    <p className="mt-1 text-sm text-red-600">
-      {message[0]}
+    <p className="mt-1 text-sm text-red-600 min-h-[1.25rem]">
+      {msg}
     </p>
   );
 }

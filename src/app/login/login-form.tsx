@@ -19,17 +19,16 @@ export function LoginForm({ onFormAction }: LoginFormProps) {
 
   return (
     <form action={action}>
-      <FormInput label="E-mail" defaultValue={state.fields_values?.email}/>
-      <FormInput label="Password" defaultValue={state.fields_values?.password} />
+      <FormInput label="E-mail" marginTop={4} defaultValue={state.fields_values?.email}/>
+      <FormInput label="Password" marginTop={4} defaultValue={state.fields_values?.password} />
 
-      {state.message && (
-        <p className="text-red-600 text-center mt-3">
-          {state.message}
-        </p>
-      )}
+      <p className="text-red-600 mt-1 min-h-[1.25rem]">
+        {state.message ?? ""}
+      </p>
+
 
       {/* Botão */}
-      <div className="flex flex-col items-center justify-center mt-5">
+      <div className="flex flex-col items-center mt-4 justify-center">
         <input type="hidden" name="redirectTo" />
 
         <Button

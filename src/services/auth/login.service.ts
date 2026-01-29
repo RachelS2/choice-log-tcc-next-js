@@ -19,11 +19,7 @@ export async function loginService(
     return {
       message: "Falha no login. Verifique suas credenciais.",
       errors: {
-        email: "E-mail ou senha incorretos",
-        password: "E-mail ou senha incorretos",
-      },
-      fields_values: {
-        email, // retorna o e-mail preenchido
+        password: ["E-mail ou senha incorretos"],
       },
     };
   }

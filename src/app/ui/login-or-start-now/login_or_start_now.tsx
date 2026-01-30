@@ -37,7 +37,7 @@ export default function  ({ isLoginForm = true, onClick}: LoginOrStartNowProps) 
                 <AppLogo textColor="text-darkBlue" />
 
                 {/* Caixa de login */}
-                <div className="w-full bg-offWhite rounded-xl pt-2 pb-8 shadow-lg md:p-4 space-y-3">
+                <div className="w-full bg-white rounded-xl pt-2 pb-8 shadow-lg md:p-4 space-y-3">
 
                     {/* Título e subtítulo */}
                     <div className="text-center">

@@ -71,7 +71,7 @@ export function FormInput({ label, marginTop = 0, minLength,  defaultValue }: Fo
         {label}
       </label>
 
-      <div className="relative">
+      <div className="relative bg-white">
         <Icon className="pointer-events-none absolute top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-mediumGray peer-focus:text-superDarkGray-900" />
 
         <input
@@ -79,7 +79,7 @@ export function FormInput({ label, marginTop = 0, minLength,  defaultValue }: Fo
           placeholder={placeholder}
           defaultValue={(defaultValue !== null && defaultValue !== undefined) ? defaultValue : ''}
           required
-          className="pl-5 peer block w-full rounded-md text-[1.1rem] text-mediumGray border border-beige placeholder:text-darkGray"
+          className="pl-5 peer block w-full rounded-md text-[1.1rem] text-darkGray border border-beige placeholder:text-darkGray"
           {...inputProps}
         />
       </div>

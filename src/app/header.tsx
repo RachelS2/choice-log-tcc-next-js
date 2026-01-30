@@ -10,7 +10,7 @@ export function Header() {
   const linkClass : string=
     "flex items-center justify-center transition-colors hover:brightness-110 aria-disabled:cursor-not-allowed px-3 aria-disabled:opacity-50 rounded-full hover:bg-blue h-10";
 
-  const hamburgerMenuClass: string = "flex items-center justify-center w-[130px] transition-colors hover:brightness-110 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 md:w-[140px] rounded hover:bg-darkBlue h-10";
+  const hamburgerMenuClass: string = "flex items-center justify-center w-[130px] whitespace-nowrap px-2 transition-colors hover:brightness-110 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 md:w-[140px] rounded hover:bg-darkBlue h-10";
 
   return (
 
@@ -35,15 +35,15 @@ export function Header() {
         <Link href="/resources" className={`${linkClass}`}>Resources</Link>
         <Link href="/about"  className={`${linkClass}`}>About</Link>
         <Link href="/login" className={`${linkClass}`}>Log In</Link>
-        <Link href="/start-now" className={`${linkClass}`}>Start Now</Link>
+        <Link href="/start-now" className={`${linkClass} whitespace-nowrap` }>Start Now</Link>
         {/* <Button className="w-[130px] md:w-[140px] bg-[var(--darkdarkBlue)] hover:bg-lightdarkBlue">Start Now</Button> */}
       </nav>
 
       {/* Menu mobile dropdown - Hamburguer */}
       {isOpen && (
         
-        <nav className="absolute items-center justify-center top-[100px] w-full right-0 bg-accent flex flex-row items-center gap-4 py-4 px-4 text-lg md:hidden z-40">
-          <Link href="/how-it-works" className={`${hamburgerMenuClass} whitespace-nowrap`} onClick={() => setIsOpen(false)}>How It Works</Link>
+        <nav className="absolute items-center justify-center top-[100px] w-full right-0 bg-accent flex flex-row items-center gap-2 py-4 px-4 text-lg md:hidden z-40">
+          <Link href="/how-it-works" className={`${hamburgerMenuClass}`} onClick={() => setIsOpen(false)}>How It Works</Link>
           <Link href="/resources" className={`${hamburgerMenuClass}`}  onClick={() => setIsOpen(false)}>Resources</Link>
           <Link href="/about"  className={`${hamburgerMenuClass}`}  onClick={() => setIsOpen(false)}>About</Link>
           <Link href="/login" className={`${hamburgerMenuClass}`} >Log In</Link>

@@ -8,12 +8,10 @@ export async function loginController(
   formData: FormData
 ): Promise<AuthFormStateController> {
 
-  // TODO: regra de negócio
-  // verificar usuário, senha, etc.
   const email : string = formData.get("email")?.toString() ?? "";
   const password : string = formData.get("password")?.toString() ?? "";
   const loggedUser: boolean = false;
-
+  
   if (!loggedUser) {
     return {
       message: "Falha no login. Verifique suas credenciais.",
@@ -22,6 +20,8 @@ export async function loginController(
       },
     };
   }
+  // TODO: regra de negócio
+  // verificar usuário, senha, etc.
   return {
     message: "Login realizado com sucesso",
     errors: {},

@@ -81,6 +81,61 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+
+## Prisma Overview
+
+Prisma is a modern ORM for Node.js and TypeScript that provides a fully type-safe way to interact with databases. It generates a typed client directly from a schema, eliminating the need to write raw SQL and reducing runtime errors.
+
+Prisma is responsible for:
+- Defining the database schema
+- Generating a type-safe database client
+- Managing migrations
+- Improving developer productivity with autocomplete and compile-time validation
+
+---
+
+## Prisma Schema
+
+The Prisma schema (`prisma/schema.prisma`) is the single source of truth for the database structure.  
+It defines the database provider, models, fields, and constraints, and is used to generate the Prisma Client.
+
+---
+
+## Prisma Commands
+
+### `npx prisma init`
+
+Initializes Prisma in the project by creating:
+- `prisma/schema.prisma`
+- `.env` file with the database connection URL
+- Base Prisma configuration
+
+---
+
+### `npx prisma generate`
+
+Generates the Prisma Client based on the schema.
+
+This command:
+- Reads the schema definition
+- Produces a fully typed client
+- Outputs the generated code into the configured directory (e.g. `generated/prisma`)
+
+The generated client is used by the application to perform all database operations.
+
+---
+
+## Generated Folder
+
+The `generated/` folder contains auto-generated Prisma Client code.  
+It is not manually edited and can be safely deleted and regenerated at any time using `npx prisma generate`.
+
+Next.js App
+    ↓
+Prisma Client
+    ↓
+Neon (PostgreSQL)
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
@@ -95,3 +150,4 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+

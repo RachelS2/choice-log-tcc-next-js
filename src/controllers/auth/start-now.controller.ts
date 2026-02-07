@@ -3,6 +3,7 @@
 import {startNowSchema} from '@/validations/auth/start-now.validation';
 import { AuthFormStateController } from './auth-form.controller';
 import { ZodSafeParseResult } from 'zod';
+import { checkUserExistanceService } from '@/services/auth/start-now.service';
 
 export async function userRegisterController(prevState: AuthFormStateController, form: FormData): Promise<AuthFormStateController> {
     const EMAIL: string | undefined = form.get('email')?.toString() ?? undefined;
@@ -19,6 +20,7 @@ export async function userRegisterController(prevState: AuthFormStateController,
     });
     console.log("Validation result:", validation);
     
+
     if (!validation.success) {
        return {
             errors: validation.error.flatten().fieldErrors,
@@ -31,8 +33,9 @@ export async function userRegisterController(prevState: AuthFormStateController,
        }
     }
 
+    const isRegistered : boolean = await checkUserExistanceService(validation.data.email);
+
     // Simulação de chamada a um serviço de backend para registrar o usuário
-    const isRegistered: boolean = true; // Suponha que o registro foi bem-sucedido
 
     // Simulação de chamada a backend
     console.log("Registering user:", { EMAIL, USERNAME, PASSWORD, CONFIRM_PASSWORD });

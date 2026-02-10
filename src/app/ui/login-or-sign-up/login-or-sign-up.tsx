@@ -1,15 +1,15 @@
 import AppLogo from '@/app/ui/app-logo';
 import Link from 'next/link';
 import {LoginForm} from '../../login/login-form';
-import {StartNowForm} from '../../start-now/start-now-form';
 import { Header } from '@/app/header';
-import { AuthFormStateController } from '@/controllers/auth/auth-form.controller';
+import { AuthFormStateService } from '@/services/auth/login.service';
+import { StartNowForm } from '@/app/sign-up/sign-up-form';
 
 type LoginOrStartNowProps = {
   onClick: (
-    prevState: AuthFormStateController,
+    prevState: AuthFormStateService,
     formData: FormData
-  ) => Promise<AuthFormStateController>;
+  ) => Promise<AuthFormStateService>;
   isLoginForm?: boolean;
 };
 
@@ -19,7 +19,7 @@ export default function  ({ isLoginForm = true, onClick}: LoginOrStartNowProps) 
     let mainTitle: string = "Welcome back!";
     let callToAction : string = "Still don't have an account?";
     let linkText: string = "Subscribe here";
-    let href: "/start-now" | "/login" = "/start-now";
+    let href: "/sign-up" | "/login" = "/sign-up";
     if (!isLoginForm) {
         
         mainTitle = "Create your account";

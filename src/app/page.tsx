@@ -21,7 +21,7 @@ export default function Home() {
         </p>
 
         
-        <Link href="/start-now" className="flex items-center justify-center rounded-full w-[180px] hover:brightness-110
+        <Link href="/sign-up" className="flex items-center justify-center rounded-full w-[180px] hover:brightness-110
          max-w-[40rem] bg-accent h-10 text-[1.1rem] sm:text-[1.25rem] md:text-[1.35rem]">
           <p className="text-offWhite">Start Now</p>
         </Link>

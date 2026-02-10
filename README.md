@@ -136,6 +136,17 @@ Prisma Client
     ↓
 Neon (PostgreSQL)
 
+### Migrations
+
+To migrate table configurations to the remote data base, run:
+
+### `npx prisma migrate dev` 
+
+To check the database tables via CMD, run:
+
+### `npx prisma studio` 
+
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

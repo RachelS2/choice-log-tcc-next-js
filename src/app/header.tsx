@@ -35,7 +35,7 @@ export function Header() {
         <Link href="/resources" className={`${linkClass}`}>Resources</Link>
         <Link href="/about"  className={`${linkClass}`}>About</Link>
         <Link href="/login" className={`${linkClass}`}>Log In</Link>
-        <Link href="/start-now" className={`${linkClass} whitespace-nowrap` }>Start Now</Link>
+        <Link href="/sign-up" className={`${linkClass} whitespace-nowrap` }>Start Now</Link>
         {/* <Button className="w-[130px] md:w-[140px] bg-[var(--darkdarkBlue)] hover:bg-lightdarkBlue">Start Now</Button> */}
       </nav>
 
@@ -47,7 +47,7 @@ export function Header() {
           <Link href="/resources" className={`${hamburgerMenuClass}`}  onClick={() => setIsOpen(false)}>Resources</Link>
           <Link href="/about"  className={`${hamburgerMenuClass}`}  onClick={() => setIsOpen(false)}>About</Link>
           <Link href="/login" className={`${hamburgerMenuClass}`} >Log In</Link>
-          <Link href="/start-now"  className={`${hamburgerMenuClass}`} >Start Now</Link>
+          <Link href="/sign-up"  className={`${hamburgerMenuClass}`} >Start Now</Link>
         </nav>
       )}
     </header>

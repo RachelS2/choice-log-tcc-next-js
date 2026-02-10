@@ -1,20 +1,21 @@
 'use client'
-
+import { useForm } from "react-hook-form"
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/app/ui/button';
 import { useActionState } from 'react';
-import { FormInput } from '../ui/login-or-start-now/form-input';
-import { AuthFormStateController } from '@/controllers/auth/auth-form.controller';
+import { FormInput } from '../ui/login-or-sign-up/form-input';
+import { AuthFormStateService } from '@/services/auth/login.service';
+import {} from '@/lib/auth-client'
 
 type LoginFormProps = {
   onFormAction: (
-    prevState: AuthFormStateController,
+    prevState: AuthFormStateService,
     formData: FormData
-  ) => Promise<AuthFormStateController>;
+  ) => Promise<AuthFormStateService>;
 };
 
 export function LoginForm({ onFormAction }: LoginFormProps) {
-  const initialState: AuthFormStateController = { message: null, errors: {} };
+  const initialState: AuthFormStateService = { message: null, errors: {} };
   const [state, action] = useActionState(onFormAction, initialState);
 
   return (

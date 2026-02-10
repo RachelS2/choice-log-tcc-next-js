@@ -1,11 +1,10 @@
 "use server";
 
-import {startNowSchema} from '@/validations/auth/start-now.validation';
-import { AuthFormStateController } from './auth-form.controller';
+import {startNowSchema} from '@/validations/auth/sign-up.validation';
 import { ZodSafeParseResult } from 'zod';
-import { checkUserExistanceService } from '@/services/auth/start-now.service';
+import { AuthFormStateService } from './login.service';
 
-export async function userRegisterController(prevState: AuthFormStateController, form: FormData): Promise<AuthFormStateController> {
+export async function userSignUpService(prevState: AuthFormStateService, form: FormData): Promise<AuthFormStateService> {
     const EMAIL: string | undefined = form.get('email')?.toString() ?? undefined;
     const USERNAME: string  | undefined = form.get('username')?.toString() ?? undefined;
     const PASSWORD: string  | undefined = form.get('password')?.toString() ?? undefined;
@@ -55,4 +54,15 @@ export async function userRegisterController(prevState: AuthFormStateController,
         errors: {},
         message: "User registered successfully"
 };
+}
+
+function checkUserExistanceService(email: string): Promise<boolean> {
+    // Simulação de verificação de existência do usuário no backend
+    console.log("Checking if user exists with email:", email);
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const userExists = false; // Simulação: o usuário não existe
+            resolve(userExists);
+        }, 1000); // Simula um atraso de 1 segundo para a resposta do backend
+    });
 }

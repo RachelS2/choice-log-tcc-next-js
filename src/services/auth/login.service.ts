@@ -20,7 +20,6 @@ export type AuthFormStateService = {
 
 
 export async function loginService(
-  prevState: AuthFormStateService,
   formData: FormData
 ): Promise<AuthFormStateService> {
 

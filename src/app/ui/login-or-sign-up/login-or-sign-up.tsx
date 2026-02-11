@@ -49,9 +49,9 @@ export default function  ({ isLoginForm = true, onClick}: LoginOrStartNowProps) 
 
                     {/* Formulário */}
                     {isLoginForm ? (
-                        <LoginForm onFormAction={onClick} />
+                        <LoginForm />
                     ) : (
-                        <StartNowForm onFormAction={onClick} />
+                        <StartNowForm />
                     )}
 
                     {/* Rodapé */}

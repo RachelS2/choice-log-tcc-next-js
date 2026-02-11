@@ -5,17 +5,18 @@ import {
 } from '@heroicons/react/24/outline';
 import {  UserIcon } from 'lucide-react';
 import { ForwardRefExoticComponent, RefAttributes, SVGProps } from 'react';
+import { UseFormRegister } from 'react-hook-form';
 
 
 type FormInputProps = {
   label: 'E-mail' | 'Username' | 'Password' | 'Check Password';
   marginTop?: number,
   minLength?: number;
-  defaultValue?: string | null; 
+  register: UseFormRegister<any>;
 };
 
 
-export function FormInput({ label, marginTop = 0, minLength,  defaultValue }: FormInputProps) {
+export function FormInput({ label, marginTop = 0, minLength,  register }: FormInputProps) {
   let placeholder: string = '';
   let id : 'email' | 'username' | 'password' | 'confirmPassword' = 'email';
   let inputProps: React.InputHTMLAttributes<HTMLInputElement> = {};
@@ -77,7 +78,7 @@ export function FormInput({ label, marginTop = 0, minLength,  defaultValue }: Fo
         <input
           id={id}
           placeholder={placeholder}
-          defaultValue={(defaultValue !== null && defaultValue !== undefined) ? defaultValue : ''}
+          {...register(id)}
           required
           className="pl-5 peer block w-full rounded-md text-[1.1rem] text-darkGray border border-beige placeholder:text-darkGray"
           {...inputProps}
@@ -88,14 +89,11 @@ export function FormInput({ label, marginTop = 0, minLength,  defaultValue }: Fo
 }
 
 //Shows validation error messages for a form field.
-export function FieldError({ message }: { message?: string[] }) {
-  let msg : string = " "
-  if (message && message.length >0 ) 
-    msg = message[0] ;
-
+export function FieldError({ message }: { message?: string }) {
+  console.log(message)
   return (
     <p className="mt-1 text-sm text-red-600 min-h-[1.25rem]">
-      {msg}
+      {message}
     </p>
   );
 }

@@ -2,29 +2,46 @@
 import { useForm } from "react-hook-form"
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/app/ui/button';
-import { useActionState } from 'react';
 import { FormInput } from '../ui/login-or-sign-up/form-input';
-import { AuthFormStateService } from '@/services/auth/login.service';
 import {} from '@/lib/auth-client'
+import {zodResolver} from "@hookform/resolvers/zod"
+import { z } from "zod";
+import { AuthFormStateService } from "@/services/auth/login.service";
 
-type LoginFormProps = {
-  onFormAction: (
-    prevState: AuthFormStateService,
-    formData: FormData
-  ) => Promise<AuthFormStateService>;
-};
+// Schema para validação do formulário de login de usuário:
+const loginSchema = z.object({
+  email: z.email("Invalid e-mail format."),
+  password:  z.string().min(1, "Password is required")
+});
 
-export function LoginForm({ onFormAction }: LoginFormProps) {
+type LoginSchemaType = z.infer<typeof loginSchema>;
+
+export function LoginForm() {
   const initialState: AuthFormStateService = { message: null, errors: {} };
-  const [state, action] = useActionState(onFormAction, initialState);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<LoginSchemaType>({
+    resolver: zodResolver(loginSchema), 
+    defaultValues: {
+      email: initialState?.fields_values?.email ?? "",
+      password: initialState?.fields_values?.password ?? "",
+    },
+  });
+
+  function handleOnSubmit(loginData: LoginSchemaType) {
+    console.log(loginData)
+  }
   return (
-    <form action={action}>
-      <FormInput label="E-mail" marginTop={4} defaultValue={state.fields_values?.email}/>
-      <FormInput label="Password" marginTop={4} defaultValue={state.fields_values?.password} />
+    <form onSubmit={handleSubmit(handleOnSubmit)}>
+
+      <FormInput label="E-mail" marginTop={4} register={register}/>
+      <FormInput label="Password" marginTop={4} register={register} />
 
       <p className="text-red-600 mt-1 min-h-[1.25rem]">
-        {state.message ?? ""}
+        {errors.email?.message}
       </p>
 
 

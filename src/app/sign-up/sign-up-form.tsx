@@ -7,7 +7,10 @@ import { FieldError, FormInput } from '../ui/login-or-sign-up/form-input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-
+import {authClient} from '@/lib/auth-client';
+import {useRouter} from "next/navigation";
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { ErrorContext, RequestContext, SuccessContext } from 'better-auth/react';
 
 const userNameSchema : z.ZodString = z
   .string()
@@ -88,8 +91,30 @@ export function StartNowForm() {
     },
   });
 
-  function handleOnSubmit(signUpData: SignUpSchemaType) {
+  const router : AppRouterInstance = useRouter();
+
+  async function handleOnSubmit(signUpData: SignUpSchemaType) {
     console.log(signUpData)
+    const {data, error} = await authClient.signUp.email({
+      email: signUpData.email,
+      name: signUpData.username,
+      password: signUpData.password,
+      callbackURL: "/home",
+    }, {
+      onSuccess: (ctx: SuccessContext) => {
+        router.replace("/home");
+      },
+
+      onError : (ctx: ErrorContext) => {
+        console.error("Error during sign-up:", ctx.error);
+      },
+
+      onRequest: (ctx: RequestContext) => {
+        console.log("Sign-up request initiated.");
+      }
+
+    }
+  )
   }
 
   return (

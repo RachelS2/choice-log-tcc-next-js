@@ -2,19 +2,11 @@ import AppLogo from '@/app/ui/app-logo';
 import Link from 'next/link';
 import {LoginForm} from '../../login/login-form';
 import { Header } from '@/app/header';
-import { AuthFormStateService } from '@/services/auth/login.service';
 import { StartNowForm } from '@/app/sign-up/sign-up-form';
 
-type LoginOrStartNowProps = {
-  onClick: (
-    prevState: AuthFormStateService,
-    formData: FormData
-  ) => Promise<AuthFormStateService>;
-  isLoginForm?: boolean;
-};
 
 
-export default function  ({ isLoginForm = true, onClick}: LoginOrStartNowProps) {
+export default function  ({ isLoginForm = true}: { isLoginForm?: boolean }) {
     let subTitle: string = "Log in to register your shopping decisions.";
     let mainTitle: string = "Welcome back!";
     let callToAction : string = "Still don't have an account?";

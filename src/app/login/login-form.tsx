@@ -1,12 +1,12 @@
 'use client'
 import { useForm } from "react-hook-form"
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { Button } from '@/app/ui/button';
-import { FormInput } from '../ui/login-or-sign-up/form-input';
+import { Button } from '@/components/ui/button';
+import { FormInput } from '../../components/ui/login-or-sign-up/form-input';
 import {} from '@/lib/auth-client'
 import {zodResolver} from "@hookform/resolvers/zod"
 import { z } from "zod";
-import { AuthFormStateService } from "@/services/auth/login.service";
+import { AuthFormStateModel } from "@/models/auth/auth-form-state-model";
 
 // Schema para validação do formulário de login de usuário:
 const loginSchema = z.object({
@@ -17,7 +17,7 @@ const loginSchema = z.object({
 type LoginSchemaType = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-  const initialState: AuthFormStateService = { message: null, errors: {} };
+  const initialState: AuthFormStateModel = { message: null, errors: {} };
 
   const {
     register,
@@ -51,7 +51,7 @@ export function LoginForm() {
 
         <Button
           type="submit"
-          className="bg-accent px-4  text-sm gap-2 sm:px-5 sm:py-2.5 sm:text-base md:px-6 md:py-3 md:text-lg min-w-[8rem]"
+          className="bg-seaBlue px-4  text-sm gap-2 sm:px-5 sm:py-2.5 sm:text-base md:px-6 md:py-3 md:text-lg min-w-[8rem]"
         >
           Login
           <ArrowRightIcon className="h-5 w-5" />

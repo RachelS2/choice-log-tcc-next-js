@@ -1,6 +1,6 @@
-import AppLogo from '@/app/ui/app-logo';
+import AppLogo from '@/components/ui/app-logo';
 import Link from 'next/link';
-import {LoginForm} from '../../login/login-form';
+import {LoginForm} from '../../../app/login/login-form';
 import { Header } from '@/app/header';
 import { StartNowForm } from '@/app/sign-up/sign-up-form';
 

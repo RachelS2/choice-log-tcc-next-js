@@ -1,4 +1,4 @@
-import LoginOrStartNow from "@/app/ui/login-or-sign-up/login-or-sign-up";
+import LoginOrStartNow from "@/components/ui/login-or-sign-up/login-or-sign-up";
 
 
 export default function LoginPage() {

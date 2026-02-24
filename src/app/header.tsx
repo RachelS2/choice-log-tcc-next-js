@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import AppLogo from '@/app/ui/app-logo'
+import AppLogo from '@/components/ui/app-logo'
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)

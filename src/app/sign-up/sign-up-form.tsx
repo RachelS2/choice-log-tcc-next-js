@@ -1,9 +1,9 @@
 
 'use client'
-import { Button } from '../ui/button';
-import { ArrowRightIcon } from 'lucide-react';
-import { AuthFormStateService } from '@/services/auth/login.service';
-import { FieldError, FormInput } from '../ui/login-or-sign-up/form-input';
+import { Button } from '../../components/ui/button';
+import { ArrowRightIcon , Loader2 } from 'lucide-react';
+import { AuthFormStateModel } from '@/models/auth/auth-form-state-model';
+import { FieldError, FormInput } from '../../components/ui/login-or-sign-up/form-input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
@@ -11,6 +11,8 @@ import {authClient} from '@/lib/auth-client';
 import {useRouter} from "next/navigation";
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { ErrorContext, RequestContext, SuccessContext } from 'better-auth/react';
+import { toast } from 'sonner';
+import { useState } from 'react';
 
 const userNameSchema : z.ZodString = z
   .string()
@@ -76,7 +78,7 @@ type SignUpSchemaType = z.infer<typeof signUpSchema>;
 
 export function StartNowForm() {
 
-  const initialState: AuthFormStateService = { message: null, errors: {} };
+  const initialState: AuthFormStateModel = { message: null, errors: {} };
   const {
     register,
     handleSubmit,
@@ -92,29 +94,38 @@ export function StartNowForm() {
   });
 
   const router : AppRouterInstance = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleOnSubmit(signUpData: SignUpSchemaType) {
     console.log(signUpData)
-    const {data, error} = await authClient.signUp.email({
-      email: signUpData.email,
-      name: signUpData.username,
-      password: signUpData.password,
-      callbackURL: "/home", 
-    }, {
-      onSuccess: (ctx: SuccessContext) => {
+    setIsSubmitting(true);
+    try {
+
+      const {data, error} = await authClient.signUp.email({
+          email: signUpData.email,
+          name: signUpData.username,
+          password: signUpData.password,
+          callbackURL: "/home", 
+        })
+
+      if (error) {
+        console.log(error.code)        
+        toast.error("An error occurred during sign-up.", { description: "Please try again later or contact support if the problem persists." })
+        
+      }
+
+      else {
+        toast.success("Successfully signed up!", { description: "Check your e-mail to confirm your account creation." })
         router.replace("/home");
-      },
-
-      onError : (ctx: ErrorContext) => {
-        console.error("Error during sign-up:", ctx.error);
-      },
-
-      onRequest: (ctx: RequestContext) => {
-        console.log("Sign-up request initiated.");
       }
 
     }
-  )
+    catch (error) {
+      toast.error("An unexpected error occurred during sign-up.")
+    }
+    finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -133,13 +144,27 @@ export function StartNowForm() {
 
       {/* Botão */}
       <div className="flex flex-col items-center justify-center mt-1">
-        <input type="hidden" name="redirectTo" />
         <Button
-          type="submit"
-          className="bg-accent px-4  text-sm gap-2 sm:px-5 sm:py-2.5 sm:text-base md:px-6 md:py-3 md:text-lg min-w-[8rem]"
+          type="submit" disabled={isSubmitting} 
+          className={`
+            bg-seaBlue px-4 text-sm gap-2
+            sm:px-5 sm:py-2.5 sm:text-base
+            md:px-6 md:py-3 md:text-lg
+            min-w-[8rem]
+            ${isSubmitting ? "cursor-wait opacity-70" : "cursor-pointer"}
+          `}
         >
-          Create Account
-          <ArrowRightIcon className="h-5 w-5" />
+          {isSubmitting ? (
+            <>
+              <Loader2 className="h-5 w-5 animate-spin" />
+              <span>Creating account...</span>
+            </>
+          ) : (
+            <>
+              Create Account
+              <ArrowRightIcon className="h-5 w-5" />
+            </>
+          )}
         </Button>
       </div>
     </form>

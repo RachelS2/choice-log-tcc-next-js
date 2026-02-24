@@ -99,7 +99,7 @@ export function StartNowForm() {
       email: signUpData.email,
       name: signUpData.username,
       password: signUpData.password,
-      callbackURL: "/home",
+      callbackURL: "/home", 
     }, {
       onSuccess: (ctx: SuccessContext) => {
         router.replace("/home");

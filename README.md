@@ -92,6 +92,8 @@ Prisma is responsible for:
 - Managing migrations
 - Improving developer productivity with autocomplete and compile-time validation
 
+https://www.prisma.io/docs/guides/betterauth-nextjs
+
 ---
 
 ## Prisma Schema
@@ -125,6 +127,24 @@ The generated client is used by the application to perform all database operatio
 
 ---
 
+### `npx prisma migrate dev --name #migrations_name#`
+
+To migrate table configurations to the remote data base and settle it a name, run that command. 
+
+--- 
+
+### `npx prisma db push --force-reset`
+
+That command syncronizes the schema directly with the database, but it **doesn't' logs that action in the migration's history. 
+
+---
+
+### `npx prisma studio` 
+
+To check the database tables via CMD.
+
+---
+
 ## Generated Folder
 
 The `generated/` folder contains auto-generated Prisma Client code.  
@@ -136,16 +156,7 @@ Prisma Client
     ↓
 Neon (PostgreSQL)
 
-### Migrations
-
-To migrate table configurations to the remote data base, run:
-
-### `npx prisma migrate dev` 
-
-To check the database tables via CMD, run:
-
-### `npx prisma studio` 
-
+---
 
 ## Learn More
 

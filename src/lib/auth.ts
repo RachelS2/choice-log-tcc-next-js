@@ -8,6 +8,5 @@ export const auth : Auth<BetterAuthOptions>= betterAuth({
     }), 
     emailAndPassword: {
         enabled: true,
-        requireEmailVerification: true,
     }
 });

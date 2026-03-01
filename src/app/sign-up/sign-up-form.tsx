@@ -10,7 +10,6 @@ import z from 'zod';
 import {authClient} from '@/lib/auth-client';
 import {useRouter} from "next/navigation";
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { ErrorContext, RequestContext, SuccessContext } from 'better-auth/react';
 import { toast } from 'sonner';
 import { useState } from 'react';
 
@@ -99,33 +98,24 @@ export function StartNowForm() {
   async function handleOnSubmit(signUpData: SignUpSchemaType) {
     console.log(signUpData)
     setIsSubmitting(true);
-    try {
+    await fetch("/api/dev/delete-all-users", { method: "DELETE" }); // TODO: Remove this row later
+    await authClient.signUp.email({
+        email: signUpData.email,
+        name: signUpData.username,
+        password: signUpData.password,
+        callbackURL: "/home", 
+      }, {
 
-      const {data, error} = await authClient.signUp.email({
-          email: signUpData.email,
-          name: signUpData.username,
-          password: signUpData.password,
-          callbackURL: "/home", 
-        })
-
-      if (error) {
-        console.log(error.code)        
-        toast.error("An error occurred during sign-up.", { description: "Please try again later or contact support if the problem persists." })
-        
-      }
-
-      else {
-        toast.success("Successfully signed up!", { description: "Check your e-mail to confirm your account creation." })
-        router.replace("/home");
-      }
-
-    }
-    catch (error) {
-      toast.error("An unexpected error occurred during sign-up.")
-    }
-    finally {
-      setIsSubmitting(false);
-    }
+        onSuccess: () => {
+          toast.success("Successfully signed up!", { description: "Check your e-mail to confirm your account creation." })
+          //router.replace("/home");
+        },
+        onError: (ctx) => {
+          toast.error("An error occurred during sign-up.", { description: "Please try again with a different e-mail or contact support if the problem persists." })
+          console.log(ctx.error.message);
+        }
+      });
+    setIsSubmitting(false);
   }
 
   return (

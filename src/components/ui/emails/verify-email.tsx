@@ -17,6 +17,7 @@ interface VerifyEmailProps {
 }
 
 const VerifyEmail = (props: VerifyEmailProps) => {
+  console.log("Verify Url: " + props.verifyUrl);
   const { username, verifyUrl } = props;
   return (
     <Html dir="ltr" lang="en">
@@ -61,7 +62,7 @@ const VerifyEmail = (props: VerifyEmailProps) => {
               <Text className="m-0 text-[12px] text-gray-500 leading-[16px]">
                 Best regards,
                 <br />
-                <AppLogo />
+                ChoiceLog team.
               </Text>
             </Section>
 

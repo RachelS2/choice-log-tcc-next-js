@@ -90,7 +90,6 @@ export function FormInput({ label, marginTop = 0, minLength,  register }: FormIn
 
 //Shows validation error messages for a form field.
 export function FieldError({ message }: { message?: string }) {
-  console.log(message)
   return (
     <p className="mt-1 text-sm text-red-600 min-h-[1.25rem]">
       {message}

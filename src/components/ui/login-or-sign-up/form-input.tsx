@@ -1,10 +1,11 @@
 'use client'
 import {
   AtSymbolIcon,
+  EyeSlashIcon,
   KeyIcon,
 } from '@heroicons/react/24/outline';
-import {  UserIcon } from 'lucide-react';
-import { ForwardRefExoticComponent, RefAttributes, SVGProps } from 'react';
+import {  EyeIcon, UserIcon } from 'lucide-react';
+import { ForwardRefExoticComponent, RefAttributes, SVGProps, useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 
 
@@ -24,7 +25,8 @@ export function FormInput({ label, marginTop = 0, minLength,  register }: FormIn
     title?: string;
     titleId?: string;
 } & RefAttributes<SVGSVGElement>>= AtSymbolIcon;
-
+  const [showPassword, setShowPassword] = useState(false);
+  const isPasswordField: boolean = label === 'Password' || label === 'Check Password';
   switch (label) {
     case 'E-mail':
       placeholder = 'Enter your email address';
@@ -73,16 +75,30 @@ export function FormInput({ label, marginTop = 0, minLength,  register }: FormIn
       </label>
 
       <div className="relative bg-white">
-        <Icon className="pointer-events-none absolute top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-mediumGray peer-focus:text-superDarkGray-900" />
+        <Icon className="pointer-events-none absolute top-1/2 h-[18px] w-[18px] ml-1 -translate-y-1/2 text-mediumGray peer-focus:text-superDarkGray-900" />
 
         <input
           id={id}
           placeholder={placeholder}
           {...register(id)}
           required
-          className="pl-5 peer block w-full rounded-md text-[1.1rem] text-darkGray border border-beige placeholder:text-darkGray"
+          type={isPasswordField ? (showPassword ? 'text' : 'password') : inputProps.type}
+          className="pl-8 pr-8 peer block w-full rounded-md text-[1.1rem] text-darkGray border border-beige placeholder:text-darkGray"
           {...inputProps}
         />
+        {isPasswordField && (
+        <button
+          type="button"
+          onClick={() => setShowPassword(prev => !prev)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-darkGray"
+        >
+          {showPassword ? (
+            <EyeSlashIcon className="h-[18px] w-[18px]" />
+          ) : (
+            <EyeIcon className="h-[18px] w-[18px]" />
+          )}
+        </button>
+      )}
       </div>
     </div>
   );

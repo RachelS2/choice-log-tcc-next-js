@@ -2,37 +2,28 @@ import { Auth, betterAuth, BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import {Resend} from "resend";
-import { emailVerification } from "@/app/api/email-verification";
+import { emailVerification } from "@/lib/email";
 
-export const auth : Auth<BetterAuthOptions>= betterAuth({
+export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: "postgresql", // or "mysql", "postgresql", ...etc
     }), 
     emailAndPassword: {
         enabled: true, 
+        // TODO: Reativar a verificação de e-mail depois, quando o domínio tiver sido comprado
+        
         // requireEmailVerification: true,
-    }
-    // ,emailVerification: {
-    //     sendVerificationEmail: async ({ user, url }) => {
-    //         try {
-    //             const { data , error } = await resend.emails.send({
-    //                 from: "onboarding@resend.dev", //`${process.env.EMAIL_SENDER_NAME} <${process.env.EMAIL_SENDER_ADDRESS}>`,
-    //                 to: user.email,
-    //                 subject: "ChoiceLog - Verify your email",
-    //                 react: VerifyEmail({ username: user.name, verifyUrl: url }),
-    //             });
-    
-    //             if (error) {
-    //                 console.log(error.message);
-    //                 throw new Error(error.message);
-    //             }
-    //         }
-
-    //         catch (error) {
-    //             console.log("Error sending verification email: " + error);
-    //             throw error;
-    //         }
+    // },
+    // emailVerification: {
+    //     sendVerificationEmail: async (params) => {
+    //         const { user, url } = params;
+    //         await emailVerification({
+    //             username: user.name,
+    //             email: user.email,
+    //             url,
+    //         });
     //     },
-    //     sendOnSignUp: true, }
-    } 
-);
+    //     sendOnSignUp: true,
+    // },
+    }
+});

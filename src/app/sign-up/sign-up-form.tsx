@@ -107,8 +107,8 @@ export function StartNowForm() {
       }, {
 
         onSuccess: () => {
-          toast.success("Successfully signed up!", { description: "Check your e-mail to confirm your account creation." })
-          //router.replace("/home");
+          toast.success("Successfully signed up!", { description: "Please login to get started.." })
+          router.replace("/login");
         },
         onError: (ctx) => {
           toast.error("An error occurred during sign-up.", { description: "Please try again with a different e-mail or contact support if the problem persists." })

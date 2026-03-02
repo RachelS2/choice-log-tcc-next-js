@@ -9,18 +9,19 @@ if (!process.env.RESEND_API_KEY) {
 const resend: Resend = new Resend(process.env.RESEND_API_KEY);
 
 type EmailVerificationProps = {
-  user: User,
+  username: string,
+  email: string,
   url: string;
 };
 
-export async function emailVerification ({ user, url }: EmailVerificationProps) {
+export async function emailVerification ({ username, email, url }: EmailVerificationProps) {
    
     try {
         const { data , error } = await resend.emails.send({
             from: "onboarding@resend.dev", //`${process.env.EMAIL_SENDER_NAME} <${process.env.EMAIL_SENDER_ADDRESS}>`,
-            to: user.email,
+            to: email,
             subject: "ChoiceLog - Verify your email",
-            react: VerifyEmail({ username: user.name, verifyUrl: url }),
+            react: VerifyEmail({ username, verifyUrl: url }),
         });
 
         if (error) {

@@ -98,7 +98,7 @@ export function StartNowForm() {
   async function handleOnSubmit(signUpData: SignUpSchemaType) {
     console.log(signUpData)
     setIsSubmitting(true);
-    await fetch("/api/dev/delete-all-users", { method: "DELETE" }); // TODO: Remove this row later
+    // await fetch("/api/dev/delete-all-users", { method: "DELETE" }); // TODO: Remove this row later
     await authClient.signUp.email({
         email: signUpData.email,
         name: signUpData.username,
@@ -111,9 +111,21 @@ export function StartNowForm() {
           router.replace("/login");
         },
         onError: (ctx) => {
-          toast.error("An error occurred during sign-up.", { description: "Please try again with a different e-mail or contact support if the problem persists." })
           console.log(ctx.error.message);
-        }
+          console.log(ctx.error.code);
+          let message: string = "";
+          let description: string = "";
+          if (ctx.error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
+            message= "User already exists";
+            description= "Try logging in instead.";
+          }
+          else {
+            message = "An error occurred during sign-up.";
+            description= "Please try again with a different e-mail or contact support if the problem persists."
+          }
+          toast.error(message, { description: description })
+        },
+        
       });
     setIsSubmitting(false);
   }

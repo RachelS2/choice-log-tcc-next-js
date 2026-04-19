@@ -4,9 +4,7 @@ import {LoginForm} from '../../../app/login/login-form';
 import { Header } from '@/app/header';
 import { StartNowForm } from '@/app/sign-up/sign-up-form';
 
-
-
-export default function  ({ isLoginForm = true}: { isLoginForm?: boolean }) {
+export default function LoginOrStartNow ({ isLoginForm = true}: { isLoginForm?: boolean }) {
     let subTitle: string = "Log in to register your shopping decisions.";
     let mainTitle: string = "Welcome back!";
     let callToAction : string = "Still don't have an account?";

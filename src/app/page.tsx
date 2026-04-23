@@ -1,6 +1,6 @@
 import { BarChart3, Clipboard, BadgeCheck } from "lucide-react";
 import Link from "next/link";
-import {Header} from "@/app/header"
+import {MainHeader} from "@/app/main-header"
 
 export default function Home() {
   const iconClass : string = "bg-white text-darkBlue p-[10px] rounded-[20%] w-[3.5rem] h-[3rem] shadow-[1.2px_1px_1px_1px_#DCDAD8]";
@@ -9,7 +9,7 @@ export default function Home() {
   return ( 
   <main className="min-h-screen pt-[100px] flex items-center justify-center text-center">
 
-    <Header/>
+    <MainHeader/>
 
       <h1 className="text-[2.5rem] sm:text-[3rem] md:text-[4rem] bg-gradient-to-r from-accent to-darkBlue text-transparent bg-clip-text">
         Track your shopping choices with clarity.

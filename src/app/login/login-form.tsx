@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form"
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/components/ui/button';
-import { FormInput } from '../../components/ui/login-or-sign-up/form-input';
+import { FormInput } from '../../components/login-or-sign-up/form-input';
 import { authClient } from '@/lib/auth-client'
 import {zodResolver} from "@hookform/resolvers/zod"
 import { z } from "zod";
@@ -42,11 +42,11 @@ export function LoginForm() {
     await authClient.signIn.email({
       email: loginData.email,
       password: loginData.password,
-      callbackURL: "/home", 
+      callbackURL: "/dashboard", 
     }
     , {
       onSuccess: () => {
-        router.replace("/home");
+        router.replace("/dashboard");
       },
       onError: (ctx) => {
         if (ctx.error.status === 401) {

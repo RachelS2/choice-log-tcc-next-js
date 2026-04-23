@@ -1,5 +1,5 @@
 import {Resend} from "resend";
-import VerifyEmail from "@/components/ui/emails/verify-email";
+import VerifyEmail from "@/components/emails/verify-email";
 import { User } from "better-auth";
 
 if (!process.env.RESEND_API_KEY) {

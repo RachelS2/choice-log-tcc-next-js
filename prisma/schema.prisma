@@ -53,11 +53,124 @@ model Account {
 }
 
 model Verification {
-  id         String   @id @default(cuid())
+  id         String         @id @default(cuid())
   identifier String
   value      String
   expiresAt  DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
 
+}
+
+model Item {
+  id              String      @id @default(cuid())
+  systemName      String
+  friendlyName    String
+  brand           String?
+  type            ItemType
+  imageUrl        String?
+
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  categoryId      String
+  category        Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  consumptions    Consumption[] 
+  wishListItems   WishListItem[]
+
+  @@unique([systemName, brand, userId])
+}
+
+
+model Category {
+  id              String          @id @default(cuid())
+  systemName      String
+  friendlyName    String
+
+  userId          String?
+  user            User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items           Item[]
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([systemName, userId])
+}
+
+
+model WishList {
+  id              String          @id @default(cuid())
+
+  userId          String          @unique
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items           WishListItem[]
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([userId, id]) 
+
+}
+
+
+model WishListItem {
+  id              String                @id @default(cuid())
+
+  wishListId      String
+  wishList        WishList              @relation(fields: [wishListId], references: [id], onDelete: Cascade)
+
+  itemId          String
+  item            Item                  @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  priority        WishListItemPriority
+  goal            String?
+
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  consumptions    Consumption[]
+
+  @@unique([wishListId, itemId]) 
+}
+
+model Consumption {
+  id                  String                @id @default(cuid())
+
+  userId              String
+  user                User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  itemId              String
+  item                Item                  @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  wishListItemId      String?
+  wishListItem        WishListItem?          @relation(fields: [wishListItemId], references: [id])
+
+  wouldBuyAgain       Boolean
+
+  price               Float
+  rating              Int                   // (1–5)
+  ratingReason        String?                       
+  consumptionReason   String?               // motivo da compra
+  notes               String?
+
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime                  @updatedAt
+
+}
+
+enum ItemType {
+  PRODUCT
+  SERVICE
+}
+
+enum WishListItemPriority {
+  HIGH
+  MEDIUM
+  LOW
 }

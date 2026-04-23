@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import AppLogo from '@/components/ui/app-logo'
 
-export function Header() {
+export function MainHeader() {
   const [isOpen, setIsOpen] = useState(false)
   const linkClass : string=
     "flex items-center justify-center transition-colors hover:brightness-110 aria-disabled:cursor-not-allowed px-3 aria-disabled:opacity-50 rounded-full hover:bg-blue h-10";

@@ -3,7 +3,7 @@
 import { Button } from '../../components/ui/button';
 import { ArrowRightIcon , Loader2 } from 'lucide-react';
 import { AuthFormStateModel } from '@/models/auth/auth-form-state-model';
-import { FieldError, FormInput } from '../../components/ui/login-or-sign-up/form-input';
+import { FieldError, FormInput } from '../../components/login-or-sign-up/form-input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
@@ -103,7 +103,7 @@ export function StartNowForm() {
         email: signUpData.email,
         name: signUpData.username,
         password: signUpData.password,
-        callbackURL: "/home", 
+        callbackURL: "/dashboard", 
       }, {
 
         onSuccess: () => {

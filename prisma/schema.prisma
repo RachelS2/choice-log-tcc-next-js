@@ -17,6 +17,10 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  items         Item[]
+  categories    Category[]
+  wishList      WishList?
+  consumptions  Consumption[]
   sessions      Session[]
   accounts      Account[]
 }
@@ -63,24 +67,25 @@ model Verification {
 }
 
 model Item {
-  id              String      @id @default(cuid())
-  systemName      String
   friendlyName    String
-  brand           String?
-  type            ItemType
-  imageUrl        String?
-
-  userId          String
-  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  systemName      String
 
   categoryId      String
   category        Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  id              String      @id @default(cuid())
+  brand           String
+  type            ItemType
+
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
   consumptions    Consumption[] 
   wishListItems   WishListItem[]
+  imageUrl        String?
 
   @@unique([systemName, brand, userId])
 }
@@ -91,6 +96,7 @@ model Category {
   systemName      String
   friendlyName    String
 
+  type            ItemType
   userId          String?
   user            User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -102,7 +108,6 @@ model Category {
   @@unique([systemName, userId])
 }
 
-
 model WishList {
   id              String          @id @default(cuid())
 
@@ -113,8 +118,6 @@ model WishList {
 
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
-
-  @@unique([userId, id]) 
 
 }
 
@@ -151,17 +154,18 @@ model Consumption {
   wishListItemId      String?
   wishListItem        WishListItem?          @relation(fields: [wishListItemId], references: [id])
 
-  wouldBuyAgain       Boolean
-
+  wouldBuyAgain       Boolean?
+  influence           ConsumptionInfluence
   price               Float
-  rating              Int                   // (1–5)
-  ratingReason        String?                       
-  consumptionReason   String?               // motivo da compra
-  notes               String?
-
+  rating              Float?                 // Opcional, pode ser preenchido depois (1–5)
+  negativeAspects     ConsumptionNegativeAspects[]      // contras do consumo. Opcional, pode ser preenchido depois      
+  consumptionReason   ConsumptionReason     // motivo da compra. 
+  details             String?               
+  
+  address             String?
   createdAt           DateTime              @default(now())
-  updatedAt           DateTime                  @updatedAt
-
+  updatedAt           DateTime              @updatedAt
+  consumptionDate     DateTime
 }
 
 enum ItemType {
@@ -174,3 +178,96 @@ enum WishListItemPriority {
   MEDIUM
   LOW
 }
+
+enum ConsumptionReason {
+  ITEM_REPLACEMENT
+  EFFECTIVENESS_TEST
+  PERSONAL_SATISFACTION
+  SOCIAL_ALIGNMENT
+  OTHER
+}
+
+enum ConsumptionInfluence {
+  SOCIAL_MEDIA
+  FRIENDS_FAMILY
+  SOCIETY_TREND
+  OWN_RESEARCH
+  IMPULSIVITY
+  EMERGENCY
+  SELLER_INFLUENCE
+  REDUCED_COST
+  MULTIPLE
+  UNKNOWN
+}
+
+enum ConsumptionNegativeAspects {
+  INEFFECTIVE         // O produto não cumpriu o objetivo proposto
+  LOW_QUALITY         // O produto veio danificado ou é frágil, feito com materiais de baixa qualidade e não possui acabamento adequado
+  LOW_DURABILITY      // Os efeitos do produto tem baixa durabilidade e rendimento
+  POOR_DESIGN         // O design do produto não me agradou
+  UNSAFE              // O produto é perigoso e tem efeitos colaterais
+  POOR_CUSTOMER_SERVICE    // O atendimento não me agradou 
+}
+
+//TODO: Prisma não dá suporte para constraints, então executar no banco mais tarde:
+
+// 1. Constraint de Nota divísivel por 5
+
+//ALTER TABLE "Consumption"
+//ADD CONSTRAINT rating_range
+//CHECK (rating IS NULL OR (rating >= 1 AND rating <= 5));
+
+
+// 2. Adicionar constraint na coluna "details" de Consumption de modo que não armazene mais de 300 caracteres.
+
+//ALTER TABLE "Consumption"
+//ADD CONSTRAINT details_length
+//CHECK (details IS NULL OR char_length(details) <= 300);
+
+
+// 3. Adicionar trigger no item de modo que ele só possa ser associado à categoria (categoryId) se ambos tiverem
+// o mesmo tipo (produto ou serviço).
+
+//CREATE OR REPLACE FUNCTION validate_item_category_type()
+//RETURNS trigger AS $$
+//BEGIN
+//  IF NEW."type" <> (
+//    SELECT "type" FROM "Category" WHERE id = NEW."categoryId"
+//  ) THEN
+//    RAISE EXCEPTION 'Item type must match Category type';
+//  END IF;
+// RETURN NEW;
+//END;
+//$$ LANGUAGE plpgsql;
+
+// CREATE TRIGGER trg_validate_item_category_type
+// BEFORE INSERT OR UPDATE ON "Item"
+// FOR EACH ROW
+// EXECUTE FUNCTION validate_item_category_type();
+
+
+// 4. Adicionar trigger (não dá pra fazer com CHECK simples, porque envolve outra tabela):
+
+//CREATE OR REPLACE FUNCTION validate_consumption_user()
+//RETURNS trigger AS $$
+//BEGIN
+  //IF NEW."userId" <> (
+    //SELECT "userId" FROM "Item" WHERE id = NEW."itemId"
+  //) THEN
+    //RAISE EXCEPTION 'Consumption userId must match Item userId';
+  //END IF;
+ //RETURN NEW;
+//END;
+//$$ LANGUAGE plpgsql;
+
+//CREATE TRIGGER trg_validate_consumption_user
+//BEFORE INSERT OR UPDATE ON "Consumption"
+//FOR EACH ROW
+//EXECUTE FUNCTION validate_consumption_user();
+
+
+// 5. Garantir que consumptionDate não seja no futuro
+
+// ALTER TABLE "Consumption"
+// ADD CONSTRAINT consumption_date_check
+// CHECK ("consumptionDate" <= now());

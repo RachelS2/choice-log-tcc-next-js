@@ -1,48 +1,78 @@
-import { BarChart3, Clipboard, BadgeCheck } from "lucide-react";
-import Link from "next/link";
-import {MainHeader} from "@/app/main-header"
+import Link from "next/link"
+import {
+  BarChart3,
+  Clipboard,
+  BadgeCheck
+} from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent
+} from "@/components/ui/card"
+
+import { MainHeader } from "@/app/main-header"
 
 export default function Home() {
-  const iconClass : string = "bg-white text-darkBlue p-[10px] rounded-[20%] w-[3.5rem] h-[3rem] shadow-[1.2px_1px_1px_1px_#DCDAD8]";
-  const h2Class : string = "text-[1.1rem] text-superDarkGray mt-[15px] border-0";
-  const liClass: string = "flex flex-col items-center justify-center text-center max-w-[140px] whitespace-nowrap mx-10";
-  return ( 
-  <main className="min-h-screen pt-[100px] flex items-center justify-center text-center">
+  const features = [
+    {
+      icon: Clipboard,
+      title: "Log Decisions",
+    },
+    {
+      icon: BadgeCheck,
+      title: "Evaluate Experiences",
+    },
+    {
+      icon: BarChart3,
+      title: "Analyze Your History",
+    },
+  ]
 
-    <MainHeader/>
+  return (
+    <main className="min-h-screen bg-background">
+      <MainHeader />
 
-      <h1 className="text-[2.5rem] sm:text-[3rem] md:text-[4rem] bg-gradient-to-r from-accent to-darkBlue text-transparent bg-clip-text">
-        Track your shopping choices with clarity.
-      </h1>
+      <section className="container mx-auto px-6 py-3 pt-32 pb-16 text-center">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-blue to-blue-600 text-transparent bg-clip-text">
+            Track your shopping choices with clarity.
+          </h1>
 
-      <div className="flex flex-col bg- items-center gap-10 mt-4 ">
-        <p className="text-[1.3rem] sm:text-[1.45rem] md:text-[1.65rem] text-superDarkGray max-w-[40rem]">
-          A platform to record and evaluate  your everyday <b>shopping decisions</b>, helping you to make better choices over time.
-        </p>
+          <p className="text-lg md:text-xl  text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            A platform to record and evaluate your everyday shopping decisions, helping you make better choices over time.
+          </p>
 
-        
-        <Link href="/sign-up" className="flex items-center justify-center rounded-full w-[180px] hover:brightness-110
-         max-w-[40rem] bg-seaBlue h-10 text-[1.1rem] sm:text-[1.25rem] md:text-[1.35rem]">
-          <p className="text-offWhite">Start Now</p>
-        </Link>
+          <Button asChild size="lg" className="bg-blue rounded-full px-8">
+            <Link href="/sign-up">
+              Start Now
+            </Link>
+          </Button>
+        </div>
 
-        <ol className="w-full flex flex-col sm:flex-row sm:flex-nowrap items-center justify-center gap-15  mt-10 mb-10">
-          <li className={`${liClass}`}>
-            <Clipboard className={`${iconClass}`} />
-            <h2 className={`${h2Class}`}>Log Decisions</h2>
-          </li>
-          <li className={`${liClass}`}>
-            <BadgeCheck className={`${iconClass}`} />
-            <h2 className={`${h2Class}`}>Evaluate Experiences</h2>
-          </li>
-          <li className={`${liClass}`}>
-            <BarChart3 className={`${iconClass}`} />
-            <h2 className={`${h2Class}`}>Analyse Your History</h2>
-          </li>
-        </ol>
-      </div>
+        <div className="grid md:grid-cols-3 gap-6 mt-12 max-w-5xl mx-auto">
+          {features.map((item, index) => {
+            const Icon = item.icon
 
-</main>
+            return (
+              <Card
+                key={index}
+                className="border-muted hover:shadow-md transition"
+              >
+                <CardContent className="pt-8 pb-8 flex flex-col items-center text-center space-y-4">
+                  <div className="p-4 rounded-xl bg-primary/10">
+                    <Icon className="h-8 w-8 text-primary" />
+                  </div>
 
-   )
+                  <h2 className="font-semibold text-lg">
+                    {item.title}
+                  </h2>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+      </section>
+    </main>
+  )
 }

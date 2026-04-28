@@ -25,7 +25,25 @@ import {
 } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { NEGATIVE_ASPECTS, CONSUMPTION_REASONS } from './new-experience-details';
+
+export const CONSUMPTION_REASONS: string[] = [
+  'Need',
+  'Impulse',
+  'Gift',
+  'Recommendation',
+  'Replacement',
+  'Other',
+];
+
+export const NEGATIVE_ASPECTS: string[] = [
+  'Price too high',
+  'Poor quality',
+  'Slow shipping',
+  'Bad packaging',
+  'Difficult to use',
+  "Didn't meet expectations",
+  'Short lifespan',
+];
 
 interface ReflectionSectionProps {
   reason: string;

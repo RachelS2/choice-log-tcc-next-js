@@ -1,4 +1,12 @@
 import Sidebar from "@/components/dashboard/sidebar";
+import { Kaisei_Tokumin } from "next/font/google";
+
+
+const kaiseiTokumin = Kaisei_Tokumin({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-kaisei',
+});
 
 export default function DashboardLayout({
   children,
@@ -6,7 +14,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen">
+    <div className={`${kaiseiTokumin.variable} font-sans antialiased flex min-h-screen `}>
       <Sidebar />
       <main className="flex-1">
         {children}

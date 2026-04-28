@@ -149,7 +149,7 @@ export function StartNowForm() {
         <Button
           type="submit" disabled={isSubmitting} 
           className={`
-            bg-seaBlue px-4 text-sm gap-2
+            bg-blue px-4 text-sm gap-2
             sm:px-5 sm:py-2.5 sm:text-base
             md:px-6 md:py-3 md:text-lg
             min-w-[8rem]

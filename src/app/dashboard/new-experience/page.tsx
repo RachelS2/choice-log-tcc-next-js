@@ -4,10 +4,10 @@ import { toast } from 'sonner';
 import { Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import ProductSelector, { Product } from '../../components/new-experience/product-selector';
-import AddProductModal from '../../components/new-experience/add-product-modal';
-import ExperienceDetails from '../../components/new-experience/new-experience-details';
-import ReflectionSection from '../../components/new-experience/reflection-section';
+import ProductSelector, { Product } from '../../../components/new-experience/product-selector';
+import AddProductModal from '../../../components/new-experience/add-product-modal';
+import ExperienceDetails from '../../../components/new-experience/new-experience-details';
+import ReflectionSection from '../../../components/new-experience/reflection-section';
 
 const SEED_PRODUCTS: Product[] = [
   { id: 'p-1', name: 'AirPods Pro (2nd gen)', brand: 'Apple', category: 'Electronics' },
@@ -66,8 +66,7 @@ export default function NewExperiencePage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
-        <p className="text-sm text-blue-600 font-medium mb-1">Experiences</p>
+      <div className="mt-4">
         <h1 className="text-3xl font-semibold text-gray-900 tracking-tight">
           Log a new purchase experience
         </h1>

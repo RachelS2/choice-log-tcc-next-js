@@ -1,200 +1,167 @@
-import { X, ChevronDown } from 'lucide-react';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import { toast } from 'sonner';
+import { Save } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import ProductSelector, { Product } from './product-selector';
+import AddProductModal from './add-product-modal';
+import ExperienceDetails from './experience-details';
+import ReflectionSection from './reflection-section';
 
-// TODO: Pegar do banco depois
-export const CONSUMPTION_REASONS : string[] = [
-  'Need',
-  'Impulse',
-  'Gift',
-  'Recommendation',
-  'Replacement',
-  'Other',
+const SEED_PRODUCTS: Product[] = [
+  { id: 'p-1', name: 'AirPods Pro (2nd gen)', brand: 'Apple', category: 'Electronics' },
+  { id: 'p-2', name: 'Kindle Paperwhite', brand: 'Amazon', category: 'Electronics' },
+  { id: 'p-3', name: 'Nespresso Vertuo Plus', brand: 'Nespresso', category: 'Home & Kitchen' },
+  { id: 'p-4', name: 'V15 Detect Cordless Vacuum', brand: 'Dyson', category: 'Home & Kitchen' },
+  { id: 'p-5', name: 'WH-1000XM5 Headphones', brand: 'Sony', category: 'Electronics' },
+  { id: 'p-6', name: 'Instant Pot Duo 7-in-1', brand: 'Instant Pot', category: 'Home & Kitchen' },
 ];
 
-// TODO: Pegar do banco depois
-export const NEGATIVE_ASPECTS : string[] = [
-  'Price too high',
-  'Poor quality',
-  'Slow shipping',
-  'Bad packaging',
-  'Difficult to use',
-  "Didn't meet expectations",
-  'Short lifespan',
-];
+export default function NewExperiencePage() {
+  const [products, setProducts] = useState<Product[]>(SEED_PRODUCTS);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
-interface ReflectionSectionProps {
-  reason: string;
-  onReasonChange: (value: string) => void;
-  negativeAspects: string[];
-  onNegativeAspectsChange: (value: string[]) => void;
-  notes: string;
-  onNotesChange: (value: string) => void;
-}
+  const [rating, setRating] = useState(0);
+  const [wouldBuyAgain, setWouldBuyAgain] = useState(true);
+  const [price, setPrice] = useState('');
+  const [date, setDate] = useState<Date>(new Date());
 
-export default function ReflectionSection({
-  reason,
-  onReasonChange,
-  negativeAspects,
-  onNegativeAspectsChange,
-  notes,
-  onNotesChange,
-}: ReflectionSectionProps) {
-  const [aspectsOpen, setAspectsOpen] = useState(false);
+  const [reason, setReason] = useState('');
+  const [negativeAspects, setNegativeAspects] = useState<string[]>([]);
+  const [notes, setNotes] = useState('');
 
-  const toggleAspect = (aspect: string) => {
-    if (negativeAspects.includes(aspect)) {
-      onNegativeAspectsChange(negativeAspects.filter((a) => a !== aspect));
-    } else {
-      onNegativeAspectsChange([...negativeAspects, aspect]);
-    }
+  const handleCreateProduct = (product: Product) => {
+    setProducts((prev) => [product, ...prev]);
+    setSelectedId(product.id);
+    toast.success('Product added', {
+      description: `${product.name} is now available for selection.`,
+    });
   };
 
-  const removeAspect = (aspect: string) => {
-    onNegativeAspectsChange(negativeAspects.filter((a) => a !== aspect));
+  const canSubmit = selectedId && rating > 0 && price && reason;
+
+  const handleSave = () => {
+    if (!canSubmit) {
+      toast.error('Please complete the required fields', {
+        description: 'Product, rating, price and reason are required.',
+      });
+      return;
+    }
+    toast.success('Experience saved', {
+      description: 'Your purchase experience has been recorded.',
+    });
+    // reset
+    setSelectedId(null);
+    setRating(0);
+    setWouldBuyAgain(true);
+    setPrice('');
+    setDate(new Date());
+    setReason('');
+    setNegativeAspects([]);
+    setNotes('');
   };
 
   return (
-    <div className="space-y-6">
-      {/* Reason */}
-      <div className="space-y-2">
-        <Label htmlFor="reason">Why did you buy it?</Label>
-        <Select value={reason} onValueChange={onReasonChange}>
-          <SelectTrigger id="reason" className="bg-white">
-            <SelectValue placeholder="Select a reason" />
-          </SelectTrigger>
-          <SelectContent>
-            {CONSUMPTION_REASONS.map((r) => (
-              <SelectItem key={r} value={r}>
-                {r}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <p className="text-sm text-blue-600 font-medium mb-1">Experiences</p>
+        <h1 className="text-3xl font-semibold text-gray-900 tracking-tight">
+          Log a new purchase experience
+        </h1>
+        <p className="text-gray-500 mt-2">
+          Capture how a product performed so you can make smarter decisions next time.
+        </p>
       </div>
 
-      {/* Negative aspects multi-select */}
-      <div className="space-y-2">
-        <Label>Negative aspects (optional)</Label>
-        <Popover open={aspectsOpen} onOpenChange={setAspectsOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              type="button"
-              variant="outline"
-              role="combobox"
-              className="w-full justify-between bg-white font-normal"
-            >
-              <span className="text-gray-500">
-                {negativeAspects.length > 0
-                  ? `${negativeAspects.length} selected`
-                  : 'Select aspects you disliked...'}
-              </span>
-              <ChevronDown className="h-4 w-4 opacity-50" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
-            <Command>
-              <CommandInput placeholder="Search aspects..." />
-              <CommandList>
-                <CommandEmpty>No aspect found.</CommandEmpty>
-                <CommandGroup>
-                  {NEGATIVE_ASPECTS.map((aspect) => {
-                    const selected = negativeAspects.includes(aspect);
-                    return (
-                      <CommandItem
-                        key={aspect}
-                        value={aspect}
-                        onSelect={() => toggleAspect(aspect)}
-                      >
-                        <div
-                          className={cn(
-                            'mr-2 h-4 w-4 rounded border flex items-center justify-center',
-                            selected
-                              ? 'bg-blue-600 border-blue-600'
-                              : 'border-gray-300 bg-white'
-                          )}
-                        >
-                          {selected && (
-                            <svg
-                              viewBox="0 0 16 16"
-                              className="h-3 w-3 text-white"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            >
-                              <path d="M3 8l3 3 7-7" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          )}
-                        </div>
-                        {aspect}
-                      </CommandItem>
-                    );
-                  })}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
+      {/* Product Selection */}
+      <Card className="border-gray-200 shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-lg">Product</CardTitle>
+          <CardDescription>Select an existing product or add a new one to your catalog.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ProductSelector
+            products={products}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+            onAddNew={() => setModalOpen(true)}
+          />
+        </CardContent>
+      </Card>
 
-        {negativeAspects.length > 0 && (
-          <div className="flex flex-wrap gap-2 pt-2">
-            {negativeAspects.map((aspect) => (
-              <Badge
-                key={aspect}
-                variant="secondary"
-                className="bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-100 pl-3 pr-1 py-1 gap-1"
-              >
-                {aspect}
-                <button
-                  type="button"
-                  onClick={() => removeAspect(aspect)}
-                  className="ml-1 rounded-full hover:bg-blue-200 p-0.5"
-                  aria-label={`Remove ${aspect}`}
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </Badge>
-            ))}
-          </div>
-        )}
+      {/* Experience Details */}
+      <Card className="border-gray-200 shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-lg">Experience details</CardTitle>
+          <CardDescription>Rate this purchase and record the key facts.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ExperienceDetails
+            rating={rating}
+            onRatingChange={setRating}
+            wouldBuyAgain={wouldBuyAgain}
+            onWouldBuyAgainChange={setWouldBuyAgain}
+            price={price}
+            onPriceChange={setPrice}
+            date={date}
+            onDateChange={setDate}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Reflection */}
+      <Card className="border-gray-200 shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-lg">Reflection</CardTitle>
+          <CardDescription>Reflect on why you bought it and what could be better.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ReflectionSection
+            reason={reason}
+            onReasonChange={setReason}
+            negativeAspects={negativeAspects}
+            onNegativeAspectsChange={setNegativeAspects}
+            notes={notes}
+            onNotesChange={setNotes}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Submit */}
+      <div className="flex items-center justify-end gap-3 pt-2">
+        <Button
+          variant="outline"
+          className="!bg-transparent hover:!bg-gray-50"
+          onClick={() => {
+            setSelectedId(null);
+            setRating(0);
+            setWouldBuyAgain(true);
+            setPrice('');
+            setDate(new Date());
+            setReason('');
+            setNegativeAspects([]);
+            setNotes('');
+          }}
+        >
+          Reset
+        </Button>
+        <Button
+          size="lg"
+          onClick={handleSave}
+          className="bg-blue-600 text-white hover:bg-blue-700 shadow-sm"
+        >
+          <Save className="h-4 w-4 mr-2" />
+          Save Experience
+        </Button>
       </div>
 
-      {/* Notes */}
-      <div className="space-y-2">
-        <Label htmlFor="notes">Additional notes (optional)</Label>
-        <Textarea
-          id="notes"
-          placeholder="Write any extra thoughts about this purchase..."
-          value={notes}
-          onChange={(e) => onNotesChange(e.target.value)}
-          rows={4}
-          className="bg-white resize-none"
-        />
-      </div>
+      <AddProductModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        onCreate={handleCreateProduct}
+      />
     </div>
   );
 }

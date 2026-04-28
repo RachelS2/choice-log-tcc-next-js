@@ -2,12 +2,12 @@ import {headers} from "next/headers";
 import {auth} from "@/lib/auth";
 import {redirect} from "next/navigation";
 import Header from "@/components/dashboard/header";
-import Sidebar from "@/components/dashboard/sidebar";
 import SummaryCards from "@/components/dashboard/summary-cards";
 import ChartSection from "@/components/dashboard/chart-section";
 import RecentExperiences from "@/components/dashboard/recent-experiences";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link'
+import { Card, CardAction, CardDescription } from "@/components/ui/card";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() } );
@@ -19,21 +19,19 @@ export default async function DashboardPage() {
     <main className="flex-1 p-6 space-y-6">
       <Header username={username} />
 
-      {/* CTA */}
-      <div className="bg-white  p-6 rounded-2xl shadow flex items-center justify-between">
-        <div>
-          <Button className="text-xl font-semibold text-darkBlue">Nova Experiência</Button>
-          <p className="text-gray-500">
+      <Card className="bg-white p-6 rounded-2xl shadow flex items-center justify-between">
+          <CardDescription className="text-black-900">
             Registre uma decisão de consumo recente e reflita sobre ela.
-          </p>
-        </div>
-
-        <Link href="/new-experience" className="bg-blue-600 text-white px-5 py-3 rounded-xl hover:bg-blue-700">
-          + Nova Experiência
-          
-        </Link>
-        
-      </div>
+          </CardDescription>
+          <CardAction className="text-white">
+            <Link
+              href="/dashboard/new-experience"
+              className="inline-flex items-center rounded-xl bg-blue-600 px-5 py-3 hover:bg-blue-700"
+            >
+              + Nova Experiência
+            </Link>
+          </CardAction>
+      </Card>
 
       <SummaryCards />
       <ChartSection />

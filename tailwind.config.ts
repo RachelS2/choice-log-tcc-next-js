@@ -22,7 +22,7 @@ const config: Config = {
         offWhite: "var(--offWhite)",
       },
       fontFamily: {
-        kaisei: ['"Kaisei Tokumin"', "serif"],
+          sans: ["var(--font-poppins)", "Arial", "sans-serif"],
       },
     },
   },

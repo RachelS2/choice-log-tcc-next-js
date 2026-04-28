@@ -9,7 +9,7 @@ interface AppLogoProps {
   href?: string; // se não houver href, logo não é clicável
 }
 
-export default function AppLogo({ textColor = "text-darkBlue", href }: AppLogoProps) {
+export default function AppLogo({ textColor = "text-gray-900", href }: AppLogoProps) {
   const isClickable: boolean  = Boolean(href);
 
   const content = (
@@ -18,10 +18,10 @@ export default function AppLogo({ textColor = "text-darkBlue", href }: AppLogoPr
         isClickable ? 'cursor-pointer hover:opacity-80' : 'cursor-default'
       }`}
     >
-      <CheckSquare className={cn("bg-beige w-10 h-7 ", textColor)} />
-      <span className={cn("font-bold", textColor)}> 
-        ChoiceLog
-      </span>
+      <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
+        <CheckSquare className="h-4 w-4 text-white" />
+      </div>
+      <span className="font-semibold text-gray-900">Choice Log</span>
     </div>
   );
 

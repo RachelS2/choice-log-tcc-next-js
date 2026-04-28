@@ -1,77 +1,63 @@
 import Link from "next/link"
 import {
+  ArrowRight,
   BarChart3,
-  Clipboard,
-  BadgeCheck
+  BadgeCheck,
+  ShoppingBag,
+  Sparkles,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
-  CardContent
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
 } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import MainHeader from "./main-header"
+import HeroDashboardSection from "@/components/landing/hero-dashboard"
+import BenefitsSection from "@/components/landing/benefits-section"
 
-import { MainHeader } from "@/app/main-header"
-
-export default function Home() {
-  const features = [
-    {
-      icon: Clipboard,
-      title: "Log Decisions",
-    },
-    {
-      icon: BadgeCheck,
-      title: "Evaluate Experiences",
-    },
-    {
-      icon: BarChart3,
-      title: "Analyze Your History",
-    },
-  ]
-
+export default function HomePage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-white">
       <MainHeader />
 
-      <section className="container mx-auto px-6 py-3 pt-32 pb-16 text-center">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-blue to-blue-600 text-transparent bg-clip-text">
-            Track your shopping choices with clarity.
-          </h1>
+      {/* Fake dashboard and Hero */}
+      <HeroDashboardSection />
 
-          <p className="text-lg md:text-xl  text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            A platform to record and evaluate your everyday shopping decisions, helping you make better choices over time.
-          </p>
+      <Separator className="mx-auto max-w-7xl" />
 
-          <Button asChild size="lg" className="bg-blue rounded-full px-8">
-            <Link href="/sign-up">
-              Start Now
-            </Link>
-          </Button>
-        </div>
+      <BenefitsSection/>
 
-        <div className="grid md:grid-cols-3 gap-6 mt-12 max-w-5xl mx-auto">
-          {features.map((item, index) => {
-            const Icon = item.icon
+      {/* Final CTA */}
+      <section className="mx-auto max-w-7xl px-6 pb-24">
+        <Card className="rounded-3xl border-none bg-primary text-primary-foreground">
+          <CardContent className="flex flex-col gap-6 p-10 text-center md:p-14">
+            <h3 className="text-3xl font-semibold">
+              Comece a comprar com mais consciência.
+            </h3>
 
-            return (
-              <Card
-                key={index}
-                className="border-muted hover:shadow-md transition"
+            <p className="mx-auto max-w-2xl text-primary-foreground/80">
+              Transforme decisões comuns em aprendizados valiosos.
+            </p>
+
+            <div>
+              <Button
+                size="lg"
+                variant="secondary"
+                asChild
               >
-                <CardContent className="pt-8 pb-8 flex flex-col items-center text-center space-y-4">
-                  <div className="p-4 rounded-xl bg-primary/10">
-                    <Icon className="h-8 w-8 text-primary" />
-                  </div>
-
-                  <h2 className="font-semibold text-lg">
-                    {item.title}
-                  </h2>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </div>
+                <Link href="/sign-up">
+                  Criar Conta Grátis
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </section>
     </main>
   )

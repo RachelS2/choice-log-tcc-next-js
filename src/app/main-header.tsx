@@ -1,55 +1,31 @@
-'use client'
+"use client"
 
-import Link from 'next/link'
-import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
-import AppLogo from '@/components/ui/app-logo'
+import Link from "next/link"
+import { Button } from '@/components/ui/button';
+import { Sparkles } from 'lucide-react';
+import AppLogo from "@/components/ui/app-logo";
 
-export function MainHeader() {
-  const [isOpen, setIsOpen] = useState(false)
-  const linkClass : string=
-    "flex items-center justify-center transition-colors hover:brightness-110 aria-disabled:cursor-not-allowed px-3 aria-disabled:opacity-50 rounded-full hover:bg-blue h-10";
-
-  const hamburgerMenuClass: string = "flex items-center justify-center w-[130px] whitespace-nowrap px-2 transition-colors hover:brightness-110 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 md:w-[140px] rounded hover:bg-darkBlue h-10";
-
+export default function MainHeader() {
   return (
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <AppLogo href="/" textColor="text-gray-900" />
 
-    <header className="fixed top-0 w-full h-[100px] flex items-center justify-between bg-darkBlue text-white border-b-2 border-white z-50">
-
-      <div className="mx-5">
-        <AppLogo textColor="text-white" href='/'/>
-      </div>
-
-      {/* Hamburguer button control, visible when the screen is minimized */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden text-white m-5 cursor-pointer"
-        aria-label="Toggle menu"
-      >
-        {isOpen ? <X size={32} /> : <Menu size={32} />}
-      </button>
-
-      {/* Desktop nav menu */}
-      <nav className="hidden md:flex items-center justify-center gap-5 text-[1.2rem] mx-5">
-        <Link href="/how-it-works" className={`${linkClass} whitespace-nowrap`}>How It Works</Link>
-        <Link href="/resources" className={`${linkClass}`}>Resources</Link>
-        <Link href="/about"  className={`${linkClass}`}>About</Link>
-        <Link href="/login" className={`${linkClass}`}>Log In</Link>
-        <Link href="/sign-up" className={`${linkClass} whitespace-nowrap` }>Start Now</Link>
-        {/* <Button className="w-[130px] md:w-[140px] bg-[var(--darkdarkBlue)] hover:bg-lightdarkBlue">Start Now</Button> */}
-      </nav>
-
-      {/* Menu mobile dropdown - Hamburguer */}
-      {isOpen && (
-        
-        <nav className="absolute items-center justify-center top-[100px] w-full right-0 bg-accent flex flex-row items-center gap-2 py-4 px-4 text-lg md:hidden z-40">
-          <Link href="/how-it-works" className={`${hamburgerMenuClass}`} onClick={() => setIsOpen(false)}>How It Works</Link>
-          <Link href="/resources" className={`${hamburgerMenuClass}`}  onClick={() => setIsOpen(false)}>Resources</Link>
-          <Link href="/about"  className={`${hamburgerMenuClass}`}  onClick={() => setIsOpen(false)}>About</Link>
-          <Link href="/login" className={`${hamburgerMenuClass}`} >Log In</Link>
-          <Link href="/sign-up"  className={`${hamburgerMenuClass}`} >Start Now</Link>
+        <nav className="flex items-center gap-2 sm:gap-4">
+          <Link
+            href="/experiences"
+            className="hidden text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-950 sm:inline-block"
+          >
+            Entrar
+          </Link>
+          <Button
+            asChild
+            className="bg-blue-600 text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md"
+          >
+            <Link href="/experiences">Criar Conta</Link>
+          </Button>
         </nav>
-      )}
+      </div>
     </header>
-  )
+  );
 }

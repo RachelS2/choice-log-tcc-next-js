@@ -1,6 +1,6 @@
 'use client'
 import { FaceFrownIcon } from '@heroicons/react/24/outline';
-import { MainHeader } from './main-header';
+import  MainHeader from './main-header';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 export default function NotFound() {

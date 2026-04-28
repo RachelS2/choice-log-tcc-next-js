@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import AppLogo from '../ui/app-logo';
 
 interface NavItem {
   label: string;
@@ -26,12 +27,13 @@ export default async function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 flex flex-col">
       <div className="h-16 flex items-center px-6 border-b border-gray-200">
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
             <Sparkles className="h-4 w-4 text-white" />
           </div>
           <span className="font-semibold text-gray-900">Choice Log</span>
-        </div>
+        </div> */}
+        <AppLogo href="/dashboard" textColor="text-gray-900" />
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1">

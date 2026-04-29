@@ -18,11 +18,11 @@ export default function HeroDashboardSection() {
               Consumerism reflection platform
             </Badge>
 
-            <h1 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-blue-500 to-blue-900 bg-clip-text text-transparent sm:text-5xl lg:text-6xl">
-              Smarter shopping decisions start here.
+            <h1 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent sm:text-5xl lg:text-6xl">
+              Better shopping decisions start here.
             </h1>
 
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-neutral-900">
+            <p className="mt-6 max-w-xl text-xl leading-relaxed text-neutral-900">
               ChoiceLog helps you record, evaluate, and reflect on your shopping experiences — 
               transforming each purchase into a step toward more informed future decisions.
             </p>
@@ -32,10 +32,10 @@ export default function HeroDashboardSection() {
               asChild
               variant="ghost"
               size="lg"
-              className="bg-blue-600 text-white hover:bg-blue-700 hover:text-white"
+              className="bg-blue-600 text-white text-sm hover:bg-blue-700 hover:text-white"
             >
-                <Link href="/experiences">
-                  Começar Agora
+                <Link href="/login">
+                  Start Now
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -43,9 +43,8 @@ export default function HeroDashboardSection() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-neutral-300 !bg-transparent text-neutral-900 transition-colors hover:!bg-neutral-90"
-              >
-                <Link href="/experiences">Saiba mais</Link>
+                className="border-neutral-300 bg-white text-neutral-950 hover:bg-neutral-100 hover:text-neutral-700 transition-colors">
+                  <Link href="/experiences">Learn More</Link>
               </Button>
             </div>
           </div>
@@ -60,15 +59,15 @@ export default function HeroDashboardSection() {
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
-                    Última experiência
+                    LAST EXPERIENCE
                   </p>
                   <h3 className="mt-1 text-lg font-semibold text-neutral-950">
                     Fone Bluetooth Pro X
                   </h3>
                   <p className="text-sm text-neutral-500">SoundCo · R$ 499,90</p>
                 </div>
-                <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700">
-                  Excelente
+                <span className="rounded-full bg-blue-50 px-2.5 py-1 text-sm font-medium text-blue-700">
+                  Excellent
                 </span>
               </div>
 
@@ -92,8 +91,8 @@ export default function HeroDashboardSection() {
               {/* Mini chart */}
               <div className="mt-6 rounded-xl bg-neutral-50 p-4">
                 <div className="mb-3 flex items-center justify-between">
-                  <span className="text-xs font-medium text-neutral-600">
-                    Satisfação ao longo do tempo
+                  <span className="text-s font-medium text-neutral-600">
+                    Your consumption satisfaction over time 
                   </span>
                   <TrendingUp className="h-4 w-4 text-blue-600" />
                 </div>
@@ -113,20 +112,20 @@ export default function HeroDashboardSection() {
               {/* Small meta row */}
               <div className="mt-4 grid grid-cols-3 gap-3 text-center">
                 <div className="rounded-lg border border-neutral-200 p-2">
-                  <p className="text-xs text-neutral-500">Registros</p>
-                  <p className="text-sm font-semibold text-neutral-950">
+                  <p className="text-sm text-neutral-800">Registered Experiences</p>
+                  <p className="text-xs font-semibold text-neutral-950">
                     248
                   </p>
                 </div>
                 <div className="rounded-lg border border-neutral-200 p-2">
-                  <p className="text-xs text-neutral-500">Média</p>
-                  <p className="text-sm font-semibold text-neutral-950">
+                  <p className="text-sm text-neutral-800">Average Satisfaction</p>
+                  <p className="text-xs font-semibold text-neutral-950">
                     4,3
                   </p>
                 </div>
                 <div className="rounded-lg border border-neutral-200 p-2">
-                  <p className="text-xs text-neutral-500">Economia</p>
-                  <p className="text-sm font-semibold text-blue-600">+18%</p>
+                  <p className="text-sm text-neutral-800">Economy</p>
+                  <p className="text-xs font-semibold text-blue-600">+18%</p>
                 </div>
               </div>
             </div>

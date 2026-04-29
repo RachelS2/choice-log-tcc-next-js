@@ -1,13 +1,13 @@
 'use client'
 import { FaceFrownIcon } from '@heroicons/react/24/outline';
-import  MainHeader from './main-header';
+import  LandingHeader from '../components/landing/header';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 export default function NotFound() {
   const router = useRouter();
   return (
     <main className="gap-2">
-      <MainHeader />
+      <LandingHeader />
       <FaceFrownIcon className="w-13 text-superDarkGray" />
       <h2 className="text-2xl font-semibold text-superDarkGray  ">404 Not Found</h2>
       <p className="text-xl text-superDarkGray">Could not find the requested page.</p>

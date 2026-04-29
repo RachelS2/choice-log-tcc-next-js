@@ -1,7 +1,7 @@
 import AppLogo from '@/components/ui/app-logo';
 import Link from 'next/link';
 import {LoginForm} from '../../app/login/login-form';
-import { MainHeader } from '@/app/main-header';
+import  LandingHeader  from '@/components/landing/header';
 import { StartNowForm } from '@/app/sign-up/sign-up-form';
 
 export default function LoginOrStartNow ({ isLoginForm = true}: { isLoginForm?: boolean }) {
@@ -20,7 +20,7 @@ export default function LoginOrStartNow ({ isLoginForm = true}: { isLoginForm?: 
     }
     return (
     <>
-        <MainHeader />
+        <LandingHeader />
         <main className="flex w-full max-w-md justify-center pt-[100px]">
             {/* <div className="flex flex-col items-center  w-full gap-6"> */}
 

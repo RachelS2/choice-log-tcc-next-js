@@ -17,48 +17,24 @@ import {
   CardDescription,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import MainHeader from "./main-header"
+import LandingHeader from "../components/landing/header"
 import HeroDashboardSection from "@/components/landing/hero-dashboard"
 import BenefitsSection from "@/components/landing/benefits-section"
+import HowItWorksSection from "@/components/landing/how-it-works"
+import FinalCTASection from "@/components/landing/final-cta"
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white">
-      <MainHeader />
+    <main className="min-h-screen bg-gradient-to-b from-white via-blue-50 to-white">
+      <LandingHeader />
 
-      {/* Fake dashboard and Hero */}
       <HeroDashboardSection />
-
-      <Separator className="mx-auto max-w-7xl" />
 
       <BenefitsSection/>
 
-      {/* Final CTA */}
-      <section className="mx-auto max-w-7xl px-6 pb-24">
-        <Card className="rounded-3xl border-none bg-primary text-primary-foreground">
-          <CardContent className="flex flex-col gap-6 p-10 text-center md:p-14">
-            <h3 className="text-3xl font-semibold">
-              Comece a comprar com mais consciência.
-            </h3>
+      <HowItWorksSection/>
 
-            <p className="mx-auto max-w-2xl text-primary-foreground/80">
-              Transforme decisões comuns em aprendizados valiosos.
-            </p>
-
-            <div>
-              <Button
-                size="lg"
-                variant="secondary"
-                asChild
-              >
-                <Link href="/sign-up">
-                  Criar Conta Grátis
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
+      <FinalCTASection />
     </main>
   )
 }

@@ -4,21 +4,21 @@ import { ClipboardCheck, Star, BarChart3 } from 'lucide-react';
 const benefits = [
   {
     icon: ClipboardCheck,
-    title: 'Registre decisões de compra',
+    title: 'Record purchase decisions',
     description:
-      'Mantenha um histórico detalhado de cada aquisição — produtos, marcas, preços e contexto da decisão.',
+      'Keep a detailed record of each purchase — products, brands, prices, and the context of the decision for your future self.',
   },
   {
     icon: Star,
-    title: 'Avalie experiências reais',
+    title: 'Evaluate real experiences',
     description:
-      'Atribua notas e escreva reflexões honestas sobre o que você consumiu, com base no uso real do produto.',
+      'Assign ratings and write honest reflections about what you have consumed, based on the actual use of the product.',
   },
   {
     icon: BarChart3,
-    title: 'Descubra padrões de consumo',
+    title: 'Discover your consumption patterns',
     description:
-      'Visualize tendências, identifique decisões recorrentes e melhore sua forma de consumir ao longo do tempo.',
+      'Visualize trends, identify recurring decisions, and improve your consumption habits over time.',
   },
 ];
 
@@ -27,13 +27,12 @@ export default function BenefitsSection() {
     <section className="border-t border-neutral-200  py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-semibold tracking-tight text-neutral-950 sm:text-4xl">
-            Tudo o que você precisa para consumir melhor
+          <h2 className="text-3xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent sm:text-4xl">
+            Everything you need to make smarter shopping decisions
           </h2>
-          <p className="mt-4 text-lg text-neutral-600">
-            Uma plataforma pensada para quem busca mais consciência e clareza
-            nas decisões de consumo do dia a dia.
-          </p>
+          <h3 className="mt-6 text-xl text-neutral-900">
+            A platform designed for those seeking greater awareness and clarity in their daily consumption decisions.
+          </h3>
         </div>
 
         <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -46,10 +45,10 @@ export default function BenefitsSection() {
                 <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
                   <Icon className="h-5 w-5 text-blue-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-neutral-950">
+                <h3 className="text-xl font-semibold text-neutral-950">
                   {title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+                <p className="mt-2 text-lg leading-relaxed text-neutral-600">
                   {description}
                 </p>
               </CardContent>

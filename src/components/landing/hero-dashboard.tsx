@@ -13,7 +13,7 @@ export default function HeroDashboardSection() {
           <div className="flex flex-col items-start">
             <Badge
               variant="outline"
-              className="mb-6 rounded-full border-neutral-300 bg-white px-3 py-3 text-sm font-medium text-neutral-700"
+              className="mb-6 rounded-full border-neutral-300 bg-white px-3 py-3 text-base font-medium text-neutral-700"
             >
               Consumerism reflection platform
             </Badge>
@@ -32,7 +32,7 @@ export default function HeroDashboardSection() {
               asChild
               variant="ghost"
               size="lg"
-              className="bg-blue-600 text-white text-sm hover:bg-blue-700 hover:text-white"
+              className="bg-blue-600 text-white text-base hover:bg-blue-700 hover:text-white"
             >
                 <Link href="/login">
                   Start Now
@@ -43,7 +43,7 @@ export default function HeroDashboardSection() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-neutral-300 bg-white text-neutral-950 hover:bg-neutral-100 hover:text-neutral-700 transition-colors">
+                className="border-neutral-300 text-base bg-white text-neutral-950 hover:bg-neutral-100 hover:text-neutral-700 transition-colors">
                   <Link href="/experiences">Learn More</Link>
               </Button>
             </div>

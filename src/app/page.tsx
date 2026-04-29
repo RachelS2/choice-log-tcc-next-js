@@ -1,22 +1,3 @@
-import Link from "next/link"
-import {
-  ArrowRight,
-  BarChart3,
-  BadgeCheck,
-  ShoppingBag,
-  Sparkles,
-} from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 import LandingHeader from "../components/landing/header"
 import HeroDashboardSection from "@/components/landing/hero-dashboard"
 import BenefitsSection from "@/components/landing/benefits-section"
@@ -33,7 +14,7 @@ export default function HomePage() {
       <BenefitsSection/>
 
       <HowItWorksSection/>
-
+      
       <FinalCTASection />
     </main>
   )

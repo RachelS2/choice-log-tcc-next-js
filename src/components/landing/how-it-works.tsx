@@ -6,14 +6,14 @@ const steps = [
     icon: ShoppingBag,
     title: 'Register a Purchase',
     description:
-      'Add the product, its brand, the price paid, and the context that led to the purchase decision.',
+      'Add a product or service, its brand, the price paid, and the context that led to the purchase decision.',
   },
   {
     number: '02',
     icon: Star,
-    title: 'Evaluate Experience',
+    title: 'Evaluate Experiences',
     description:
-      "After use, rate it and record what worked—or didn't work—in practice.",
+      "After consuming a product or a service, rate it and record what worked —or didn't work— in practice.",
   },
   {
     number: '03',

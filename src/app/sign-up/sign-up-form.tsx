@@ -163,7 +163,7 @@ export function StartNowForm() {
             </>
           ) : (
             <>
-              Create Account
+              Sign Up
               <ArrowRightIcon className="h-5 w-5" />
             </>
           )}

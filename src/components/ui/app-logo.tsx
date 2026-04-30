@@ -19,7 +19,7 @@ export default function AppLogo({ textColor = "text-gray-900", href }: AppLogoPr
       }`}
     >
       <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
-        <CheckSquare className="h-4 w-4 text-white"/>
+        <ShoppingBag className="h-4 w-4 text-white"/>
       </div>
       <span className="font-semibold text-gray-900">Choice Log</span>
     </div>

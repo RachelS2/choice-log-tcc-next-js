@@ -11,7 +11,7 @@ const steps = [
   {
     number: '02',
     icon: Star,
-    title: 'Evaluate Experiences',
+    title: 'Evaluate The Experience',
     description:
       "After consuming a product or a service, rate it and record what worked —or didn't work— in practice.",
   },

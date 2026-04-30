@@ -3,6 +3,7 @@ import HeroDashboardSection from "@/components/landing/hero-dashboard"
 import BenefitsSection from "@/components/landing/benefits-section"
 import HowItWorksSection from "@/components/landing/how-it-works"
 import FinalCTASection from "@/components/landing/final-cta"
+import Footer from "@/components/landing/footer"
 
 export default function HomePage() {
   return (
@@ -16,6 +17,8 @@ export default function HomePage() {
       <HowItWorksSection/>
       
       <FinalCTASection />
+
+      <Footer/>
     </main>
   )
 }

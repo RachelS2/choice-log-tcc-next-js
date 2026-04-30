@@ -29,7 +29,7 @@ export default function FinalCTASection() {
                 size="lg"
                 className="bg-white text-lg text-blue-700 shadow-sm transition-all hover:bg-neutral-100 hover:shadow-md"
               >
-                <Link href="/login">
+                <Link href="/sign-up">
                   Create Free Account
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>

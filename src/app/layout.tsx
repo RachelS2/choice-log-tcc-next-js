@@ -37,9 +37,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${kaiseiTokumin.variable} font-sans antialiased`}>
+      <body className={`
+          ${kaiseiTokumin.variable}
+          ${poppins.variable}
+          font-sans
+          antialiased
+        `}
+        >
         {children}
-        <Toaster richColors/>
+        <Toaster
+          richColors
+          theme="light"
+          position="bottom-right"
+          closeButton
+        />
       </body>
     </html>
   );

@@ -43,7 +43,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-neutral-600">
-                More conscious consumer decisions, based on reflection and real data.
+              More conscious consumer decisions, based on reflection and real data.
             </p>
           </div>
 
@@ -74,7 +74,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-4">
             <a
-              href="https://github.com/RachelS2/choice-log-tcc-next-js"
+              href="https://github.com/RachelS2"
               aria-label="GitHub"
               className="text-neutral-500 transition-colors hover:text-neutral-950"
             >

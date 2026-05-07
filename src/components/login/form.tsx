@@ -13,6 +13,9 @@ import {zodResolver} from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
+import PasswordInput from './password-input';
+import { ArrowRightIcon, KeyIcon, Loader2 } from 'lucide-react';
+import { AtSymbolIcon } from '@heroicons/react/24/outline';
 
 // Schema para validação do formulário de login de usuário:
 const loginSchema = z.object({
@@ -65,20 +68,34 @@ export default function LoginForm(){
             <Card className='w-full max-w-md rounded-3xl shadow-xl border-neutral-200'>
                 <CardHeader className=' text-center'>
                     <CardTitle className='text-3xl'>Sign In</CardTitle>
-                    <CardDescription>Access your ChoiceLog account</CardDescription>
+                    <CardDescription className='text-xl'>Access your ChoiceLog account</CardDescription>
                 </CardHeader>
                 <CardContent className='space-y-2'>
-                    <div className='space-y-2'>
-                        <Label htmlFor='email'>Email</Label>
-                        <Input id='email' type='email' placeholder='you@example.com' {...register('email')} />
-                        <p className="text-red-600 min-h-[1rem]">
+
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <AtSymbolIcon className="h-4 w-4 text-neutral-500" />
+
+                            <Label htmlFor='email' className="text-lg">Email</Label>
+                        </div>
+
+                        <Input id='email' type='email' placeholder='your_email@example.com' {...register('email')} className="!text-base" />
+                        <p className="text-red-600 text-base min-h-[1rem]">
                             {errors.email?.message}
                         </p>
                     </div>
-                    <div className='space-y-2'>
-                        <Label htmlFor='password'>Password</Label>
-                        <Input id='password' type='password' placeholder='••••••••' {...register('password')} />
-                        <p className="text-red-600 min-h-[1rem]">
+
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <KeyIcon className="h-4 w-4 text-neutral-500" />
+
+                            <Label htmlFor="password" className="text-lg">
+                                Password
+                            </Label>
+                        </div>
+
+                        <PasswordInput register={register} />
+                        <p className="text-red-600 text-base min-h-[1rem]">
                             {errors.password?.message}
                         </p>
                     </div>
@@ -89,8 +106,20 @@ export default function LoginForm(){
                         </div>
                         <Link href='/forgot-password' className='text-blue-600 hover:underline'>Forgot password?</Link>
                     </div>
-                    <Button className='w-full h-11 text-base' type="submit" disabled={isSubmitting}>
-                        Login
+                    <Button className='w-full h-11 text-base bg-blue-500 hover:bg-blue-700' type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? 
+                            ( 
+                                <>
+                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                    <span>Logging in...</span>
+                                </>
+                            ) : 
+                            ( 
+                                <>
+                                    Login
+                                    <ArrowRightIcon className="h-5 w-5" />
+                                </>
+                            )}
                     </Button>
                     {/* <Button variant='outline' className='w-full h-11 text-base'>
                         Continue with Google

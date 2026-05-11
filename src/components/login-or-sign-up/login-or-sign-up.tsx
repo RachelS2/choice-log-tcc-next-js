@@ -1,7 +1,7 @@
 import AppLogo from '@/components/ui/app-logo';
 import Link from 'next/link';
 import  LandingHeader  from '@/components/landing/header';
-import { StartNowForm } from '@/app/sign-up/sign-up-form';
+import { StartNowForm } from '@/app/sign-up/old-form';
 
 export default function LoginOrStartNow ({ isLoginForm = true}: { isLoginForm?: boolean }) {
     let subTitle: string = "Log in to register your shopping decisions.";

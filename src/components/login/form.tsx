@@ -45,6 +45,7 @@ export default function LoginForm(){
         email: loginData.email,
         password: loginData.password,
         callbackURL: "/dashboard", 
+        rememberMe: rememberMe,
         }
         , {
         onSuccess: () => {
@@ -63,6 +64,8 @@ export default function LoginForm(){
         setIsSubmitting(false);
     }
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false); 
+    // rememberMe falso = sessão acaba ao fechar navegador, true = sessão persiste por 7 dias ou até o usuário deslogar manualmente
     return (
         <form onSubmit={handleSubmit(handleOnSubmit)} className="flex flex-col items-start min-h-[calc(100vh-96px)] justify-center p-10">
             <Card className='w-full max-w-md rounded-3xl shadow-xl border-neutral-200'>
@@ -101,7 +104,7 @@ export default function LoginForm(){
                     </div>
                     <div className='flex items-center justify-between text-sm'>
                         <div className='flex items-center gap-2'>
-                            <Checkbox id='remember' />
+                            <Checkbox id='remember' checked={rememberMe} onCheckedChange={(checked) => setRememberMe(!!checked)} />
                             <Label htmlFor='remember'>Remember me</Label>
                         </div>
                         <Link href='/forgot-password' className='text-blue-600 hover:underline'>Forgot password?</Link>

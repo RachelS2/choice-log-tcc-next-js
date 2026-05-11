@@ -8,6 +8,10 @@ export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: "postgresql", // or "mysql", "postgresql", ...etc
     }), 
+    session: {   
+        expiresIn: 60 * 60 * 24 * 7, // 7 days if "Remember me" is enabled
+        updateAge: 60 * 60 * 24, // Refresh session every 1 day
+    }, 
     emailAndPassword: {
         enabled: true, 
         // TODO: Reativar a verificação de e-mail depois, quando o domínio tiver sido comprado

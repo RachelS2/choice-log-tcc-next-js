@@ -1,23 +1,23 @@
-import {Resend} from "resend";
+import { Resend } from "resend";
 import VerifyEmail from "@/components/emails/verify-email";
 import { User } from "better-auth";
 
 if (!process.env.RESEND_API_KEY) {
-  throw new Error("RESEND_API_KEY is not defined");
+    throw new Error("RESEND_API_KEY is not defined");
 }
 
 const resend: Resend = new Resend(process.env.RESEND_API_KEY);
 
 type EmailVerificationProps = {
-  username: string,
-  email: string,
-  url: string;
+    username: string,
+    email: string,
+    url: string;
 };
 
-export async function emailVerification ({ username, email, url }: EmailVerificationProps) {
-   
+export async function emailVerification({ username, email, url }: EmailVerificationProps) {
+
     try {
-        const { data , error } = await resend.emails.send({
+        const { data, error } = await resend.emails.send({
             from: "onboarding@resend.dev", //`${process.env.EMAIL_SENDER_NAME} <${process.env.EMAIL_SENDER_ADDRESS}>`,
             to: email,
             subject: "ChoiceLog - Verify your email",
@@ -25,8 +25,8 @@ export async function emailVerification ({ username, email, url }: EmailVerifica
         });
 
         if (error) {
-        console.error("Resend error:", error);
-        throw new Error(`Email send failed: ${error.message}`);
+            console.error("Resend error:", error);
+            throw new Error(`Email send failed: ${error.message}`);
         }
     }
 

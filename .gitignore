@@ -11,6 +11,9 @@
 !.yarn/versions
 pnpm-lock.yaml
 
+# code formatting (formatter hero - beautify)
+dist 
+
 # testing
 /coverage
 

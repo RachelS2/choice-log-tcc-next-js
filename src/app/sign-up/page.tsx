@@ -1,9 +1,23 @@
-import LoginOrStartNow from "@/components/login-or-sign-up/login-or-sign-up";
+import LandingHeader from "@/components/landing/header";
+import MotivationPage from "@/components/sign-up/motivation";
+import SignUpForm from "@/components/sign-up/form";
 
-export default function StartNowPage() {
+export default function SignUpPage() {
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-offWhite">
-      <LoginOrStartNow isLoginForm={false} />
-    </div>
+    <>
+      <LandingHeader />
+
+      <main className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-slate-900 pt-15">
+        <div className="grid min-h-[calc(100vh-96px)] lg:grid-cols-2">
+
+          {/* LEFT SIDE */}
+          <MotivationPage />
+
+          {/* RIGHT SIDE */}
+          <SignUpForm />
+        </div>
+      </main>
+    </>
   );
 }

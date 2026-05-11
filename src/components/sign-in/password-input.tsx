@@ -34,13 +34,13 @@ export default function PasswordInput({
         type="button"
         variant="ghost"
         size="icon"
-        onClick={() => setShowPassword((prev) => !prev)}
+        onClick={() => setShowPassword(!showPassword)}
         className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2 hover:bg-transparent"
       >
         {showPassword ? (
-          <EyeOff className="h-4 w-4 text-neutral-500" />
+          <EyeOff className="h-4 w-4 text-neutral-800" />
         ) : (
-          <Eye className="h-4 w-4 text-neutral-500" />
+          <Eye className="h-4 w-4 text-neutral-800" />
         )}
       </Button>
     </div>

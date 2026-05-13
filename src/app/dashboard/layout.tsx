@@ -14,7 +14,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${kaiseiTokumin.variable} font-sans antialiased flex min-h-screen `}>
+    <div className={`${kaiseiTokumin.variable} font-serif antialiased flex min-h-screen `}>
       <Sidebar />
       <main className="flex-1">
         {children}

@@ -4,6 +4,7 @@ import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import AppLogo from '../ui/app-logo';
+import LogoutButton from './logout-btn';
 
 interface NavItem {
   label: string;
@@ -65,6 +66,7 @@ export default async function Sidebar() {
             <p className="text-sm font-medium text-gray-900 truncate">{session.user.name}</p>
             <p className="text-xs text-gray-500 truncate">{session.user.email}</p>
           </div>
+          <LogoutButton />
         </div>
       </div>
     </aside>

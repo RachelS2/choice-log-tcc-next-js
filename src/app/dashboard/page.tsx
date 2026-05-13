@@ -21,7 +21,7 @@ export default async function DashboardPage() {
 
       <Card className="bg-white p-6 rounded-2xl shadow flex items-center justify-between">
           <CardDescription className="text-black-900">
-            Registre uma decisão de consumo recente e reflita sobre ela.
+            Register and think about a consumption decision. 
           </CardDescription>
           <CardAction className="text-white">
             <Link

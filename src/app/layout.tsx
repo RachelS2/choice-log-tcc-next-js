@@ -1,29 +1,33 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins, Kaisei_Tokumin } from "next/font/google";
-import "./globals.css";
+import { Cormorant_Garamond, Inter } from "next/font/google";
+import "./globals.css" assert { type: "css" };
 import { Toaster } from "@/components/ui/sonner";
+import { cn } from "@/lib/utils";
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-poppins',
-});
-
-const kaiseiTokumin = Kaisei_Tokumin({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-kaisei',
-});
-
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
+// OBS: ugly fonts:
+// const poppins = Poppins({
+//   subsets: ['latin'],
+//   weight: ['300', '400', '500', '600', '700'],
+//   variable: '--font-poppins',
 // });
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
+// const kaiseiTokumin = Kaisei_Tokumin({
+//   subsets: ['latin'],
+//   weight: ['400', '500', '700'],
+//   variable: '--font-kaisei',
 // });
+
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  weight: ["400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "ChoiceLog",
@@ -37,13 +41,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`
-          ${kaiseiTokumin.variable}
-          ${poppins.variable}
-          font-sans
-          antialiased
-        `}
-        >
+    <body
+      className={cn(
+        inter.className,
+        //cormorant.className,
+        "font-sans antialiased"
+      )}
+    >
         {children}
         <Toaster
           // richColors

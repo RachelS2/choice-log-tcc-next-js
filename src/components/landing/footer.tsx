@@ -3,27 +3,27 @@ import Link from 'next/link';
 
 const columns = [
   {
-    title: 'Produto',
+    title: 'Product',
     links: [
-      { label: 'Funcionalidades', href: '/experiences' },
-      { label: 'Preços', href: '#' },
-      { label: 'Demonstração', href: '/experiences' },
+      { label: 'Functionalities', href: '/experiences' },
+      { label: 'Prices', href: '#' },
+      { label: 'Demo', href: '/experiences' },
     ],
   },
   {
-    title: 'Empresa',
+    title: 'Company',
     links: [
-      { label: 'Sobre', href: '#' },
+      { label: 'About', href: '#' },
       { label: 'Blog', href: '#' },
-      { label: 'Contato', href: '#' },
+      { label: 'Contact', href: '#' },
     ],
   },
   {
-    title: 'Recursos',
+    title: 'Resources',
     links: [
-      { label: 'Central de Ajuda', href: '#' },
-      { label: 'Guia de Uso', href: '#' },
-      { label: 'Privacidade', href: '#' },
+      { label: 'Help', href: '#' },
+      { label: 'Use Guide', href: '#' },
+      { label: 'Privacy', href: '#' },
     ],
   },
 ];

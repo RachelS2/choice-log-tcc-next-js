@@ -1,5 +1,5 @@
 'use client';
-import { Mail, User, Lock, EyeOff, Eye, Link } from "lucide-react";
+import { Mail, User, Lock, Loader2, ArrowRightIcon } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -7,18 +7,33 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { FieldError, FieldErrors, useForm, UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import z from 'zod';
 import { AuthFormStateModel } from "@/models/auth/auth-form-state-model";
+import assert from "assert";
+import PasswordInput from "../sign-in/password-input";
+import Link from "next/link";
 
-type HtmlFor = "name" | "email" | "password" | "confirmPassword";
+type HtmlFor = "username" | "email" | "password" | "confirmPassword";
 
-function createLabelsAndInputs(htmlFor: HtmlFor, placeholder: string, Icon: React.ComponentType<{ className?: string }>) {
-    const labelText = htmlFor.charAt(0).toUpperCase() + htmlFor.slice(1);
+
+function createLabelsAndInputs(
+    htmlFor: HtmlFor,
+    placeholder: string,
+    Icon: React.ComponentType<{ className?: string }>, errors: FieldError | undefined,
+    register: UseFormRegister<SignUpSchemaType>
+) {
+
+    const isPasswordField =
+        htmlFor === "password" ||
+        htmlFor === "confirmPassword";
+    const labelText =
+        htmlFor.charAt(0).toUpperCase() + htmlFor.slice(1);
+
     return (
-        <div className="space-y-2">
+        <div className="space-y-1 w-full">
             <Label
                 htmlFor={htmlFor}
                 className="flex items-center gap-2 text-base"
@@ -27,11 +42,21 @@ function createLabelsAndInputs(htmlFor: HtmlFor, placeholder: string, Icon: Reac
                 {labelText}
             </Label>
 
-            <Input
-                id={htmlFor}
-                placeholder={placeholder}
-                className="h-11 text-base"
-            />
+            {isPasswordField ? (
+                <PasswordInput
+                    register={register} name={htmlFor} />
+            ) : (
+                <Input
+                    id={htmlFor}
+                    {...register(htmlFor)}
+                    placeholder={placeholder}
+                    className="h-11 w-full text-base"
+                />
+            )}
+
+            <p className="mt-1 max-w-full break-words text-sm text-blue-900">
+                {errors?.message}
+            </p>
         </div>
     );
 }
@@ -43,7 +68,7 @@ const userNameSchema: z.ZodString = z
     .max(15, "Username must have at tops 40 characters.")
     .regex(
         /^[a-zA-Z0-9_ ]+$/,
-        "Username must contain only letters, white spaces, numbers and '_'"
+        "Username must contain only letters, white spaces, numbers and underscores."
     );
 
 const passwordSchema: z.ZodString = z
@@ -150,13 +175,12 @@ export default function SignUpForm() {
         });
         setIsSubmitting(false);
     }
-    const [showPassword, setShowPassword] = useState(false);
     return (
-        <section className="flex items-center justify-center px-6 py-12 sm:px-10">
-            <Card className="w-full max-w-md rounded-3xl border-neutral-200 shadow-2xl">
-                <CardHeader className="space-y-3 text-center">
+        <form onSubmit={handleSubmit(handleOnSubmit)} className="w-full max-w-2xl">
+            <Card className="w-full min-w-[30rem] rounded-3xl border border-white/10 bg-white shadow-2xl">
+                <CardHeader className="space-y-1 text-center">
                     <CardTitle className="text-3xl">
-                        Create Account
+                        Sign Up
                     </CardTitle>
 
                     <CardDescription className="text-base">
@@ -164,19 +188,38 @@ export default function SignUpForm() {
                     </CardDescription>
                 </CardHeader>
 
-                <CardContent className="space-y-5">
+                <CardContent className="space-y-5 w-full">
+                    {/* <div className="grid gap-5"> */}
 
-                    {createLabelsAndInputs("name", "Your name", User)}
+                    {createLabelsAndInputs("username", "Your username", User, errors.username, register)}
 
-                    {createLabelsAndInputs("email", "you@example.com", Mail)}
+                    {createLabelsAndInputs("email", "you@example.com", Mail, errors.email, register)}
 
-                    {createLabelsAndInputs("password", "At least 8 characters", Lock)}
+                    {createLabelsAndInputs("password", "At least 8 characters", Lock, errors.password, register)}
 
-                    {createLabelsAndInputs("confirmPassword", "Confirm your password", Lock)}
+                    {createLabelsAndInputs("confirmPassword", "Confirm your password", Lock, errors.confirmPassword, register)}
+
+                    {/* </div> */}
+
 
                     {/* BUTTON */}
-                    <Button className="h-11 w-full text-base">
-                        Create Account
+                    <Button className='w-full h-11 text-base bg-blue-500 hover:bg-blue-700'
+                        type="submit"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ?
+                            (
+                                <>
+                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                    <span>Creating Account...</span>
+                                </>
+                            ) :
+                            (
+                                <>
+                                    Create Account
+                                    <ArrowRightIcon className="h-5 w-5" />
+                                </>
+                            )}
                     </Button>
 
                     {/* GOOGLE */}
@@ -199,6 +242,6 @@ export default function SignUpForm() {
                     </p>
                 </CardContent>
             </Card>
-        </section>
+        </form>
     );
 }

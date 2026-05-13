@@ -22,7 +22,8 @@ const config: Config = {
         offWhite: "var(--offWhite)",
       },
       fontFamily: {
-          sans: ["var(--font-poppins)", "Arial", "sans-serif"],
+        sans: ["var(--font-poppins)"],
+        serif: ["var(--font-kaisei)", "serif"],
       },
     },
   },

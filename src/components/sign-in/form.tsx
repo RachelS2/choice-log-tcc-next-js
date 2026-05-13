@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form"
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import PasswordInput from './password-input';
-import { ArrowRightIcon, KeyIcon, Loader2 } from 'lucide-react';
+import { ArrowRightIcon, Lock, Loader2 } from 'lucide-react';
 import { AtSymbolIcon } from '@heroicons/react/24/outline';
 
 // Schema para validação do formulário de login de usuário:
@@ -90,14 +90,14 @@ export default function LoginForm(){
 
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">
-                            <KeyIcon className="h-4 w-4 text-neutral-500" />
+                            <Lock className="h-4 w-4 text-neutral-500" />
 
                             <Label htmlFor="password" className="text-lg">
                                 Password
                             </Label>
                         </div>
 
-                        <PasswordInput register={register} />
+                        <PasswordInput register={register} name={'password'} />
                         <p className="text-red-600 text-base min-h-[1rem]">
                             {errors.password?.message}
                         </p>

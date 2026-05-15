@@ -7,14 +7,19 @@ export default function LoginPage() {
   return (
     <>
       <LandingHeader />
-      <main className="max-h-screen  bg-gradient-to-br from-blue-600 via-blue-700 to-slate-800 pt-15 grid lg:grid-cols-2">
-        <div className="grid items-center justify-center max-h-screen lg:grid-cols-2 lg:gap-16">
+      <main className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-slate-800 pt-16">
+        <div className="mx-auto grid min-h-[calc(100vh-64px)] max-w-8xl lg:grid-cols-2">
+          
           <MotivationPage />
 
-          <LoginForm />
+          <div className="flex items-center justify-center px-6 py-10">
+            <LoginForm />
+          </div>
+
         </div>
       </main>
+
       <Footer />
     </>
-  )
+  );
 }

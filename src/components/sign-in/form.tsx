@@ -67,7 +67,7 @@ export default function LoginForm(){
     const [rememberMe, setRememberMe] = useState(false); 
     // rememberMe falso = sessão acaba ao fechar navegador, true = sessão persiste por 7 dias ou até o usuário deslogar manualmente
     return (
-        <form onSubmit={handleSubmit(handleOnSubmit)} className="flex flex-col items-start min-h-[calc(100vh-96px)] justify-center p-10">
+        <form onSubmit={handleSubmit(handleOnSubmit)} className="flex flex-col items-start w-full max-w-md min-h-[calc(100vh-96px)] justify-center p-10">
             <Card className='w-full max-w-md rounded-3xl shadow-xl border-neutral-200'>
                 <CardHeader className=' text-center'>
                     <CardTitle className='text-3xl'>Sign In</CardTitle>

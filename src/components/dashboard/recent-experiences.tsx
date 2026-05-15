@@ -1,3 +1,5 @@
+import RatingStars from "../ui/rating-starts";
+import Link from 'next/link'
 
 const data = [
   {
@@ -17,7 +19,7 @@ const data = [
 export default function RecentExperiences() {
   return (
     <div className="bg-white p-6 rounded-2xl shadow">
-      <h2 className="font-semibold mb-4 text-black">Experiências recentes</h2>
+      <h2 className="font-semibold mb-4 text-black">Recent Experiences</h2>
 
       <div className="space-y-4">
         {data.map((item, i) => (
@@ -26,15 +28,28 @@ export default function RecentExperiences() {
             className="flex justify-between text-gray items-center border-b pb-2"
           >
             <div>
-              <p className="font-medium">{item.title}</p>
+              <p className="flex items-center gap-2 font-medium text-blue-600">
+                {item.title}
+
+                <RatingStars rating={item.rating} />
+              </p>
               <p className="text-sm text-gray-500">{item.category}</p>
             </div>
 
-            <div className="text-sm text-gray-500">
-              {item.rating}⭐ • {item.date}
+            <div className="text-sm text-gray-700">
+              • {item.date}
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="text-right mt-4">
+        <Link
+          href="/dashboard/products"
+          className="inline-flex text-sm items-center rounded-xl bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
+        >
+          Check Complete History →
+        </Link>
       </div>
     </div>
   );

@@ -9,19 +9,39 @@ interface AppLogoProps {
   href?: string; // se não houver href, logo não é clicável
 }
 
-export default function AppLogo({ textColor = "text-gray-900", href }: AppLogoProps) {
-  const isClickable: boolean  = Boolean(href);
+
+export default function AppLogo({
+  textColor = "text-gray-900",
+  href,
+}: AppLogoProps) {
+  const isClickable = Boolean(href);
 
   const content = (
     <div
-      className={`flex items-center gap-1 text-[2rem] ${
-        isClickable ? 'cursor-pointer hover:opacity-80' : 'cursor-default'
-      }`}
+      className={`
+        flex items-center gap-3
+        ${
+          isClickable
+            ? "cursor-pointer hover:opacity-80 transition-opacity"
+            : "cursor-default"
+        }
+      `}
     >
-      <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
-        <ShoppingBag className="h-4 w-4 text-white"/>
+      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 shrink-0">
+        <ShoppingBag className="h-4 w-4 text-white" />
       </div>
-      <span className="font-semibold font-serif text-gray-900">Choice Log</span>
+
+      <span
+        className={`
+          whitespace-nowrap
+          text-3xl
+          font-semibold
+          font-serif
+          ${textColor}
+        `}
+      >
+        Choice Log
+      </span>
     </div>
   );
 

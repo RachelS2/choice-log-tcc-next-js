@@ -182,15 +182,6 @@ body {
   overflow-x: hidden;
 }
 
-main{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: var(--offWhite);
-}
-
 * {
   box-sizing: border-box;
   /* padding: 0;
@@ -201,7 +192,6 @@ a {
   text-decoration: none;
   font-family: var(--font-serif);
 }
-
 
 
 @media (prefers-color-scheme: dark) {

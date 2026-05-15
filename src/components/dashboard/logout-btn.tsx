@@ -42,6 +42,7 @@ function ConfirmLogoutModal({
 
         <DialogFooter className="mt-4">
           <Button
+            className="hover:bg-gray-200 hover:text-gray-900"
             variant="outline"
             onClick={() => onOpenChange(false)}
           >

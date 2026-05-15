@@ -2,10 +2,29 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Star, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+import { Card, CardContent } from '../ui/card';
 
+function GraphSubtitle({ subtitle, value }: { subtitle: string, value: string }) {
+
+  return (
+    <Card className="border-neutral-200 shadow-sm">
+      <CardContent className="flex flex-col items-center p-3 text-center">
+
+        <p className="min-h-[40px] max-w-[120px] text-sm text-neutral-800">
+          {subtitle}
+        </p>
+
+        <p className="mt-2 text-lg font-semibold text-neutral-950">
+          {value}
+        </p>
+
+      </CardContent>
+    </Card>
+  );
+}
 export default function HeroDashboardSection() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-24">
+    <section className="relative overflow-hidden pt-32 pb-20 sm:pt-30 sm:pb-24">
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
@@ -23,18 +42,18 @@ export default function HeroDashboardSection() {
             </h1>
 
             <p className="mt-6 max-w-xl text-xl leading-relaxed text-neutral-900">
-              ChoiceLog helps you record, evaluate, and reflect on your shopping experiences — 
+              ChoiceLog helps you record, evaluate, and reflect on your shopping experiences —
               transforming each purchase into a step toward more informed future decisions.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button
-              asChild
-              variant="ghost"
-              size="lg"
-              className="bg-blue-600 text-white text-base hover:bg-blue-700 hover:text-white"
-            >
-                <Link href="/login">
+              <Button
+                asChild
+                variant="ghost"
+                size="lg"
+                className="bg-blue-600 text-white text-base hover:bg-blue-700 hover:text-white"
+              >
+                <Link href="/sign-up">
                   Start Now
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -44,7 +63,7 @@ export default function HeroDashboardSection() {
                 variant="outline"
                 size="lg"
                 className="border-neutral-300 text-base bg-white text-neutral-950 hover:bg-neutral-100 hover:text-neutral-700 transition-colors">
-                  <Link href="/experiences">Learn More</Link>
+                <Link href="/experiences">Learn More</Link>
               </Button>
             </div>
           </div>
@@ -92,7 +111,7 @@ export default function HeroDashboardSection() {
               <div className="mt-6 rounded-xl bg-neutral-50 p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <span className="text-s font-medium text-neutral-600">
-                    Your consumption satisfaction over time 
+                    Your consumption satisfaction over time
                   </span>
                   <TrendingUp className="h-4 w-4 text-blue-600" />
                 </div>
@@ -111,22 +130,9 @@ export default function HeroDashboardSection() {
 
               {/* Small meta row */}
               <div className="mt-4 grid grid-cols-3 gap-3 text-center">
-                <div className="rounded-lg border border-neutral-200 p-2">
-                  <p className="text-sm text-neutral-800">Registered Experiences</p>
-                  <p className="text-xs font-semibold text-neutral-950">
-                    248
-                  </p>
-                </div>
-                <div className="rounded-lg border border-neutral-200 p-2">
-                  <p className="text-sm text-neutral-800">Average Satisfaction</p>
-                  <p className="text-xs font-semibold text-neutral-950">
-                    4,3
-                  </p>
-                </div>
-                <div className="rounded-lg border border-neutral-200 p-2">
-                  <p className="text-sm text-neutral-800">Economy</p>
-                  <p className="text-xs font-semibold text-blue-600">+18%</p>
-                </div>
+                {GraphSubtitle({ subtitle: "Registered Experiences", value: "248" })}
+                {GraphSubtitle({ subtitle: "Average Satisfaction", value: "4.3" })}
+                {GraphSubtitle({ subtitle: "Economy", value: "+18%" })}
               </div>
             </div>
           </div>

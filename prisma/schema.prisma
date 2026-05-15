@@ -23,6 +23,7 @@ model User {
   consumptions  Consumption[]
   sessions      Session[]
   accounts      Account[]
+  incomeRange   IncomeRange?
 }
 
 model Session {
@@ -199,6 +200,15 @@ enum ConsumptionInfluence {
   UNKNOWN
 }
 
+enum IncomeRange {
+  UP_TO_1_MINIMUM_WAGE
+  FROM_1_TO_3
+  FROM_3_TO_5
+  FROM_5_TO_10
+  ABOVE_10
+  PREFER_NOT_TO_SAY
+}
+
 enum ConsumptionNegativeAspects {
   INEFFECTIVE         // O produto não cumpriu o objetivo proposto
   LOW_QUALITY         // O produto veio danificado ou é frágil, feito com materiais de baixa qualidade e não possui acabamento adequado
@@ -206,6 +216,15 @@ enum ConsumptionNegativeAspects {
   POOR_DESIGN         // O design do produto não me agradou
   UNSAFE              // O produto é perigoso e tem efeitos colaterais
   POOR_CUSTOMER_SERVICE    // O atendimento não me agradou 
+  OTHER
+}
+
+enum GoalType {
+  MONTHLY_SPENDING_LIMIT
+  WEEKLY_SPENDING_LIMIT
+  TARGET_CATEGORY
+  TARGET_SATISFACTION
+  REDUCE_IMPULSIVITY
 }
 
 //TODO: Prisma não dá suporte para constraints, então executar no banco mais tarde:

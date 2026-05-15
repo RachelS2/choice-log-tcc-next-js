@@ -1,5 +1,4 @@
 'use client'
-'use client'
 
 import { useRouter } from "next/navigation";
 import { FaceFrownIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
@@ -12,23 +11,13 @@ export default function NotFound() {
   const router = useRouter();
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <LandingHeader />
 
-      <main className="relative flex min-h-[calc(100vh-80px)] items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-slate-900 px-6 py-20">
-        
-        {/* Glow background */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.35) 0, transparent 30%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.25) 0, transparent 35%)",
-          }}
-        />
+      <main className="flex flex-1 items-center justify-center overflow-hidden bg-blue-50 mt-16 px-6">
 
-        <div className="relative w-full max-w-2xl rounded-3xl border border-white/10 bg-white/10 p-10 text-center shadow-2xl backdrop-blur-md">
-          
+        <div className="relative w-full max-w-2xl rounded-3xl border border-white/10 bg-gradient-to-br from-blue-600 via-blue-700 to-slate-900 p-10 text-center shadow-2xl backdrop-blur-md">
+
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-white/10">
             <FaceFrownIcon className="h-10 w-10 text-white" />
           </div>
@@ -46,7 +35,7 @@ export default function NotFound() {
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            
+
             <Button
               onClick={() => router.back()}
               size="lg"
@@ -69,6 +58,6 @@ export default function NotFound() {
           </div>
         </div>
       </main>
-    </>
+    </div>
   );
 }

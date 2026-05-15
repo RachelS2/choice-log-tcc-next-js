@@ -27,14 +27,15 @@ export default function RecentExperiences() {
             key={i}
             className="flex justify-between text-gray items-center border-b pb-2"
           >
-            <div>
-              <p className="flex items-center gap-2 font-medium text-blue-600">
+            <div className="flex flex-row" >
+              <p className="flex items-center gap-2 mr-2 font-medium text-blue-600">
                 {item.title}
-
-                <RatingStars rating={item.rating} />
               </p>
-              <p className="text-sm text-gray-500">{item.category}</p>
+              <RatingStars rating={item.rating} />
+
+
             </div>
+              <p className="text-sm text-gray-500">{item.category}</p>
 
             <div className="text-sm text-gray-700">
               • {item.date}

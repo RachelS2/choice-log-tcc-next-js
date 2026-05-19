@@ -26,7 +26,7 @@ export default async function DashboardPage() {
           </CardDescription>
 
           <Link
-            href="/dashboard/new-experience"
+            href="/dashboard/products/new-experience"
             className="inline-flex items-center rounded-xl bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
           >
             + New Experience

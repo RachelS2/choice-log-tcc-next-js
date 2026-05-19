@@ -7,7 +7,7 @@ export default function SummaryCards() {
         { title: "Experiences", value: "12" },
         { title: "Top Category", value: "Education" },
         { title: "Satisfaction", value: "4.2 / 5" },
-        { title: "Positive Decisions", value: "75%" },
+        { title: "Achieved Goals", value: "75%" },
       ].map((card, i) => (
         <div key={i} className="bg-white p-4 flex flex-col items-center rounded-2xl shadow">
           <p className="text-black font-semibold">{card.title}</p>

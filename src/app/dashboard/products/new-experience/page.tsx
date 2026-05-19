@@ -4,10 +4,10 @@ import { toast } from 'sonner';
 import { Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import ProductSelector, { Product } from '../../../components/new-experience/product-selector';
-import AddProductModal from '../../../components/new-experience/add-product-modal';
-import ExperienceDetails from '../../../components/new-experience/new-experience-details';
-import ReflectionSection from '../../../components/new-experience/reflection-section';
+import ProductSelector, { Product } from '../../../../components/dashboard/products/new-experience/product-selector';
+import AddProductModal from '../../../../components/dashboard/products/new-experience/add-product-modal';
+import ExperienceDetails from '../../../../components/dashboard/products/new-experience/new-experience-details';
+import ReflectionSection from '../../../../components/dashboard/products/new-experience/reflection-section';
 
 const SEED_PRODUCTS: Product[] = [
   { id: 'p-1', name: 'AirPods Pro (2nd gen)', brand: 'Apple', category: 'Electronics' },

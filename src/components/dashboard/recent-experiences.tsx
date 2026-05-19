@@ -3,16 +3,16 @@ import Link from 'next/link'
 
 const data = [
   {
-    title: "Comprei curso de Marketing",
-    category: "Educação",
+    title: "Marketing Course",
+    category: "Education",
     rating: 4,
-    date: "20/05/2025",
+    date: "20/04/2026",
   },
   {
-    title: "Assinei plano anual",
-    category: "Produtividade",
+    title: "Netflix Annual Subscription",
+    category: "Leisure",
     rating: 5,
-    date: "18/05/2025",
+    date: "18/05/2026",
   },
 ];
 
@@ -25,21 +25,24 @@ export default function RecentExperiences() {
         {data.map((item, i) => (
           <div
             key={i}
-            className="flex justify-between text-gray items-center border-b pb-2"
-          >
-            <div className="flex flex-row" >
-              <p className="flex items-center gap-2 mr-2 font-medium text-blue-600">
+            className="grid grid-cols-[1fr_1fr_auto] items-center justify-center gap-4 border-b pb-2"          >
+            {/* coluna 1 */}
+            <div className="flex items-center gap-2">
+              <p className="font-medium text-blue-600">
                 {item.title}
               </p>
               <RatingStars rating={item.rating} />
-
-
             </div>
-              <p className="text-sm text-gray-500">{item.category}</p>
 
-            <div className="text-sm text-gray-700">
+            {/* coluna 2 */}
+            <p className="text-sm text-center text-gray-500 whitespace-nowrap">
+              {item.category}
+            </p>
+
+            {/* coluna 3 */}
+            <p className="text-sm text-gray-500">
               • {item.date}
-            </div>
+            </p>
           </div>
         ))}
       </div>

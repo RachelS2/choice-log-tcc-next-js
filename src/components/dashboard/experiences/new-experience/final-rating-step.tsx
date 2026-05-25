@@ -3,19 +3,17 @@ import { Switch } from "@/components/ui/switch";
 import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences/new-experience";
 import { Star } from "lucide-react";
 import StarRating from "../StarRating";
+import { Step } from "./steps-abc";
 
 
 export default function FinalRatingStep({ currentStep, formData, updateField }: AddNewExperienceFormStepsModel) {
-    return currentStep === 4 && (
-        <div className="space-y-5">
-            <div className="space-y-1">
-                <h3 className="text-lg font-semibold text-gray-900">
-                    Como foi a experiência?
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                    Avalie sua satisfação com o produto ou serviço.
-                </p>
-            </div>
+
+    return (
+        <Step
+            title="Como foi a experiência?"
+            description="Avalie sua satisfação com o produto ou serviço."
+            isActive={currentStep === 4}
+        >
 
             <div className="space-y-6">
                 <div className="space-y-3">
@@ -44,6 +42,6 @@ export default function FinalRatingStep({ currentStep, formData, updateField }: 
                     />
                 </div>
             </div>
-        </div>
+        </Step>
     )
 }

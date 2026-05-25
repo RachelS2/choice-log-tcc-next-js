@@ -1,24 +1,21 @@
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ConsumptionInfluenceHelper, ConsumptionReasonHelper } from "@/lib/enums";
-import {  AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences/new-experience";
+import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences/new-experience";
 import { Brain, Users } from "lucide-react";
+import { Step } from "./steps-abc";
 
 const REASONS: string[] = ConsumptionReasonHelper.labels;
 
 const CONSUMPTION_INFLUENCE: string[] = ConsumptionInfluenceHelper.labels;
 
 export default function ContextStep({ currentStep, formData, updateField }: AddNewExperienceFormStepsModel) {
-    return currentStep === 1 && (
-        <div className="space-y-5">
-            <div className="space-y-1">
-                <h3 className="text-lg font-semibold text-gray-900">
-                    Contexto da decisão
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                    O que motivou essa compra ou consumo?
-                </p>
-            </div>
+    return (
+        <Step
+            title="Contexto da decisão"
+            description="O que motivou essa compra ou consumo?"
+            isActive={currentStep === 1}
+        >
 
             <div className="space-y-4">
                 <div className="space-y-2">
@@ -65,6 +62,7 @@ export default function ContextStep({ currentStep, formData, updateField }: AddN
                     </Select>
                 </div>
             </div>
-        </div>
-    )
+
+        </Step >
+    );
 }

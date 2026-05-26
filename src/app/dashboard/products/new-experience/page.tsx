@@ -4,10 +4,10 @@ import { toast } from 'sonner';
 import { Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import ProductSelector, { Product } from '../../../../components/dashboard/products/new-experience/product-selector';
-import AddProductModal from '../../../../components/dashboard/products/new-experience/add-product-modal';
-import ExperienceDetails from '../../../../components/dashboard/products/new-experience/new-experience-details';
-import ReflectionSection from '../../../../components/dashboard/products/new-experience/reflection-section';
+import ProductSelector, { Product } from '@/components/dashboard/products/new-experience/product-selector';
+import AddProductModal from '@/components/dashboard/products/new-experience/add-product-modal';
+import ExperienceDetails from '@/components/dashboard/products/new-experience/experience-details';
+import ReflectionSection from '@/components/dashboard/products/new-experience/reflection-section';
 
 const SEED_PRODUCTS: Product[] = [
   { id: 'p-1', name: 'AirPods Pro (2nd gen)', brand: 'Apple', category: 'Electronics' },
@@ -64,9 +64,10 @@ export default function NewExperiencePage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="p-11 space-y-6 bg-blue-50">
       {/* Header */}
-      <div className="mt-4">
+      <div>
+        <p className="text-sm text-blue-600 font-medium mb-1">Experiences</p>
         <h1 className="text-3xl font-semibold text-gray-900 tracking-tight">
           Log a new purchase experience
         </h1>
@@ -76,58 +77,38 @@ export default function NewExperiencePage() {
       </div>
 
       {/* Product Selection */}
-      <Card className="border-gray-200 shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-lg">Product</CardTitle>
-          <CardDescription>Select an existing product or add a new one to your catalog.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ProductSelector
-            products={products}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-            onAddNew={() => setModalOpen(true)}
-          />
-        </CardContent>
-      </Card>
+
+      <ProductSelector
+        products={products}
+        selectedId={selectedId}
+        onSelect={setSelectedId}
+        onAddNew={() => setModalOpen(true)}
+      />
 
       {/* Experience Details */}
-      <Card className="border-gray-200 shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-lg">Experience details</CardTitle>
-          <CardDescription>Rate this purchase and record the key facts.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ExperienceDetails
-            rating={rating}
-            onRatingChange={setRating}
-            wouldBuyAgain={wouldBuyAgain}
-            onWouldBuyAgainChange={setWouldBuyAgain}
-            price={price}
-            onPriceChange={setPrice}
-            date={date}
-            onDateChange={setDate}
-          />
-        </CardContent>
-      </Card>
+
+      <ExperienceDetails
+        rating={rating}
+        onRatingChange={setRating}
+        wouldBuyAgain={wouldBuyAgain}
+        onWouldBuyAgainChange={setWouldBuyAgain}
+        price={price}
+        onPriceChange={setPrice}
+        date={date}
+        onDateChange={setDate}
+      />
+
 
       {/* Reflection */}
-      <Card className="border-gray-200 shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-lg">Reflection</CardTitle>
-          <CardDescription>Reflect on why you bought it and what could be better.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ReflectionSection
-            reason={reason}
-            onReasonChange={setReason}
-            negativeAspects={negativeAspects}
-            onNegativeAspectsChange={setNegativeAspects}
-            notes={notes}
-            onNotesChange={setNotes}
-          />
-        </CardContent>
-      </Card>
+
+      <ReflectionSection
+        reason={reason}
+        onReasonChange={setReason}
+        negativeAspects={negativeAspects}
+        onNegativeAspectsChange={setNegativeAspects}
+        notes={notes}
+        onNotesChange={setNotes}
+      />
 
       {/* Submit */}
       <div className="flex items-center justify-end gap-3 pt-2">

@@ -45,16 +45,16 @@ const navItems: NavItem[] = [
 ];
 
 export function SidebarNav() {
-  const pathname = usePathname();
+  let pathname = usePathname();
 
   return (
     <nav className="flex-1 space-y-1 px-3 py-4">
       {navItems.map((item) => {
         const Icon = item.icon;
-
         const isActive =
-          pathname === item.href ||
-          pathname.startsWith(item.href + "/");
+          item.href === "/dashboard"
+            ? pathname === "/dashboard"
+            : pathname === item.href || pathname.startsWith(item.href + "/");
 
         return (
           <Link

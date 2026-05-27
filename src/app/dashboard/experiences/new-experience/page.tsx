@@ -4,10 +4,10 @@ import { toast } from 'sonner';
 import { Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import ProductSelector, { Product } from '@/components/dashboard/products/new-experience/product-selector';
-import AddProductModal from '@/components/dashboard/products/new-experience/add-product-modal';
-import ExperienceDetails from '@/components/dashboard/products/new-experience/experience-details';
-import ReflectionSection from '@/components/dashboard/products/new-experience/reflection-section';
+import ProductSelector, { Product } from '@/components/dashboard/experiences/new-experience/product-selector';
+import AddProductModal from '@/components/dashboard/experiences/new-experience/add-product-modal';
+import ExperienceDetails from '@/components/dashboard/experiences/new-experience/experience-details';
+import ReflectionSection from '@/components/dashboard/experiences/new-experience/reflection-section';
 
 const SEED_PRODUCTS: Product[] = [
   { id: 'p-1', name: 'AirPods Pro (2nd gen)', brand: 'Apple', category: 'Electronics' },
@@ -85,6 +85,17 @@ export default function NewExperiencePage() {
         onAddNew={() => setModalOpen(true)}
       />
 
+      {/* Reflection */}
+
+      <ReflectionSection
+        reason={reason}
+        onReasonChange={setReason}
+        negativeAspects={negativeAspects}
+        onNegativeAspectsChange={setNegativeAspects}
+        notes={notes}
+        onNotesChange={setNotes}
+      />
+
       {/* Experience Details */}
 
       <ExperienceDetails
@@ -96,18 +107,6 @@ export default function NewExperiencePage() {
         onPriceChange={setPrice}
         date={date}
         onDateChange={setDate}
-      />
-
-
-      {/* Reflection */}
-
-      <ReflectionSection
-        reason={reason}
-        onReasonChange={setReason}
-        negativeAspects={negativeAspects}
-        onNegativeAspectsChange={setNegativeAspects}
-        notes={notes}
-        onNotesChange={setNotes}
       />
 
       {/* Submit */}

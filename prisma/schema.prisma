@@ -24,6 +24,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   incomeRange   IncomeRange?
+  goals         Goal[]
 }
 
 model Session {
@@ -106,6 +107,8 @@ model Category {
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 
+  goals Goal[]
+
   @@unique([systemName, userId])
 }
 
@@ -117,8 +120,6 @@ model WishList {
 
   items           WishListItem[]
 
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
 }
 
 
@@ -159,7 +160,7 @@ model Consumption {
   price               Float
   rating              Float?                 // Opcional, pode ser preenchido depois (1–5)
   negativeAspects     ConsumptionNegativeAspects[]      // contras do consumo. Opcional, pode ser preenchido depois      
-  consumptionReason   ConsumptionReason     // motivo da compra. 
+  consumptionReason   ConsumptionReason    // motivo da compra. 
   details             String?               
   
   address             String?
@@ -215,8 +216,7 @@ enum ConsumptionInfluence {
   EMERGENCY
   SELLER_INFLUENCE
   REDUCED_COST
-  MULTIPLE
-  UNKNOWN
+  OTHER
 }
 
 enum IncomeRange {

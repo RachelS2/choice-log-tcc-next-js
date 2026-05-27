@@ -26,25 +26,10 @@ import {
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {ConsumptionReasonHelper, ConsumptionInfluenceHelper, ConsumptionNegativeAspectsHelper} from "@/lib/enums"
 
-export const CONSUMPTION_REASONS: string[] = [
-  'Need',
-  'Impulse',
-  'Gift',
-  'Recommendation',
-  'Replacement',
-  'Other',
-];
-
-export const NEGATIVE_ASPECTS: string[] = [
-  'Price too high',
-  'Poor quality',
-  'Slow shipping',
-  'Bad packaging',
-  'Difficult to use',
-  "Didn't meet expectations",
-  'Short lifespan',
-];
+const CONSUMPTION_INFLUENCE: string[] = ConsumptionInfluenceHelper.labels;
+const NEGATIVE_ASPECTS: string[] = ConsumptionNegativeAspectsHelper.labels;
 
 interface ReflectionSectionProps {
   reason: string;
@@ -90,13 +75,13 @@ export default function ReflectionSection({
 
             {/* Reason */}
             <div className="space-y-2">
-              <Label htmlFor="reason">Why did you buy it?</Label>
+              <Label htmlFor="reason">What or who influenced this purchase?</Label>
               <Select value={reason} onValueChange={onReasonChange}>
                 <SelectTrigger id="reason" className="bg-white">
                   <SelectValue placeholder="Select a reason" />
                 </SelectTrigger>
                 <SelectContent>
-                  {CONSUMPTION_REASONS.map((r) => (
+                  {CONSUMPTION_INFLUENCE.map((r) => (
                     <SelectItem key={r} value={r}>
                       {r}
                     </SelectItem>

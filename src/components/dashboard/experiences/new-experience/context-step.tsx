@@ -20,7 +20,7 @@ export default function ContextStep({ currentStep, formData, updateField }: AddN
             <div className="space-y-4">
                 <div className="space-y-2">
                     <Label className="flex items-center gap-2 text-sm font-medium">
-                        <Brain className="h-3.5 w-3.5 text-purple-500" />
+                        <Brain className="h-3.5 w-3.5 text-blue-500" />
                         Motivo da compra
                     </Label>
                     <Select
@@ -42,7 +42,7 @@ export default function ContextStep({ currentStep, formData, updateField }: AddN
 
                 <div className="space-y-2">
                     <Label className="flex items-center gap-2 text-sm font-medium">
-                        <Users className="h-3.5 w-3.5 text-purple-500" />
+                        <Users className="h-3.5 w-3.5 text-blue-500" />
                         Influência principal
                     </Label>
                     <Select

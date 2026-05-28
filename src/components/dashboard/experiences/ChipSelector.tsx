@@ -57,8 +57,8 @@ export default function ChipSelector({
             variant={selected.includes(option) ? "default" : "outline"}
             className={`cursor-pointer px-3 py-1.5 text-sm transition-all hover:scale-105 ${
               selected.includes(option)
-                ? "bg-purple-600 hover:bg-purple-700 text-white"
-                : "hover:border-purple-400 hover:text-purple-600"
+                ? "bg-blue-600 hover:bg-blue-700 text-white"
+                : "hover:border-blue-400 hover:text-blue-600"
             }`}
             onClick={() => toggleChip(option)}
           >
@@ -112,7 +112,7 @@ export default function ChipSelector({
           variant="ghost"
           size="sm"
           onClick={() => setShowInput(true)}
-          className="text-purple-600 hover:text-purple-700 hover:bg-purple-50 gap-1"
+          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 gap-1"
         >
           <Plus className="h-3.5 w-3.5" />
           Adicionar outro

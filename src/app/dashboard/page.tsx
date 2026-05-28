@@ -14,7 +14,7 @@ export default async function DashboardPage() {
   }
   const username: string = session.user.name || "usuário";
   return (
-    <div className="p-11 space-y-6 bg-blue-50">
+    <div className="p-11 space-y-6 bg-indigo-300/20 rounded-ful">
       <h1 className="text-2xl font-bold text-blue-600">
         Hello, {username} 👋
       </h1>

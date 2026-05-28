@@ -18,7 +18,7 @@ export default function IdentificationStep({ currentStep, formData, updateField 
                         htmlFor="item"
                         className="flex items-center gap-2 text-sm font-medium"
                     >
-                        <ShoppingBag className="h-3.5 w-3.5 text-purple-500" />
+                        <ShoppingBag className="h-3.5 w-3.5 text-blue-500" />
                         Item consumido *
                     </Label>
 
@@ -37,7 +37,7 @@ export default function IdentificationStep({ currentStep, formData, updateField 
                             htmlFor="date"
                             className="flex items-center gap-2 text-sm font-medium"
                         >
-                            <Calendar className="h-3.5 w-3.5 text-purple-500" />
+                            <Calendar className="h-3.5 w-3.5 text-blue-500" />
                             Data *
                         </Label>
 
@@ -55,7 +55,7 @@ export default function IdentificationStep({ currentStep, formData, updateField 
                             htmlFor="price"
                             className="flex items-center gap-2 text-sm font-medium"
                         >
-                            <DollarSign className="h-3.5 w-3.5 text-purple-500" />
+                            <DollarSign className="h-3.5 w-3.5 text-blue-500" />
                             Preço (R$)
                         </Label>
 

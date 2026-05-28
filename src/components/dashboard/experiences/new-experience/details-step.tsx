@@ -16,7 +16,7 @@ export default function DetailsStep({ currentStep, formData, updateField }: AddN
             <div className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="description" className="flex items-center gap-2 text-sm font-medium">
-                        <FileText className="h-3.5 w-3.5 text-purple-500" />
+                        <FileText className="h-3.5 w-3.5 text-blue-500" />
                         Descrição
                     </Label>
                     <Textarea
@@ -30,7 +30,7 @@ export default function DetailsStep({ currentStep, formData, updateField }: AddN
 
                 <div className="space-y-2">
                     <Label htmlFor="location" className="flex items-center gap-2 text-sm font-medium">
-                        <MapPin className="h-3.5 w-3.5 text-purple-500" />
+                        <MapPin className="h-3.5 w-3.5 text-blue-500" />
                         Local
                     </Label>
                     <Input

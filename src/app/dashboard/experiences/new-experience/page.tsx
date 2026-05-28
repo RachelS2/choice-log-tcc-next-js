@@ -115,13 +115,13 @@ export default function WizardForm() {
               Experiência registrada!
             </h2>
             <p className="text-muted-foreground">
-              Sua experiência com <span className="font-medium text-purple-600">{formData.item}</span> foi salva com sucesso.
+              Sua experiência com <span className="font-medium text-blue-600">{formData.item}</span> foi salva com sucesso.
             </p>
           </div>
           <div className="flex gap-3 pt-4">
             <Button
               onClick={handleReset}
-              className="bg-purple-600 hover:bg-purple-700 text-white"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               <Sparkles className="mr-2 h-4 w-4" />
               Registrar outra
@@ -133,105 +133,114 @@ export default function WizardForm() {
   }
 
   return (
-    <Card className="w-full max-w-lg mx-auto border-0 shadow-xl bg-white/90 backdrop-blur-sm">
-      <CardContent className="p-0">
-        {/* Progress Header */}
-        <div className="px-6 pt-6 pb-4 space-y-4">
-          <div className="flex items-center justify-between">
-            {STEPS.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <div
-                  key={step.title}
-                  className={`flex flex-col items-center gap-1 transition-all ${index === currentStep
-                    ? "text-purple-600 scale-110"
-                    : index < currentStep
-                      ? "text-green-500"
-                      : "text-gray-300"
-                    }`}
-                >
-                  <div
-                    className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${index === currentStep
-                      ? "bg-purple-100 ring-2 ring-purple-400"
-                      : index < currentStep
-                        ? "bg-green-100"
-                        : "bg-gray-100"
-                      }`}
-                  >
-                    {index < currentStep ? (
-                      <Check className="h-4 w-4" />
-                    ) : (
-                      <Icon className="h-4 w-4" />
-                    )}
-                  </div>
-                  <span className="text-[10px] font-medium hidden sm:block">
-                    {step.title}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-          <Progress value={progress} className="h-1.5" />
-        </div>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
 
-        <IdentificationStep currentStep={currentStep} formData={formData} updateField={updateField} />
-        <ContextStep currentStep={currentStep} formData={formData} updateField={updateField} />
-        <DetailsStep currentStep={currentStep} formData={formData} updateField={updateField} />
-        <NegativeAspectsStep currentStep={currentStep} formData={formData} updateField={updateField} />
-        <FinalRatingStep currentStep={currentStep} formData={formData} updateField={updateField} />
+      <div className="absolute top-[-100px] left-[-100px] h-80 w-80 rounded-full bg-blue-300/20 blur-3xl" />
 
+      <div className="absolute bottom-[-120px] right-[-120px] h-96 w-96 rounded-full bg-indigo-300/20 blur-3xl" />
 
-        {/* Navigation */}
-        <div className="px-6 pb-6 pt-2 border-t border-gray-100">
-          <div className="flex items-center justify-between gap-3">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={handlePrev}
-              disabled={currentStep === 0}
-              className="gap-1"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              Voltar
-            </Button>
-
-            <div className="flex items-center gap-2">
-              {currentStep < STEPS.length - 1 && currentStep > 0 && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleSkipDetails}
-                  className="text-xs text-muted-foreground"
-                >
-                  Salvar agora
-                </Button>
-              )}
-
-              {currentStep < STEPS.length - 1 ? (
-                <Button
-                  type="button"
-                  onClick={handleNext}
-                  disabled={!canProceed()}
-                  className="bg-purple-600 hover:bg-purple-700 text-white gap-1"
-                >
-                  Próximo
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  onClick={handleSave}
-                  className="bg-purple-600 hover:bg-purple-700 text-white gap-1"
-                >
-                  <Check className="h-4 w-4" />
-                  Salvar experiência
-                </Button>
-              )}
+      <div className="relative z-10 flex items-center justify-center min-h-screen">
+        <Card className="w-full max-w-lg mx-auto shadow-2xl border-0 p-0 min-h-[500px]  bg-white backdrop-blur-sm">
+          <CardContent className="p-0">
+            {/* Progress Header */}
+            <div className="px-6 pt-6 pb-4 space-y-4 ">
+              <div className="flex items-center  justify-between">
+                {STEPS.map((step, index) => {
+                  const Icon = step.icon;
+                  return (
+                    <div
+                      key={step.title}
+                      className={`flex flex-col items-center gap-1 transition-all ${index === currentStep
+                        ? "text-blue-600 scale-110"
+                        : index < currentStep
+                          ? "text-green-500"
+                          : "text-gray-300"
+                        }`}
+                    >
+                      <div
+                        className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${index === currentStep
+                          ? "bg-blue-100 ring-2 ring-blue-400"
+                          : index < currentStep
+                            ? "bg-green-100"
+                            : "bg-gray-100"
+                          }`}
+                      >
+                        {index < currentStep ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <Icon className="h-4 w-4" />
+                        )}
+                      </div>
+                      <span className="text-[10px] font-medium hidden sm:block">
+                        {step.title}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+              <Progress value={progress} className="h-2 rounded-full  bg-slate-100" />
             </div>
-          </div>
-        </div>
-      </CardContent >
-    </Card >
+
+            <IdentificationStep currentStep={currentStep} formData={formData} updateField={updateField} />
+            <ContextStep currentStep={currentStep} formData={formData} updateField={updateField} />
+            <DetailsStep currentStep={currentStep} formData={formData} updateField={updateField} />
+            <NegativeAspectsStep currentStep={currentStep} formData={formData} updateField={updateField} />
+            <FinalRatingStep currentStep={currentStep} formData={formData} updateField={updateField} />
+
+
+            {/* Navigation */}
+            <div className="px-6 pb-6 pt-2 border-t border-gray-100">
+              <div className="flex items-center justify-between gap-3">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={handlePrev}
+                  disabled={currentStep === 0}
+                  className="gap-1"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Voltar
+                </Button>
+
+                <div className="flex items-center gap-2">
+                  {currentStep < STEPS.length - 1 && currentStep > 0 && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleSkipDetails}
+                      className="text-xs text-muted-foreground"
+                    >
+                      Salvar agora
+                    </Button>
+                  )}
+
+                  {currentStep < STEPS.length - 1 ? (
+                    <Button
+                      type="button"
+                      onClick={handleNext}
+                      disabled={!canProceed()}
+                      className="bg-blue-600 hover:bg-blue-700 text-white gap-1"
+                    >
+                      Próximo
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      onClick={handleSave}
+                      className="bg-blue-600 hover:bg-blue-700 text-white gap-1"
+                    >
+                      <Check className="h-4 w-4" />
+                      Salvar experiência
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </CardContent >
+        </Card >
+      </div >
+    </div >
   );
 }

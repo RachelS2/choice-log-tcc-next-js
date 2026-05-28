@@ -18,7 +18,7 @@ export default function FinalRatingStep({ currentStep, formData, updateField }: 
             <div className="space-y-6">
                 <div className="space-y-3">
                     <Label className="flex items-center gap-2 text-sm font-medium">
-                        <Star className="h-3.5 w-3.5 text-purple-500" />
+                        <Star className="h-3.5 w-3.5 text-blue-500" />
                         Nota geral
                     </Label>
                     <StarRating

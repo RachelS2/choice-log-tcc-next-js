@@ -16,7 +16,8 @@ export default function DashboardLayout({
   return (
     <div className={`${kaiseiTokumin.variable} font-sans antialiased flex min-h-screen `}>
       <Sidebar />
-      <main className="ml-64 min-h-screen flex-1 ">
+      <main className="ml-64 min-h-screen flex-1  bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 "> 
+        {/* bg-blue-50  */}
         {children}
       </main>
     </div>

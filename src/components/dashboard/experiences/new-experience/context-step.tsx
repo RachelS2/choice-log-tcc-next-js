@@ -1,7 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ConsumptionInfluenceHelper, ConsumptionReasonHelper } from "@/lib/enums";
-import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences/new-experience";
+import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences";
 import { Brain, Users } from "lucide-react";
 import { Step } from "./steps-abc";
 
@@ -12,8 +12,8 @@ const CONSUMPTION_INFLUENCE: string[] = ConsumptionInfluenceHelper.labels;
 export default function ContextStep({ currentStep, formData, updateField }: AddNewExperienceFormStepsModel) {
     return (
         <Step
-            title="Contexto da decisão"
-            description="O que motivou essa compra ou consumo?"
+            title="Decision context"
+            description="What motivated this purchase or consumption?"
             isActive={currentStep === 1}
         >
 
@@ -21,14 +21,14 @@ export default function ContextStep({ currentStep, formData, updateField }: AddN
                 <div className="space-y-2">
                     <Label className="flex items-center gap-2 text-sm font-medium">
                         <Brain className="h-3.5 w-3.5 text-blue-500" />
-                        Motivo da compra
+                        Purchase reason
                     </Label>
                     <Select
                         value={formData.reason}
                         onValueChange={(val) => updateField("reason", val)}
                     >
                         <SelectTrigger className="h-11">
-                            <SelectValue placeholder="Selecione o motivo..." />
+                            <SelectValue placeholder="Select a reason..." />
                         </SelectTrigger>
                         <SelectContent>
                             {REASONS.map((reason) => (
@@ -43,14 +43,14 @@ export default function ContextStep({ currentStep, formData, updateField }: AddN
                 <div className="space-y-2">
                     <Label className="flex items-center gap-2 text-sm font-medium">
                         <Users className="h-3.5 w-3.5 text-blue-500" />
-                        Influência principal
+                        Main influence
                     </Label>
                     <Select
                         value={formData.influence}
                         onValueChange={(val) => updateField("influence", val)}
                     >
                         <SelectTrigger className="h-11">
-                            <SelectValue placeholder="O que influenciou sua decisão?" />
+                            <SelectValue placeholder="What influenced your decision?" />
                         </SelectTrigger>
                         <SelectContent>
                             {CONSUMPTION_INFLUENCE.map((influence) => (

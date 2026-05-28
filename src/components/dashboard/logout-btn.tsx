@@ -9,57 +9,7 @@ import { authClient } from "@/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
-interface ConfirmLogoutModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onConfirm: () => Promise<void>;
-}
-
-function ConfirmLogoutModal({
-  open,
-  onOpenChange,
-  onConfirm,
-}: ConfirmLogoutModalProps) {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Confirm Logout</DialogTitle>
-
-          <DialogDescription>
-            Are you sure you want to logout?
-          </DialogDescription>
-        </DialogHeader>
-
-        <DialogFooter className="mt-4">
-          <Button
-            className="hover:bg-gray-200 hover:text-gray-900"
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-          >
-            Cancel
-          </Button>
-
-          <Button
-            onClick={onConfirm}
-            className="bg-red-600 text-white hover:bg-red-700"
-          >
-            Logout
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
+import Modal from "@/components/ui/modal";
 
 export default function LogoutButton() {
   const router = useRouter();
@@ -89,10 +39,13 @@ export default function LogoutButton() {
         <LogOut className="h-5 w-5" />
       </Button>
 
-      <ConfirmLogoutModal
+      <Modal
         open={open}
         onOpenChange={setOpen}
         onConfirm={handleLogout}
+        dialogTitle="Confirm Logout"
+        dialogDescription="Are you sure you want to logout?"
+        buttonText="Logout"
       />
     </>
   );

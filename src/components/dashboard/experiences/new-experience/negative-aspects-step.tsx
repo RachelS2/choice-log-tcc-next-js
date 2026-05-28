@@ -1,5 +1,5 @@
 
-import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences/new-experience";
+import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences";
 import ChipSelector from "../ChipSelector";
 import { ConsumptionNegativeAspectsHelper } from "@/lib/enums";
 import { Step } from "./steps-abc";
@@ -8,8 +8,8 @@ import { Step } from "./steps-abc";
 export default function FinalRatingStep({ currentStep, formData, updateField }: AddNewExperienceFormStepsModel) {
     return (
         <Step
-            title="Pontos negativos"
-            description="Selecione os aspectos que poderiam melhorar."
+            title="Negative points"
+            description="Select the aspects that could improve."
             isActive={currentStep === 3}
         >
 
@@ -17,7 +17,7 @@ export default function FinalRatingStep({ currentStep, formData, updateField }: 
                 options={ConsumptionNegativeAspectsHelper.labels}
                 selected={formData.negativeAspects}
                 onChange={(val) => updateField("negativeAspects", val)}
-                placeholder="Outro ponto negativo..."
+                placeholder="Other negative point..."
             />
         </Step>
     )

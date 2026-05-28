@@ -1,5 +1,5 @@
 "use client";
-import { LayoutDashboard, ALargeSmall ,  Package, BarChart3, Settings, ShoppingCart } from 'lucide-react';
+import { LayoutDashboard, ClipboardList ,  Package, BarChart3, Settings, ShoppingCart } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -18,9 +18,9 @@ const navItems: NavItem[] = [
     href: "/dashboard",
   },
   {
-    label: "Categories",
-    icon: ALargeSmall ,
-    href: "/dashboard/categories",
+    label: "Experiences",
+    icon: ClipboardList ,
+    href: "/dashboard/experiences",
   },
   {
     label: "Products",

@@ -15,24 +15,30 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import IdentificationStep from "@/components/dashboard/experiences/new-experience/identification-step";
-import { AddNewExperienceFormModel } from "@/models/dashboard/experiences/new-experience";
+import { AddNewExperienceFormModel } from "@/models/dashboard/experiences";
 import ContextStep from "@/components/dashboard/experiences/new-experience/context-step";
 import FinalRatingStep from "@/components/dashboard/experiences/new-experience/final-rating-step";
 import NegativeAspectsStep from "@/components/dashboard/experiences/new-experience/negative-aspects-step";
 import DetailsStep from "@/components/dashboard/experiences/new-experience/details-step";
+import Modal from "@/components/ui/modal";
+import { useRouter } from "next/navigation";
 
 
 const STEPS = [
-  { title: "Identificação", icon: ShoppingBag },
-  { title: "Contexto", icon: Brain },
-  { title: "Detalhes", icon: FileText },
-  { title: "Pontos Negativos", icon: ThumbsDown },
-  { title: "Avaliação", icon: Star },
+  { title: "Identification", icon: ShoppingBag },
+  { title: "Context", icon: Brain },
+  { title: "Details", icon: FileText },
+  { title: "Negative Aspects", icon: ThumbsDown },
+  { title: "Final Rating", icon: Star },
 ];
 
 export default function WizardForm() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+
   const [formData, setFormData] = useState<AddNewExperienceFormModel>({
     item: "",
     date: new Date().toISOString().split("T")[0],
@@ -54,7 +60,7 @@ export default function WizardForm() {
 
   const canProceed = () => {
     if (currentStep === 0) {
-      return formData.item.trim() !== "" && formData.date !== "";
+      return formData.item.trim() !== "" && formData.date !== "" && selectedItemId !== null;
     }
     return true;
   };
@@ -65,10 +71,18 @@ export default function WizardForm() {
     }
   };
 
+
   const handlePrev = () => {
     if (currentStep > 0) {
       setCurrentStep((prev) => prev - 1);
+      return;
     }
+
+    setModalOpen(true);
+  };
+
+  const handleRouterBack = async () => {
+    router.back();
   };
 
   const handleSave = () => {
@@ -140,8 +154,8 @@ export default function WizardForm() {
       <div className="absolute bottom-[-120px] right-[-120px] h-96 w-96 rounded-full bg-indigo-300/20 blur-3xl" />
 
       <div className="relative z-10 flex items-center justify-center min-h-screen">
-        <Card className="w-full max-w-lg mx-auto shadow-2xl border-0 p-0 min-h-[500px]  bg-white backdrop-blur-sm">
-          <CardContent className="p-0">
+        <Card className="w-full max-w-lg mx-auto shadow-2xl border-0 p-0 min-h-[510px]  bg-white backdrop-blur-sm">
+          <CardContent className="p-0 flex flex-col h-full min-h-[500px]">
             {/* Progress Header */}
             <div className="px-6 pt-6 pb-4 space-y-4 ">
               <div className="flex items-center  justify-between">
@@ -181,37 +195,61 @@ export default function WizardForm() {
               <Progress value={progress} className="h-2 rounded-full  bg-slate-100" />
             </div>
 
-            <IdentificationStep currentStep={currentStep} formData={formData} updateField={updateField} />
-            <ContextStep currentStep={currentStep} formData={formData} updateField={updateField} />
-            <DetailsStep currentStep={currentStep} formData={formData} updateField={updateField} />
-            <NegativeAspectsStep currentStep={currentStep} formData={formData} updateField={updateField} />
-            <FinalRatingStep currentStep={currentStep} formData={formData} updateField={updateField} />
-
+            <div className="flex-1">
+              <IdentificationStep currentStep={currentStep} formData={formData} updateField={updateField} selectedId={selectedItemId} setSelectedId={setSelectedItemId} />
+              <ContextStep currentStep={currentStep} formData={formData} updateField={updateField} />
+              <DetailsStep currentStep={currentStep} formData={formData} updateField={updateField} />
+              <NegativeAspectsStep currentStep={currentStep} formData={formData} updateField={updateField} />
+              <FinalRatingStep currentStep={currentStep} formData={formData} updateField={updateField} />
+            </div>
 
             {/* Navigation */}
-            <div className="px-6 pb-6 pt-2 border-t border-gray-100">
-              <div className="flex items-center justify-between gap-3">
+            <div className="h-20 flex items-center px-6 border-t border-gray-100 flex items-center">
+              <div className="flex items-center justify-center gap-3">
+              <>  
                 <Button
                   type="button"
                   variant="ghost"
                   onClick={handlePrev}
-                  disabled={currentStep === 0}
-                  className="gap-1"
+                  className="
+                    gap-1
+                    hover:bg-blue-100
+                    hover:text-blue-700
+                    transition-colors hover:font-bold
+                  "
                 >
                   <ChevronLeft className="h-4 w-4" />
-                  Voltar
+                  Return
                 </Button>
 
+                  <Modal
+                    open={modalOpen}
+                    onOpenChange={setModalOpen}
+                    onConfirm={handleRouterBack}
+                    dialogTitle="Confirm Return"
+                    dialogDescription="Are you sure you want to return to the dashboard page?"
+                    buttonText="Return to Dashboard"
+                  />
+                </>
                 <div className="flex items-center gap-2">
                   {currentStep < STEPS.length - 1 && currentStep > 0 && (
                     <Button
                       type="button"
                       variant="outline"
-                      size="sm"
                       onClick={handleSkipDetails}
-                      className="text-xs text-muted-foreground"
-                    >
-                      Salvar agora
+                      className="
+                      text-xs
+                      border
+                      border-blue-400
+                      bg-white
+                      text-blue-500
+                      hover:bg-blue-100
+                      hover:-translate-y-[1px]
+                      hover:text-blue-700
+                      shadow-[0_4px_12px_rgba(59,130,246,0.15)]
+                      transition-all
+                      duration-200">
+                      Save and Continue Later
                     </Button>
                   )}
 
@@ -220,9 +258,9 @@ export default function WizardForm() {
                       type="button"
                       onClick={handleNext}
                       disabled={!canProceed()}
-                      className="bg-blue-600 hover:bg-blue-700 text-white gap-1"
+                      className="bg-blue-600 hover:bg-blue-700 shadow-[0_4px_12px_rgba(59,130,246,0.15)] hover:-translate-y-[1px] text-white gap-1"
                     >
-                      Próximo
+                      Next
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   ) : (
@@ -232,7 +270,7 @@ export default function WizardForm() {
                       className="bg-blue-600 hover:bg-blue-700 text-white gap-1"
                     >
                       <Check className="h-4 w-4" />
-                      Salvar experiência
+                      Save Experience
                     </Button>
                   )}
                 </div>

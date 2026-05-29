@@ -41,7 +41,7 @@ export default function WizardForm() {
 
   const [formData, setFormData] = useState<AddNewExperienceFormModel>({
     itemId: "",
-    date: new Date().toISOString().split("T")[0],
+    date: new Date(),
     price: "",
     itemType: "PRODUCT",
     reason: "",
@@ -62,7 +62,7 @@ export default function WizardForm() {
   const nextButtonDisabled = () => {
     if (currentStep === 0) {
       const isItemIdEmpty  = formData.itemId.trim() === "";
-      const isDateEmpty  = formData.date.trim() === "";
+      const isDateEmpty  = formData.date.toString().trim() === "";
       const isPriceEmpty = formData.price.trim() === "";
 
       return isItemIdEmpty  || isDateEmpty  || isPriceEmpty;
@@ -105,7 +105,7 @@ export default function WizardForm() {
   const handleReset = () => {
     setFormData({
       itemId: "",
-      date: new Date().toISOString().split("T")[0],
+      date: new Date(),
       price: "",
       itemType: "PRODUCT",
       reason: "",

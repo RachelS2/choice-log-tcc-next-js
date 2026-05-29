@@ -2,12 +2,15 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences";
-import { Calendar, DollarSign, ShoppingBag } from "lucide-react";
+import { CalendarIcon, DollarSign, ShoppingBag } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 import { Step } from "./steps-abc";
 import ProductSelector from "../../../products/new-product/product-selector";
+import { useState } from "react";
+import DatePicker from "@/components/ui/date-picker";
 
-export default function IdentificationStep({ currentStep, formData, updateField}: AddNewExperienceFormStepsModel) {
-
+export default function IdentificationStep({ currentStep, formData, updateField }: AddNewExperienceFormStepsModel) {
+    const [datePickerOpen, setDatePickerOpen] = useState(false);
     return (
         <Step
             title="What did you consume?"
@@ -36,17 +39,16 @@ export default function IdentificationStep({ currentStep, formData, updateField}
                             htmlFor="date"
                             className="flex items-center gap-2 text-sm font-medium"
                         >
-                            <Calendar className="h-3.5 w-3.5 text-blue-500" />
-                            Date *
+                            <CalendarIcon className="h-3.5 w-3.5 text-blue-500" />
+                            Consumption Date *
                         </Label>
+                        <DatePicker putCalendarIcon={false} onChange={(d) => {
+                            if (d) {
+                                updateField("date", d);
+                                setDatePickerOpen(false);
+                            }
+                        }} value={formData.date} />
 
-                        <Input
-                            id="date"
-                            type="date"
-                            value={formData.date}
-                            onChange={(e) => updateField("date", e.target.value)}
-                            className="h-11"
-                        />
                     </div>
 
                     <div className="space-y-2">
@@ -70,6 +72,6 @@ export default function IdentificationStep({ currentStep, formData, updateField}
                     </div>
                 </div>
             </div>
-        </Step>
+        </Step >
     )
 }

@@ -3,7 +3,7 @@ import { ItemType } from "../../../../generated/prisma";
 export type AddNewExperienceFormModel {
     itemId: string;
     itemType: ItemType;
-    date: string;
+    date: Date;
     price: string;
     reason: string;
     influence: string;

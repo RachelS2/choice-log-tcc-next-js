@@ -118,15 +118,6 @@ export default function ProductSelector({
                                                     {product.brand} · {product.categoryId}
                                                 </span>
                                             </div>
-
-                                            <Check
-                                                className={cn(
-                                                    "h-4 w-4",
-                                                    selectedId === product.id
-                                                        ? "opacity-100 text-blue-600"
-                                                        : "opacity-0"
-                                                )}
-                                            />
                                         </CommandItem>
                                     ))}
                                 </CommandGroup>

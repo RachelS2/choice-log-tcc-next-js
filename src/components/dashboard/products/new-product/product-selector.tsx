@@ -14,104 +14,142 @@ import { cn } from '@/lib/utils';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { useGetUserProducts } from '@/hooks/use-products';
 import { toast } from 'sonner';
+import { AddNewExperienceFormModel } from '@/models/dashboard/experiences';
+import { Input } from '@/components/ui/input';
 
 
 interface ProductSelectorProps {
     selectedId: string | null;
-    onSelect: (id: string) => void;
+    updateField: <K extends keyof AddNewExperienceFormModel>(field: K, value: AddNewExperienceFormModel[K]) => void;
 }
 
 export default function ProductSelector({
     selectedId,
-    onSelect,
+    updateField,
 }: ProductSelectorProps) {
     const [onOpen, setOpen] = useState(false);
-    const { products, error, loading } = useGetUserProducts();
-    const [addModalOpen, setAddModalOpen] = useState(false);
-
+    const { data, error, loading } = useGetUserProducts();
     if (error && !loading) {
-        toast.error("Failed to load products.", {description: error.message});
+        toast.error("Failed to load products.", { description: error.message });
         return
     }
+    const [addModalOpen, setAddModalOpen] = useState(false);
+    const [search, setSearch] = useState("");
+    const filteredProducts = data?.filter((product) =>
+        `${product.friendlyName} ${product.brand}`
+            .toLowerCase()
+            .includes(search.toLowerCase())
+    );
 
-    const selected = products.find((p) => p.id === selectedId);
+    const selected = data?.find((p) => p.id === selectedId);
     return (
-        <>
-            <Card>
-                <CardHeader>
-                    <CardDescription>Select an existing product or add a new one to your catalog.</CardDescription>
-                </CardHeader>
-                <CardContent>
+        <div className="flex gap-1">
+            <div className="relative flex-1">
+                <Input
+                    value={search}
+                    onChange={(e) => {
+                        setSearch(e.target.value);
+                        setOpen(true);
+                    }}
+                    onFocus={() => setOpen(true)}
+                    onBlur={() => {
+                        setTimeout(() => setOpen(false), 150);
+                    }}
+                    placeholder="Search and select a product..."
+                    className="pr-10 h-11"
+                />
 
-                    <div className="flex gap-2">
-                        <Popover open={onOpen} onOpenChange={setOpen}>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    role="combobox"
-                                    aria-expanded={onOpen}
-                                    className="flex-1 justify-between bg-white font-normal"
-                                >
-                                    {selected ? (
-                                        <span className="flex items-center gap-2 truncate">
-                                            <span className="font-medium text-gray-900">{selected.friendlyName}</span>
-                                            <span className="text-gray-500 text-xs">· {selected.brand}</span>
-                                        </span>
-                                    ) : (
-                                        <span className="text-gray-500">Search and select a product...</span>
-                                    )}
-                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
-                                <Command>
-                                    <CommandInput placeholder="Search products..." />
-                                    <CommandList>
-                                        <CommandEmpty>No product found.</CommandEmpty>
-                                        <CommandGroup>
-                                            {products.map((product) => (
-                                                <CommandItem
-                                                    key={product.id}
-                                                    value={`${product.friendlyName} ${product.brand}`}
-                                                    onSelect={() => {
-                                                        onSelect(product.id);
-                                                        setOpen(false);
-                                                    }}
-                                                    className="flex items-center justify-between"
-                                                >
-                                                    <div className="flex flex-col">
-                                                        <span className="text-black">{product.friendlyName}</span>
-                                                        <span className="text-xs text-gray-600">
-                                                            {product.brand} · {product.categoryId}
-                                                        </span>
-                                                    </div>
-                                                    <Check
-                                                        className={cn(
-                                                            'h-4 w-4',
-                                                            selectedId === product.id ? 'opacity-100 text-blue-600' : 'opacity-0'
-                                                        )}
-                                                    />
-                                                </CommandItem>
-                                            ))}
-                                        </CommandGroup>
-                                    </CommandList>
-                                </Command>
-                            </PopoverContent>
-                        </Popover>
+                <ChevronsUpDown
+                    className="
+            absolute
+            right-3
+            top-1/2
+            -translate-y-1/2
+            h-4
+            w-4
+            opacity-50 cursor-pointer
+        " onClick={() => setOpen((prev) => !prev)} />
 
-                        <Button
-                            type="button"
-                            onClick={() => setAddModalOpen(true)}
-                            className="bg-blue-600 text-white hover:bg-blue-700 shrink-0"
-                        >
-                            <Plus className="h-4 w-4 mr-1" />
-                            Add new
-                        </Button>
+                {onOpen && (
+                    <div
+                        className="
+                absolute
+                top-full
+                left-0
+                mt-1
+                w-full
+                z-50
+                rounded-md
+                border
+                bg-white
+                shadow-lg
+                overflow-hidden
+            "
+                    >
+                        <Command>
+                            <CommandList className="max-h-64 overflow-y-auto">
+                                <CommandEmpty>No product found.</CommandEmpty>
+
+                                <CommandGroup>
+                                    {filteredProducts?.map((product) => (
+                                        <CommandItem
+                                            key={product.id}
+                                            value={`${product.friendlyName} ${product.brand}`}
+                                            onSelect={() => {
+                                                updateField("itemId", product.id);
+
+                                                setSearch(product.friendlyName);
+
+                                                setOpen(false);
+                                            }}
+                                            className="
+                                    flex
+                                    cursor-pointer
+                                    items-center
+                                    justify-between
+                                "
+                                        >
+                                            <div className="flex flex-col">
+                                                <span className="text-black">
+                                                    {product.friendlyName}
+                                                </span>
+
+                                                <span className="text-xs text-gray-600">
+                                                    {product.brand} · {product.categoryId}
+                                                </span>
+                                            </div>
+
+                                            <Check
+                                                className={cn(
+                                                    "h-4 w-4",
+                                                    selectedId === product.id
+                                                        ? "opacity-100 text-blue-600"
+                                                        : "opacity-0"
+                                                )}
+                                            />
+                                        </CommandItem>
+                                    ))}
+                                </CommandGroup>
+                            </CommandList>
+                        </Command>
                     </div>
-
-                </CardContent>
-            </Card>
-
-        </>
+                )}
+            </div>
+            {/* BOTÃO */}
+            <Button
+                type="button"
+                onClick={() => setAddModalOpen(true)}
+                className="
+            bg-blue-600
+            text-white
+            hover:bg-blue-700
+            h-11
+            shrink-0
+        "
+            >
+                <Plus className="h-4 w-4 mr-1" />
+                Add new
+            </Button>
+        </div>
     );
 }

@@ -5,11 +5,16 @@ import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences";
 import { Brain, Users } from "lucide-react";
 import { Step } from "./steps-abc";
 
-const REASONS: string[] = ConsumptionReasonHelper.labels;
+const REASONS = Object.values(
+  ConsumptionReasonHelper.labels
+);
 
-const CONSUMPTION_INFLUENCE: string[] = ConsumptionInfluenceHelper.labels;
+const CONSUMPTION_INFLUENCE = Object.values(
+  ConsumptionInfluenceHelper.labels
+);
 
 export default function ContextStep({ currentStep, formData, updateField }: AddNewExperienceFormStepsModel) {
+    console.log(ConsumptionReasonHelper.labels)
     return (
         <Step
             title="Decision context"

@@ -1,6 +1,8 @@
+import { ItemType } from "../../../../generated/prisma";
 
 export type AddNewExperienceFormModel {
-    item: string;
+    itemId: string;
+    itemType: ItemType;
     date: string;
     price: string;
     reason: string;

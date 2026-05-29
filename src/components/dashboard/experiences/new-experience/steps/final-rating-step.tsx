@@ -2,7 +2,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences";
 import { Star } from "lucide-react";
-import StarRating from "../StarRating";
+import StarRating from "../../StarRating";
 import { Step } from "./steps-abc";
 
 

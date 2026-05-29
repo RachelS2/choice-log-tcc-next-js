@@ -11,10 +11,10 @@ export const ConsumptionInfluenceHelper = createEnumHelpers(
 
 export const ConsumptionReasonHelper = createEnumHelpers(
   ConsumptionReason,
-  LABELS.ConsumptionReason
+  LABELS.ProductConsumptionReason
 );
 
 export const ConsumptionNegativeAspectsHelper = createEnumHelpers(
   ConsumptionNegativeAspects,
-  LABELS.ConsumptionNegativeAspects
+  LABELS.ProductConsumptionNegativeAspects
 );

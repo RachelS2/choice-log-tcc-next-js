@@ -1,6 +1,6 @@
 
 import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences";
-import ChipSelector from "../ChipSelector";
+import ChipSelector from "../../ChipSelector";
 import { ConsumptionNegativeAspectsHelper } from "@/lib/enums";
 import { Step } from "./steps-abc";
 

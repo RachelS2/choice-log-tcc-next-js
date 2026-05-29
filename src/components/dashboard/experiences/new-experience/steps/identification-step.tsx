@@ -4,13 +4,9 @@ import { Label } from "@/components/ui/label";
 import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences";
 import { Calendar, DollarSign, ShoppingBag } from "lucide-react";
 import { Step } from "./steps-abc";
-import ProductSelector from "../../products/new-product/product-selector";
+import ProductSelector from "../../../products/new-product/product-selector";
 
-
-
-
-type IdentificationStepProps = AddNewExperienceFormStepsModel & { selectedId: string | null, setSelectedId: (id: string) => void };
-export default function IdentificationStep({ currentStep, formData, updateField, selectedId, setSelectedId }: IdentificationStepProps) {
+export default function IdentificationStep({ currentStep, formData, updateField}: AddNewExperienceFormStepsModel) {
 
     return (
         <Step
@@ -18,8 +14,8 @@ export default function IdentificationStep({ currentStep, formData, updateField,
             description="Record the product or service you want to review."
             isActive={currentStep === 0}
         >
-            <div className="space-y-4">
-                <div className="space-y-2">
+            <div>
+                <div className="space-y-2 pb-4">
                     <Label
                         htmlFor="item"
                         className="flex items-center gap-2 text-sm font-medium"
@@ -29,8 +25,8 @@ export default function IdentificationStep({ currentStep, formData, updateField,
                     </Label>
 
                     <ProductSelector
-                        selectedId={selectedId}
-                        onSelect={setSelectedId}
+                        selectedId={formData.itemId}
+                        updateField={updateField}
                     />
                 </div>
 
@@ -41,7 +37,7 @@ export default function IdentificationStep({ currentStep, formData, updateField,
                             className="flex items-center gap-2 text-sm font-medium"
                         >
                             <Calendar className="h-3.5 w-3.5 text-blue-500" />
-                            Data *
+                            Date *
                         </Label>
 
                         <Input
@@ -59,7 +55,7 @@ export default function IdentificationStep({ currentStep, formData, updateField,
                             className="flex items-center gap-2 text-sm font-medium"
                         >
                             <DollarSign className="h-3.5 w-3.5 text-blue-500" />
-                            Price (R$)
+                            Price (R$) *
                         </Label>
 
                         <Input

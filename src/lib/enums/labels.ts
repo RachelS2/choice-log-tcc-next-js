@@ -14,7 +14,7 @@ export const LABELS = {
         [ConsumptionInfluence.OTHER]: 'Other',
     },
 
-    ConsumptionReason: {
+    ProductConsumptionReason: {
         [ConsumptionReason.ITEM_REPLACEMENT]: 'Replace Item',
         [ConsumptionReason.EFFECTIVENESS_TEST]: 'Test Effectiveness',
         [ConsumptionReason.PERSONAL_SATISFACTION]: 'Personal Satisfaction',
@@ -22,7 +22,7 @@ export const LABELS = {
         [ConsumptionReason.OTHER]: 'Other',
     },
 
-    ConsumptionNegativeAspects: {
+    ProductConsumptionNegativeAspects: {
         [ConsumptionNegativeAspects.INEFFECTIVE]: 'Item was Ineffective',
         [ConsumptionNegativeAspects.LOW_QUALITY]: 'Poor Quality',
         [ConsumptionNegativeAspects.LOW_DURABILITY]: 'Short Lifespan',

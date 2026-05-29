@@ -61,11 +61,11 @@ export default function WizardForm() {
 
   const nextButtonDisabled = () => {
     if (currentStep === 0) {
-      const isItemIdEmpty  = formData.itemId.trim() === "";
-      const isDateEmpty  = formData.date.toString().trim() === "";
+      const isItemIdEmpty = formData.itemId.trim() === "";
+      const isDateEmpty = formData.date.toString().trim() === "";
       const isPriceEmpty = formData.price.trim() === "";
 
-      return isItemIdEmpty  || isDateEmpty  || isPriceEmpty;
+      return isItemIdEmpty || isDateEmpty || isPriceEmpty;
     }
     return false;
   };

@@ -1,12 +1,12 @@
 
 import { fetchUserProducts } from "@/lib/repository/dashboard/products";
-import { getUserId } from "@/lib/utils";
+import { getUserIdServer } from "@/lib/utils";
 import { useAsyncData } from "./generic-hook";
 
 
 export function useGetUserProducts() {
     return useAsyncData(async () => {
-        const userId = await getUserId();
+        const userId = await getUserIdServer();
         return fetchUserProducts(userId);
     }, []);
 }

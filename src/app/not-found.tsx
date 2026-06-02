@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { FaceFrownIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
-import LandingHeader from "@/components/landing/header";
+import LandingHeaderClient from "@/components/landing/landing-header-client";
 
 import { Button } from "@/components/ui/button";
 
@@ -12,7 +12,7 @@ export default function NotFound() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <LandingHeader />
+      <LandingHeaderClient />
 
       <main className="flex flex-1 items-center justify-center overflow-hidden bg-blue-50 mt-16 px-6">
 

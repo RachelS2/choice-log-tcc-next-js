@@ -1,6 +1,6 @@
 
 import { fetchSystemCategories, fetchSystemProductsCategories, fetchSystemServiceCategories, fetchUserCategories, fetchUserProductsCategories, fetchUserServiceCategories } from "@/lib/repository/dashboard/categories";
-import { getUserId } from "@/lib/utils";
+import { getUserIdServer } from "@/lib/utils";
 import { useAsyncData } from "./generic-hook";
 
 
@@ -10,7 +10,7 @@ import { useAsyncData } from "./generic-hook";
  */
 export function useGetUserCategories() {
     return useAsyncData(async () => {
-        const userId = await getUserId();
+        const userId = await getUserIdServer();
 
         return fetchUserCategories(userId);
     }, []);
@@ -21,7 +21,7 @@ export function useGetUserCategories() {
 
 export function useGetUserProductsCategories() {
     return useAsyncData(async () => {
-        const userId = await getUserId();
+        const userId = await getUserIdServer();
 
         return fetchUserProductsCategories(userId);
     }, []);
@@ -32,7 +32,7 @@ export function useGetUserProductsCategories() {
  */
 export function useGetUserServicesCategories() {
     return useAsyncData(async () => {
-        const userId = await getUserId();
+        const userId = await getUserIdServer();
 
         return fetchUserServiceCategories(userId);
     }, []);

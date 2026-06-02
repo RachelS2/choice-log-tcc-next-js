@@ -1,4 +1,4 @@
-import LandingHeader from "../components/landing/header"
+import LandingHeaderClient from "../components/landing/landing-header-client"
 import HeroDashboardSection from "@/components/landing/hero-dashboard"
 import BenefitsSection from "@/components/landing/benefits-section"
 import HowItWorksSection from "@/components/landing/how-it-works"
@@ -8,7 +8,7 @@ import Footer from "@/components/landing/footer"
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-white via-blue-50 to-white">
-      <LandingHeader />
+      <LandingHeaderClient />
 
       <HeroDashboardSection />
 

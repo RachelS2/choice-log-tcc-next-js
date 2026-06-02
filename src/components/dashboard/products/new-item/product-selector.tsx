@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {  Plus, ArrowDown } from 'lucide-react';
+import { Plus, ArrowDown, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Command,
@@ -65,7 +65,13 @@ export default function ProductSelector({
                     <div className="absolute top-full left-0 mt-1 w-full z-50 rounded-md border bg-white shadow-lg overflow-hidden">
                         <Command>
                             <CommandList className="max-h-80 overflow-y-auto">
-                                <CommandEmpty>No product found.</CommandEmpty>
+                                <CommandEmpty>{loading ? (
+                                    <>
+                                        <Loader2 className="animate-spin" />
+                                        <span>Loading...</span>
+                                    </>
+                                ) :
+                                    "No product found."}</CommandEmpty>
 
                                 <CommandGroup>
                                     {filteredProducts?.map((product) => (

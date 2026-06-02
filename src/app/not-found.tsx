@@ -6,13 +6,34 @@ import { FaceFrownIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import LandingHeaderClient from "@/components/landing/landing-header-client";
 
 import { Button } from "@/components/ui/button";
+import { getUserIdClient } from "@/lib/utils";
 
 export default function NotFound() {
   const router = useRouter();
+  const userIsLoggedIn = !!getUserIdClient();
 
   return (
     <div className="flex min-h-screen flex-col">
-      <LandingHeaderClient />
+      {/* Background */}
+      <div className="pointer-events-none absolute inset-0 z-0">
+
+        {/* Top left */}
+        <div className="absolute -top-24 left-1/4 h-[280px] w-[280px] rounded-full bg-blue-400/20 blur-3xl" />
+
+        {/* Top right */}
+        <div className="absolute top-10 right-[-80px] h-[320px] w-[320px] rounded-full bg-blue-400/20 blur-3xl" />
+
+        {/* Center */}
+        <div className="absolute top-1/2 left-1/3 h-[200px] w-[200px] rounded-full bg-blue-400/20 blur-2xl" />
+
+        {/* Bottom left */}
+        <div className="absolute bottom-0 left-[-60px] h-[260px] w-[260px] rounded-full bg-blue-400/10 blur-3xl" />
+
+        {/* Bottom right */}
+        <div className="absolute bottom-[-40px] right-10 h-[220px] w-[220px] rounded-full bg-blue-400/20 blur-3xl" />
+
+      </div>
+      <LandingHeaderClient userIsLoggedIn={userIsLoggedIn} />
 
       <main className="flex flex-1 items-center justify-center overflow-hidden bg-blue-50 mt-16 px-6">
 

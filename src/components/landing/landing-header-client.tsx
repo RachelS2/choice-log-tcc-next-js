@@ -8,10 +8,9 @@ import { getUserIdClient } from "@/lib/utils";
 import { useState } from "react";
 
 
-export default function LandingHeaderClient() {
+export default function LandingHeaderClient({userIsLoggedIn}: {userIsLoggedIn: boolean}) {
   const [path, setPath] = useState("");
 
-  const userIsLoggedIn = !!getUserIdClient();
   function handleLogoClick() {
     if (window.history.length > 1) {
       userIsLoggedIn ? setPath("/dashboard") : setPath("/");
@@ -19,7 +18,6 @@ export default function LandingHeaderClient() {
       setPath("/");
     }
   }
-
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white border-b border-neutral-200 blackdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">

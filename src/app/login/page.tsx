@@ -6,7 +6,7 @@ import Footer from '@/components/landing/footer';
 export default function LoginPage() {
   return (
     <>
-      <LandingHeaderClient />
+      <LandingHeaderClient userIsLoggedIn={false} />
       <main className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-slate-800 pt-16">
         <div className="mx-auto grid min-h-[calc(100vh-64px)] max-w-8xl lg:grid-cols-2">
           

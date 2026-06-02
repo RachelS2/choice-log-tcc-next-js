@@ -161,7 +161,7 @@ export default function WizardForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+    <form onSubmit={handleSubmit} className="relative min-h-screen overflow-hidden">
       <ProgressHeader steps={STEPS} currentStep={currentStep} progress={progress} >
         <div className="flex-1">
           <IdentificationStep currentStep={currentStep} formData={formData} updateField={updateField} />

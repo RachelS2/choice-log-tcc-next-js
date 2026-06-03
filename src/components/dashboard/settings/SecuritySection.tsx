@@ -19,25 +19,25 @@ export default function SecuritySection() {
     const [loggingOut, setLoggingOut] = useState(false);
 
     const handleChangePassword = () => {
-        toast.info('Um email com instruções para redefinir sua senha foi enviado.');
+        toast.info('An email with password reset instructions has been sent.');
     };
 
     const handleLogout = async () => {
         setLoggingOut(true);
         await new Promise((resolve) => setTimeout(resolve, 800));
-        toast.success('Sessão encerrada com sucesso.');
+        toast.success('Session ended successfully.');
         setLoggingOut(false);
     };
 
     const handleDeleteAccount = () => {
-        toast.error('Conta excluída. Sentiremos sua falta.');
+        toast.error('Account deleted. We\'ll miss you.');
     };
 
     return (
         <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-neutral-950 mb-1">Segurança</h2>
+            <h2 className="text-lg font-semibold text-neutral-950 mb-1">Security</h2>
             <p className="text-sm text-neutral-500 mb-6">
-                Gerencie sua senha e acesso à conta.
+                Manage your password and account access.
             </p>
 
             <div className="space-y-4">
@@ -48,9 +48,9 @@ export default function SecuritySection() {
                             <KeyRound className="h-4 w-4" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-neutral-900">Alterar senha</p>
+                            <p className="text-sm font-medium text-neutral-900">Change password</p>
                             <p className="text-xs text-neutral-500">
-                                Enviaremos um link de redefinição para seu email.
+                                We'll send a password reset link to your email.
                             </p>
                         </div>
                     </div>
@@ -60,7 +60,7 @@ export default function SecuritySection() {
                         onClick={handleChangePassword}
                         className="border-neutral-300 text-neutral-700 hover:bg-neutral-100"
                     >
-                        Alterar
+                        Change
                     </Button>
                 </div>
 
@@ -71,9 +71,9 @@ export default function SecuritySection() {
                             <LogOut className="h-4 w-4" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-neutral-900">Sair da conta</p>
+                            <p className="text-sm font-medium text-neutral-900">Log out</p>
                             <p className="text-xs text-neutral-500">
-                                Encerre sua sessão atual neste dispositivo.
+                                End your current session on this device.
                             </p>
                         </div>
                     </div>
@@ -84,7 +84,7 @@ export default function SecuritySection() {
                         disabled={loggingOut}
                         className="border-neutral-300 text-neutral-700 hover:bg-neutral-100"
                     >
-                        {loggingOut ? 'Saindo...' : 'Sair'}
+                        {loggingOut ? 'Logging out...' : 'Log out'}
                     </Button>
                 </div>
 
@@ -97,9 +97,9 @@ export default function SecuritySection() {
                             <Trash2 className="h-4 w-4" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-red-900">Excluir conta</p>
+                            <p className="text-sm font-medium text-red-900">Delete account</p>
                             <p className="text-xs text-red-600/70">
-                                Esta ação é irreversível. Todos os seus dados serão apagados.
+                                This action is irreversible. All your data will be deleted.
                             </p>
                         </div>
                     </div>
@@ -110,24 +110,24 @@ export default function SecuritySection() {
                                 size="sm"
                                 className="border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800"
                             >
-                                Excluir
+                                Delete
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>Tem certeza que deseja excluir sua conta?</AlertDialogTitle>
+                                <AlertDialogTitle>Are you sure you want to delete your account?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Esta ação não pode ser desfeita. Todos os seus dados, experiências registradas
-                                    e insights serão permanentemente removidos dos nossos servidores.
+                                    This action cannot be undone. All your data, recorded experiences,
+                                    and insights will be permanently removed from our servers.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
                                     onClick={handleDeleteAccount}
                                     className="bg-red-600 text-white hover:bg-red-700"
                                 >
-                                    Sim, excluir minha conta
+                                    Yes, delete my account
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>

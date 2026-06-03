@@ -11,7 +11,7 @@ import { getUserIdClient } from "@/lib/utils";
 export default function NotFound() {
   const router = useRouter();
   const userIsLoggedIn = !!getUserIdClient();
-
+  console.log("User is logged in NOT FOUND:", userIsLoggedIn);
   return (
     <div className="flex min-h-screen flex-col">
       {/* Background */}

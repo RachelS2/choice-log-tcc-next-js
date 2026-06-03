@@ -13,6 +13,7 @@ export default function LandingHeaderClient({userIsLoggedIn}: {userIsLoggedIn: b
 
   function handleLogoClick() {
     if (window.history.length > 1) {
+      console.log("User is logged in:", userIsLoggedIn);
       userIsLoggedIn ? setPath("/dashboard") : setPath("/");
     } else {
       setPath("/");

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Save, AlertCircle } from 'lucide-react';
+import { Save, AlertCircle, PencilIcon } from 'lucide-react';
 import SecuritySection from '@/components/dashboard/settings/SecuritySection';
 import ProfileSection from '@/components/dashboard/settings/ProfileSection';
 import PersonalContextSection from '@/components/dashboard/settings/PersonalContextSection';
@@ -29,7 +29,7 @@ export default function ProfileSettings() {
     const [savedProfile, setSavedProfile] = useState<UserProfile>(initialProfile);
     const [saving, setSaving] = useState(false);
     const [hasChanges, setHasChanges] = useState(false);
-
+    const [isEditing, setIsEditing] = useState(false);
     useEffect(() => {
         const changed = JSON.stringify(profile) !== JSON.stringify(savedProfile);
         setHasChanges(changed);
@@ -47,11 +47,15 @@ export default function ProfileSettings() {
     }, [hasChanges]);
 
     const handleSave = async () => {
+
         setSaving(true);
         // Simulate API call
         await new Promise((resolve) => setTimeout(resolve, 1200));
         setSavedProfile({ ...profile });
+        console.log(profile);
         setSaving(false);
+        setIsEditing(false);
+        setHasChanges(false);
         toast.success('Profile updated successfully!');
     };
 
@@ -79,21 +83,39 @@ export default function ProfileSettings() {
                         </div>
                     )}
                     <Button
-                        onClick={handleSave}
-                        disabled={!hasChanges || saving}
-                        className="bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                        onClick={() => {
+                            if (isEditing) {
+                                handleSave();
+                            } else {
+                                setIsEditing(true);
+                            }
+                        }}
+                        disabled={saving}
+                        className="h-11 min-w-fit bg-blue-600 hover:bg-blue-700 text-white"
                     >
                         {saving ? (
                             <span className="flex items-center gap-2">
                                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                                 Saving...
                             </span>
-                        ) : (
-                            <span className="flex items-center gap-2">
-                                <Save className="h-4 w-4" />
-                                Save Changes
-                            </span>
-                        )}
+                        ) :
+
+                            isEditing ?
+                                (
+                                    <span className="flex items-center gap-2">
+                                        <Save className="h-4 w-4" />
+                                        Save Changes
+                                    </span>
+                                )
+                                :
+                                (
+                                    <span className="flex items-center gap-2">
+                                        <PencilIcon className="h-4 w-4" />
+                                        Edit Profile
+                                    </span>
+                                )
+
+                        }
                     </Button>
                 </div>
             </div>
@@ -102,18 +124,15 @@ export default function ProfileSettings() {
                 <ProfileSection
                     profile={profile}
                     updateProfile={updateProfile}
+                    isEditing={isEditing}
                 />
 
                 <PersonalContextSection
                     profile={profile}
                     updateProfile={updateProfile}
+                    isEditing={isEditing}
                 />
             </div>
-            {/* Profile Section
-                <ProfileSection profile={profile} updateProfile={updateProfile} />
-
-                {/* Personal Context Section */}
-            {/* <PersonalContextSection profile={profile} updateProfile={updateProfile} /> */}
 
             {/* Security Section */}
             <SecuritySection />

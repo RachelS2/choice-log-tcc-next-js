@@ -8,10 +8,12 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { UserProfile } from '@/app/dashboard/settings/page';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 
 export interface PersonalContextSectionProps {
     profile: UserProfile;
     updateProfile: (updates: Partial<UserProfile>) => void;
+    isEditing: boolean;
 }
 
 const incomeOptions = [
@@ -26,26 +28,44 @@ const incomeOptions = [
 export default function PersonalContextSection({
     profile,
     updateProfile,
+    isEditing,
 }: PersonalContextSectionProps) {
     return (
-        <section className="rounded-2xl  bg-white/80 border border-neutral-200 p-6 shadow-md">
-            <h2 className="text-lg font-semibold text-neutral-950 mb-1">Personal Context</h2>
-            <p className="text-sm text-neutral-500 mb-6">
-                Optional information that helps personalize your insights.
-            </p>
+        <Card className="bg-white/80 backdrop-blur-md border-neutral-200 shadow-md">
 
-            <div className="space-y-4 max-w-sm">
-                <div className="space-y-2">
-                    <Label htmlFor="income-range" className="text-sm font-medium text-neutral-700">
+            {/* Header */}
+            <CardHeader>
+                <CardTitle className="text-lg text-neutral-950">
+                    Personal Context
+                </CardTitle>
+                <CardDescription className="text-sm text-neutral-500">
+                    Optional information that helps personalize your insights.
+                </CardDescription>
+            </CardHeader>
+
+            {/* Content */}
+            <CardContent className="space-y-5">
+
+                {/* Income */}
+                <div className="space-y-2 w-full">
+                    <Label
+                        htmlFor="income-range"
+                        className="text-sm font-medium text-neutral-700"
+                    >
                         Income Range
                     </Label>
+
                     <Select
                         value={profile.incomeRange}
-                        onValueChange={(value) => updateProfile({ incomeRange: value })}
+                        disabled={!isEditing}
+                        onValueChange={(value) =>
+                            updateProfile({ incomeRange: value })
+                        }
                     >
-                        <SelectTrigger id="income-range" className="w-full">
+                        <SelectTrigger id="income-range" className="w-full h-11">
                             <SelectValue placeholder="Select your income range" />
                         </SelectTrigger>
+
                         <SelectContent>
                             {incomeOptions.map((option) => (
                                 <SelectItem key={option.value} value={option.value}>
@@ -56,13 +76,15 @@ export default function PersonalContextSection({
                     </Select>
                 </div>
 
-                {/* Privacy notice */}
-                <div className="flex items-start gap-2.5 rounded-xl bg-blue-50/70 border border-blue-100 p-4">
+                {/* Info box */}
+                <div className="flex items-start gap-3 rounded-xl bg-blue-50/70 border border-blue-100 p-4">
                     <Info className="h-4 w-4 mt-0.5 text-blue-600 shrink-0" />
+
                     <div className="space-y-1">
                         <p className="text-xs font-medium text-blue-800">
                             Why do we ask for this information?
                         </p>
+
                         <p className="text-xs leading-relaxed text-blue-700/80">
                             Your income range helps us contextualize your consumption insights —
                             never to judge. This information is private and used only to generate
@@ -70,7 +92,8 @@ export default function PersonalContextSection({
                         </p>
                     </div>
                 </div>
-            </div>
-        </section>
+
+            </CardContent>
+        </Card>
     );
 }

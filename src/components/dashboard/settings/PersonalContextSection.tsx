@@ -7,12 +7,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { UserProfile } from '@/app/dashboard/settings/page';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+import { UserProfileViewDTO } from '@/models/user';
 
 export interface PersonalContextSectionProps {
-    profile: UserProfile;
-    updateProfile: (updates: Partial<UserProfile>) => void;
+    profile: UserProfileViewDTO;
+    updateProfile: (updates: Partial<UserProfileViewDTO>) => void;
     isEditing: boolean;
 }
 
@@ -59,14 +60,23 @@ export default function PersonalContextSection({
                         value={profile.incomeRange}
                         disabled={!isEditing}
                         onValueChange={(value) =>
-                            updateProfile({ incomeRange: value })
+                            updateProfile({ incomeRange: value as UserProfileViewDTO['incomeRange'] })
                         }
                     >
-                        <SelectTrigger id="income-range" className="w-full h-11">
+                        <SelectTrigger id="income-range" size="lg" className={cn(
+                            "w-full h-10 text-neutral-600 transition-all",
+                            !isEditing
+                                ? "bg-neutral-50 cursor-not-allowed"
+                                : "bg-white"
+
+                        )}>
                             <SelectValue placeholder="Select your income range" />
                         </SelectTrigger>
 
-                        <SelectContent>
+                        <SelectContent position="popper"
+
+                            side="bottom"
+                            align="start">
                             {incomeOptions.map((option) => (
                                 <SelectItem key={option.value} value={option.value}>
                                     {option.label}

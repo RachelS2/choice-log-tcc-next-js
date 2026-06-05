@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { LogOut } from "lucide-react";
-
 import { authClient } from "@/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
@@ -32,11 +30,12 @@ export default function LogoutButton() {
   return (
     <>
       <Button
-        //variant="ghost"
-        size="icon"
+        variant="outline"
+        size="sm"
+        className="border-neutral-300 text-neutral-900 hover:bg-neutral-900"
         onClick={() => setOpen(true)}
       >
-        <LogOut className="h-5 w-5" />
+        Logout
       </Button>
 
       <Modal

@@ -14,6 +14,18 @@ export default function NotFound() {
   console.log("User is logged in NOT FOUND:", userIsLoggedIn);
   return (
     <div className="flex min-h-screen flex-col">
+      {/* Grid */}
+      <div
+        className="absolute inset-0 z-0 opacity-40"
+        style={{
+          backgroundImage: `
+        linear-gradient(to right, rgb(148 163 184 / 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(148 163 184 / 0.15) 1px, transparent 1px)
+      `,
+          backgroundSize: "32px 32px",
+        }}
+      />
+
       {/* Background */}
       <div className="pointer-events-none absolute inset-0 z-0">
 

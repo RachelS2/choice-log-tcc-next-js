@@ -31,3 +31,14 @@ export const auth = betterAuth({
     // },
     }
 });
+
+
+// TODO: Separar os models e fluxos de atualização de conta quando ativar a confirmação:
+// Profile
+// ├── Name
+// ├── Income range
+// └── Photo
+
+// Security
+// ├── Email
+// └── Password

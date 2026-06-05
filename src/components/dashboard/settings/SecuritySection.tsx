@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { KeyRound, LogOut, Trash2 } from 'lucide-react';
+import { KeyRound, Loader2, LogOut, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -14,25 +14,33 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
+import LogoutButton from './logout-btn';
+import { useRouter } from "next/navigation";
+import { deleteUserAccount } from '@/lib/repository/dashboard/user';
 
 export default function SecuritySection() {
-    const [loggingOut, setLoggingOut] = useState(false);
 
+    const router = useRouter();
     const handleChangePassword = () => {
         toast.info('An email with password reset instructions has been sent.');
     };
 
-    const handleLogout = async () => {
-        setLoggingOut(true);
-        await new Promise((resolve) => setTimeout(resolve, 800));
-        toast.success('Session ended successfully.');
-        setLoggingOut(false);
-    };
+    const handleDeleteAccount = async () => {
+        const loadingToast = toast.loading("Deleting account...");
+        const result: {
+            success: boolean;
+            message: string;
+        } = await deleteUserAccount();
+        toast.dismiss(loadingToast);
 
-    const handleDeleteAccount = () => {
-        toast.error('Account deleted. We\'ll miss you.');
+        if (result.success) {
+            const toastId = toast.success("Account deleted.");
+            router.replace("/");
+            toast.dismiss(toastId)
+        } else {
+            toast.error(result.message);
+        }
     };
-
     return (
         <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-neutral-950 mb-1">Security</h2>
@@ -77,18 +85,8 @@ export default function SecuritySection() {
                             </p>
                         </div>
                     </div>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleLogout}
-                        disabled={loggingOut}
-                        className="border-neutral-300 text-neutral-700 hover:bg-neutral-100"
-                    >
-                        {loggingOut ? 'Logging out...' : 'Log out'}
-                    </Button>
+                    <LogoutButton />
                 </div>
-
-                <Separator className="my-2" />
 
                 {/* Delete Account */}
                 <div className="flex items-center justify-between rounded-xl border border-red-100 bg-red-50/30 p-4">

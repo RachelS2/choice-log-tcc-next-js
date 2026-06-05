@@ -82,7 +82,7 @@ export default function ProfileSection({ profile, updateProfile, isEditing }: Pr
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         variant="ghost"
-                        className="text-xs text-blue-600 hover:bg-blue-50"
+                        className="text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                     >
                         Change photo
                     </Button>
@@ -127,7 +127,7 @@ export default function ProfileSection({ profile, updateProfile, isEditing }: Pr
                                 <Button
                                     size="sm"
                                     variant="outline"
-                                    className="text-blue-600 border-blue-300 hover:bg-blue-50"
+                                    className="text-blue-600 bg-white border-blue-300 hover:bg-blue-50 hover:text-blue-700"
                                 >
                                     <TriangleAlert />
                                     Verify E-mail

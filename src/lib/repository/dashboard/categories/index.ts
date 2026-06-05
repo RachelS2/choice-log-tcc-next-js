@@ -1,5 +1,7 @@
 import { Category } from "../../../../../generated/prisma";
 
+
+
 export async function fetchUserCategories(userId: string): Promise<Category[]> {
     // Simulate an API call with a delay
     await new Promise((resolve) => setTimeout(resolve, 500));

@@ -3,19 +3,35 @@ import { Camera, CheckCircle2, XCircle, Mail, User, TriangleAlert } from 'lucide
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { UserProfile } from '@/app/dashboard/settings/page';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { UserProfileViewDTO } from '@/models/user';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SignUpSchemaType, signUpSchema } from '@/zod-schemas/sign-up';
+import { FieldErrors, useForm, UseFormRegister } from 'react-hook-form';
+
+
 
 interface ProfileSectionProps {
-    profile: UserProfile;
-    updateProfile: (updates: Partial<UserProfile>) => void;
+    profile: UserProfileViewDTO;
+    updateProfile: (updates: Partial<UserProfileViewDTO>) => void;
     isEditing: boolean;
+    errors: FieldErrors<{
+        email: string;
+        username: string;
+        password: string;
+        confirmPassword: string;
+    }>
+    register: UseFormRegister<{
+        email: string;
+        username: string;
+        password: string;
+        confirmPassword: string;
+    }>
 }
 
-export default function ProfileSection({ profile, updateProfile, isEditing }: ProfileSectionProps) {
+export default function ProfileSection({ profile, updateProfile, isEditing, errors, register }: ProfileSectionProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(profile.image);
 
@@ -38,6 +54,7 @@ export default function ProfileSection({ profile, updateProfile, isEditing }: Pr
     };
 
     return (
+
         <Card className="w-full bg-white/80 backdrop-blur-md border-neutral-200 shadow-md">
 
             {/* Header */}
@@ -106,11 +123,13 @@ export default function ProfileSection({ profile, updateProfile, isEditing }: Pr
                         </Label>
 
                         <InputSection
-                            id="name"
+                            id="username"
                             icon={User}
                             value={profile.name}
                             onChange={(value) => updateProfile({ name: value })}
                             isEditing={isEditing}
+                            register={register}
+                            errors={errors}
                         />
                     </div>
 
@@ -142,6 +161,8 @@ export default function ProfileSection({ profile, updateProfile, isEditing }: Pr
                             onChange={(value) => updateProfile({ email: value })}
                             icon={Mail}
                             isEditing={isEditing}
+                            register={register}
+                            errors={errors}
                         />
                     </div>
 
@@ -152,13 +173,24 @@ export default function ProfileSection({ profile, updateProfile, isEditing }: Pr
 }
 
 type InputSectionProps = {
-    id: "email" | "name";
+    id: "email" | "username";
     value: string;
     onChange: (value: string) => void;
     icon?: React.ComponentType<{ className?: string }>;
     type?: string;
     isEditing: boolean;
-
+    register: UseFormRegister<{
+        email: string;
+        username: string;
+        password: string;
+        confirmPassword: string;
+    }>
+    errors: FieldErrors<{
+        email: string;
+        username: string;
+        password: string;
+        confirmPassword: string;
+    }>
 };
 
 
@@ -169,6 +201,8 @@ function InputSection({
     icon,
     type = "text",
     isEditing,
+    register,
+    errors
 }: InputSectionProps) {
     const Icon = icon;
 
@@ -182,6 +216,7 @@ function InputSection({
                 id={id}
                 type={type}
                 value={value}
+                {...register(id)}
                 readOnly={!isEditing}
                 className={cn(
                     "pl-9 h-10 text-neutral-600 transition-all",
@@ -192,6 +227,9 @@ function InputSection({
                 )}
                 onChange={(e) => onChange(e.target.value)}
             />
+            <p className="text-sm text-red-500">
+                {errors[id]?.message}
+            </p>
         </div>
     );
 }

@@ -9,15 +9,18 @@ import {
 } from '@/components/ui/select';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { UserProfileViewDTO } from '@/models/user';
+import { IncomeRange } from '../../../../generated/prisma';
+import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
+import { UserSettingsSchemaType } from '@/zod-schemas/user-settings';
 
 export interface PersonalContextSectionProps {
-    profile: UserProfileViewDTO;
-    updateProfile: (updates: Partial<UserProfileViewDTO>) => void;
     isEditing: boolean;
+    setValue: UseFormSetValue<UserSettingsSchemaType>;
+    watch: UseFormWatch<UserSettingsSchemaType>;
 }
 
-const incomeOptions = [
+
+const incomeOptions: { value: IncomeRange; label: string }[] = [
     { value: 'UP_TO_1_MINIMUM_WAGE', label: 'Up to 1 minimum wage' },
     { value: 'FROM_1_TO_3', label: 'From 1 to 3 minimum wages' },
     { value: 'FROM_3_TO_5', label: 'From 3 to 5 minimum wages' },
@@ -27,9 +30,7 @@ const incomeOptions = [
 ];
 
 export default function PersonalContextSection({
-    profile,
-    updateProfile,
-    isEditing,
+    isEditing, setValue, watch
 }: PersonalContextSectionProps) {
     return (
         <Card className="bg-white/80 backdrop-blur-md border-neutral-200 shadow-md">
@@ -55,12 +56,18 @@ export default function PersonalContextSection({
                     >
                         Income Range
                     </Label>
-
                     <Select
-                        value={profile.incomeRange}
+                        value={watch("incomeRange")} 
                         disabled={!isEditing}
                         onValueChange={(value) =>
-                            updateProfile({ incomeRange: value as UserProfileViewDTO['incomeRange'] })
+                            setValue(
+                                "incomeRange",
+                                value as IncomeRange,
+                                {
+                                    shouldDirty: true,
+                                    shouldValidate: true,
+                                }
+                            )
                         }
                     >
                         <SelectTrigger id="income-range" size="lg" className={cn(

@@ -2,7 +2,7 @@ export type CreateItemViewDTO = {
   friendlyName: string;
   brand: string;
   categoryId: string;
-  imageUrl?: string | null;
+  image?: string | null;
 };
 
 // await prisma.item.create({

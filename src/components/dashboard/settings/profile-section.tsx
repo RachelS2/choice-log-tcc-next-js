@@ -2,50 +2,45 @@ import { useRef, useState } from 'react';
 import { Camera, CheckCircle2, XCircle, Mail, User, TriangleAlert } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { UserProfileViewDTO } from '@/models/user';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SignUpSchemaType, signUpSchema } from '@/zod-schemas/sign-up';
-import { FieldErrors, useForm, UseFormRegister } from 'react-hook-form';
+import { cn, getUserAuthData } from '@/lib/utils';
 
+import { FieldErrors, useForm, UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { UserSettingsSchemaType } from '@/zod-schemas/user-settings';
+import { UserAuthDTO } from '@/models/user';
+import { IncomeRange } from '../../../../generated/prisma';
 
 
 interface ProfileSectionProps {
-    profile: UserProfileViewDTO;
-    updateProfile: (updates: Partial<UserProfileViewDTO>) => void;
     isEditing: boolean;
-    errors: FieldErrors<{
-        email: string;
-        username: string;
-        password: string;
-        confirmPassword: string;
-    }>
-    register: UseFormRegister<{
-        email: string;
-        username: string;
-        password: string;
-        confirmPassword: string;
-    }>
+    errors: FieldErrors<UserSettingsSchemaType>
+    register: UseFormRegister<UserSettingsSchemaType>
+    userData: UserAuthDTO
+    setValue: UseFormSetValue<UserSettingsSchemaType>
 }
 
-export default function ProfileSection({ profile, updateProfile, isEditing, errors, register }: ProfileSectionProps) {
+export default function ProfileSection({ isEditing, errors, register, userData, setValue }: ProfileSectionProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(profile.image);
-
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [previewImage, setPreviewImage] = useState(userData.image ?? "");
+    const handleImageUpload = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
         const file = e.target.files?.[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setPreviewUrl(url);
-            updateProfile({ image: url });
-        }
+
+        if (!file) return;
+
+        const url = URL.createObjectURL(file);
+
+        setPreviewImage(url);
+
+        setValue("image", url, {
+            shouldDirty: true,
+        });
     };
 
-    const getInitials = (name: string) => {
-        return name
+    const getInitials = (username: string) => {
+        return username
             .split(' ')
             .map((n) => n[0])
             .join('')
@@ -77,15 +72,15 @@ export default function ProfileSection({ profile, updateProfile, isEditing, erro
                         onClick={() => fileInputRef.current?.click()}
                     >
                         <div className="h-28 w-28 shadow-md ring-4 ring-white rounded-full overflow-hidden border-2 border-neutral-200 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                            {previewUrl ? (
+                            {previewImage ? (
                                 <img
-                                    src={previewUrl}
+                                    src={previewImage}
                                     alt="Profile"
                                     className="h-full w-full object-cover"
                                 />
                             ) : (
-                                <span className="text-2xl font-semibold text-white">
-                                    {getInitials(profile.name || "U")}
+                                <span>
+                                    {getInitials(userData.name)}
                                 </span>
                             )}
                         </div>
@@ -125,8 +120,6 @@ export default function ProfileSection({ profile, updateProfile, isEditing, erro
                         <InputSection
                             id="username"
                             icon={User}
-                            value={profile.name}
-                            onChange={(value) => updateProfile({ name: value })}
                             isEditing={isEditing}
                             register={register}
                             errors={errors}
@@ -142,8 +135,9 @@ export default function ProfileSection({ profile, updateProfile, isEditing, erro
 
                             </div>
 
-                            {!profile.emailVerified && (
+                            {!userData?.emailVerified && (
                                 <Button
+                                    type="button"
                                     size="sm"
                                     variant="outline"
                                     className="text-blue-600 bg-white border-blue-300 hover:bg-blue-50 hover:text-blue-700"
@@ -157,8 +151,6 @@ export default function ProfileSection({ profile, updateProfile, isEditing, erro
                         <InputSection
                             id="email"
                             type="email"
-                            value={profile.email}
-                            onChange={(value) => updateProfile({ email: value })}
                             icon={Mail}
                             isEditing={isEditing}
                             register={register}
@@ -174,38 +166,22 @@ export default function ProfileSection({ profile, updateProfile, isEditing, erro
 
 type InputSectionProps = {
     id: "email" | "username";
-    value: string;
-    onChange: (value: string) => void;
     icon?: React.ComponentType<{ className?: string }>;
     type?: string;
     isEditing: boolean;
-    register: UseFormRegister<{
-        email: string;
-        username: string;
-        password: string;
-        confirmPassword: string;
-    }>
-    errors: FieldErrors<{
-        email: string;
-        username: string;
-        password: string;
-        confirmPassword: string;
-    }>
-};
+    register: UseFormRegister<UserSettingsSchemaType>;
+    errors: FieldErrors<UserSettingsSchemaType>;
+}
 
 
 function InputSection({
     id,
-    value,
-    onChange,
-    icon,
+    icon: Icon,
     type = "text",
     isEditing,
     register,
     errors
 }: InputSectionProps) {
-    const Icon = icon;
-
     return (
         <div className="relative w-full">
             {Icon && (
@@ -215,21 +191,20 @@ function InputSection({
             <Input
                 id={id}
                 type={type}
-                value={value}
-                {...register(id)}
                 readOnly={!isEditing}
+                {...register(id)}
                 className={cn(
                     "pl-9 h-10 text-neutral-600 transition-all",
-                    !isEditing
-                        ? "bg-neutral-50 cursor-not-allowed"
-                        : "bg-white",
+                    !isEditing ? "bg-neutral-50 cursor-not-allowed" : "bg-white",
                     "focus-visible:ring-2 focus-visible:ring-blue-500"
                 )}
-                onChange={(e) => onChange(e.target.value)}
             />
-            <p className="text-sm text-red-500">
-                {errors[id]?.message}
-            </p>
+
+            {errors?.[id] && (
+                <p className="text-sm text-red-500">
+                    {errors[id]?.message as string}
+                </p>
+            )}
         </div>
     );
 }

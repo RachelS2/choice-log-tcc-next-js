@@ -7,15 +7,13 @@ import { Save, AlertCircle, PencilIcon } from 'lucide-react';
 import SecuritySection from '@/components/dashboard/settings/security-section';
 import ProfileSection from '@/components/dashboard/settings/profile-section';
 import PersonalContextSection from '@/components/dashboard/settings/personal-context-section';
-import { UserProfileViewDTO } from '@/models/user';
+import { UpdateUserProfileDTO, UserCompleteDTO } from '@/models/user';
 import { updateUserProfile } from '@/lib/repository/dashboard/user';
 import { useGetUserProfile } from '@/hooks/use-user';
 import { useRouter } from 'next/navigation';
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { signUpSchema, SignUpSchemaType } from '@/zod-schemas/sign-up';
-import { useForm } from 'react-hook-form';
-import { AuthFormStateModel } from '@/models/auth/auth-form-state-model';
+import { useForm, UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { userSettingsSchema, UserSettingsSchemaType } from '@/zod-schemas/user-settings';
 
 
 export default function ProfileSettings() {
@@ -25,14 +23,18 @@ export default function ProfileSettings() {
         handleSubmit,
         reset,
         watch,
+        setValue,
         formState: { errors, isDirty, isSubmitting }
-    } = useForm<SignUpSchemaType>({
-        resolver: zodResolver(signUpSchema),
+    } = useForm<UserSettingsSchemaType>({
+        resolver: zodResolver(userSettingsSchema),
         mode: "onChange",
+        defaultValues: {
+            incomeRange: "PREFER_NOT_TO_SAY",
+        },
     });
 
     const userProfileData: {
-        data: UserProfileViewDTO | null;
+        data: UserCompleteDTO | null;
         loading: boolean;
         error: Error | null;
         reload: () => Promise<void>;
@@ -43,7 +45,12 @@ export default function ProfileSettings() {
 
     useEffect(() => {
         if (userProfileData.data) {
-            reset(userProfileData.data);
+            reset({
+                email: userProfileData.data.email,
+                username: userProfileData.data.name,
+                incomeRange: userProfileData.data.incomeRange,
+                image: userProfileData.data.image ?? undefined,
+            });
         }
     }, [userProfileData.data, reset]);
 
@@ -66,56 +73,55 @@ export default function ProfileSettings() {
         return () => window.removeEventListener('beforeunload', handleBeforeUnload);
     }, [isDirty]);
 
-    if (!userProfileData.data) {
-        console.log("Profile is null, rendering loading state for settings");
-        return;
-    }
-    if (userProfileData.error) {
-        console.error("Error loading user profile:", userProfileData.error);
-        return;
+
+    if (userProfileData.loading) {
+        return <div><p className="text-red-500">Loading...</p></div>;
     }
 
-    const handleSave = async () => {
-        console.log("Saving profile:", formState);
-        if (!formState) {
-            setSaving(false);
-            setIsEditing(false);
+    if (userProfileData.error) {
+        return <div><p className="text-red-500">Error loading profile</p></div>;
+    }
+
+    if (!userProfileData.data) {
+        return <div><p className="text-red-500">No profile found</p></div>;
+    }
+    const onSubmit = async (data: UserSettingsSchemaType) => {
+        console.log("SUBMIT FIRED");
+        console.log(data)
+        if (!userProfileData.data) {
+            toast.error("User data is not available. Please try again later.");
             return;
         }
-
-        setSavedProfile({ ...formState });
-        if (isDirty) {
-            const result = await updateUserProfile(formState);
-            router.refresh();
-            if (result.success) {
-                toast.success(result.message);
-            } else {
-                toast.error(result.message);
-                console.log("Error to update user profile:", result.message);
-            }
+        const completeData: UpdateUserProfileDTO = {
+            email: data.email,
+            name: data.username,
+            incomeRange: data.incomeRange,
+            image: data.image,
         }
-        setIsEditing(false);
-    };
-
-    const updateProfile = (updates: Partial<UserProfileViewDTO>) => {
-        setProfile((prev) => prev ? ({ ...prev, ...updates }) as UserProfileViewDTO : prev);
-    };
-
-    const onSubmitForm = async (data: UserProfileViewDTO) => {
-        const result = await updateUserProfile(data);
-
+        console.log("Submitting profile update with data:", completeData);
+        const result = await updateUserProfile(completeData);
+        console.log("Is editing = ", isEditing);
         if (result.success) {
             toast.success(result.message);
-            router.refresh();
-            reset(data); // limpa o dirty state
+            reset({
+                email: data.email,
+                username: data.username,
+                incomeRange: data.incomeRange,
+                image: data.image ?? undefined
+            }); // limpa dirty state
             setIsEditing(false);
+            router.refresh();
         } else {
             toast.error(result.message);
         }
     };
-
     return (
-        <form className="p-11 space-y-6 rounded-ful" onSubmit={handleSubmit(onSubmitForm)}>
+        <form className="p-11 space-y-6 rounded-ful"
+            onSubmit={(e) => {
+                console.log("FORM SUBMIT EVENT");
+                handleSubmit(onSubmit)(e);
+            }}
+        >
             {/* Page Header */}
             <div className="flex items-center justify-between">
                 <div>
@@ -133,56 +139,44 @@ export default function ProfileSettings() {
                             Unsaved changes
                         </div>
                     )}
-                    <Button
-                        disabled={isSubmitting}
-                        className="h-11 min-w-fit bg-blue-600 hover:bg-blue-700 text-white"
-                        type="submit"
-                    >
-                        {isSubmitting && isDirty ? (
-                            <span className="flex items-center gap-2">
-                                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                                Saving...
-                            </span>
-                        ) :
+                    {isEditing ? (
+                        <Button type="submit">
+                            <Save className="h-4 w-4" />
 
-                            isEditing ?
-                                (
-                                    <span className="flex items-center gap-2">
-                                        <Save className="h-4 w-4" />
-                                        Save Changes
-                                    </span>
-                                )
-                                :
-                                (
-                                    <span className="flex items-center gap-2">
-                                        <PencilIcon className="h-4 w-4" />
-                                        Edit Profile
-                                    </span>
-                                )
-
-                        }
-                    </Button>
+                            Save Changes
+                        </Button>
+                    ) : (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                console.log("NATIVE BUTTON CLICK");
+                                setIsEditing(true);
+                            }}
+                        >
+                            Edit Profile
+                        </button>
+                    )}
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <ProfileSection
-                    profile={profile ?? userProfileData.data}
-                    updateProfile={updateProfile}
+                    setValue={setValue}
+                    userData={userProfileData.data}
                     isEditing={isEditing}
                     errors={errors}
                     register={register}
                 />
 
                 <PersonalContextSection
-                    profile={profile ?? userProfileData.data}
-                    updateProfile={updateProfile}
                     isEditing={isEditing}
+                    setValue={setValue}
+                    watch={watch}
                 />
             </div>
 
             {/* Security Section */}
             <SecuritySection />
-        </form>
+        </form >
     );
 }

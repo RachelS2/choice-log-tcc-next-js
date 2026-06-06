@@ -6,11 +6,11 @@ import { FaceFrownIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import LandingHeaderClient from "@/components/landing/landing-header-client";
 
 import { Button } from "@/components/ui/button";
-import { getUserIdClient } from "@/lib/utils";
+import { getUserAuthData } from "@/lib/utils";
 
 export default function NotFound() {
   const router = useRouter();
-  const userIsLoggedIn = !!getUserIdClient();
+  const userIsLoggedIn = !!getUserAuthData();
   console.log("User is logged in NOT FOUND:", userIsLoggedIn);
   return (
     <div className="flex min-h-screen flex-col">

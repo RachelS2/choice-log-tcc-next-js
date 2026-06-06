@@ -2,10 +2,10 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { UserProfileViewDTO } from "@/models/user";
+import { UpdateUserProfileDTO, UserCompleteDTO } from "@/models/user";
 import { IncomeRange } from "../../../../../generated/prisma";
 
-export async function fetchUserProfile(): Promise<UserProfileViewDTO | null> {
+export async function fetchUserProfile(): Promise<UserCompleteDTO | null> {
     const session = await auth.api.getSession({
         headers: await headers(),
     });
@@ -24,6 +24,9 @@ export async function fetchUserProfile(): Promise<UserProfileViewDTO | null> {
             email: true,
             emailVerified: true,
             incomeRange: true,
+            createdAt: true,
+            updatedAt: true,
+
         },
     });
 
@@ -31,7 +34,10 @@ export async function fetchUserProfile(): Promise<UserProfileViewDTO | null> {
         return null;
     }
     return {
+        id: session.user.id,
         name: user.name || '',
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
         image: user.image || null,
         email: user.email || '',
         emailVerified: user.emailVerified || false,
@@ -40,7 +46,7 @@ export async function fetchUserProfile(): Promise<UserProfileViewDTO | null> {
 }
 
 export async function updateUserProfile(
-    profile: UserProfileViewDTO
+    profile: UpdateUserProfileDTO
 ): Promise<{
     success: boolean;
     message: string;

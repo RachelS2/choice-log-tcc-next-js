@@ -1,24 +1,19 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { authClient } from "./auth-client";
+import { UserAuthDTO } from "@/models/user";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export async function getUserIdServer(): Promise<string> {
+export async function getUserAuthData(): Promise<UserAuthDTO | null> {
   const session = await authClient.getSession();
-
-  const userId = session.data?.user?.id;
-
-  if (!userId) {
-    throw new Error("User not authenticated");
+  if (!session.data?.user) {
+    return null;
   }
-
-  return userId;
-}
-
-export async function getUserIdClient(): Promise<string | undefined> {
-  const session = await authClient.getSession();
-  return session.data?.user?.id;
+  return {
+    ...session.data.user,
+    image: session.data.user.image ?? null,
+  };
 }

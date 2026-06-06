@@ -1,6 +1,6 @@
 import z from "zod";
 
-const userNameSchema: z.ZodString = z
+export const userNameSchema: z.ZodString = z
   .string()
   .nonempty("Username is required.")
   .min(5, "Username must have at least 5 characters.")
@@ -10,7 +10,7 @@ const userNameSchema: z.ZodString = z
     "Username must contain only letters, white spaces, numbers and underscores."
   );
 
-const passwordSchema: z.ZodString = z
+export const passwordSchema: z.ZodString = z
   .string()
   .nonempty("Password is required.")
   .min(6, "Password must have at least 6 characters.")

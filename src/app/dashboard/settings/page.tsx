@@ -149,14 +149,23 @@ export default function ProfileSettings() {
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
-                    {isDirty && (
-                        <div className="flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 text-xs font-medium text-amber-700 border border-amber-200">
-                            <AlertCircle className="h-7 w-3.5" />
-                            Unsaved changes
-                        </div>
-                    )}
                     {isEditing ? (
                         <div className="flex items-center gap-2">
+                            {isDirty && (
+                                <div className="
+            flex items-center gap-2
+            h-11 px-3
+            rounded-lg
+            border border-amber-200
+            bg-amber-50
+            text-amber-700
+            text-sm
+            font-medium
+        ">
+                                    <AlertCircle className="h-4 w-4" />
+                                    Unsaved changes
+                                </div>
+                            )}
                             <Button type="submit" className="h-11 bg-blue-600 hover:bg-blue-700 text-white">
                                 <span className="flex items-center gap-2 text-md ">
                                     <Save className="h-4 w-4" />

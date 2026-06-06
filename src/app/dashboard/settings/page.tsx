@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Save, AlertCircle, PencilIcon } from 'lucide-react';
+import { Save, AlertCircle, PencilIcon, X } from 'lucide-react';
 import SecuritySection from '@/components/dashboard/settings/security-section';
 import ProfileSection from '@/components/dashboard/settings/profile-section';
 import PersonalContextSection from '@/components/dashboard/settings/personal-context-section';
@@ -92,15 +92,17 @@ export default function ProfileSettings() {
             toast.error("User data is not available. Please try again later.");
             return;
         }
+        if (!isDirty) {
+            setIsEditing(false);
+            return;
+        }
         const completeData: UpdateUserProfileDTO = {
             email: data.email,
             name: data.username,
             incomeRange: data.incomeRange,
             image: data.image,
         }
-        console.log("Submitting profile update with data:", completeData);
         const result = await updateUserProfile(completeData);
-        console.log("Is editing = ", isEditing);
         if (result.success) {
             toast.success(result.message);
             reset({
@@ -109,11 +111,25 @@ export default function ProfileSettings() {
                 incomeRange: data.incomeRange,
                 image: data.image ?? undefined
             }); // limpa dirty state
-            setIsEditing(false);
+
             router.refresh();
         } else {
             toast.error(result.message);
         }
+        setIsEditing(false);
+    };
+
+    const handleCancel = () => {
+        if (!userProfileData.data) return;
+
+        reset({
+            email: userProfileData.data.email,
+            username: userProfileData.data.name,
+            incomeRange: userProfileData.data.incomeRange,
+            image: userProfileData.data.image ?? undefined,
+        });
+
+        setIsEditing(false);
     };
     return (
         <form className="p-11 space-y-6 rounded-ful"
@@ -125,7 +141,7 @@ export default function ProfileSettings() {
             {/* Page Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-semibold tracking-tight text-neutral-950">
+                    <h1 className=" tracking-tight text-2xl font-bold text-blue-600">
                         Profile Settings
                     </h1>
                     <p className="mt-1 text-md text-neutral-500">
@@ -140,20 +156,48 @@ export default function ProfileSettings() {
                         </div>
                     )}
                     {isEditing ? (
-                        <Button type="submit">
-                            <Save className="h-4 w-4" />
+                        <div className="flex items-center gap-2">
+                            <Button type="submit" className="h-11 bg-blue-600 hover:bg-blue-700 text-white">
+                                <span className="flex items-center gap-2 text-md ">
+                                    <Save className="h-4 w-4" />
+                                    Save Changes
+                                </span>
+                            </Button>
 
-                            Save Changes
-                        </Button>
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                onClick={handleCancel}
+                                className="h-11 border border-neutral-300 bg-white text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100"
+                            >
+
+                                <X className="h-4 w-4" />
+                                Cancel
+                            </Button>
+
+                        </div>
                     ) : (
                         <button
                             type="button"
+                            className="
+inline-flex items-center justify-center gap-2
+h-11 px-4
+rounded-lg
+bg-blue-600 text-white
+hover:bg-blue-700
+font-medium text-sm
+transition-all
+cursor-pointer
+"
                             onClick={() => {
                                 console.log("NATIVE BUTTON CLICK");
                                 setIsEditing(true);
                             }}
                         >
-                            Edit Profile
+                            <span className="flex items-center gap-2">
+                                <PencilIcon className="h-4 w-4" />
+                                Edit Profile
+                            </span>
                         </button>
                     )}
                 </div>

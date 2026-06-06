@@ -23,8 +23,8 @@ export default function DashboardLayout({
           className="absolute inset-0 z-0 opacity-40"
           style={{
             backgroundImage: `
-        linear-gradient(to right, rgb(148 163 184 / 0.08) 2px, transparent 1px),
-        linear-gradient(to bottom, rgb(148 163 184 / 0.08) 2px, transparent 1px)
+        linear-gradient(to right, rgb(148 163 184 / 0.12) 2px, transparent 1px),
+        linear-gradient(to bottom, rgb(148 163 184 / 0.12) 2px, transparent 1px)
       `,
             backgroundSize: "32px 32px",
           }}

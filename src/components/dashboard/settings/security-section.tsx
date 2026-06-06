@@ -66,7 +66,7 @@ export default function SecuritySection() {
                         variant="outline"
                         size="sm"
                         onClick={handleChangePassword}
-                        className="border-neutral-300 text-neutral-700 hover:bg-neutral-100"
+                        className="w-24 h-9 border-neutral-300 text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100"
                     >
                         Change
                     </Button>
@@ -106,7 +106,7 @@ export default function SecuritySection() {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800"
+                                className="w-24 h-9 border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800"
                             >
                                 Delete
                             </Button>

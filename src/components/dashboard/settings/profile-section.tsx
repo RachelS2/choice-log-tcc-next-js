@@ -183,25 +183,29 @@ function InputSection({
     errors
 }: InputSectionProps) {
     return (
-        <div className="relative w-full">
-            {Icon && (
-                <Icon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
-            )}
-
-            <Input
-                id={id}
-                type={type}
-                readOnly={!isEditing}
-                {...register(id)}
-                className={cn(
-                    "pl-9 h-10 text-neutral-600 transition-all",
-                    !isEditing ? "bg-neutral-50 cursor-not-allowed" : "bg-white",
-                    "focus-visible:ring-2 focus-visible:ring-blue-500"
+        <div className="w-full">
+            <div className="relative">
+                {Icon && (
+                    <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
                 )}
-            />
+
+                <Input
+                    id={id}
+                    type={type}
+                    readOnly={!isEditing}
+                    {...register(id)}
+                    className={cn(
+                        "pl-9 h-10 text-neutral-600 transition-all",
+                        !isEditing
+                            ? "bg-neutral-50 cursor-not-allowed"
+                            : "bg-white",
+                        "focus-visible:ring-2 focus-visible:ring-blue-500"
+                    )}
+                />
+            </div>
 
             {errors?.[id] && (
-                <p className="text-sm text-red-500">
+                <p className="mt-1 text-sm text-red-500">
                     {errors[id]?.message as string}
                 </p>
             )}

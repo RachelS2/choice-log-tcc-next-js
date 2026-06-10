@@ -33,7 +33,10 @@ export default function PersonalContextSection({
     isEditing, setValue, watch
 }: PersonalContextSectionProps) {
     return (
-        <Card className="bg-white/80 backdrop-blur-md border-neutral-200 shadow-md">
+        <Card className="bg-white/80 backdrop-blur-md border shadow-lg
+border
+border-blue-100
+shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
 
             {/* Header */}
             <CardHeader>
@@ -57,7 +60,7 @@ export default function PersonalContextSection({
                         Income Range
                     </Label>
                     <Select
-                        value={watch("incomeRange")} 
+                        value={watch("incomeRange") ?? "PREFER_NOT_TO_SAY"}
                         disabled={!isEditing}
                         onValueChange={(value) =>
                             setValue(

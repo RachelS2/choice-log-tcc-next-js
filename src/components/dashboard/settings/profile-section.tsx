@@ -9,7 +9,7 @@ import { cn, getUserAuthData } from '@/lib/utils';
 import { FieldErrors, useForm, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { UserSettingsSchemaType } from '@/zod-schemas/user-settings';
 import { UserAuthDTO } from '@/models/user';
-import { IncomeRange } from '../../../../generated/prisma';
+import UserIcon from '@/components/ui/user-icon';
 
 
 interface ProfileSectionProps {
@@ -50,7 +50,10 @@ export default function ProfileSection({ isEditing, errors, register, userData, 
 
     return (
 
-        <Card className="w-full bg-white/80 backdrop-blur-md border-neutral-200 shadow-md">
+        <Card className="bg-white/80 backdrop-blur-md border shadow-lg
+border
+border-blue-100
+shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
 
             {/* Header */}
             <CardHeader>
@@ -71,20 +74,11 @@ export default function ProfileSection({ isEditing, errors, register, userData, 
                         className="relative group cursor-pointer"
                         onClick={() => fileInputRef.current?.click()}
                     >
-                        <div className="h-28 w-28 shadow-md ring-4 ring-white rounded-full overflow-hidden border-2 border-neutral-200 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                            {previewImage ? (
-                                <img
-                                    src={previewImage}
-                                    alt="Profile"
-                                    className="h-full w-full object-cover"
-                                />
-                            ) : (
-                                <span>
-                                    {getInitials(userData.name)}
-                                </span>
-                            )}
-                        </div>
-
+                        <UserIcon
+                            name={userData.name}
+                            image={userData.image}
+                            className='h-28 w-28 text-2xl font-semibold'
+                        />
                         <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
                             <Camera className="h-5 w-5 text-white" />
                         </div>
@@ -140,7 +134,7 @@ export default function ProfileSection({ isEditing, errors, register, userData, 
                                     type="button"
                                     size="sm"
                                     variant="outline"
-                                    className="text-blue-600 bg-white border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+                                    className="text-blue-600 h-8 text-xs bg-white/80 border-blue-300 hover:bg-blue-50 hover:text-blue-700"
                                 >
                                     <TriangleAlert />
                                     Verify E-mail
@@ -195,7 +189,7 @@ function InputSection({
                     readOnly={!isEditing}
                     {...register(id)}
                     className={cn(
-                        "pl-9 h-10 text-neutral-600 transition-all",
+                        "pl-9 h-10 text-neutral-600 shadow-sm transition-all",
                         !isEditing
                             ? "bg-neutral-50 cursor-not-allowed"
                             : "bg-white",

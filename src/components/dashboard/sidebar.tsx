@@ -6,6 +6,7 @@ import AppLogo from '../ui/app-logo';
 import { SidebarNav } from './sidebarnav';
 import { Button } from '../ui/button';
 import { Bell } from 'lucide-react';
+import UserIcon from '../ui/user-icon';
 export default async function Sidebar() {
 
   const session = await auth.api.getSession({ headers: await headers() });
@@ -25,10 +26,11 @@ export default async function Sidebar() {
 
       <div className="p-4 border-t border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
-            {session.user.name ? session.user.name.charAt(0).toUpperCase() : "U"}
-
-          </div>
+          <UserIcon
+            name={session.user.name}
+            image={session.user.image}
+            className="h-9 w-9"
+          />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">{session.user.name}</p>
             <p className="text-xs text-gray-500 truncate">{session.user.email}</p>

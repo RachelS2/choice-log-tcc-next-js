@@ -8,14 +8,14 @@ datasource db {
 }
 
 model User {
-  id            String        @id @default(cuid())
+  id            String           @id @default(cuid())
   name          String?
-  email         String        @unique
+  email         String           @unique
   image         String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  emailVerified Boolean       @default(false)
-  incomeRange   IncomeRange?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  emailVerified Boolean          @default(false)
+  incomeRange   IncomeRange      @default(PREFER_NOT_TO_SAY)
   accounts      Account[]
   categories    Category[]
   consumptions  Consumption[]

@@ -31,8 +31,9 @@ export default function LogoutButton() {
     <>
       <Button
         variant="outline"
+        type="button"
         size="sm"
-        className="border-neutral-300 w-24 h-9 text-neutral-900 hover:bg-neutral-900"
+        className="w-24 h-9 text-blue-500 bg-white/80 text-md shadow-md hover:text-blue-600"
         onClick={() => setOpen(true)}
       >
         Logout

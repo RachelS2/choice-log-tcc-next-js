@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from 'react';
-
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Save, AlertCircle, PencilIcon, X } from 'lucide-react';
@@ -15,7 +14,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { userSettingsSchema, UserSettingsSchemaType } from '@/zod-schemas/user-settings';
 import { errorToJSON } from 'next/dist/server/render';
-
 
 export default function ProfileSettings() {
 
@@ -43,7 +41,6 @@ export default function ProfileSettings() {
 
     const [isEditing, setIsEditing] = useState(false);
     const router = useRouter();
-
     useEffect(() => {
         if (userProfileData.data) {
             reset({
@@ -54,7 +51,6 @@ export default function ProfileSettings() {
             });
         }
     }, [userProfileData.data, reset]);
-
     useEffect(() => {
         if (userProfileData.error) {
             toast.error(
@@ -73,8 +69,6 @@ export default function ProfileSettings() {
         window.addEventListener('beforeunload', handleBeforeUnload);
         return () => window.removeEventListener('beforeunload', handleBeforeUnload);
     }, [isDirty]);
-
-
     if (userProfileData.loading) {
         return <div><p className="text-red-500">Loading...</p></div>;
     }
@@ -121,7 +115,6 @@ export default function ProfileSettings() {
         }
         setIsEditing(false);
     };
-
     const handleCancel = () => {
         if (!userProfileData.data) return;
 
@@ -134,16 +127,14 @@ export default function ProfileSettings() {
 
         setIsEditing(false);
     };
-    return (
-        <form className="p-11 space-y-6 rounded-ful"
+      return (
+        <form className="p-11 space-y-6 rounded-full"
             onSubmit={handleSubmit(
                 onSubmit,
-                (errors) => {
-                    toast.error(errorToJSON.toString);
-                }
+
             )}
         >
-            {/* Page Header */}
+ {/* Page Header */}
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className=" tracking-tight text-2xl font-bold text-blue-600">
@@ -236,6 +227,6 @@ shadow-xl
 
             {/* Security Section */}
             <SecuritySection />
-        </form >
-    );
+        </form>
+        );
 }

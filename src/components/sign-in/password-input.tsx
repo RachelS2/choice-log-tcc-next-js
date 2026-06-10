@@ -9,11 +9,13 @@ import { Eye, EyeOff } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type PasswordInputProps<T extends FieldValues> = {
   register: UseFormRegister<T>;
   name: Path<T>;
   placeholder?: string;
+  className?: string;
 };
 
 export default function PasswordInput<
@@ -22,6 +24,7 @@ export default function PasswordInput<
   register,
   name,
   placeholder = "••••••••",
+  className
 }: PasswordInputProps<T>) {
   const [showPassword, setShowPassword] =
     useState(false);
@@ -32,7 +35,7 @@ export default function PasswordInput<
         id={String(name)}
         type={showPassword ? "text" : "password"}
         placeholder={placeholder}
-        className="pr-10 !text-base"
+        className={cn("pr-10 !text-base", className)}
         {...register(name)}
       />
 

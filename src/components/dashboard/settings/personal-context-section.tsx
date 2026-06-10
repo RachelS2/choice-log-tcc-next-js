@@ -74,7 +74,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                         }
                     >
                         <SelectTrigger id="income-range" size="lg" className={cn(
-                            "w-full h-10 text-neutral-600 transition-all",
+                            "w-full h-10 text-neutral-600 shadow-sm transition-all",
                             !isEditing
                                 ? "bg-neutral-50 cursor-not-allowed"
                                 : "bg-white"

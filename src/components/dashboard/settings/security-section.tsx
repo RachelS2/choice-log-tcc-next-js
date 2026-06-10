@@ -20,8 +20,33 @@ import { deleteUserAccount } from '@/lib/repository/dashboard/user';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import PasswordInput from '@/components/sign-in/password-input';
+import { Path, UseFormRegister } from 'react-hook-form';
+import { SignUpSchemaType } from '@/zod-schemas/sign-up';
 
-export default function SecuritySection() {
+type CreatePasswordType = {
+    label: string;
+    register: UseFormRegister<SignUpSchemaType>;
+    name: Path<SignUpSchemaType>;
+}
+function CreatePasswordInput({
+    label,
+    register,
+    name
+}: CreatePasswordType) {
+    return (
+        <div className="space-y-2 text-blue-500">
+            <Label>{label}</Label>
+            <PasswordInput
+                register={register}
+                name={name}
+                className="border border-blue-200 bg-white/80 shadow-sm"
+            />
+        </div>
+    );
+}
+
+export default function SecuritySection({register} : UseFormRegister<SignUpSchemaType>) {
 
     const router = useRouter();
     const handleChangePassword = () => {
@@ -92,34 +117,25 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
 
                     {/* Expandable form */}
                     {showPasswordForm && (
-                        <div className="bg-blue-50/70 border border-blue-100 p-4 rounded-xl">
+                        <div className="bg-blue-50 border border-blue-200 p-4 shadow-sm rounded-xl">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div className="space-y-2 text-blue-800">
-                                    <Label>Current password</Label>
-                                    <Input type="password" />
-                                </div>
 
-                                <div className="space-y-2 text-blue-800">
-                                    <Label>New password</Label>
-                                    <Input type="password" />
-                                </div>
-
-                                <div className="space-y-2 text-blue-800">
-                                    <Label>Confirm password</Label>
-                                    <Input type="password" />
-                                </div>
+                                <CreatePasswordInput name="password" register={register} label="Current Password" />
+                                <CreatePasswordInput name={register} label="New password" />
+                                <CreatePasswordInput register={register} label="Confirm password" />
                             </div>
 
-                            <div className="flex justify-end pt-3 gap-2">
+                            <div className="flex justify-start pt-6 gap-2">
                                 <Button
                                     type="button"
                                     variant="ghost"
+                                    className="w-24 h-9 text-blue-500 bg-white/80 shadow-md hover:text-blue-600"
                                     onClick={() => setShowPasswordForm(false)}
                                 >
                                     Cancel
                                 </Button>
 
-                                <Button type="button" className="bg-blue-600 hover:bg-blue-500 shadow-lg">
+                                <Button type="button" className="bg-blue-600 h-9 hover:bg-blue-500 shadow-lg">
                                     Update Password
                                 </Button>
                             </div>

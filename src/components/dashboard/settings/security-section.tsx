@@ -21,19 +21,23 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import PasswordInput from '@/components/sign-in/password-input';
-import { Path, UseFormRegister } from 'react-hook-form';
-import { SignUpSchemaType } from '@/zod-schemas/sign-up';
+import { FieldErrors, Path, useForm, UseFormRegister } from 'react-hook-form';
+import { signUpSchema, SignUpSchemaType } from '@/zod-schemas/sign-up';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { changePasswordSchema, ChangePasswordSchemaType, userSettingsSchema } from '@/zod-schemas/user-settings';
 
-type CreatePasswordType = {
+type PasswordInputType = {
     label: string;
-    register: UseFormRegister<SignUpSchemaType>;
-    name: Path<SignUpSchemaType>;
+    register: UseFormRegister<ChangePasswordSchemaType>;
+    name: Path<ChangePasswordSchemaType>;
+    errors?: string
 }
 function CreatePasswordInput({
     label,
     register,
-    name
-}: CreatePasswordType) {
+    name,
+    errors
+}: PasswordInputType) {
     return (
         <div className="space-y-2 text-blue-500">
             <Label>{label}</Label>
@@ -42,16 +46,45 @@ function CreatePasswordInput({
                 name={name}
                 className="border border-blue-200 bg-white/80 shadow-sm"
             />
+            {errors && (
+                <p className="text-sm text-red-500">{errors}</p>
+            )}
         </div>
     );
 }
 
-export default function SecuritySection({register} : UseFormRegister<SignUpSchemaType>) {
+export default function SecuritySection() {
 
-    const router = useRouter();
-    const handleChangePassword = () => {
-        toast.info('An email with password reset instructions has been sent.');
+    const {
+        register,
+        handleSubmit,
+        reset,
+        watch,
+        setValue,
+        formState: { errors, isDirty, isSubmitting }
+    } = useForm<ChangePasswordSchemaType>({
+        resolver: zodResolver(changePasswordSchema),
+        mode: "onChange",
+
+    });
+    const handleChangePassword = async (data: ChangePasswordSchemaType) => {
+        const loadingToast = toast.loading("Updating password...");
+
+        const result = console.log(data) //await changePassword(data);
+
+        toast.dismiss(loadingToast);
+
+        // if (result.success) {
+        //     toast.success("Password updated successfully.");
+
+        //     reset();
+        //     setShowPasswordForm(false);
+        // } else {
+        //     toast.error(result.message);
+        // }
     };
+    const router = useRouter();
+
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const handleDeleteAccount = async () => {
         const loadingToast = toast.loading("Deleting account...");
@@ -120,9 +153,9 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                         <div className="bg-blue-50 border border-blue-200 p-4 shadow-sm rounded-xl">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-                                <CreatePasswordInput name="password" register={register} label="Current Password" />
-                                <CreatePasswordInput name={register} label="New password" />
-                                <CreatePasswordInput register={register} label="Confirm password" />
+                                <CreatePasswordInput errors={errors.password?.message} name="password" register={register} label="Current Password" />
+                                <CreatePasswordInput errors={errors.newPassword?.message} name="newPassword" register={register} label="New password" />
+                                <CreatePasswordInput errors={errors.confirmPassword?.message} name="confirmPassword" register={register} label="Confirm password" />
                             </div>
 
                             <div className="flex justify-start pt-6 gap-2">
@@ -134,9 +167,12 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                                 >
                                     Cancel
                                 </Button>
-
-                                <Button type="button" className="bg-blue-600 h-9 hover:bg-blue-500 shadow-lg">
-                                    Update Password
+                                <Button
+                                    type="submit"
+                                    disabled={!isDirty || isSubmitting}
+                                    className="bg-blue-600 h-9 hover:bg-blue-500 shadow-lg"
+                                >
+                                    {isSubmitting ? "Updating..." : "Update Password"}
                                 </Button>
                             </div>
                         </div>
@@ -222,3 +258,4 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
         </Card>
     );
 }
+

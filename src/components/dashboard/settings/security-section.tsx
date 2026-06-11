@@ -16,16 +16,13 @@ import {
 import { toast } from 'sonner';
 import LogoutButton from './logout-btn';
 import { useRouter } from "next/navigation";
-import { deleteUserAccount, putNewPassword } from '@/lib/repository/dashboard/user';
+import { deleteUserAccount } from '@/lib/repository/dashboard/user';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import PasswordInput from '@/components/sign-in/password-input';
-import { FieldErrors, Path, useForm, UseFormRegister } from 'react-hook-form';
-import { signUpSchema, SignUpSchemaType } from '@/zod-schemas/sign-up';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { changePasswordSchema, ChangePasswordSchemaType, userSettingsSchema } from '@/zod-schemas/user-settings';
-import { makeErrorForHideStackFrame } from 'better-auth';
+import { Path, UseFormRegister } from 'react-hook-form';
+import { ChangePasswordSchemaType } from '@/zod-schemas/user-settings';
+import { ChangePasswordForm } from '@/components/sign-in/forgot-password/new-password';
 
 type PasswordInputType = {
     label: string;
@@ -56,40 +53,6 @@ function CreatePasswordInput({
 
 export default function SecuritySection() {
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors, isDirty, isSubmitting }
-    } = useForm<ChangePasswordSchemaType>({
-        resolver: zodResolver(changePasswordSchema),
-        mode: "onChange",
-
-    });
-    const handleChangePassword = async (data: ChangePasswordSchemaType) => {
-        if (data.confirmPassword == data.password) {
-            toast.warning("New password must be different from the old one!")
-            return
-        }
-        const loadingToast = toast.loading("Updating password...");
-        console.log(data)
-        const result = await putNewPassword(data);
-
-        toast.dismiss(loadingToast);
-
-        if (result.success) {
-            toast.success("Password updated successfully.");
-
-            reset();
-            setShowPasswordForm(false);
-        } else {
-            toast.error(result.message);
-        }
-    };
-    const handleCancelChangePassword = (valueToSet: boolean) => {
-        setShowPasswordForm(valueToSet)
-        reset()
-    }
 
     const router = useRouter();
 
@@ -149,7 +112,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                         <Button
                             type="button"
                             variant="outline"
-                            onClick={() => handleCancelChangePassword(!showPasswordForm)}
+                            onClick={() => setShowPasswordForm(!showPasswordForm)}
                             className="w-24 h-9 text-blue-500 bg-white/80 shadow-md hover:text-blue-600"
                         >
                             {showPasswordForm ? "Hide" : "Change"}
@@ -158,32 +121,8 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
 
                     {/* Expandable form */}
                     {showPasswordForm && (
-                        <form onSubmit={handleSubmit(handleChangePassword)} className="bg-blue-50 border border-blue-200 p-4 shadow-sm rounded-xl">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <ChangePasswordForm onCancel={() => setShowPasswordForm(false)} onPasswordChanged={() => setShowPasswordForm(false)} />
 
-                                <CreatePasswordInput error={errors.password?.message} name="password" register={register} label="Current Password" />
-                                <CreatePasswordInput error={errors.newPassword?.message} name="newPassword" register={register} label="New password" />
-                                <CreatePasswordInput error={errors.confirmPassword?.message} name="confirmPassword" register={register} label="Confirm password" />
-                            </div>
-
-                            <div className="flex justify-start pt-6 gap-2">
-                                <Button
-                                    type="button"
-                                    variant="ghost"
-                                    className="w-24 h-9 text-blue-500 bg-white/80 shadow-md hover:text-blue-600"
-                                    onClick={() => handleCancelChangePassword(false)}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    disabled={!isDirty || isSubmitting || Object.keys(errors).length > 0}
-                                    className="bg-blue-600 h-9 hover:bg-blue-500 shadow-lg"
-                                >
-                                    {isSubmitting ? "Updating..." : "Update Password"}
-                                </Button>
-                            </div>
-                        </form>
                     )}
                 </div>
 

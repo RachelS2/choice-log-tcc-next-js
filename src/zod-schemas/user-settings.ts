@@ -24,6 +24,13 @@ export const changePasswordSchema: z.ZodObject<{
     newPassword: passwordSchema,
     confirmPassword: z.string().nonempty("Password confirmation is required."),
   })
+  .refine(
+    (data) => data.newPassword !== data.password,
+    {
+      message: "New password must be different from the current password",
+      path: ["newPassword"],
+    }
+  )
   .superRefine((data, ctx) => {
     const passwordCheck = passwordSchema.safeParse(data.newPassword);
 

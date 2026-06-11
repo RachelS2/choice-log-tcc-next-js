@@ -4,9 +4,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn, getUserAuthData } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 
-import { FieldErrors, useForm, UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { UserSettingsSchemaType } from '@/zod-schemas/user-settings';
 import { UserAuthDTO } from '@/models/user';
 import UserIcon from '@/components/ui/user-icon';
@@ -39,15 +39,6 @@ export default function ProfileSection({ isEditing, errors, register, userData, 
         });
     };
 
-    const getInitials = (username: string) => {
-        return username
-            .split(' ')
-            .map((n) => n[0])
-            .join('')
-            .toUpperCase()
-            .slice(0, 2);
-    };
-
     return (
 
         <Card className="bg-white/80 backdrop-blur-md border shadow-lg
@@ -76,7 +67,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                     >
                         <UserIcon
                             name={userData.name}
-                            image={userData.image}
+                            image={previewImage}
                             className='h-28 w-28 text-2xl font-semibold'
                         />
                         <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
@@ -134,7 +125,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                                     type="button"
                                     size="sm"
                                     variant="outline"
-                                    className="text-blue-600 h-8 text-xs bg-white/80 border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+                                    className="text-blue-600 h-8 shadow-sm text-xs bg-white/80 border-blue-300 hover:bg-blue-50 hover:text-blue-700"
                                 >
                                     <TriangleAlert />
                                     Verify E-mail

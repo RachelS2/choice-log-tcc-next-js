@@ -1,6 +1,6 @@
 "use client";
 import SecuritySection from '@/components/dashboard/settings/security-section';
-import PersonalProfileSection from '@/components/dashboard/settings/personal-profile-sections';
+import PersonalProfileSection from '@/components/dashboard/settings/personal-context/personal-profile-sections';
 
 export default function ProfileSettings() {
 

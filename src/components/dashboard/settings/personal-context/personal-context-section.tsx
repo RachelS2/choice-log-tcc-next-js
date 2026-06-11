@@ -9,9 +9,9 @@ import {
 } from '@/components/ui/select';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { IncomeRange } from '../../../../generated/prisma';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { UserSettingsSchemaType } from '@/zod-schemas/user-settings';
+import { IncomeRange } from '../../../../../generated/prisma';
 
 export interface PersonalContextSectionProps {
     isEditing: boolean;

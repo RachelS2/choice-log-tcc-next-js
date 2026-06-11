@@ -11,6 +11,8 @@ import { toast } from "sonner";
 import PersonalContextSection from "./personal-context-section";
 import ProfileSection from "./profile-section";
 import { Button } from "@/components/ui/button";
+import PersonalProfileSectionSkeleton from "./personal-profile-section-skeleton";
+import ProfileSettingsHeader from "./header";
 
 export default function PersonalProfileSection() {
 
@@ -20,7 +22,8 @@ export default function PersonalProfileSection() {
         reset,
         watch,
         setValue,
-        formState: { errors, isDirty, isSubmitting }
+
+        formState: { errors, isDirty }
     } = useForm<UserSettingsSchemaType>({
         resolver: zodResolver(userSettingsSchema),
         mode: "onChange",
@@ -67,7 +70,7 @@ export default function PersonalProfileSection() {
         return () => window.removeEventListener('beforeunload', handleBeforeUnload);
     }, [isDirty]);
     if (userProfileData.loading) {
-        return <div><p className="text-red-500">Loading...</p></div>;
+        return <PersonalProfileSectionSkeleton />;
     }
 
     if (userProfileData.error) {
@@ -84,19 +87,16 @@ export default function PersonalProfileSection() {
             toast.error("User data is not available. Please try again later.");
             return;
         }
-        if (!isDirty) {
-            setIsEditing(false);
-            console.log("Returning...")
-            return;
-        }
+        const updatingToast = toast.warning("Updating profile...")
         const completeData: UpdateUserProfileDTO = {
             email: data.email,
             name: data.username,
-            incomeRange: userProfileData.data.incomeRange ?? "PREFER_NOT_TO_SAY",
+            incomeRange: data.incomeRange,
             image: data.image,
         }
         const result = await updateUserProfile(completeData);
         console.log("Profile updated...")
+        toast.dismiss(updatingToast);
         if (result.success) {
             toast.success(result.message);
             reset({
@@ -134,14 +134,7 @@ export default function PersonalProfileSection() {
         >
             {/* Page Header */}
             <div className="flex items-center justify-between pb-4">
-                <div>
-                    <h1 className=" tracking-tight text-2xl font-bold text-blue-600">
-                        Profile Settings
-                    </h1>
-                    <p className="mt-1 text-md text-neutral-500">
-                        Manage your personal information and account preferences.
-                    </p>
-                </div>
+                <ProfileSettingsHeader />
                 <div className="flex items-center gap-3">
                     {isEditing ? (
                         <div className="flex items-center gap-2">

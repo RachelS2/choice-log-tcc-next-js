@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { UpdateUserProfileDTO, UserCompleteDTO } from "@/models/user";
 import { IncomeRange } from "../../../../../generated/prisma";
+import { authClient } from "@/lib/auth-client";
+import { ChangePasswordSchemaType } from "@/zod-schemas/user-settings";
 
 export async function fetchUserProfile(): Promise<UserCompleteDTO | null> {
     const session = await auth.api.getSession({
@@ -126,4 +128,40 @@ export async function deleteUserAccount(): Promise<{
         };
     }
 
+}
+
+export async function putNewPassword(
+    changePassword: ChangePasswordSchemaType
+): Promise<{
+    success: boolean;
+    message: string;
+}> {
+    const session = await authClient.getSession();
+
+    if (!session) {
+        return {
+            success: false,
+            message: "Unauthorized",
+        };
+    }
+    try {
+        await auth.api.changePassword({
+            body: {
+                currentPassword: changePassword.password,
+                newPassword: changePassword.newPassword,
+                revokeOtherSessions: true
+            },
+            headers: await headers()
+        });
+
+        return {
+            success: true,
+            message: "Password updated successfully.",
+        };
+    } catch {
+        return {
+            success: false,
+            message: "Current password is incorrect.",
+        };
+    }
 }

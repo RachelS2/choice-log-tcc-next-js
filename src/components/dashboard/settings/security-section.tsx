@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { KeyRound, Loader2, LogOut, Trash2 } from 'lucide-react';
+import { KeyRound, LogOut, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -16,7 +16,7 @@ import {
 import { toast } from 'sonner';
 import LogoutButton from './logout-btn';
 import { useRouter } from "next/navigation";
-import { deleteUserAccount } from '@/lib/repository/dashboard/user';
+import { deleteUserAccount, putNewPassword } from '@/lib/repository/dashboard/user';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -25,18 +25,19 @@ import { FieldErrors, Path, useForm, UseFormRegister } from 'react-hook-form';
 import { signUpSchema, SignUpSchemaType } from '@/zod-schemas/sign-up';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { changePasswordSchema, ChangePasswordSchemaType, userSettingsSchema } from '@/zod-schemas/user-settings';
+import { makeErrorForHideStackFrame } from 'better-auth';
 
 type PasswordInputType = {
     label: string;
     register: UseFormRegister<ChangePasswordSchemaType>;
     name: Path<ChangePasswordSchemaType>;
-    errors?: string
+    error?: string
 }
 function CreatePasswordInput({
     label,
     register,
     name,
-    errors
+    error
 }: PasswordInputType) {
     return (
         <div className="space-y-2 text-blue-500">
@@ -46,8 +47,8 @@ function CreatePasswordInput({
                 name={name}
                 className="border border-blue-200 bg-white/80 shadow-sm"
             />
-            {errors && (
-                <p className="text-sm text-red-500">{errors}</p>
+            {error && (
+                <p className="text-sm text-red-500">{error}</p>
             )}
         </div>
     );
@@ -59,8 +60,6 @@ export default function SecuritySection() {
         register,
         handleSubmit,
         reset,
-        watch,
-        setValue,
         formState: { errors, isDirty, isSubmitting }
     } = useForm<ChangePasswordSchemaType>({
         resolver: zodResolver(changePasswordSchema),
@@ -68,26 +67,36 @@ export default function SecuritySection() {
 
     });
     const handleChangePassword = async (data: ChangePasswordSchemaType) => {
+        if (data.confirmPassword == data.password) {
+            toast.warning("New password must be different from the old one!")
+            return
+        }
         const loadingToast = toast.loading("Updating password...");
-
-        const result = console.log(data) //await changePassword(data);
+        console.log(data)
+        const result = await putNewPassword(data);
 
         toast.dismiss(loadingToast);
 
-        // if (result.success) {
-        //     toast.success("Password updated successfully.");
+        if (result.success) {
+            toast.success("Password updated successfully.");
 
-        //     reset();
-        //     setShowPasswordForm(false);
-        // } else {
-        //     toast.error(result.message);
-        // }
+            reset();
+            setShowPasswordForm(false);
+        } else {
+            toast.error(result.message);
+        }
     };
+    const handleCancelChangePassword = (valueToSet: boolean) => {
+        setShowPasswordForm(valueToSet)
+        reset()
+    }
+
     const router = useRouter();
 
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const handleDeleteAccount = async () => {
         const loadingToast = toast.loading("Deleting account...");
+        console.log("Deleting account...")
         const result: {
             success: boolean;
             message: string;
@@ -95,9 +104,8 @@ export default function SecuritySection() {
         toast.dismiss(loadingToast);
 
         if (result.success) {
-            const toastId = toast.success("Account deleted.");
+            toast.success("Account deleted.");
             router.replace("/");
-            toast.dismiss(toastId)
         } else {
             toast.error(result.message);
         }
@@ -141,7 +149,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                         <Button
                             type="button"
                             variant="outline"
-                            onClick={() => setShowPasswordForm((v) => !v)}
+                            onClick={() => handleCancelChangePassword(!showPasswordForm)}
                             className="w-24 h-9 text-blue-500 bg-white/80 shadow-md hover:text-blue-600"
                         >
                             {showPasswordForm ? "Hide" : "Change"}
@@ -150,12 +158,12 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
 
                     {/* Expandable form */}
                     {showPasswordForm && (
-                        <div className="bg-blue-50 border border-blue-200 p-4 shadow-sm rounded-xl">
+                        <form onSubmit={handleSubmit(handleChangePassword)} className="bg-blue-50 border border-blue-200 p-4 shadow-sm rounded-xl">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-                                <CreatePasswordInput errors={errors.password?.message} name="password" register={register} label="Current Password" />
-                                <CreatePasswordInput errors={errors.newPassword?.message} name="newPassword" register={register} label="New password" />
-                                <CreatePasswordInput errors={errors.confirmPassword?.message} name="confirmPassword" register={register} label="Confirm password" />
+                                <CreatePasswordInput error={errors.password?.message} name="password" register={register} label="Current Password" />
+                                <CreatePasswordInput error={errors.newPassword?.message} name="newPassword" register={register} label="New password" />
+                                <CreatePasswordInput error={errors.confirmPassword?.message} name="confirmPassword" register={register} label="Confirm password" />
                             </div>
 
                             <div className="flex justify-start pt-6 gap-2">
@@ -163,19 +171,19 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                                     type="button"
                                     variant="ghost"
                                     className="w-24 h-9 text-blue-500 bg-white/80 shadow-md hover:text-blue-600"
-                                    onClick={() => setShowPasswordForm(false)}
+                                    onClick={() => handleCancelChangePassword(false)}
                                 >
                                     Cancel
                                 </Button>
                                 <Button
                                     type="submit"
-                                    disabled={!isDirty || isSubmitting}
+                                    disabled={!isDirty || isSubmitting || Object.keys(errors).length > 0}
                                     className="bg-blue-600 h-9 hover:bg-blue-500 shadow-lg"
                                 >
                                     {isSubmitting ? "Updating..." : "Update Password"}
                                 </Button>
                             </div>
-                        </div>
+                        </form>
                     )}
                 </div>
 

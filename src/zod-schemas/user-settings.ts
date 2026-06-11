@@ -20,7 +20,7 @@ export const changePasswordSchema: z.ZodObject<{
   confirmPassword: z.ZodString;
 }, z.core.$strip> = z
   .object({
-    password: passwordSchema,
+    password: z.string(),
     newPassword: passwordSchema,
     confirmPassword: z.string().nonempty("Password confirmation is required."),
   })

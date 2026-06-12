@@ -99,7 +99,9 @@ export default function LoginForm() {
                             <Checkbox id='remember' checked={rememberMe} onCheckedChange={(checked) => setRememberMe(!!checked)} />
                             <Label htmlFor='remember'>Remember me</Label>
                         </div>
-                        <Link href='/forgot-password' className='text-blue-600 hover:underline'>Forgot password?</Link>
+                        <Link href='/sign-in/forgot-password' className='text-blue-600 hover:underline'>
+                            Forgot password?
+                        </Link>
                     </div>
                     <Button className='w-full h-11 text-base bg-blue-500 hover:bg-blue-700' type="submit" disabled={isSubmitting}>
                         {isSubmitting ?

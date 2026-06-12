@@ -95,7 +95,7 @@ export default function SignUpForm() {
 
             onSuccess: () => {
                 toast.success("Successfully signed up!", { description: "Please login to get started.." })
-                router.replace("/login");
+                router.replace("/sign-in");
             },
             onError: (ctx) => {
                 console.log(ctx.error.message);
@@ -175,7 +175,7 @@ export default function SignUpForm() {
                     <p className="text-center text-sm text-muted-foreground">
                         Already have an account?{" "}
                         <Link
-                            href="/login"
+                            href="/sign-in"
                             className="font-medium text-blue-600 hover:underline"
                         >
                             Sign In

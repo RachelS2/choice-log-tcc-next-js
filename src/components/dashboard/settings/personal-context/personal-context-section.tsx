@@ -33,7 +33,7 @@ export default function PersonalContextSection({
     isEditing, setValue, watch
 }: PersonalContextSectionProps) {
     return (
-        <Card className="bg-white/80 backdrop-blur-md border shadow-lg
+        <Card className="bg-white backdrop-blur-md border shadow-lg
 border
 border-blue-100
 shadow-[0_2px_20px_rgba(59,130,246,0.05)]">

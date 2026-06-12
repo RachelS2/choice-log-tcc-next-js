@@ -18,41 +18,9 @@ import LogoutButton from './logout-btn';
 import { useRouter } from "next/navigation";
 import { deleteUserAccount } from '@/lib/repository/dashboard/user';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import PasswordInput from '@/components/sign-in/password-input';
-import { Path, UseFormRegister } from 'react-hook-form';
-import { ChangePasswordSchemaType } from '@/zod-schemas/user-settings';
 import { ChangePasswordForm } from '@/components/sign-in/forgot-password/new-password';
 
-type PasswordInputType = {
-    label: string;
-    register: UseFormRegister<ChangePasswordSchemaType>;
-    name: Path<ChangePasswordSchemaType>;
-    error?: string
-}
-function CreatePasswordInput({
-    label,
-    register,
-    name,
-    error
-}: PasswordInputType) {
-    return (
-        <div className="space-y-2 text-blue-500">
-            <Label>{label}</Label>
-            <PasswordInput
-                register={register}
-                name={name}
-                className="border border-blue-200 bg-white/80 shadow-sm"
-            />
-            {error && (
-                <p className="text-sm text-red-500">{error}</p>
-            )}
-        </div>
-    );
-}
-
 export default function SecuritySection() {
-
 
     const router = useRouter();
 
@@ -74,7 +42,7 @@ export default function SecuritySection() {
         }
     };
     return (
-        <Card className="bg-white/80 backdrop-blur-md border shadow-lg
+        <Card className="bg-white backdrop-blur-md border shadow-lg
 border
 border-blue-100
 shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
@@ -87,7 +55,6 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                     Update your password and manage your account.
                 </CardDescription>
             </CardHeader>
-
 
             <CardContent className="space-y-5">
 

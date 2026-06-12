@@ -39,13 +39,15 @@ type ChangePasswordFormProps = {
     onCancel?: () => void;
     layout?: "horizontal" | "vertical";
     onPasswordChanged?: () => void;
-};
+    justifyButtons? : "start" | "center";
+}; 
 
 
 export function ChangePasswordForm({
     onCancel,
     layout = "horizontal",
-    onPasswordChanged
+    onPasswordChanged,
+    justifyButtons = "start",
 }: ChangePasswordFormProps) {
     const {
         register,
@@ -106,7 +108,7 @@ export function ChangePasswordForm({
                 />
             </div>
 
-            <div className="flex justify-start pt-6 gap-2">
+            <div className={`flex justify-${justifyButtons} pt-6 gap-2`}>
                 {onCancel ? <Button
                     type="button"
                     variant="ghost"

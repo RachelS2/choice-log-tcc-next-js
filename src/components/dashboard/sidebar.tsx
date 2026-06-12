@@ -11,7 +11,7 @@ export default async function Sidebar() {
 
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
-    redirect("/login");
+    redirect("/sign-in");
   }
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 flex flex-col">

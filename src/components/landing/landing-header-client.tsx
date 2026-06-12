@@ -6,7 +6,7 @@ import AppLogo from "@/components/ui/app-logo";
 import { useState } from "react";
 
 
-export default function LandingHeaderClient({userIsLoggedIn}: {userIsLoggedIn: boolean}) {
+export default function LandingHeaderClient({ userIsLoggedIn }: { userIsLoggedIn: boolean }) {
   const [path, setPath] = useState("");
 
   function handleLogoClick() {
@@ -28,7 +28,7 @@ export default function LandingHeaderClient({userIsLoggedIn}: {userIsLoggedIn: b
         {!userIsLoggedIn && (
           <nav className="flex items-center gap-2 sm:gap-4">
             <Link
-              href="/login"
+              href="/sign-in"
               className="hidden text-lg font-medium text-neutral-600 hover:text-blue-500 sm:inline-block"
             >
               Sign In

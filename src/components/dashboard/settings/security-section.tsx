@@ -18,7 +18,7 @@ import LogoutButton from './logout-btn';
 import { useRouter } from "next/navigation";
 import { deleteUserAccount } from '@/lib/repository/dashboard/user';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { ChangePasswordForm } from '@/components/sign-in/forgot-password/new-password';
+import { ResetPasswordForm } from '@/components/dashboard/settings/new-password-form';
 
 export default function SecuritySection() {
 
@@ -88,7 +88,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
 
                     {/* Expandable form */}
                     {showPasswordForm && (
-                        <ChangePasswordForm onCancel={() => setShowPasswordForm(false)} onPasswordChanged={() => setShowPasswordForm(false)} />
+                        <ResetPasswordForm onCancel={() => setShowPasswordForm(false)} onPasswordChanged={() => setShowPasswordForm(false)} />
 
                     )}
                 </div>

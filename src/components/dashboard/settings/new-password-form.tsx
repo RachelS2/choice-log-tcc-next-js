@@ -1,7 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { changePasswordSchema, ChangePasswordSchemaType } from "@/zod-schemas/user-settings";
 import { FieldErrors, Path, useForm, UseFormRegister } from "react-hook-form";
-import PasswordInput from "../password-input";
+import PasswordInput from "../../sign-in/password-input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { putNewPassword } from "@/lib/repository/dashboard/user";
@@ -35,7 +35,7 @@ function CreatePasswordInput({
     );
 }
 
-type ChangePasswordFormProps = {
+type ResetPasswordFormProps = {
     onCancel?: () => void;
     layout?: "horizontal" | "vertical";
     onPasswordChanged?: () => void;
@@ -43,12 +43,12 @@ type ChangePasswordFormProps = {
 }; 
 
 
-export function ChangePasswordForm({
+export function ResetPasswordForm({
     onCancel,
     layout = "horizontal",
     onPasswordChanged,
     justifyButtons = "start",
-}: ChangePasswordFormProps) {
+}: ResetPasswordFormProps) {
     const {
         register,
         handleSubmit,

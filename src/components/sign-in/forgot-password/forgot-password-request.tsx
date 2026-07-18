@@ -67,7 +67,7 @@ export function ForgotPasswordPage() {
                         Resend email
                     </Button>
                     <Button asChild variant="ghost" className="h-11 w-full">
-                        <Link href="/">
+                        <Link href="/sign-in">
                             <ArrowLeft className="size-4" />
                             Back to Login
                         </Link>
@@ -98,7 +98,7 @@ export function ForgotPasswordPage() {
                         </Button>
                     </form>
                     <Button asChild variant="ghost" className="h-11 w-full">
-                        <Link href="/">
+                        <Link href="/sign-in">
                             <ArrowLeft className="size-4" />
                             Back to Login
                         </Link>

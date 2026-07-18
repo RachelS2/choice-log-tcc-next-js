@@ -78,16 +78,17 @@ export default function NotFound() {
               Go Back
             </Button>
 
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="border-white/30 bg-transparent text-white hover:bg-white/10"
-            >
-              <a href="/">
-                Return Home
-              </a>
-            </Button>
+            {!userIsLoggedIn ? (
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
+              >
+                <a href="/">Return Home</a>
+              </Button>
+            ) : null}
+
           </div>
         </div>
       </main>

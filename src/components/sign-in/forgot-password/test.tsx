@@ -1,3 +1,4 @@
+import { Card } from "@/components/ui/card";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -9,26 +10,18 @@ interface AuthCardProps {
   footer?: ReactNode;
 }
 
-export function AuthShell({ children }: { children: ReactNode }) {
+export function ForgotPasswordWrapper({ children }: { children: ReactNode }) {
   return (
     <div
       className="flex min-h-screen flex-col items-center justify-center px-4"
       style={{ background: "var(--gradient-subtle)" }}
     >
-      {/* <div className="mb-8 flex items-center gap-2">
-        <div className="grid size-8 place-items-center rounded-lg bg-primary font-bold text-primary-foreground">
-          C
-        </div>
-        <span className="text-lg font-semibold tracking-tight text-foreground">
-          ChoiceLog
-        </span>
-      </div> */}
       {children}
     </div>
   );
 }
 
-export function AuthCard({
+export function ForgotPasswordMainContent({
   icon: Icon,
   title,
   description,
@@ -36,7 +29,7 @@ export function AuthCard({
   footer,
 }: AuthCardProps) {
   return (
-    <div
+    <Card
       className="w-full max-w-md rounded-2xl border border-border bg-card p-8 duration-500 animate-in fade-in slide-in-from-bottom-2 sm:p-10"
       style={{ boxShadow: "var(--shadow-card)" }}
     >
@@ -57,6 +50,6 @@ export function AuthCard({
           {footer}
         </div>
       ) : null}
-    </div>
+    </Card>
   );
 }

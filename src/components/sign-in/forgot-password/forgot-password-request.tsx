@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { AuthShell, AuthCard } from "./test";
+import { ForgotPasswordWrapper, ForgotPasswordMainContent } from "./test";
 import Link from 'next/link'
 
 //import { AuthCard } from "./test";
@@ -45,15 +45,15 @@ export function ForgotPasswordPage() {
     };
 
     return (
-        <AuthShell>
+        <ForgotPasswordWrapper>
             {sent ? (
-                <AuthCard
+                <ForgotPasswordMainContent
                     icon={MailCheck}
                     title="Check your inbox"
                     description={
                         <>
-                            We've sent a password reset link to{" "}
-                            <span className="font-medium text-foreground">{email || "your email address"}</span>
+                            We've sent a password reset link to
+                            <span className="font-medium text-foreground"> {email || "your email address"}</span>
                             . The link expires in 30 minutes.
                         </>
                     }
@@ -66,22 +66,17 @@ export function ForgotPasswordPage() {
                     >
                         Resend email
                     </Button>
-                    <Button asChild variant="ghost" className="h-11 w-full">
-                        <Link href="/sign-in">
-                            <ArrowLeft className="size-4" />
-                            Back to Login
-                        </Link>
-                    </Button>
-                </AuthCard>
+                    {backToLoginButton()}
+                </ForgotPasswordMainContent>
             ) : (
-                <AuthCard
+                <ForgotPasswordMainContent
                     icon={Mail}
                     title="Forgot your password?"
                     description="Enter your email address and we'll send you a secure link to reset your password."
                 >
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="email" className="text-lg">Email</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -90,21 +85,27 @@ export function ForgotPasswordPage() {
                                 placeholder="you@company.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="h-11"
+                                className="h-11 text-xl"
                             />
                         </div>
                         <Button type="submit" className="h-11 w-full" disabled={loading}>
                             {loading ? "Sending..." : "Send reset link"}
                         </Button>
                     </form>
-                    <Button asChild variant="ghost" className="h-11 w-full">
-                        <Link href="/sign-in">
-                            <ArrowLeft className="size-4" />
-                            Back to Login
-                        </Link>
-                    </Button>
-                </AuthCard>
+                    {backToLoginButton()}
+                </ForgotPasswordMainContent>
             )}
-        </AuthShell>
+        </ForgotPasswordWrapper>
+    );
+}
+
+function backToLoginButton() {
+    return (
+        <Button asChild variant="ghost" className="h-11 w-full">
+            <Link href="/sign-in">
+                <ArrowLeft className="size-4" />
+                Back to Login
+            </Link>
+        </Button>
     );
 }

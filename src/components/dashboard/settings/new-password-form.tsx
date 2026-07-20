@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 
 type PasswordInputType = {
-    label: string;
+    label: "Current Password" | "New password" | "Confirm Password";
     register: UseFormRegister<ChangePasswordSchemaType>;
     name: Path<ChangePasswordSchemaType>;
     error?: string

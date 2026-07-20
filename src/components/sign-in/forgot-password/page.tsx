@@ -18,6 +18,7 @@ export function ForgotPasswordPage() {
         e.preventDefault();
         const { error } = await authClient.requestPasswordReset({
             email: email,
+            redirectTo: "/api/auth/reset-password",
         });
         if (error) {
             toast.error(error.message);

@@ -2,7 +2,6 @@ import { Auth, betterAuth, BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import { Resend } from "resend";
-import { emailVerification, sendResetPasswordEmail } from "@/lib/email";
 import ForgotPasswordEmail from "@/components/emails/forgot-password";
 import VerifyEmail from "@/components/emails/verify-email";
 
@@ -24,28 +23,23 @@ export const auth = betterAuth({
         enabled: true,
         //requireEmailVerification: true,
         sendVerificationEmail: async ({ user, url, token }: { user: { email: string; name: string }; url: string; token?: string }, request: Request) => {
-            try {
-                const { error } = await resend.emails.send({
-                    from: "onboarding@resend.dev", 
-                    to: user.email,
-                    subject: "ChoiceLog - Verify your email",
-                    react: VerifyEmail({ username: user.name, verifyUrl: url }),
-                });
 
-                if (error) {
-                    console.error("Resend error:", error);
-                    throw new Error(`Email send failed: ${error.message}`);
-                }
+            const { error } = await resend.emails.send({
+                from: "onboarding@resend.dev",
+                to: user.email,
+                subject: "ChoiceLog - Verify your email",
+                react: VerifyEmail({ username: user.name, verifyUrl: url }),
+            });
+
+            if (error) {
+                console.error("Resend error:", error);
+                throw new Error(`Email send failed: ${error.message}`);
             }
 
-            catch (error) {
-                console.log("Error sending verification email: " + error);
-                throw error;
-            }
         },
         sendResetPassword: async ({ user, url }) => {
             console.log("Sending reset password email to: " + user.email);
-            await resend.emails.send({
+            const { error } = await resend.emails.send({
                 from: "onboarding@resend.dev",
                 to: user.email,
                 subject: "ChoiceLog - Reset your password",
@@ -55,6 +49,11 @@ export const auth = betterAuth({
                     userEmail: user.email,
                 }),
             });
+            if (error) {
+                console.error("Resend error:", error);
+                throw new Error(`Email send failed: ${error.message}`);
+            }
+
         },
     },
 });

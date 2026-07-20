@@ -69,16 +69,13 @@ const VerifyEmail = (props: VerifyEmailProps) => {
               <Text className="m-0 text-center text-[12px] text-gray-400 leading-[16px]">
                 Choice Log
                 <br />
-                Made By Rachel Barino Silva as a Final Project for a Information Systems Degree at Universidade Federal Fluminense (UFF)
+                Made By Rachel Barino Silva as a Final Project (TCC) for a Information Systems Degree at Universidade Federal Fluminense (UFF)
                 <br />
                 Niterói, Rio de Janeiro - Brazil 
               </Text>
 
               <Text className="m-0 mt-[8px] text-center text-[12px] text-gray-400 leading-[16px]">
-                <a className="text-gray-400 underline" href="/">
-                  Unsubscribe
-                </a>{" "}
-                | © 2026 Choice Log. All rights reserved.
+                © 2026 Choice Log. All rights reserved.
               </Text>
             </Section>
           </Container>

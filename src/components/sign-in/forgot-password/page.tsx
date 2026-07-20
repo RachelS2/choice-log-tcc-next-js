@@ -1,47 +1,32 @@
-//import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { Mail, MailCheck, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card } from "@/components/ui/card";
-import { ForgotPasswordWrapper, ForgotPasswordMainContent } from "./test";
+import { ForgotPasswordWrapper, ForgotPasswordMainContent } from "./forgot-password-components";
 import Link from 'next/link'
-
-//import { AuthCard } from "./test";
-
-// export const Route = createFileRoute("/forgot-password")({
-//     head: () => ({
-//         meta: [
-//             { title: "Forgot password — ChoiceLog" },
-//             {
-//                 name: "description",
-//                 content:
-//                     "Reset your ChoiceLog password. Enter your email and we'll send you a secure reset link.",
-//             },
-//             { property: "og:title", content: "Forgot password — ChoiceLog" },
-//             {
-//                 property: "og:description",
-//                 content: "Request a secure password reset link for your ChoiceLog account.",
-//             },
-//         ],
-//     }),
-//     component: ForgotPasswordPage,
-// });
+import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 export function ForgotPasswordPage() {
     const [email, setEmail] = useState("");
     const [sent, setSent] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = async (e: FormEvent) => {
         setLoading(true);
-        // Mock: no backend yet
-        setTimeout(() => {
-            setLoading(false);
-            setSent(true);
-        }, 500);
+        e.preventDefault();
+        const { error } = await authClient.requestPasswordReset({
+            email: email,
+        });
+        if (error) {
+            toast.error(error.message);
+        } else {
+            toast.success("Password reset email sent");
+        }
+
+        setSent(true);
+        setLoading(false);
     };
 
     return (
@@ -53,14 +38,14 @@ export function ForgotPasswordPage() {
                     description={
                         <>
                             We've sent a password reset link to
-                            <span className="font-medium text-foreground"> {email || "your email address"}</span>
+                            <span className="font-medium"> {email || "your email address"}</span>
                             . The link expires in 30 minutes.
                         </>
                     }
                     footer="Didn't receive it? Check your spam folder."
                 >
                     <Button
-                        variant="outline"
+
                         className="h-11 w-full"
                         onClick={() => setSent(false)}
                     >
@@ -82,10 +67,10 @@ export function ForgotPasswordPage() {
                                 type="email"
                                 required
                                 autoComplete="email"
-                                placeholder="you@company.com"
+                                placeholder="you@gmail.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="h-11 text-xl"
+                                className="h-11 text-xl focus-visible:ring-2 focus-visible:ring-blue-500"
                             />
                         </div>
                         <Button type="submit" className="h-11 w-full" disabled={loading}>
@@ -101,7 +86,7 @@ export function ForgotPasswordPage() {
 
 function backToLoginButton() {
     return (
-        <Button asChild variant="ghost" className="h-11 w-full">
+        <Button asChild variant="ghost" className="h-11 w-full hover:text-blue-500">
             <Link href="/sign-in">
                 <ArrowLeft className="size-4" />
                 Back to Login

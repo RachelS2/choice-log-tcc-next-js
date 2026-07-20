@@ -94,7 +94,7 @@ export default function SignUpForm() {
         }, {
 
             onSuccess: () => {
-                toast.success("Successfully signed up!", { description: "Please login to get started.." })
+                toast.success("Successfully signed up!", { description: "Please login to get started." })
                 router.replace("/sign-in");
             },
             onError: (ctx) => {

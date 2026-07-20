@@ -121,7 +121,7 @@ export default function LoginForm() {
                     {/* <Button variant='outline' className='w-full h-11 text-base'>
                         Continue with Google
                     </Button> */}
-                    <p className='text-center text-sm text-muted-foreground'>Don’t have an account? <Link href='/sign-up' className='text-blue-600 hover:underline'>Create one</Link></p>
+                    <p className='text-center text-sm text-muted-foreground'>Don’t have an account? <Link href='/sign-up' className='text-blue-600 hover:underline'>Sign up</Link></p>
                 </CardContent>
             </Card>
         </form>

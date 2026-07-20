@@ -1,5 +1,5 @@
 import MotivationPage from '@/components/sign-in/motivation';
-import LoginForm from '@/components/sign-in/form';
+import LoginForm from '@/components/sign-in/page';
 
 export default function LoginPage() {
   return (

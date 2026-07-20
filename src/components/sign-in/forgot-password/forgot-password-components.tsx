@@ -35,9 +35,9 @@ export function ForgotPasswordMainContent({
     >
       <div className="mb-6 flex flex-col items-center text-center">
         <div className="mb-5 grid size-14 place-items-center rounded-full bg-primary/10 text-primary">
-          <Icon className="size-7" strokeWidth={2} />
+          <Icon className="size-7 text-blue-400" strokeWidth={2} />
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+        <h1 className="text-2xl font-semibold tracking-tight text-black">
           {title}
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">

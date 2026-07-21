@@ -184,7 +184,6 @@ function InputSection({
                         !isEditing
                             ? "bg-neutral-50 cursor-not-allowed"
                             : "bg-white",
-                        "focus-visible:ring-2 focus-visible:ring-blue-500"
                     )}
                 />
             </div>

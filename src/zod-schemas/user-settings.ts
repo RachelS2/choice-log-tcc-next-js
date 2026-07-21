@@ -12,29 +12,17 @@ export const userSettingsSchema = z.object({
 
 export type UserSettingsSchemaType = z.infer<typeof userSettingsSchema>;
 
-
-// Schema para validação do formulário de cadastro de usuário:
-export const changePasswordSchema: z.ZodObject<{
-  password: z.ZodString;
-  newPassword: z.ZodString;
-  confirmPassword: z.ZodString;
-}, z.core.$strip> = z
+//Schema para validação do formulário de redefinição de senha (esqueci minha senha):
+export const resetPasswordSchema = z
   .object({
-    password: z.string(),
     newPassword: passwordSchema,
     confirmPassword: z.string().nonempty("Password confirmation is required."),
   })
-  .refine(
-    (data) => data.newPassword !== data.password,
-    {
-      message: "New password must be different from the current password",
-      path: ["newPassword"],
-    }
-  )
   .superRefine((data, ctx) => {
     const passwordCheck = passwordSchema.safeParse(data.newPassword);
 
-    if (passwordCheck.error) return; // Se a senha não for válida, não faz a verificação de correspondência
+    if (passwordCheck.error) return;
+
     if (data.newPassword !== data.confirmPassword) {
       ctx.addIssue({
         path: ["confirmPassword"],
@@ -43,5 +31,21 @@ export const changePasswordSchema: z.ZodObject<{
       });
     }
   });
+
+export type ResetPasswordSchemaType = z.infer<typeof resetPasswordSchema>;
+
+
+// Schema para validação do formulário de cadastro de usuário:
+export const changePasswordSchema = resetPasswordSchema
+  .extend({
+    password: z.string(),
+  })
+  .refine(
+    (data) => data.newPassword !== data.password,
+    {
+      message: "New password must be different from the current password.",
+      path: ["newPassword"],
+    }
+  );
 
 export type ChangePasswordSchemaType = z.infer<typeof changePasswordSchema>;

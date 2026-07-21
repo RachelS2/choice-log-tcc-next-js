@@ -2,7 +2,7 @@ import { Auth, betterAuth, BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import { Resend } from "resend";
-import ForgotPasswordEmail from "@/components/emails/forgot-password";
+import ForgotPasswordEmail from "@/components/emails/forgot-password-email";
 import VerifyEmail from "@/components/emails/verify-email";
 
 if (!process.env.RESEND_API_KEY) {
@@ -21,6 +21,8 @@ export const auth = betterAuth({
     },
     emailAndPassword: {
         enabled: true,
+        resetPasswordTokenExpiresIn: 60 * 30, // 30 minutes
+        revokeSessionsOnPasswordReset: true,
         //requireEmailVerification: true,
         sendVerificationEmail: async ({ user, url, token }: { user: { email: string; name: string }; url: string; token?: string }, request: Request) => {
 

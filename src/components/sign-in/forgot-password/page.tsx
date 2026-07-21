@@ -18,7 +18,7 @@ export function ForgotPasswordPage() {
         e.preventDefault();
         const { error } = await authClient.requestPasswordReset({
             email: email,
-            redirectTo: "/api/auth/reset-password",
+            redirectTo: "/sign-in/reset-password",
         });
         if (error) {
             toast.error(error.message);
@@ -71,7 +71,7 @@ export function ForgotPasswordPage() {
                                 placeholder="you@gmail.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="h-11 text-xl focus-visible:ring-2 focus-visible:ring-blue-500"
+                                className="h-11 text-xl"
                             />
                         </div>
                         <Button type="submit" className="h-11 w-full" disabled={loading}>

@@ -16,14 +16,12 @@ import {
 import { toast } from 'sonner';
 import LogoutButton from './logout-btn';
 import { useRouter } from "next/navigation";
-import { deleteUserAccount } from '@/lib/repository/dashboard/user';
+import { deleteUserAccount, putNewPassword } from '@/lib/repository/dashboard/user';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { ResetPasswordForm } from '@/components/dashboard/settings/new-password-form';
+import { ChangePasswordFormSettings } from './change-password-form-settings';
 
 export default function SecuritySection() {
-
     const router = useRouter();
-
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const handleDeleteAccount = async () => {
         const loadingToast = toast.loading("Deleting account...");
@@ -88,8 +86,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
 
                     {/* Expandable form */}
                     {showPasswordForm && (
-                        <ResetPasswordForm onCancel={() => setShowPasswordForm(false)} onPasswordChanged={() => setShowPasswordForm(false)} />
-
+                        <ChangePasswordFormSettings onCancel={() => setShowPasswordForm(false)} onPasswordChanged={() => setShowPasswordForm(false)} />
                     )}
                 </div>
 

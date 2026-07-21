@@ -35,25 +35,23 @@ function CreatePasswordInput({
     );
 }
 
-type ResetPasswordFormProps = {
+type ChangePasswordFormSettingsProps = {
     onCancel?: () => void;
-    layout?: "horizontal" | "vertical";
     onPasswordChanged?: () => void;
-    justifyButtons? : "start" | "center";
-}; 
+    justifyButtons?: "start" | "center";
+};
 
 
-export function ResetPasswordForm({
+export function ChangePasswordFormSettings({
     onCancel,
-    layout = "horizontal",
     onPasswordChanged,
     justifyButtons = "start",
-}: ResetPasswordFormProps) {
+}: ChangePasswordFormSettingsProps) {
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isDirty, isSubmitting, isValid }
+        formState: { errors, isDirty, isSubmitting }
     } = useForm<ChangePasswordSchemaType>({
         resolver: zodResolver(changePasswordSchema),
         mode: "onChange",
@@ -67,8 +65,7 @@ export function ResetPasswordForm({
 
         if (result.success) {
             toast.success("Password updated successfully.");
-            reset();
-            onPasswordChanged?.();
+            onPasswordChanged?.()
         } else {
             toast.error(result.message);
         }
@@ -80,11 +77,7 @@ export function ResetPasswordForm({
     return (
         <form onSubmit={handleSubmit(handleChangePassword)} className="bg-blue-50 border border-blue-200 p-4 shadow-sm rounded-xl">
             <div
-                className={
-                    layout === "horizontal"
-                        ? "grid grid-cols-1 md:grid-cols-3 gap-4"
-                        : "space-y-4"
-                }
+                className="grid grid-cols-1 md:grid-cols-3 gap-4"
             >
                 <CreatePasswordInput
                     error={errors.password?.message}

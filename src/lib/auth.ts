@@ -4,6 +4,7 @@ import { prisma } from "./prisma";
 import { Resend } from "resend";
 import ForgotPasswordEmail from "@/components/emails/forgot-password-email";
 import VerifyEmail from "@/components/emails/verify-email";
+import { toast } from "sonner";
 
 if (!process.env.RESEND_API_KEY) {
     throw new Error("RESEND_API_KEY is not defined");
@@ -53,7 +54,7 @@ export const auth = betterAuth({
             });
             if (error) {
                 console.error("Resend error:", error);
-                throw new Error(`Email send failed: ${error.message}`);
+                toast.error(`Failed to send e-mail: ${error.message}`)
             }
 
         },

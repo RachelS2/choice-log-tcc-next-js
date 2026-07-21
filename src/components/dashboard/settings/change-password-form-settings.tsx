@@ -4,7 +4,7 @@ import { FieldErrors, Path, useForm, UseFormRegister } from "react-hook-form";
 import PasswordInput from "../../sign-in/password-input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { putNewPassword } from "@/lib/repository/dashboard/user";
+import { updatePassword } from "@/lib/repository/dashboard/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 
@@ -59,7 +59,7 @@ export function ChangePasswordFormSettings({
     });
     const handleChangePassword = async (data: ChangePasswordSchemaType) => {
         const loadingToast = toast.loading("Updating password...");
-        const result = await putNewPassword(data);
+        const result = await updatePassword(data);
 
         toast.dismiss(loadingToast);
 

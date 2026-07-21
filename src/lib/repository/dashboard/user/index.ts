@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { UpdateUserProfileDTO, UserCompleteDTO } from "@/models/user";
 import { IncomeRange } from "../../../../../generated/prisma";
 import { authClient } from "@/lib/auth-client";
-import { ChangePasswordSchemaType } from "@/zod-schemas/user-settings";
+import { ChangePasswordSchemaType, ResetPasswordSchemaType } from "@/zod-schemas/user-settings";
 
 export async function fetchUserProfile(): Promise<UserCompleteDTO | null> {
     const session = await auth.api.getSession({
@@ -130,7 +130,7 @@ export async function deleteUserAccount(): Promise<{
 
 }
 
-export async function putNewPassword(
+export async function updatePassword(
     changePassword: ChangePasswordSchemaType
 ): Promise<{
     success: boolean;
@@ -162,6 +162,41 @@ export async function putNewPassword(
         return {
             success: false,
             message: "Current password is incorrect.",
+        };
+    }
+}
+
+export async function resetPassword(
+    changePassword: ResetPasswordSchemaType, token: string
+): Promise<{
+    success: boolean;
+    message: string;
+}> {
+    const session = await authClient.getSession();
+
+    if (!session) {
+        return {
+            success: false,
+            message: "Unauthorized",
+        };
+    }
+    try {
+        await auth.api.resetPassword({
+            body: {
+                newPassword: changePassword.newPassword,
+                token: token
+            },
+            headers: await headers()
+        });
+
+        return {
+            success: true,
+            message: "Password resetted successfully.",
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: "Unexpected error trying to reset password.\nError: " + error,
         };
     }
 }

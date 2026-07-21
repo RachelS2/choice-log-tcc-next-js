@@ -10,10 +10,11 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock } from 'lucide-react';
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import PasswordInput from '../password-input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
+import { resetPassword } from '@/lib/repository/dashboard/user';
 
 type PasswordInputType = {
     label: "New password" | "Confirm Password";
@@ -52,58 +53,12 @@ export function ResetPasswordForm() {
     const searchParams = useSearchParams();
     const error = searchParams.get("error");
     const token = searchParams.get("token");
-    if (error === "INVALID_TOKEN") {
-        return (
-            <Card className="bg-white p-8 rounded-xl shadow-sm">
-                <CardHeader className="text-center">
-                    <CardTitle>
-                        Password reset link expired
-                    </CardTitle>
-
-                    <CardDescription>
-                        This password reset link is no longer valid.
-                        It may have expired or has already been used.
-                    </CardDescription>
-                </CardHeader>
-
-                <CardContent>
-                    <Button asChild className="w-full">
-                        <Link href="/forgot-password">
-                            Request another reset link
-                        </Link>
-                    </Button>
-                </CardContent>
-            </Card>
-        );
-    }
-
-    if (!token) {
-        return (
-            <Card className="bg-white p-8 rounded-xl shadow-sm">
-                <CardHeader className="text-center">
-                    <CardTitle>
-                        Invalid password reset link
-                    </CardTitle>
-
-                    <CardDescription>
-                        Please request a new password reset email.
-                    </CardDescription>
-                </CardHeader>
-
-                <CardContent>
-                    <Button asChild className="w-full">
-                        <Link href="/forgot-password">
-                            Forgot Password
-                        </Link>
-                    </Button>
-                </CardContent>
-            </Card>
-        );
+    if (error === "INVALID_TOKEN" || !token) {
+        redirect("/sign-in/forgot-password");
     }
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors, isDirty, isSubmitting }
     } = useForm<ResetPasswordSchemaType>({
         resolver: zodResolver(resetPasswordSchema),
@@ -111,17 +66,17 @@ export function ResetPasswordForm() {
 
     });
     const handleChangePassword = async (data: ResetPasswordSchemaType) => {
-        const loadingToast = toast.loading("Updating password...");
-        //const result = await putNewPassword(data);
+        const loadingToast = toast.loading("Resetting password...");
+        const result = await resetPassword(data, token);
         console.log("Resetting password with data:", data);
         toast.dismiss(loadingToast);
 
-        // if (result.success) {
-        //     toast.success("Password updated successfully.");
-        //     onPasswordChanged?.()
-        // } else {
-        //     toast.error(result.message);
-        // }
+        if (result.success) {
+            toast.success("Password updated successfully.\nSign in to access your account.");
+            redirect("/sign-in")
+        } else {
+            toast.error(result.message);
+        }
     };
     return (
         <Card className="bg-white p-8 shadow-sm rounded-xl">

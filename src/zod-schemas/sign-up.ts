@@ -4,7 +4,7 @@ export const userNameSchema: z.ZodString = z
   .string()
   .nonempty("Username is required.")
   .min(5, "Username must have at least 5 characters.")
-  .max(15, "Username must have at tops 40 characters.")
+  .max(15, "Username must have at tops 15 characters.")
   .regex(
     /^[a-zA-Z0-9_ ]+$/,
     "Username must contain only letters, white spaces, numbers and underscores."

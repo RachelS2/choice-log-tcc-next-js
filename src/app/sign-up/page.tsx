@@ -1,7 +1,7 @@
 'use client'
 
 import MotivationPage from "@/components/sign-up/motivation_unused";
-import SignUpForm from "@/components/sign-up/form";
+import SignUpForm from "@/components/sign-up/page";
 import Footer from "@/components/landing/footer";
 import LandingHeaderClient from "@/components/landing/landing-header-client";
 export default function SignUpPage() {

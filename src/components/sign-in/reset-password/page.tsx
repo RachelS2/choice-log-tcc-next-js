@@ -1,10 +1,8 @@
 "use client"
-import Footer from '@/components/landing/footer';
-import LandingHeaderClient from '@/components/landing/landing-header-client';
 import { Label } from "@/components/ui/label";
-import { changePasswordSchema, ChangePasswordSchemaType, resetPasswordSchema, ResetPasswordSchemaType } from "@/zod-schemas/user-settings";
+import { resetPasswordSchema, ResetPasswordSchemaType } from "@/zod-schemas/user-settings";
 import {
-    FieldValues, DefaultValues, Path, useForm, UseFormRegister
+    Path, useForm, UseFormRegister
 } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -12,9 +10,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock } from 'lucide-react';
 import { redirect, useSearchParams } from "next/navigation";
 import PasswordInput from '../password-input';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import Link from 'next/link';
-import { resetPassword } from '@/lib/repository/dashboard/user';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useRouter } from "next/navigation";
+import { resetPassword } from '@/lib/repository/sign-in/reset-password';
 
 type PasswordInputType = {
     label: "New password" | "Confirm Password";
@@ -53,6 +51,7 @@ export function ResetPasswordForm() {
     const searchParams = useSearchParams();
     const error = searchParams.get("error");
     const token = searchParams.get("token");
+    const router = useRouter()
     if (error === "INVALID_TOKEN" || !token) {
         redirect("/sign-in/forgot-password");
     }
@@ -71,9 +70,9 @@ export function ResetPasswordForm() {
         console.log("Resetting password with data:", data);
         toast.dismiss(loadingToast);
 
-        if (result.success) {
+        if (result.success == true) {
             toast.success("Password updated successfully.\nSign in to access your account.");
-            redirect("/sign-in")
+            router.push("/sign-in");
         } else {
             toast.error(result.message);
         }

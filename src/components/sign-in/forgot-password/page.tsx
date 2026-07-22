@@ -29,7 +29,7 @@ export function ForgotPasswordPage() {
             console.log("Failed to send reset password e-mail. Received status code: " + error.status);
             toast.error(errorMessage);
         } else {
-            toast.success("Password reset email sent");
+            toast.success("If an account with this email exists, a password reset link will be sent.");
             setSent(true);
         }
         setLoading(false);

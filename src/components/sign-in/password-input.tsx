@@ -23,7 +23,7 @@ export default function PasswordInput<
 >({
   register,
   name,
-  placeholder = "••••••••",
+  placeholder = "Insert a password.",
   className
 }: PasswordInputProps<T>) {
   const [showPassword, setShowPassword] =
@@ -46,7 +46,7 @@ export default function PasswordInput<
         onClick={() =>
           setShowPassword(!showPassword)
         }
-        className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2 cursor-pointer hover:bg-transparent"
+        className="absolute right-1 !text-base top-1/2 h-8 w-8 -translate-y-1/2 cursor-pointer hover:bg-transparent"
       >
         {showPassword ? (
           <EyeOff className="h-4 w-4 text-neutral-800" />

@@ -50,7 +50,7 @@ function createLabelsAndInputs(
                     id={htmlFor}
                     {...register(htmlFor)}
                     placeholder={placeholder}
-                    className="h-11 w-full text-base"
+                    className="h-11 w-full !text-base"
                 />
             )}
 

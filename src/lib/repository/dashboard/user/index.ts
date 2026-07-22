@@ -165,38 +165,3 @@ export async function updatePassword(
         };
     }
 }
-
-export async function resetPassword(
-    changePassword: ResetPasswordSchemaType, token: string
-): Promise<{
-    success: boolean;
-    message: string;
-}> {
-    const session = await authClient.getSession();
-
-    if (!session) {
-        return {
-            success: false,
-            message: "Unauthorized",
-        };
-    }
-    try {
-        await auth.api.resetPassword({
-            body: {
-                newPassword: changePassword.newPassword,
-                token: token
-            },
-            headers: await headers()
-        });
-
-        return {
-            success: true,
-            message: "Password resetted successfully.",
-        };
-    } catch (error) {
-        return {
-            success: false,
-            message: "Unexpected error trying to reset password.\nError: " + error,
-        };
-    }
-}

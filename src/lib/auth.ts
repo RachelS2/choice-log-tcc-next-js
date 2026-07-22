@@ -54,7 +54,8 @@ export const auth = betterAuth({
             });
             if (error) {
                 console.error("Resend error:", error);
-                toast.error(`Failed to send e-mail: ${error.message}`)
+                 throw new Error(error.message);
+                 
             }
 
         },

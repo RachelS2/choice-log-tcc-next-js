@@ -49,9 +49,9 @@ export default function PasswordInput<
         className="absolute right-1 !text-base top-1/2 h-8 w-8 -translate-y-1/2 cursor-pointer hover:bg-transparent"
       >
         {showPassword ? (
-          <EyeOff className="h-4 w-4 text-neutral-800" />
+          <EyeOff className="h-5 w-5 text-neutral-800" />
         ) : (
-          <Eye className="h-4 w-4 text-neutral-800" />
+          <Eye className="h-5 w-5 text-neutral-800" />
         )}
       </button>
     </div>

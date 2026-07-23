@@ -100,7 +100,6 @@ export default function IdentificationStep({ currentStep, formData, updateField 
                             placeholder="0.00"
                             value={formData.price}
                             onChange={(e) => updateField("price", e.target.value)}
-                            className="h-11"
                         />
                     </div>
                 </div>

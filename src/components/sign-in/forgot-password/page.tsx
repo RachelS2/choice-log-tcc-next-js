@@ -3,7 +3,7 @@ import { Mail, MailCheck, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ForgotPasswordWrapper, ForgotPasswordMainContent } from "./forgot-password-components";
+import { EmailNotificationWrapper, EmailNotificationContent } from "../../ui/e-mail-notification";
 import Link from 'next/link'
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
@@ -36,9 +36,9 @@ export function ForgotPasswordPage() {
     };
 
     return (
-        <ForgotPasswordWrapper>
+        <EmailNotificationWrapper>
             {sent ? (
-                <ForgotPasswordMainContent
+                <EmailNotificationContent
                     icon={MailCheck}
                     title="Check your inbox"
                     description={
@@ -58,9 +58,9 @@ export function ForgotPasswordPage() {
                         Resend email
                     </Button>
                     {backToLoginButton()}
-                </ForgotPasswordMainContent>
+                </EmailNotificationContent>
             ) : (
-                <ForgotPasswordMainContent
+                <EmailNotificationContent
                     icon={Mail}
                     title="Forgot your password?"
                     description="Enter your email address and we'll send you a secure link to reset your password."
@@ -76,7 +76,7 @@ export function ForgotPasswordPage() {
                                 placeholder="you@gmail.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="h-11 text-xl"
+                                className="text-xl"
                             />
                         </div>
                         <Button type="submit" className="h-11 w-full" disabled={loading}>
@@ -84,9 +84,9 @@ export function ForgotPasswordPage() {
                         </Button>
                     </form>
                     {backToLoginButton()}
-                </ForgotPasswordMainContent>
+                </EmailNotificationContent>
             )}
-        </ForgotPasswordWrapper>
+        </EmailNotificationWrapper>
     );
 }
 

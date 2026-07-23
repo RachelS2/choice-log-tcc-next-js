@@ -49,7 +49,7 @@ export default function LoginForm() {
                     }
                     else {
                         toast.error("An error occurred during login.", { description: ctx.error.message })
-                        console.error(ctx.error.status);
+                        console.log("Error during login: " + ctx.error.status);
                     }
                 }
             });

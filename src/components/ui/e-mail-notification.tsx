@@ -10,7 +10,7 @@ interface AuthCardProps {
   footer?: ReactNode;
 }
 
-export function ForgotPasswordWrapper({ children }: { children: ReactNode }) {
+export function EmailNotificationWrapper({ children }: { children: ReactNode }) {
   return (
     <div
       className="flex min-h-screen flex-col items-center justify-center px-4"
@@ -21,7 +21,7 @@ export function ForgotPasswordWrapper({ children }: { children: ReactNode }) {
   );
 }
 
-export function ForgotPasswordMainContent({
+export function EmailNotificationContent({
   icon: Icon,
   title,
   description,

@@ -24,7 +24,7 @@ export const auth = betterAuth({
         enabled: true,
         resetPasswordTokenExpiresIn: 60 * 30, // 30 minutes
         revokeSessionsOnPasswordReset: true,
-        //requireEmailVerification: true,
+        requireEmailVerification: true,
         sendVerificationEmail: async ({ user, url, token }: { user: { email: string; name: string }; url: string; token?: string }, request: Request) => {
 
             const { error } = await resend.emails.send({
@@ -54,10 +54,28 @@ export const auth = betterAuth({
             });
             if (error) {
                 console.error("Resend error:", error);
-                 throw new Error(error.message);
-                 
+                throw new Error(error.message);
+
             }
 
         },
     },
+
+    emailVerification: {
+        sendVerificationEmail: async ({ user, url }) => {
+            console.log("Sending verification email to:", user.email);
+            const { error } = await resend.emails.send({
+                from: "onboarding@resend.dev",
+                to: user.email,
+                subject: "ChoiceLog - Verify your email",
+                react: VerifyEmail({ username: user.name, verifyUrl: url }),
+            });
+
+            if (error) {
+                console.error("Resend error:", error);
+                throw new Error(`Email send failed: ${error.message}`);
+            }
+
+        },
+    }
 });

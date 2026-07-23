@@ -1,5 +1,5 @@
 'use client';
-import { Mail, User, Lock, Loader2, ArrowRightIcon } from "lucide-react";
+import { Mail, User, Lock, Loader2, ArrowRightIcon, MailCheck, ArrowLeft } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -14,6 +14,7 @@ import { AuthFormStateModel } from "@/models/auth/auth-form-state-model";
 import PasswordInput from "../sign-in/password-input";
 import Link from "next/link";
 import { signUpSchema, SignUpSchemaType } from "@/zod-schemas/sign-up";
+import VerifyEmailPage from "./verify-email/page";
 
 type HtmlFor = "username" | "email" | "password" | "confirmPassword";
 
@@ -50,20 +51,21 @@ function createLabelsAndInputs(
                     id={htmlFor}
                     {...register(htmlFor)}
                     placeholder={placeholder}
-                    className="h-11 w-full !text-base"
+                    className="w-full !text-base"
                 />
             )}
 
-            <p className="mt-1 max-w-full break-words text-sm text-blue-900">
+            <p className="mt-1 max-w-full break-words text-sm text-red-500">
                 {errors?.message}
             </p>
         </div>
     );
 }
 
-
-
 export default function SignUpForm() {
+    const [emailSent, setEmailSent] = useState(false);
+    const [email, setEmail] = useState("your e-mail address");
+
     const initialState: AuthFormStateModel = { message: null, errors: {} };
     const {
         register,
@@ -90,12 +92,13 @@ export default function SignUpForm() {
             email: signUpData.email,
             name: signUpData.username,
             password: signUpData.password,
-            callbackURL: "/dashboard",
+            callbackURL: "/sign-up/verify-email/success",
         }, {
 
             onSuccess: () => {
-                toast.success("Successfully signed up!", { description: "Please login to get started." })
-                router.replace("/sign-in");
+                // toast.success("Successfully signed up!", { description: "Please login to get started." })
+                setEmail(signUpData.email);
+                setEmailSent(true);
             },
             onError: (ctx) => {
                 console.log(ctx.error.message);
@@ -117,72 +120,76 @@ export default function SignUpForm() {
         setIsSubmitting(false);
     }
     return (
-        <form onSubmit={handleSubmit(handleOnSubmit)} className="w-full max-w-2xl">
-            <Card className="w-full min-w-[30rem] rounded-3xl border border-white/10 bg-white shadow-2xl">
-                <CardHeader className="space-y-1 text-center">
-                    <CardTitle className="text-3xl">
-                        Sign Up
-                    </CardTitle>
+        !emailSent ? (
+            <form onSubmit={handleSubmit(handleOnSubmit)} className="w-full max-w-2xl">
+                <Card className="w-full min-w-[30rem] rounded-3xl border border-white/10 bg-white shadow-2xl">
+                    <CardHeader className="space-y-1 text-center">
+                        <CardTitle className="text-3xl">
+                            Sign Up
+                        </CardTitle>
 
-                    <CardDescription className="text-base">
-                        Start tracking your shopping experiences
-                    </CardDescription>
-                </CardHeader>
+                        <CardDescription className="text-base">
+                            Start tracking your shopping experiences
+                        </CardDescription>
+                    </CardHeader>
 
-                <CardContent className="space-y-5 w-full">
-                    {/* <div className="grid gap-5"> */}
+                    <CardContent className="space-y-5 w-full">
+                        {/* <div className="grid gap-5"> */}
 
-                    {createLabelsAndInputs("username", "Your username", User, errors.username, register)}
+                        {createLabelsAndInputs("username", "Your username", User, errors.username, register)}
 
-                    {createLabelsAndInputs("email", "you@example.com", Mail, errors.email, register)}
+                        {createLabelsAndInputs("email", "you@example.com", Mail, errors.email, register)}
 
-                    {createLabelsAndInputs("password", "At least 8 characters", Lock, errors.password, register)}
+                        {createLabelsAndInputs("password", "At least 8 characters", Lock, errors.password, register)}
 
-                    {createLabelsAndInputs("confirmPassword", "Confirm your password", Lock, errors.confirmPassword, register)}
+                        {createLabelsAndInputs("confirmPassword", "Confirm your password", Lock, errors.confirmPassword, register)}
 
-                    {/* </div> */}
+                        {/* </div> */}
 
 
-                    {/* BUTTON */}
-                    <Button className='w-full h-11 text-base bg-blue-500 hover:bg-blue-700'
-                        type="submit"
-                        disabled={isSubmitting}
-                    >
-                        {isSubmitting ?
-                            (
-                                <>
-                                    <Loader2 className="h-5 w-5 animate-spin" />
-                                    <span>Creating Account...</span>
-                                </>
-                            ) :
-                            (
-                                <>
-                                    Create Account
-                                    <ArrowRightIcon className="h-5 w-5" />
-                                </>
-                            )}
-                    </Button>
+                        {/* BUTTON */}
+                        <Button className='w-full h-11 text-base bg-blue-500 hover:bg-blue-700'
+                            type="submit"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ?
+                                (
+                                    <>
+                                        <Loader2 className="h-5 w-5 animate-spin" />
+                                        <span>Creating Account...</span>
+                                    </>
+                                ) :
+                                (
+                                    <>
+                                        Create Account
+                                        <ArrowRightIcon className="h-5 w-5" />
+                                    </>
+                                )}
+                        </Button>
 
-                    {/* GOOGLE */}
-                    {/* <Button
+                        {/* GOOGLE */}
+                        {/* <Button
                         variant="outline"
                         className="h-11 w-full text-base"
                     >
                         Continue with Google
                     </Button> */}
 
-                    {/* FOOTER */}
-                    <p className="text-center text-sm text-muted-foreground">
-                        Already have an account?{" "}
-                        <Link
-                            href="/sign-in"
-                            className="font-medium text-blue-600 hover:underline"
-                        >
-                            Sign In
-                        </Link>
-                    </p>
-                </CardContent>
-            </Card>
-        </form>
+                        {/* FOOTER */}
+                        <p className="text-center text-sm text-muted-foreground">
+                            Already have an account?{" "}
+                            <Link
+                                href="/sign-in"
+                                className="font-medium text-blue-600 hover:underline"
+                            >
+                                Sign In
+                            </Link>
+                        </p>
+                    </CardContent>
+                </Card>
+            </form>) :
+            (
+                <VerifyEmailPage email={email} />
+            )
     );
 }

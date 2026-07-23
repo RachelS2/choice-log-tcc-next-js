@@ -53,7 +53,7 @@ export default function ProductSelector({
                     onFocus={() => setOpen(true)}
                     onBlur={() => setTimeout(() => setOpen(false), 150)}
                     placeholder="Search and select a product..."
-                    className="pr-10 h-11"
+                    className="pr-10"
                 />
 
                 <ArrowDown

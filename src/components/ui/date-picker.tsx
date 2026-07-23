@@ -67,7 +67,6 @@ export default function DatePicker({
                             placeholder="dd/mm/aaaa"
                             onChange={(e) => handleChange(e.target.value)}
                             className={cn(
-                                "h-11",
                                 error && "border-red-500 focus-visible:ring-red-500"
                             )}
                         />

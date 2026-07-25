@@ -4,8 +4,6 @@ import { prisma } from "./prisma";
 import { Resend } from "resend";
 import ForgotPasswordEmail from "@/components/emails/forgot-password-email";
 import VerifyEmail from "@/components/emails/verify-email";
-import { toast } from "sonner";
-
 if (!process.env.RESEND_API_KEY) {
     throw new Error("RESEND_API_KEY is not defined");
 }
@@ -62,6 +60,8 @@ export const auth = betterAuth({
     },
 
     emailVerification: {
+        sendOnSignUp: true,
+        expirationTime: 60 * 30, // 30 minutes
         sendVerificationEmail: async ({ user, url }) => {
             console.log("Sending verification email to:", user.email);
             const { error } = await resend.emails.send({
@@ -77,5 +77,9 @@ export const auth = betterAuth({
             }
 
         },
-    }
+        async afterEmailVerification(user, request) {
+            // Run pre-verification logic
+            console.log(`About to verify ${user.email}`);
+        }
+    },
 });

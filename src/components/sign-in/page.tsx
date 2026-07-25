@@ -16,6 +16,7 @@ import PasswordInput from './password-input';
 import { ArrowRightIcon, Lock, Loader2 } from 'lucide-react';
 import { AtSymbolIcon } from '@heroicons/react/24/outline';
 import { loginSchema, LoginSchemaType } from '@/zod-schemas/sign-in';
+import { Info } from 'lucide-react';
 
 export default function LoginForm() {
     const initialState: AuthFormStateModel = { message: null, errors: {} };
@@ -31,12 +32,31 @@ export default function LoginForm() {
             password: initialState?.fields_values?.password ?? "",
         },
     });
+
+    async function handleResendVerificationEmail() {
+        console.log("Resending verification email to: " + userEmail);
+        setIsResendingEmail(true);
+        await authClient.sendVerificationEmail({
+            email: userEmail,
+        }, {
+            onSuccess: () => {
+                router.replace("/sign-in");
+                setEmailVerified(true); // to hide the button after resending the verification email
+                toast.warning("Verification email sent.", { description: "Please check your inbox and verify your email before logging in." })
+            },
+            onError: (ctx) => {
+
+                toast.error("Failed to send verification email.", { description: ctx.error.message });
+                setEmailVerified(false);
+            }
+        });
+        setIsResendingEmail(false);
+    }
     async function handleOnSubmit(loginData: LoginSchemaType) {
         setIsSubmitting(true);
         await authClient.signIn.email({
             email: loginData.email,
             password: loginData.password,
-            callbackURL: "/dashboard",
             rememberMe: rememberMe,
         }
             , {
@@ -44,12 +64,20 @@ export default function LoginForm() {
                     router.replace("/dashboard");
                 },
                 onError: (ctx) => {
+
                     if (ctx.error.status === 401) {
                         toast.warning("Invalid credentials.", { description: "Please check your e-mail and password and try again." })
                     }
                     else {
-                        toast.error("An error occurred during login.", { description: ctx.error.message })
                         console.log("Error during login: " + ctx.error.status);
+                        if (ctx.error.message == 'Email not verified') {
+                            setUserEmail(loginData.email);
+                            toast.error("Email not verified.", { description: "Please verify your email before logging in." });
+                            setEmailVerified(false);
+                        }
+                        else {
+                            toast.error("An error occurred during login.", { description: ctx.error.message })
+                        }
                     }
                 }
             });
@@ -57,6 +85,9 @@ export default function LoginForm() {
     }
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
+    const [userEmail, setUserEmail] = useState("");
+    const [emailVerified, setEmailVerified] = useState(true);
+    const [isResendingEmail, setIsResendingEmail] = useState(false);
     // rememberMe falso = sessão acaba ao fechar navegador, true = sessão persiste por 7 dias ou até o usuário deslogar manualmente
     return (
         <form onSubmit={handleSubmit(handleOnSubmit)} className="flex flex-col items-start w-full max-w-md min-h-[calc(100vh-96px)] justify-center p-10">
@@ -122,7 +153,29 @@ export default function LoginForm() {
                         Continue with Google
                     </Button> */}
                     <p className='text-center text-sm text-muted-foreground'>Don’t have an account? <Link href='/sign-up' className='text-blue-600 hover:underline'>Sign up</Link></p>
+                    {!emailVerified && (
+                        <div className="relative rounded-xl border border-blue-100 bg-blue-50/70 p-4">
+                            <Info className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-blue-600" />
+
+                            <div className="flex flex-col items-center text-center">
+                                <p className="text-sm font-medium text-blue-800">
+                                    Your e-mail hasn't been verified yet.
+                                </p>
+
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    disabled={isResendingEmail}
+                                    onClick={handleResendVerificationEmail}
+                                    className="h-auto p-0 text-sm font-semibold text-blue-700 hover:text-blue-800 hover:bg-blue-50/70"
+                                >
+                                    Resend verification e-mail
+                                </Button>
+                            </div>
+                        </div>
+                    )}
                 </CardContent>
+
             </Card>
         </form>
     );

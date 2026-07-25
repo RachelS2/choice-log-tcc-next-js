@@ -81,7 +81,6 @@ export default function SignUpForm() {
         },
     });
 
-    const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     async function handleOnSubmit(signUpData: SignUpSchemaType) {
@@ -92,11 +91,10 @@ export default function SignUpForm() {
             email: signUpData.email,
             name: signUpData.username,
             password: signUpData.password,
-            callbackURL: "/sign-up/verify-email/success",
         }, {
 
             onSuccess: () => {
-                // toast.success("Successfully signed up!", { description: "Please login to get started." })
+                toast.success("Successfully signed up!", { description: "Please login to get started." })
                 setEmail(signUpData.email);
                 setEmailSent(true);
             },

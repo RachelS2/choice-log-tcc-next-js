@@ -4,6 +4,7 @@ import { prisma } from "./prisma";
 import { Resend } from "resend";
 import ForgotPasswordEmail from "@/components/emails/forgot-password-email";
 import VerifyEmail from "@/components/emails/verify-email";
+import EmailVerifiedEmail from "@/components/emails/e-mail-verified";
 if (!process.env.RESEND_API_KEY) {
     throw new Error("RESEND_API_KEY is not defined");
 }
@@ -23,21 +24,6 @@ export const auth = betterAuth({
         resetPasswordTokenExpiresIn: 60 * 30, // 30 minutes
         revokeSessionsOnPasswordReset: true,
         requireEmailVerification: true,
-        sendVerificationEmail: async ({ user, url, token }: { user: { email: string; name: string }; url: string; token?: string }, request: Request) => {
-
-            const { error } = await resend.emails.send({
-                from: "onboarding@resend.dev",
-                to: user.email,
-                subject: "ChoiceLog - Verify your email",
-                react: VerifyEmail({ username: user.name, verifyUrl: url }),
-            });
-
-            if (error) {
-                console.error("Resend error:", error);
-                throw new Error(`Email send failed: ${error.message}`);
-            }
-
-        },
         sendResetPassword: async ({ user, url }) => {
             console.log("Sending reset password email to: " + user.email);
             const { error } = await resend.emails.send({
@@ -77,9 +63,15 @@ export const auth = betterAuth({
             }
 
         },
-        async afterEmailVerification(user, request) {
-            // Run pre-verification logic
-            console.log(`About to verify ${user.email}`);
-        }
-    },
-});
+        async afterEmailVerification(user) {
+            console.log(`Sending verification e-mail succeeded to ${user.email}`);
+            if (user.emailVerified) {
+                await resend.emails.send({
+                    from: "onboarding@resend.dev",
+                    to: user.email,
+                    subject: "ChoiceLog - Your account has been successfully verified!",
+                    react: EmailVerifiedEmail(user.name),
+                });
+            }
+        },
+    }});

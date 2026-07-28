@@ -119,18 +119,6 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                                 <Label>Email</Label>
 
                             </div>
-
-                            {!userData?.emailVerified && (
-                                <Button
-                                    type="button"
-                                    size="sm"
-                                    variant="outline"
-                                    className="text-blue-600 h-8 shadow-sm text-xs bg-white/80 border-blue-300 hover:bg-blue-50 hover:text-blue-700"
-                                >
-                                    <TriangleAlert />
-                                    Verify E-mail
-                                </Button>
-                            )}
                         </div>
 
                         <InputSection

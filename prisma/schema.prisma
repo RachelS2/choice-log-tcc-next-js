@@ -87,7 +87,7 @@ model Item {
 
 model Type {
   id                String              @id @default(cuid())
-  name              String              @unique
+  name              TypeEnum            @unique
 
   categories        Category[]
   consumptionReasons ConsumptionReason[]
@@ -264,7 +264,7 @@ model ImpulsivityGoal {
 
   goal            Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
 
-  targetDecrease  Float?
+  targetDecreasePercentage   Float
 }
 
 enum WishListItemPriority {
@@ -302,6 +302,11 @@ enum IncomeRange {
   PREFER_NOT_TO_SAY
 }
 
+enum TypeEnum {
+  PRODUCT
+  SERVICE
+}
+
 // enum ConsumptionNegativeAspects {
 //  INEFFECTIVE
 //  LOW_QUALITY
@@ -314,10 +319,17 @@ enum IncomeRange {
 
 //TODO: Prisma não dá suporte para constraints, então executar no banco mais tarde:
 
-// 1. Constraint de Nota divísivel por 5
+// 1. Constraint de Nota em incrementos de 5 (0, 0.5, 1, 1.5...)
 //ALTER TABLE "Consumption"
 //ADD CONSTRAINT rating_range
-//CHECK (rating IS NULL OR (rating >= 1 AND rating <= 5));
+//CHECK (
+//  rating IS NULL
+//  OR (
+//    rating >= 1
+//    AND rating <= 5
+//    AND MOD(rating * 2, 1) = 0
+//  )
+//);
 
 
 // 2. Adicionar constraint na coluna "details" de Consumption de modo que não armazene mais de 300 caracteres.
@@ -344,44 +356,90 @@ enum IncomeRange {
 //EXECUTE FUNCTION validate_consumption_user();
 
 
-// 4. Garantir que consumptionDate não seja no futuro
+// 4. Garantir que consumptionDate não seja no futuro em Consumption
 // ALTER TABLE "Consumption"
 // ADD CONSTRAINT consumption_date_check
 // CHECK ("consumptionDate" <= now());
 
-// 5. Adiciona constraint na tabela Goal 
-//ALTER TABLE "Goal"
-//ADD CONSTRAINT goal_target_rating_check
-//CHECK (targetRating IS NULL OR targetRating BETWEEN 1 AND 5)
+// 5. Adiciona constraint na tabela ImpulsivityGoal 
+//ALTER TABLE "ImpulsivityGoal"
+//ADD CONSTRAINT impulsivity_goal_target_decrease_check
+//CHECK (targetDecreasePercentage  BETWEEN 1 AND 100)
 
-// 6. targetRating deve estar entre 1 e 5
-//ALTER TABLE "Goal"
-//ADD CONSTRAINT goal_target_rating_required
-//CHECK (
-//    "type" <> 'TARGET_SATISFACTION'
-//    OR "targetRating" IS NOT NULL
-//);
+// 6. Adiciona constraint na tabela SatisfactionGoal 
+//ALTER TABLE "SatisfactionGoal"
+//ADD CONSTRAINT satisfaction_goal_target_rating_check
+//CHECK (targetRating BETWEEN 1 AND 5)
 
-// 7. Se o objetivo for categoria, categoryId é obrigatório
-// ALTER TABLE "Goal"
-// ADD CONSTRAINT goal_category_required
-// CHECK (
-//    "type" <> 'TARGET_CATEGORY'
-//    OR "categoryId" IS NOT NULL
-//);
-
-// 8. Se o objetivo for limite de gastos, spendingLimit é obrigatório
-// ALTER TABLE "Goal"
-// ADD CONSTRAINT goal_category_required
-// CHECK (
-//  "type" NOT IN ('MONTHLY_SPENDING_LIMIT', 'WEEKLY_SPENDING_LIMIT')
-//   OR "spendingLimit" IS NOT NULL
-// );
-
-// 9. A data final não pode ser anterior à inicial
+// 7. A data final não pode ser anterior à inicial
 // ALTER TABLE "Goal"
 // ADD CONSTRAINT goal_dates_check
 // CHECK (
 //   "finalDate" IS NULL
 //   OR "finalDate" >= "initialDate"
 // );
+
+// 8. Garantir que preço seja maior que 0
+// ALTER TABLE "Consumption"
+// ADD CONSTRAINT consumption_price_check
+// CHECK ("price" > 0);
+
+// 9. Cria indexes na tabela Category
+//-- CATEGORIAS DO USUÁRIO:
+// CREATE UNIQUE INDEX unique_user_category
+// ON category (name, id_user)
+// WHERE id_user IS NOT NULL;
+
+// categorias globais
+// CREATE UNIQUE INDEX unique_global_category
+// ON category (name)
+// WHERE id_user IS NULL;
+
+
+// 10. Garantir que ConsumptionReason e NegativeAspect
+// pertençam ao mesmo Type do Item associado ao Consumption.
+// Como Item não possui typeId diretamente, o Type é obtido
+// através da relação Item → Category → Type.
+//CREATE OR REPLACE FUNCTION validate_consumption_type()
+//RETURNS trigger AS $$
+//BEGIN
+  //IF NEW."userId" <> (
+    //SELECT "userId" FROM "ConsumptionReason" WHERE id = NEW."itemId"
+  //) THEN
+    //RAISE EXCEPTION 'Consumption userId must match Item userId';
+  //END IF;
+ //RETURN NEW;
+//END;
+//$$ LANGUAGE plpgsql;
+
+// 11. Garantir que o ConsumptionReason pertença ao mesmo Type do Item
+
+// CREATE OR REPLACE FUNCTION validate_consumption_reason_type()
+// RETURNS trigger AS $$
+// BEGIN
+//  IF (
+//    SELECT "typeId"
+//    FROM "ConsumptionReason"
+//    WHERE "id" = NEW."consumptionReasonId"
+//  ) <> (
+//    SELECT "typeId"
+//    FROM "Category" c
+//    JOIN "Item" i ON i."categoryId" = c."id"
+//    WHERE i."id" = NEW."itemId"
+//  ) THEN
+//    RAISE EXCEPTION
+//      'ConsumptionReason type must match Item type';
+//  END IF;
+//  RETURN NEW;
+// END;
+// $$ LANGUAGE plpgsql;
+
+// CREATE TRIGGER trg_validate_consumption_reason_type
+// BEFORE INSERT OR UPDATE ON "Consumption"
+// FOR EACH ROW
+// EXECUTE FUNCTION validate_consumption_reason_type();
+
+// 12. Mínimo de gastos na tabela SpendingGoal
+// ALTER TABLE "SpendingGoal"
+// ADD CONSTRAINT spending_goal_limit_check
+// CHECK ("spendingLimit" > 0);

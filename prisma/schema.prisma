@@ -64,43 +64,64 @@ model Verification {
 }
 
 model Item {
+  id            String         @id @default(cuid())
   friendlyName  String
   systemName    String
-  categoryId    String
-  id            String         @id @default(cuid())
   brand         String
-  type          ItemType
+
+  categoryId    String
+  category      Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
   userId        String
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   imageUrl      String?
+
   consumptions  Consumption[]
-  category      Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   wishListItems WishListItem[]
 
   @@unique([systemName, brand, userId])
 }
 
+model Type {
+  id                String              @id @default(cuid())
+  name              String              @unique
+
+  categories        Category[]
+  consumptionReasons ConsumptionReason[]
+  negativeAspects   NegativeAspect[]
+
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+}
+
 model Category {
   id           String   @id @default(cuid())
-  name          String
-  type         ItemType
+  friendlyName  String
+  systemName    String
+
+  typeId       String
+  type         Type     @relation(fields: [typeId], references: [id])
+
   userId       String?
+  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items        Item[]
+  goals        Goal[]
+
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  goals        Goal[]
-  items        Item[]
 
-  @@unique([name, userId])
+  @@unique([systemName, userId])
 }
 
 model WishList {
   id        String         @id @default(cuid())
   userId    String         @unique
   createdAt DateTime       @default(now())
-  updatedAt DateTime
+  updatedAt DateTime       @updatedAt
   user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     WishListItem[]
 }
@@ -120,43 +141,130 @@ model WishListItem {
   @@unique([wishListId, itemId])
 }
 
+model ConsumptionReason {
+  id          String       @id @default(cuid())
+  systemName  String
+  friendlyName String
+
+  typeId      String
+  type        Type         @relation(fields: [typeId], references: [id])
+
+  consumptions Consumption[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([systemName, typeId])
+}
+
+model NegativeAspect {
+  id           String       @id @default(cuid())
+  systemName   String
+  friendlyName String
+
+  typeId       String
+  type         Type         @relation(fields: [typeId], references: [id])
+
+  consumptions ConsumptionNegativeAspect[]
+
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@unique([systemName, typeId])
+}
+
 model Consumption {
-  id                String                       @id @default(cuid())
+  id                String                    @id @default(cuid())
+
   userId            String
+  user              User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   itemId            String
+  item              Item                      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
   wishListItemId    String?
+  wishListItem      WishListItem?             @relation(fields: [wishListItemId], references: [id])
+
+  consumptionReasonId String
+  consumptionReason   ConsumptionReason       @relation(fields: [consumptionReasonId], references: [id])
+
   wouldBuyAgain     Boolean?
   influence         ConsumptionInfluence
+
   price             Float
   rating            Float?
-  negativeAspects   ConsumptionNegativeAspects[]
-  consumptionReason ConsumptionReason
+
   details           String?
   address           String?
-  createdAt         DateTime                     @default(now())
-  updatedAt         DateTime                     @updatedAt
+
   consumptionDate   DateTime
-  item              Item                         @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  user              User                         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  wishListItem      WishListItem?                @relation(fields: [wishListItemId], references: [id])
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+
+  negativeAspects   ConsumptionNegativeAspect[]
+}
+
+model ConsumptionNegativeAspect {
+  consumptionId   String
+  negativeAspectId String
+
+  consumption     Consumption   @relation(
+    fields: [consumptionId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  negativeAspect   NegativeAspect @relation(
+    fields: [negativeAspectId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  @@id([consumptionId, negativeAspectId])
 }
 
 model Goal {
-  id            String    @id @default(cuid())
-  userId        String
-  categoryId    String?
-  spendingLimit Float
-  periodInDays  Int
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  category      Category? @relation(fields: [categoryId], references: [id])
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String    @id @default(cuid())
+
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  initialDate DateTime  @default(now())
+  finalDate   DateTime?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  spendingGoal      SpendingGoal?
+  categoryGoal      CategoryGoal?
+  satisfactionGoal  SatisfactionGoal?
+  impulsivityGoal   ImpulsivityGoal?
 }
 
-enum ItemType {
-  PRODUCT
-  SERVICE
+model SpendingGoal {
+  goalId         String @id
+  goal           Goal @relation(fields: [goalId], references: [id])
+
+  spendingLimit  Float
+
+  categoryId     String?
+  category       Category? @relation(fields: [categoryId], references: [id])
+}
+
+model SatisfactionGoal {
+  goalId        String   @id
+
+  goal          Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  targetRating  Float
+}
+
+model ImpulsivityGoal {
+  goalId          String   @id
+
+  goal            Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  targetDecrease  Float?
 }
 
 enum WishListItemPriority {
@@ -194,63 +302,30 @@ enum IncomeRange {
   PREFER_NOT_TO_SAY
 }
 
-enum ConsumptionNegativeAspects {
-  INEFFECTIVE
-  LOW_QUALITY
-  LOW_DURABILITY
-  POOR_DESIGN
-  UNSAFE
-  POOR_CUSTOMER_SERVICE
-  OTHER
-}
-
-enum GoalType {
-  MONTHLY_SPENDING_LIMIT
-  WEEKLY_SPENDING_LIMIT
-  TARGET_CATEGORY
-  TARGET_SATISFACTION
-  REDUCE_IMPULSIVITY
-}
+// enum ConsumptionNegativeAspects {
+//  INEFFECTIVE
+//  LOW_QUALITY
+//  LOW_DURABILITY
+//  POOR_DESIGN
+//  UNSAFE
+//  POOR_CUSTOMER_SERVICE
+//  OTHER
+//}
 
 //TODO: Prisma não dá suporte para constraints, então executar no banco mais tarde:
 
 // 1. Constraint de Nota divísivel por 5
-
 //ALTER TABLE "Consumption"
 //ADD CONSTRAINT rating_range
 //CHECK (rating IS NULL OR (rating >= 1 AND rating <= 5));
 
 
 // 2. Adicionar constraint na coluna "details" de Consumption de modo que não armazene mais de 300 caracteres.
-
 //ALTER TABLE "Consumption"
 //ADD CONSTRAINT details_length
 //CHECK (details IS NULL OR char_length(details) <= 300);
 
-
-// 3. Adicionar trigger no item de modo que ele só possa ser associado à categoria (categoryId) se ambos tiverem
-// o mesmo tipo (produto ou serviço).
-
-//CREATE OR REPLACE FUNCTION validate_item_category_type()
-//RETURNS trigger AS $$
-//BEGIN
-//  IF NEW."type" <> (
-//    SELECT "type" FROM "Category" WHERE id = NEW."categoryId"
-//  ) THEN
-//    RAISE EXCEPTION 'Item type must match Category type';
-//  END IF;
-// RETURN NEW;
-//END;
-//$$ LANGUAGE plpgsql;
-
-// CREATE TRIGGER trg_validate_item_category_type
-// BEFORE INSERT OR UPDATE ON "Item"
-// FOR EACH ROW
-// EXECUTE FUNCTION validate_item_category_type();
-
-
-// 4. Adicionar trigger (não dá pra fazer com CHECK simples, porque envolve outra tabela):
-
+// 3. Adicionar trigger (não dá pra fazer com CHECK simples, porque envolve outra tabela):
 //CREATE OR REPLACE FUNCTION validate_consumption_user()
 //RETURNS trigger AS $$
 //BEGIN
@@ -269,8 +344,44 @@ enum GoalType {
 //EXECUTE FUNCTION validate_consumption_user();
 
 
-// 5. Garantir que consumptionDate não seja no futuro
-
+// 4. Garantir que consumptionDate não seja no futuro
 // ALTER TABLE "Consumption"
 // ADD CONSTRAINT consumption_date_check
 // CHECK ("consumptionDate" <= now());
+
+// 5. Adiciona constraint na tabela Goal 
+//ALTER TABLE "Goal"
+//ADD CONSTRAINT goal_target_rating_check
+//CHECK (targetRating IS NULL OR targetRating BETWEEN 1 AND 5)
+
+// 6. targetRating deve estar entre 1 e 5
+//ALTER TABLE "Goal"
+//ADD CONSTRAINT goal_target_rating_required
+//CHECK (
+//    "type" <> 'TARGET_SATISFACTION'
+//    OR "targetRating" IS NOT NULL
+//);
+
+// 7. Se o objetivo for categoria, categoryId é obrigatório
+// ALTER TABLE "Goal"
+// ADD CONSTRAINT goal_category_required
+// CHECK (
+//    "type" <> 'TARGET_CATEGORY'
+//    OR "categoryId" IS NOT NULL
+//);
+
+// 8. Se o objetivo for limite de gastos, spendingLimit é obrigatório
+// ALTER TABLE "Goal"
+// ADD CONSTRAINT goal_category_required
+// CHECK (
+//  "type" NOT IN ('MONTHLY_SPENDING_LIMIT', 'WEEKLY_SPENDING_LIMIT')
+//   OR "spendingLimit" IS NOT NULL
+// );
+
+// 9. A data final não pode ser anterior à inicial
+// ALTER TABLE "Goal"
+// ADD CONSTRAINT goal_dates_check
+// CHECK (
+//   "finalDate" IS NULL
+//   OR "finalDate" >= "initialDate"
+// );

@@ -83,6 +83,8 @@ model Item {
   wishListItems WishListItem[]
 
   @@unique([systemName, brand, userId])
+  @@index([categoryId])
+  @@index([userId])
 }
 
 model Type {
@@ -202,6 +204,10 @@ model Consumption {
   updatedAt         DateTime                  @updatedAt
 
   negativeAspects   ConsumptionNegativeAspect[]
+  @@index([itemId])
+  @@index([userId])
+  @@index([consumptionReasonId])
+  @@index([consumptionDate])
 }
 
 model ConsumptionNegativeAspect {
@@ -236,7 +242,6 @@ model Goal {
   updatedAt   DateTime  @updatedAt
 
   spendingGoal      SpendingGoal?
-  categoryGoal      CategoryGoal?
   satisfactionGoal  SatisfactionGoal?
   impulsivityGoal   ImpulsivityGoal?
 }
@@ -396,48 +401,93 @@ enum TypeEnum {
 // WHERE id_user IS NULL;
 
 
-// 10. Garantir que ConsumptionReason e NegativeAspect
-// pertençam ao mesmo Type do Item associado ao Consumption.
+// 10. Garantir que ConsumptionReason
+// pertença ao mesmo Type do Item associado ao Consumption.
 // Como Item não possui typeId diretamente, o Type é obtido
 // através da relação Item → Category → Type.
-//CREATE OR REPLACE FUNCTION validate_consumption_type()
-//RETURNS trigger AS $$
-//BEGIN
-  //IF NEW."userId" <> (
-    //SELECT "userId" FROM "ConsumptionReason" WHERE id = NEW."itemId"
-  //) THEN
-    //RAISE EXCEPTION 'Consumption userId must match Item userId';
-  //END IF;
- //RETURN NEW;
-//END;
-//$$ LANGUAGE plpgsql;
-
-// 11. Garantir que o ConsumptionReason pertença ao mesmo Type do Item
 
 // CREATE OR REPLACE FUNCTION validate_consumption_reason_type()
 // RETURNS trigger AS $$
+// DECLARE
+//     item_type_id UUID;
+//     reason_type_id UUID;
 // BEGIN
-//  IF (
-//    SELECT "typeId"
-//    FROM "ConsumptionReason"
-//    WHERE "id" = NEW."consumptionReasonId"
-//  ) <> (
-//    SELECT "typeId"
-//    FROM "Category" c
-//    JOIN "Item" i ON i."categoryId" = c."id"
-//    WHERE i."id" = NEW."itemId"
-//  ) THEN
-//    RAISE EXCEPTION
-//      'ConsumptionReason type must match Item type';
-//  END IF;
-//  RETURN NEW;
-// END;
-// $$ LANGUAGE plpgsql;
 
-// CREATE TRIGGER trg_validate_consumption_reason_type
-// BEFORE INSERT OR UPDATE ON "Consumption"
-// FOR EACH ROW
-// EXECUTE FUNCTION validate_consumption_reason_type();
+//     SELECT c."typeId"
+//     INTO item_type_id
+//     FROM "Item" i
+//     JOIN "Category" c
+//       ON c."id" = i."categoryId"
+//     WHERE i."id" = NEW."itemId";
+
+//    SELECT "typeId"
+//    INTO reason_type_id
+//    FROM "ConsumptionReason"
+//    WHERE "id" = NEW."consumptionReasonId";
+
+//    IF item_type_id IS NULL THEN
+//        RAISE EXCEPTION 'Item % not found.', NEW."itemId";
+//    END IF;
+
+//    IF reason_type_id IS NULL THEN
+//        RAISE EXCEPTION 'ConsumptionReason % not found.', NEW."consumptionReasonId";
+//    END IF;
+
+//    IF item_type_id <> reason_type_id THEN
+//        RAISE EXCEPTION
+//            'ConsumptionReason must belong to the same Type as the consumed Item.';
+//    END IF;
+
+//    RETURN NEW;
+//END;
+//$$ LANGUAGE plpgsql;
+
+
+//CREATE TRIGGER trg_validate_consumption_reason_type
+//BEFORE INSERT OR UPDATE
+//ON "Consumption"
+//FOR EACH ROW
+//EXECUTE FUNCTION validate_consumption_reason_type();
+
+// 11. Garantir que o NegativeAspect pertença ao mesmo Type do Item
+
+//CREATE OR REPLACE FUNCTION validate_negative_aspect_type()
+//RETURNS trigger AS $$
+//DECLARE
+//    item_type_id UUID;
+//    aspect_type_id UUID;
+//BEGIN
+
+    SELECT c."typeId"
+    INTO item_type_id
+    FROM "Consumption" co
+    JOIN "Item" i
+        ON i."id" = co."itemId"
+    JOIN "Category" c
+        ON c."id" = i."categoryId"
+    WHERE co."id" = NEW."consumptionId";
+
+    SELECT "typeId"
+    INTO aspect_type_id
+    FROM "NegativeAspect"
+    WHERE "id" = NEW."negativeAspectId";
+
+    IF item_type_id IS NULL THEN
+        RAISE EXCEPTION 'Consumption % not found.', NEW."consumptionId";
+    END IF;
+
+    IF aspect_type_id IS NULL THEN
+        RAISE EXCEPTION 'NegativeAspect % not found.', NEW."negativeAspectId";
+    END IF;
+
+    IF item_type_id <> aspect_type_id THEN
+        RAISE EXCEPTION
+            'NegativeAspect must belong to the same Type as the consumed Item.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
 // 12. Mínimo de gastos na tabela SpendingGoal
 // ALTER TABLE "SpendingGoal"

@@ -88,24 +88,22 @@ model Item {
 }
 
 model ItemType {
-  id   String       @id @default(cuid())
+  id   Int          @id @default(autoincrement())
   name ItemTypeEnum @unique
 
   categories         Category[]
   consumptionReasons ConsumptionReason[]
   negativeAspects    NegativeAspect[]
 
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt
-  consumptionInfluences ConsumptionInfluence[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Category {
   id           String @id @default(cuid())
-  friendlyName String @db.VarChar(30)
-  systemName   String @db.VarChar(30)
+  name String @db.VarChar(30)
 
-  typeId String
+  typeId Int
   type   ItemType @relation(fields: [typeId], references: [id])
 
   userId String?
@@ -115,10 +113,10 @@ model Category {
   goals Goal[]
 
   createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  updatedAt     DateTime       @default(now()) @updatedAt
   spendingGoals SpendingGoal[]
 
-  @@unique([systemName, userId])
+  @@unique([name, userId])
   @@index([typeId])
 }
 
@@ -126,7 +124,7 @@ model WishList {
   id        String         @id @default(cuid())
   userId    String         @unique
   createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  updatedAt DateTime       @default(now()) @updatedAt
   user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     WishListItem[]
 }
@@ -138,7 +136,7 @@ model WishListItem {
   priority     WishListItemPriority
   note         String?              @db.VarChar(300)
   createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
+  updatedAt    DateTime             @default(now()) @updatedAt
   consumptions Consumption[]
   item         Item                 @relation(fields: [itemId], references: [id], onDelete: Cascade)
   wishList     WishList             @relation(fields: [wishListId], references: [id], onDelete: Cascade)
@@ -147,51 +145,47 @@ model WishListItem {
 }
 
 model ConsumptionReason {
-  id           String @id @default(cuid())
+  id           Int    @id @default(autoincrement())
   systemName   String @db.VarChar(30)
   friendlyName String @db.VarChar(30)
 
-  typeId String
+  typeId Int
   type   ItemType @relation(fields: [typeId], references: [id])
 
   consumptions Consumption[]
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@unique([systemName, typeId])
   @@index([typeId])
 }
 
 model ConsumptionInfluence {
-  id           String @id @default(cuid())
+  id           Int    @id @default(autoincrement())
   systemName   String @db.VarChar(30)
   friendlyName String @db.VarChar(30)
-
-  typeId String
-  type   ItemType @relation(fields: [typeId], references: [id])
 
   consumptions Consumption[]
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
-  @@unique([systemName, typeId])
-  @@index([typeId])
+  @@unique([systemName])
 }
 
 model NegativeAspect {
-  id           String @id @default(cuid())
+  id           Int    @id @default(autoincrement())
   systemName   String @db.VarChar(30)
   friendlyName String @db.VarChar(30)
 
-  typeId String
+  typeId Int
   type   ItemType @relation(fields: [typeId], references: [id])
 
   consumptions ConsumptionNegativeAspect[]
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@unique([systemName, typeId])
   @@index([typeId])
@@ -209,12 +203,12 @@ model Consumption {
   wishListItemId String?
   wishListItem   WishListItem? @relation(fields: [wishListItemId], references: [id])
 
-  reasonId String
+  reasonId Int
   reason   ConsumptionReason @relation(fields: [reasonId], references: [id])
 
   wouldBuyAgain Boolean?
 
-  influenceId String
+  influenceId Int
   influence   ConsumptionInfluence @relation(fields: [influenceId], references: [id])
 
   price  Float
@@ -225,7 +219,7 @@ model Consumption {
 
   date      DateTime
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   negativeAspects ConsumptionNegativeAspect[]
 
@@ -236,11 +230,11 @@ model Consumption {
 }
 
 model ConsumptionNegativeAspect {
-  consumptionId    String
-  negativeAspectId String
+  consumptionId String
+  consumption   Consumption @relation(fields: [consumptionId], references: [id], onDelete: Cascade)
 
-  consumption    Consumption    @relation(fields: [consumptionId], references: [id], onDelete: Cascade)
-  negativeAspect NegativeAspect @relation(fields: [negativeAspectId], references: [id], onDelete: Cascade)
+  negativeAspectId Int
+  negativeAspect   NegativeAspect @relation(fields: [negativeAspectId], references: [id], onDelete: Cascade)
 
   @@id([consumptionId, negativeAspectId])
   @@index([negativeAspectId])
@@ -256,7 +250,7 @@ model Goal {
   finalDate   DateTime?
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   spendingGoal     SpendingGoal?
   satisfactionGoal SatisfactionGoal?

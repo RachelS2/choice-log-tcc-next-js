@@ -8,14 +8,14 @@ datasource db {
 }
 
 model User {
-  id            String           @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String           @unique
+  email         String        @unique
   image         String?
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  emailVerified Boolean          @default(false)
-  incomeRange   IncomeRange      @default(PREFER_NOT_TO_SAY)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  emailVerified Boolean       @default(false)
+  incomeRange   IncomeRange   @default(PREFER_NOT_TO_SAY)
   accounts      Account[]
   categories    Category[]
   consumptions  Consumption[]
@@ -64,20 +64,20 @@ model Verification {
 }
 
 model Item {
-  id            String         @id @default(cuid())
-  friendlyName  String
-  systemName    String
-  brand         String
+  id           String @id @default(cuid())
+  friendlyName String @db.VarChar(30)
+  systemName   String @db.VarChar(30)
+  brand        String @db.VarChar(30)
 
-  categoryId    String
-  category      Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  userId        String
-  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  imageUrl      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  imageUrl  String?
 
   consumptions  Consumption[]
   wishListItems WishListItem[]
@@ -88,35 +88,37 @@ model Item {
 }
 
 model Type {
-  id                String              @id @default(cuid())
-  name              TypeEnum            @unique
+  id   String   @id @default(cuid())
+  name TypeEnum @unique
 
-  categories        Category[]
+  categories         Category[]
   consumptionReasons ConsumptionReason[]
-  negativeAspects   NegativeAspect[]
+  negativeAspects    NegativeAspect[]
 
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
-  id           String   @id @default(cuid())
-  friendlyName  String
-  systemName    String
+  id           String @id @default(cuid())
+  friendlyName String @db.VarChar(30)
+  systemName   String @db.VarChar(30)
 
-  typeId       String
-  type         Type     @relation(fields: [typeId], references: [id])
+  typeId String
+  type   Type   @relation(fields: [typeId], references: [id])
 
-  userId       String?
-  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  items        Item[]
-  goals        Goal[]
+  items Item[]
+  goals Goal[]
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  spendingGoals SpendingGoal[]
 
   @@unique([systemName, userId])
+  @@index([typeId])
 }
 
 model WishList {
@@ -133,7 +135,7 @@ model WishListItem {
   wishListId   String
   itemId       String
   priority     WishListItemPriority
-  goal         String?
+  note         String?              @db.VarChar(300)
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
   consumptions Consumption[]
@@ -144,66 +146,69 @@ model WishListItem {
 }
 
 model ConsumptionReason {
-  id          String       @id @default(cuid())
-  systemName  String
-  friendlyName String
+  id           String @id @default(cuid())
+  systemName   String @db.VarChar(30)
+  friendlyName String @db.VarChar(30)
 
-  typeId      String
-  type        Type         @relation(fields: [typeId], references: [id])
+  typeId String
+  type   Type   @relation(fields: [typeId], references: [id])
 
   consumptions Consumption[]
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([systemName, typeId])
+  @@index([typeId])
 }
 
 model NegativeAspect {
-  id           String       @id @default(cuid())
-  systemName   String
-  friendlyName String
+  id           String @id @default(cuid())
+  systemName   String @db.VarChar(30)
+  friendlyName String @db.VarChar(30)
 
-  typeId       String
-  type         Type         @relation(fields: [typeId], references: [id])
+  typeId String
+  type   Type   @relation(fields: [typeId], references: [id])
 
   consumptions ConsumptionNegativeAspect[]
 
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([systemName, typeId])
+  @@index([typeId])
 }
 
 model Consumption {
-  id                String                    @id @default(cuid())
+  id String @id @default(cuid())
 
-  userId            String
-  user              User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  itemId            String
-  item              Item                      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId String
+  item   Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
-  wishListItemId    String?
-  wishListItem      WishListItem?             @relation(fields: [wishListItemId], references: [id])
+  wishListItemId String?
+  wishListItem   WishListItem? @relation(fields: [wishListItemId], references: [id])
 
   consumptionReasonId String
-  consumptionReason   ConsumptionReason       @relation(fields: [consumptionReasonId], references: [id])
+  consumptionReason   ConsumptionReason @relation(fields: [consumptionReasonId], references: [id])
 
-  wouldBuyAgain     Boolean?
-  influence         ConsumptionInfluence
+  wouldBuyAgain Boolean?
+  influence     ConsumptionInfluence
 
-  price             Float
-  rating            Float?
+  price  Float
+  rating Float?
 
-  details           String?
-  address           String?
+  details String?
+  address String?
 
-  consumptionDate   DateTime
-  createdAt         DateTime                  @default(now())
-  updatedAt         DateTime                  @updatedAt
+  consumptionDate DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  negativeAspects   ConsumptionNegativeAspect[]
+  negativeAspects ConsumptionNegativeAspect[]
+
   @@index([itemId])
   @@index([userId])
   @@index([consumptionReasonId])
@@ -211,79 +216,65 @@ model Consumption {
 }
 
 model ConsumptionNegativeAspect {
-  consumptionId   String
+  consumptionId    String
   negativeAspectId String
 
-  consumption     Consumption   @relation(
-    fields: [consumptionId],
-    references: [id],
-    onDelete: Cascade
-  )
-
-  negativeAspect   NegativeAspect @relation(
-    fields: [negativeAspectId],
-    references: [id],
-    onDelete: Cascade
-  )
+  consumption    Consumption    @relation(fields: [consumptionId], references: [id], onDelete: Cascade)
+  negativeAspect NegativeAspect @relation(fields: [negativeAspectId], references: [id], onDelete: Cascade)
 
   @@id([consumptionId, negativeAspectId])
+  @@index([negativeAspectId])
 }
 
 model Goal {
-  id          String    @id @default(cuid())
+  id String @id @default(cuid())
 
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   initialDate DateTime  @default(now())
   finalDate   DateTime?
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  spendingGoal      SpendingGoal?
-  satisfactionGoal  SatisfactionGoal?
-  impulsivityGoal   ImpulsivityGoal?
+  spendingGoal     SpendingGoal?
+  satisfactionGoal SatisfactionGoal?
+  impulsivityGoal  ImpulsivityGoal?
+  category         Category?         @relation(fields: [categoryId], references: [id])
+  categoryId       String?
 }
 
 model SpendingGoal {
-  goalId         String @id
-  goal           Goal @relation(fields: [goalId], references: [id])
+  goalId String @id
+  goal   Goal   @relation(fields: [goalId], references: [id], onDelete: Cascade)
 
-  spendingLimit  Float
+  spendingLimit Float
 
-  categoryId     String?
-  category       Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
 }
 
 model SatisfactionGoal {
-  goalId        String   @id
+  goalId String @id
 
-  goal          Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
 
-  targetRating  Float
+  targetRating Float
 }
 
 model ImpulsivityGoal {
-  goalId          String   @id
+  goalId String @id
 
-  goal            Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
 
-  targetDecreasePercentage   Float
+  targetDecreasePercentage Float
 }
 
 enum WishListItemPriority {
   HIGH
   MEDIUM
   LOW
-}
-
-enum ConsumptionReason {
-  ITEM_REPLACEMENT
-  EFFECTIVENESS_TEST
-  PERSONAL_SATISFACTION
-  SOCIAL_ALIGNMENT
-  OTHER
 }
 
 enum ConsumptionInfluence {
@@ -312,16 +303,6 @@ enum TypeEnum {
   SERVICE
 }
 
-// enum ConsumptionNegativeAspects {
-//  INEFFECTIVE
-//  LOW_QUALITY
-//  LOW_DURABILITY
-//  POOR_DESIGN
-//  UNSAFE
-//  POOR_CUSTOMER_SERVICE
-//  OTHER
-//}
-
 //TODO: Prisma não dá suporte para constraints, então executar no banco mais tarde:
 
 // 1. Constraint de Nota em incrementos de 5 (0, 0.5, 1, 1.5...)
@@ -336,7 +317,6 @@ enum TypeEnum {
 //  )
 //);
 
-
 // 2. Adicionar constraint na coluna "details" de Consumption de modo que não armazene mais de 300 caracteres.
 //ALTER TABLE "Consumption"
 //ADD CONSTRAINT details_length
@@ -346,12 +326,12 @@ enum TypeEnum {
 //CREATE OR REPLACE FUNCTION validate_consumption_user()
 //RETURNS trigger AS $$
 //BEGIN
-  //IF NEW."userId" <> (
-    //SELECT "userId" FROM "Item" WHERE id = NEW."itemId"
-  //) THEN
-    //RAISE EXCEPTION 'Consumption userId must match Item userId';
-  //END IF;
- //RETURN NEW;
+//IF NEW."userId" <> (
+//SELECT "userId" FROM "Item" WHERE id = NEW."itemId"
+//) THEN
+//RAISE EXCEPTION 'Consumption userId must match Item userId';
+//END IF;
+//RETURN NEW;
 //END;
 //$$ LANGUAGE plpgsql;
 
@@ -359,7 +339,6 @@ enum TypeEnum {
 //BEFORE INSERT OR UPDATE ON "Consumption"
 //FOR EACH ROW
 //EXECUTE FUNCTION validate_consumption_user();
-
 
 // 4. Garantir que consumptionDate não seja no futuro em Consumption
 // ALTER TABLE "Consumption"
@@ -399,7 +378,6 @@ enum TypeEnum {
 // CREATE UNIQUE INDEX unique_global_category
 // ON category (name)
 // WHERE id_user IS NULL;
-
 
 // 10. Garantir que ConsumptionReason
 // pertença ao mesmo Type do Item associado ao Consumption.
@@ -442,7 +420,6 @@ enum TypeEnum {
 //END;
 //$$ LANGUAGE plpgsql;
 
-
 //CREATE TRIGGER trg_validate_consumption_reason_type
 //BEFORE INSERT OR UPDATE
 //ON "Consumption"
@@ -458,38 +435,67 @@ enum TypeEnum {
 //    aspect_type_id UUID;
 //BEGIN
 
-    SELECT c."typeId"
-    INTO item_type_id
-    FROM "Consumption" co
-    JOIN "Item" i
-        ON i."id" = co."itemId"
-    JOIN "Category" c
-        ON c."id" = i."categoryId"
-    WHERE co."id" = NEW."consumptionId";
+//   SELECT c."typeId"
+//    INTO item_type_id
+//    FROM "Consumption" co
+//   JOIN "Item" i
+//        ON i."id" = co."itemId"
+//    JOIN "Category" c
+//        ON c."id" = i."categoryId"
+//    WHERE co."id" = NEW."consumptionId";
 
-    SELECT "typeId"
-    INTO aspect_type_id
-    FROM "NegativeAspect"
-    WHERE "id" = NEW."negativeAspectId";
+//    SELECT "typeId"
+//    INTO aspect_type_id
+//    FROM "NegativeAspect"
+//    WHERE "id" = NEW."negativeAspectId";
 
-    IF item_type_id IS NULL THEN
-        RAISE EXCEPTION 'Consumption % not found.', NEW."consumptionId";
-    END IF;
+//    IF item_type_id IS NULL THEN
+//        RAISE EXCEPTION 'Consumption % not found.', NEW."consumptionId";
+//    END IF;
 
-    IF aspect_type_id IS NULL THEN
-        RAISE EXCEPTION 'NegativeAspect % not found.', NEW."negativeAspectId";
-    END IF;
+//    IF aspect_type_id IS NULL THEN
+//        RAISE EXCEPTION 'NegativeAspect % not found.', NEW."negativeAspectId";
+//    END IF;
 
-    IF item_type_id <> aspect_type_id THEN
-        RAISE EXCEPTION
-            'NegativeAspect must belong to the same Type as the consumed Item.';
-    END IF;
+//    IF item_type_id <> aspect_type_id THEN
+//        RAISE EXCEPTION
+//            'NegativeAspect must belong to the same Type as the consumed Item.';
+//    END IF;
 
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+//    RETURN NEW;
+//END;
+//$$ LANGUAGE plpgsql;
 
 // 12. Mínimo de gastos na tabela SpendingGoal
 // ALTER TABLE "SpendingGoal"
 // ADD CONSTRAINT spending_goal_limit_check
 // CHECK ("spendingLimit" > 0);
+
+// CREATE OR REPLACE FUNCTION validate_item_category_owner()
+// RETURNS trigger AS $$
+// DECLARE
+//    category_user_id TEXT;
+// BEGIN
+
+//    SELECT "userId"
+//    INTO category_user_id
+//    FROM "Category"
+//    WHERE id = NEW."categoryId";
+
+//    IF category_user_id IS NOT NULL
+//       AND category_user_id <> NEW."userId" THEN
+
+//        RAISE EXCEPTION
+//        'Item can only use categories owned by the same user or global categories.';
+
+//    END IF;
+
+//    RETURN NEW;
+// END;
+//   $$ LANGUAGE plpgsql;
+
+//CREATE TRIGGER trg_validate_item_category_owner
+//BEFORE INSERT OR UPDATE
+//ON "Item"
+//FOR EACH ROW
+//EXECUTE FUNCTION validate_item_category_owner();

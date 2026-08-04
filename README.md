@@ -145,6 +145,10 @@ To check the database tables via CMD.
 
 ---
 
+### `npx prisma format`
+
+To format the schema.prisma
+
 ## Generated Folder
 
 The `generated/` folder contains auto-generated Prisma Client code.  

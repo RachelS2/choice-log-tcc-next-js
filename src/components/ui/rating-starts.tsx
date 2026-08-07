@@ -19,14 +19,14 @@ export default function RatingStars({
         (_, index) => (
           <Star
             key={`full-${index}`}
-            className="h-4 w-4 fill-yellow-500 text-yellow-500"
+            className="h-4 w-4 fill-amber-400 text-amber-400"
           />
         )
       )}
 
       {/* Half star */}
       {hasHalfStar && (
-        <StarHalf className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+        <StarHalf className="h-4 w-4 fill-amber-400 text-amber-400" />
       )}
 
       {/* Empty stars */}

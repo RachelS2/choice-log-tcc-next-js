@@ -212,7 +212,7 @@ model Consumption {
   influence   ConsumptionInfluence @relation(fields: [influenceId], references: [id])
 
   price  Float
-  rating Float?
+  rating Float
 
   details String? @db.VarChar(300)
   address String? @db.VarChar(255)

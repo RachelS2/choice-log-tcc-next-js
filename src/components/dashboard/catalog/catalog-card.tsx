@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { CatalogItem } from '@/app/dashboard/catalog/page';
+import RatingStars from '@/components/ui/rating-starts';
 
 interface CatalogCardProps {
   item: CatalogItem;
@@ -42,30 +43,6 @@ function formatDate(dateStr: string): string {
   });
 }
 
-function RatingStars({ rating }: { rating: number }) {
-  const fullStars = Math.floor(rating);
-  const hasHalf = rating - fullStars >= 0.3;
-  const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
-
-  return (
-    <div className="flex items-center gap-0.5">
-      {Array.from({ length: fullStars }).map((_, i) => (
-        <Star key={`full-${i}`} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-      ))}
-      {hasHalf && (
-        <div className="relative">
-          <Star className="h-3.5 w-3.5 text-neutral-200" />
-          <div className="absolute inset-0 overflow-hidden" style={{ width: '50%' }}>
-            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-          </div>
-        </div>
-      )}
-      {Array.from({ length: emptyStars }).map((_, i) => (
-        <Star key={`empty-${i}`} className="h-3.5 w-3.5 text-neutral-200" />
-      ))}
-    </div>
-  );
-}
 
 export default function CatalogCard({ item }: CatalogCardProps) {
   const handleEdit = (e: React.MouseEvent) => {
@@ -105,14 +82,14 @@ export default function CatalogCard({ item }: CatalogCardProps) {
         <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
           <button
             onClick={handleEdit}
-            className="flex h-7 w-7 items-center justify-center rounded-md text-neutral-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
+            className="flex h-7 w-7 items-center cursor-pointer justify-center rounded-md text-neutral-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
             aria-label="Editar"
           >
             <Pencil className="h-3.5 w-3.5" />
           </button>
           <button
             onClick={handleDelete}
-            className="flex h-7 w-7 items-center justify-center rounded-md text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600"
+            className="flex h-7 w-7 items-center justify-center cursor-pointer rounded-md text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600"
             aria-label="Excluir"
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -172,7 +149,7 @@ export default function CatalogCard({ item }: CatalogCardProps) {
         <Button
           variant="outline"
           size="sm"
-          className="w-full border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+          className="w-full border-blue-200 text-blue-600 bg-blue-50 hover:bg-blue-50 hover:font-bold hover:text-blue-700 transition-colors"
           onClick={(e) => {
             e.stopPropagation();
             handleViewDetails();

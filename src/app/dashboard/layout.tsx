@@ -19,7 +19,7 @@ export default function DashboardLayout({
       <main className="ml-64 min-h-screen flex-1 relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
 
         {/* Grid */}
-        <div
+        {/* <div
           className="absolute inset-0 z-0 opacity-40"
           style={{
             backgroundImage: `
@@ -28,7 +28,7 @@ export default function DashboardLayout({
       `,
             backgroundSize: "32px 32px",
           }}
-        />
+        /> */}
 
         {/* Background */} 
         <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-0">

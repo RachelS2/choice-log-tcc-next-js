@@ -23,9 +23,9 @@ const navItems: NavItem[] = [
     href: "/dashboard/experiences",
   },
   {
-    label: "Products",
+    label: "Catalog",
     icon: Package,
-    href: "/dashboard/products",
+    href: "/dashboard/catalog",
   },
   {
     label: "Analytics",

@@ -75,7 +75,7 @@ export default function NotFound() {
               className="bg-white text-blue-700 hover:bg-blue-50"
             >
               <ArrowLeftIcon className="mr-2 h-4 w-4" />
-              Go Back
+              <a href="/dashboard">Go Back</a>
             </Button>
 
             {!userIsLoggedIn ? (

@@ -1,5 +1,5 @@
 import { CatalogItem } from '@/app/dashboard/catalog/page';
-import CatalogCard from './CatalogCard';
+import CatalogCard from './catalog-card';
 
 interface CatalogGridProps {
   items: CatalogItem[];

@@ -1,9 +1,9 @@
 'use client'
 import { useState, useMemo } from 'react';
-import CatalogEmptyState from '@/components/dashboard/catalog/CatalogEmptyState';
-import CatalogFilters from '@/components/dashboard/catalog/CatalogFilters';
-import CatalogGrid from '@/components/dashboard/catalog/CatalogGrid';
-import CatalogHeader from '@/components/dashboard/catalog/CatalogHeader';
+import CatalogEmptyState from '@/components/dashboard/catalog/catalog-empty-state';
+import CatalogFilters from '@/components/dashboard/catalog/catalog-filter';
+import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
+import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
 
 
 export interface CatalogItem {

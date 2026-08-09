@@ -2,7 +2,10 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
-export default function CatalogHeader() {
+interface CatalogHeaderProps{
+  onNewItem: () => void;
+}
+export default function CatalogHeader({onNewItem}: CatalogHeaderProps) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
@@ -14,7 +17,7 @@ export default function CatalogHeader() {
         </p>
       </div>
       <Button
-        onClick={() => toast.info('Formulário de novo item em breve!')}
+        onClick={onNewItem}
         className="h-11 bg-blue-600  shadow-xl hover:bg-blue-700 text-white"
       >
         <Plus className="h-4 w-4" />

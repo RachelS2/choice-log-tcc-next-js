@@ -17,3 +17,12 @@ export async function getUserAuthData(): Promise<UserAuthDTO | null> {
     image: session.data.user.image ?? null,
   };
 }
+
+export function toSystemName(friendlyName: string): string {
+  return friendlyName
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9\s]/g, '')
+    .replace(/\s+/g, '_')
+    .slice(0, 30);
+}

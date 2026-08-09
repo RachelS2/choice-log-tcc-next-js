@@ -10,7 +10,7 @@ import { getUserAuthData } from "@/lib/utils";
 
 export default function NotFound() {
   const router = useRouter();
-  const userIsLoggedIn = !!getUserAuthData();
+  const userIsLoggedIn = getUserAuthData() != null;
   console.log("User is logged in NOT FOUND:", userIsLoggedIn);
   return (
     <div className="flex min-h-screen flex-col">

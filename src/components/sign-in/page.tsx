@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 import PasswordInput from './password-input';
 import { ArrowRightIcon, Lock, Loader2 } from 'lucide-react';
 import { AtSymbolIcon } from '@heroicons/react/24/outline';
-import { loginSchema, LoginSchemaType } from '@/zod-schemas/sign-in';
+import { loginSchema, LoginSchemaType } from '@/zod-schemas/sign-in-schema';
 import { Info } from 'lucide-react';
 
 export default function LoginForm() {

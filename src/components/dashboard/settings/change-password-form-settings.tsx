@@ -4,7 +4,7 @@ import { FieldErrors, Path, useForm, UseFormRegister } from "react-hook-form";
 import PasswordInput from "../../sign-in/password-input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { updatePassword } from "@/lib/repository/dashboard/user";
+import { updatePassword } from "@/lib/repository/user-repository";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 

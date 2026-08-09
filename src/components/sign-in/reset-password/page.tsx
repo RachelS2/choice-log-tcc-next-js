@@ -12,7 +12,7 @@ import { redirect, useSearchParams } from "next/navigation";
 import PasswordInput from '../password-input';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useRouter } from "next/navigation";
-import { resetPassword } from '@/lib/repository/sign-in/reset-password';
+import { resetPassword } from '@/lib/repository/user-repository';
 
 type PasswordInputType = {
     label: "New password" | "Confirm Password";

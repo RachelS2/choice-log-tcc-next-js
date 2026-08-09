@@ -13,7 +13,7 @@ import { useState } from "react";
 import { AuthFormStateModel } from "@/models/auth/auth-form-state-model";
 import PasswordInput from "../sign-in/password-input";
 import Link from "next/link";
-import { signUpSchema, SignUpSchemaType } from "@/zod-schemas/sign-up";
+import { signUpSchema, SignUpSchemaType } from "@/zod-schemas/sign-up-schema";
 import VerifyEmailPage from "./verify-email/page";
 
 type HtmlFor = "username" | "email" | "password" | "confirmPassword";

@@ -1,5 +1,5 @@
 import z from "zod";
-import { userNameSchema, passwordSchema } from "./sign-up";
+import { userNameSchema, passwordSchema } from "./sign-up-schema";
 import { IncomeRange } from "../../generated/prisma";
 
 // Schema para validação do formulário de cadastro de usuário:

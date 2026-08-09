@@ -5,7 +5,7 @@ import { AddNewExperienceFormStepsModel } from "@/models/dashboard/experiences";
 import { CalendarIcon, DollarSign, Package, ShoppingBag, Wrench } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Step } from "./steps-abc";
-import ProductSelector from "../../../products/new-item/product-selector";
+import ProductSelector from "../../../items/new-item/product-selector";
 import { useState } from "react";
 import DatePicker from "@/components/ui/date-picker";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";

@@ -2,11 +2,11 @@ import { Pencil, Trash2, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { CatalogItem } from '@/app/dashboard/catalog/page';
 import RatingStars from '@/components/ui/rating-starts';
+import { CatalogViewItemModel } from '@/models/dashboard/items';
 
 interface CatalogCardProps {
-  item: CatalogItem;
+  item: CatalogViewItemModel;
 }
 
 function getInitials(name: string): string {

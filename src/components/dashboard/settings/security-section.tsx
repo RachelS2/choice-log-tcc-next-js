@@ -16,7 +16,7 @@ import {
 import { toast } from 'sonner';
 import LogoutButton from './logout-btn';
 import { useRouter } from "next/navigation";
-import { deleteUserAccount, updatePassword } from '@/lib/repository/dashboard/user';
+import { deleteUserAccount, updatePassword } from '@/lib/repository/user-repository';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { ChangePasswordFormSettings } from './change-password-form-settings';
 

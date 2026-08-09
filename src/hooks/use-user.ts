@@ -1,6 +1,6 @@
 import { UserCompleteDTO } from "@/models/user";
 import { useAsyncData } from "./generic-hook";
-import { fetchUserProfile } from "@/lib/repository/dashboard/user";
+import { fetchUserProfile } from "@/lib/repository/user-repository";
 
 
 /**

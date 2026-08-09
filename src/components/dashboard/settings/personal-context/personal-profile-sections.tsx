@@ -1,5 +1,5 @@
 import { useGetUserProfile } from "@/hooks/use-user";
-import { updateUserProfile } from "@/lib/repository/dashboard/user";
+import { updateUserProfile } from "@/lib/repository/user-repository";
 import { UpdateUserProfileDTO, UserCompleteDTO } from "@/models/user";
 import { userSettingsSchema, UserSettingsSchemaType } from "@/zod-schemas/user-settings";
 import { zodResolver } from "@hookform/resolvers/zod";

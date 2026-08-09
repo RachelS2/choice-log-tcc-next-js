@@ -14,11 +14,12 @@ import {
 } from '@/components/ui/select';
 import { cn, toSystemName } from '@/lib/utils';
 import { itemFormSchema, type ItemFormSchema } from '../../../../zod-schemas/item-form-schema';
-import { postItem, fetchCategories } from './item-api';
-import type { CategoryModel, ItemIdModel, ItemTypeEnum } from '../../../../models/dashboard/items';
+import type { CategoryModel, ItemModel, ItemTypeEnum } from '../../../../models/dashboard/items';
+import { getCategories } from '@/app/api/category/route';
+import { postItem } from '@/lib/controller/item';
 
 interface ItemFormProps {
-  onSuccess: (item: ItemIdModel) => void;
+  onSuccess: (item: ItemModel) => void;
   onCancel: () => void;
 }
 
@@ -55,7 +56,7 @@ export default function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
   const loadCategories = useCallback(async (type: ItemTypeEnum) => {
     setLoadingCategories(true);
     try {
-      const cats = await fetchCategories(type);
+      const cats = await getCategories(type);
       setCategories(cats);
     } finally {
       setLoadingCategories(false);

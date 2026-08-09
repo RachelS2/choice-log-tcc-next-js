@@ -1,9 +1,24 @@
 // src/lib/catalog.ts
 
 import { prisma } from "@/lib/prisma";
-import { CatalogViewItemModel } from "@/models/dashboard/items";
+import { CatalogViewItemModel, CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
 import { ItemModel } from "@/models/dashboard/items";
 
+
+export async function fetchCategories( type?: ItemTypeEnum): Promise<CategoryModel[]> {
+  return  await prisma.category.findMany({
+    where: type
+      ? {
+          type: {
+            name: type,
+          },
+        }
+      : undefined,
+    orderBy: {
+      name: "asc",
+    },
+  });
+}
 export async function fetchCatalogItems(): Promise<CatalogViewItemModel[]> {
   const items = await prisma.item.findMany({
     include: {

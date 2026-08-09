@@ -6,16 +6,16 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import ItemForm from './ItemForm';
-import type { ItemIdModel } from '../../../../models/dashboard/items';
+import type { ItemModel } from '../../../../models/dashboard/items';
 
 interface ItemFormModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess: (item: ItemIdModel) => void;
+  onSuccess: (item: ItemModel) => void;
 }
 
 export default function ItemFormModal({ open, onOpenChange, onSuccess }: ItemFormModalProps) {
-  const handleSuccess = (item: ItemIdModel) => {
+  const handleSuccess = (item: ItemModel) => {
     onSuccess(item);
     onOpenChange(false);
   };

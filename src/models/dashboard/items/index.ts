@@ -3,7 +3,7 @@ export type ItemTypeEnum = 'PRODUCT' | 'SERVICE';
 export interface CategoryModel {
   id: string;
   name: string;
-  itemTypeId: number;
+  typeId: number;
 }
 
 export interface CatalogViewItemModel {

@@ -1,7 +1,7 @@
 // src/lib/catalog.ts
 
 import { prisma } from "@/lib/prisma";
-import { CatalogViewItemModel, CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
+import { ItemDisplayModel, CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
 import { ItemModel } from "@/models/dashboard/items";
 
 
@@ -31,7 +31,7 @@ export async function fetchCategoriesRepository(
   }));
 }
 
-export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum): Promise<CatalogViewItemModel[]> {
+export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum): Promise<ItemDisplayModel[]> {
   const items = await prisma.item.findMany({
     where: categoryType.
       ? {
@@ -107,7 +107,7 @@ export async function insertItem({
       categoryId: item.categoryId,
       imageUrl: item.imageUrl,
       userId: userId,
-      
+
     },
   });
 }

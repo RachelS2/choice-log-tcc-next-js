@@ -3,10 +3,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import RatingStars from '@/components/ui/rating-starts';
-import { CatalogViewItemModel } from '@/models/dashboard/items';
+import { ItemDisplayModel } from '@/models/dashboard/items';
 
 interface CatalogCardProps {
-  item: CatalogViewItemModel;
+  item: ItemDisplayModel;
 }
 
 function getInitials(name: string): string {
@@ -107,8 +107,8 @@ export default function CatalogCard({ item }: CatalogCardProps) {
           <Badge
             variant="secondary"
             className={`text-[11px] font-medium ${item.type === 'PRODUCT'
-                ? 'bg-blue-50 text-blue-700 border-blue-100'
-                : 'bg-violet-50 text-violet-700 border-violet-100'
+              ? 'bg-blue-50 text-blue-700 border-blue-100'
+              : 'bg-violet-50 text-violet-700 border-violet-100'
               }`}
           >
             {item.type === 'PRODUCT' ? 'Produto' : 'Serviço'}

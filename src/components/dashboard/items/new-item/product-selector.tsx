@@ -12,7 +12,7 @@ import { useGetUserProducts } from '@/hooks/use-products';
 import { toast } from 'sonner';
 import { AddNewExperienceFormModel } from '@/models/dashboard/experiences';
 import { Input } from '@/components/ui/input';
-import NewItemModal from './ItemFormModal';
+import NewItemModal from './item-form-modal';
 
 
 interface ProductSelectorProps {

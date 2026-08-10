@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/select';
 import { cn, getUserAuthData, toSystemName } from '@/lib/utils';
 import { itemFormSchema, type ItemFormSchema } from '../../../../zod-schemas/item-form-schema';
-import type { CategoryModel, ItemModel, ItemTypeEnum } from '../../../../models/dashboard/items';
+import type { CategoryModel, ItemDisplayModel, ItemModel, ItemTypeEnum } from '../../../../models/dashboard/items';
 import { fetchCategoriesRepository, insertItem } from '@/lib/repository/catalog-repository';
 import { redirect } from 'next/navigation';
 

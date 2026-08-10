@@ -1,5 +1,4 @@
 
-import { fetchUserProducts } from "@/lib/repository/dashboard/products";
 import { getUserAuthData } from "@/lib/utils";
 import { useAsyncData } from "./generic-hook";
 

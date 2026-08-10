@@ -5,7 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import ItemForm from './ItemForm';
+import ItemForm from './item-form';
 import type { ItemModel } from '../../../../models/dashboard/items';
 
 interface ItemFormModalProps {

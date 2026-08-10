@@ -5,8 +5,8 @@ import CatalogFilters from '@/components/dashboard/catalog/catalog-filter';
 import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
 import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
 import { fetchCatalogItemsRepository } from '@/lib/repository/catalog-repository';
-import ItemFormModal from '@/components/dashboard/items/new-item/ItemFormModal';
-import { CatalogViewItemModel, ItemTypeEnum } from '@/models/dashboard/items';
+import ItemFormModal from '@/components/dashboard/items/new-item/item-form-modal';
+import { ItemDisplayModel, ItemTypeEnum } from '@/models/dashboard/items';
 
 export type SortOption = 'recent' | 'last_consumed' | 'most_experiences' | 'alphabetical';
 export type TypeFilter = 'ALL' | 'PRODUCT' | 'SERVICE';
@@ -17,7 +17,7 @@ export default function Catalog() {
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [brandFilter, setBrandFilter] = useState('ALL');
   const [sort, setSort] = useState<SortOption>('recent');
-  const [catalogItems, setCatalogItems] = useState<CatalogViewItemModel[]>([]);
+  const [catalogItems, setCatalogItems] = useState<ItemDisplayModel[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   // Load categories when type changes
   useCallback(async (type: ItemTypeEnum) => {
@@ -40,7 +40,7 @@ export default function Catalog() {
     []
   );
 
-  const filteredItems: CatalogViewItemModel[] = useMemo(() => {
+  const filteredItems: ItemDisplayModel[] = useMemo(() => {
     let items = [...catalogItems];
 
     // Search filter

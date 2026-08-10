@@ -6,7 +6,7 @@ export interface CategoryModel {
   type: ItemTypeEnum;
 }
 
-export interface CatalogViewItemModel {
+export interface ItemDisplayModel {
   id: string;
   friendlyName: string;
   brand: string;

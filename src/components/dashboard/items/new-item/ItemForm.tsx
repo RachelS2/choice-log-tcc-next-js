@@ -12,19 +12,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn, toSystemName } from '@/lib/utils';
+import { cn, getUserAuthData, toSystemName } from '@/lib/utils';
 import { itemFormSchema, type ItemFormSchema } from '../../../../zod-schemas/item-form-schema';
 import type { CategoryModel, ItemModel, ItemTypeEnum } from '../../../../models/dashboard/items';
-import { getCategories } from '@/app/api/category/route';
-import { postItem } from '@/lib/controller/item';
+import { fetchCategoriesRepository, insertItem } from '@/lib/repository/catalog-repository';
+import { redirect } from 'next/navigation';
 
 interface ItemFormProps {
   onSuccess: (item: ItemModel) => void;
   onCancel: () => void;
 }
 
-export default function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
+export default async function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
+  const userData = await getUserAuthData();
 
+  if (!userData) {
+    console.log("user is not logged in")
+    redirect("/sign-in")
+  }
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -56,8 +61,9 @@ export default function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
   const loadCategories = useCallback(async (type: ItemTypeEnum) => {
     setLoadingCategories(true);
     try {
-      const cats = await getCategories(type);
+      const cats = await fetchCategoriesRepository();
       setCategories(cats);
+      console.log("Categories: " + cats)
     } finally {
       setLoadingCategories(false);
     }
@@ -74,12 +80,15 @@ export default function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
     setSubmitting(true);
     setServerError(null);
     try {
-      const item = await postItem({
-        categoryId: data.categoryId,
-        friendlyName: data.friendlyName,
-        systemName: toSystemName(friendlyName),
-        brand: data.brand,
-        imageUrl: data.imageUrl || undefined,
+      const item = await insertItem({
+        item: {
+          categoryId: data.categoryId,
+          friendlyName: data.friendlyName,
+          systemName: toSystemName(data.friendlyName),
+          brand: data.brand,
+          imageUrl: data.imageUrl || null,
+        },
+        userId: userData.id,
       });
       onSuccess(item);
     } catch (err) {
@@ -176,7 +185,7 @@ export default function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
             <SelectContent position="popper">
               {categories.map((cat) => (
                 <SelectItem key={cat.id} value={cat.id}>
-                  {cat.name}
+                  {cat.friendlyName}
                 </SelectItem>
               ))}
             </SelectContent>

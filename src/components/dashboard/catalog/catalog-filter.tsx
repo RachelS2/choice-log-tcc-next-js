@@ -7,8 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { SortOption, TypeFilter } from '@/pages/Catalog';
 import { cn } from "@/lib/utils";
+import { SortOption, TypeFilter } from '@/app/dashboard/catalog/page';
 
 interface CatalogFiltersProps {
   search: string;
@@ -60,9 +60,9 @@ export default function CatalogFilters({
           placeholder="Tipo"
           onChange={(v) => onTypeFilterChange(v as TypeFilter)}
           options={[
-            { value: "all", label: "Todos" },
-            { value: "product", label: "Produtos" },
-            { value: "service", label: "Serviços" },
+            { value: "ALL", label: "Todos" },
+            { value: "PRODUCT", label: "Produtos" },
+            { value: "SERVICE", label: "Serviços" },
           ]}
         />
 

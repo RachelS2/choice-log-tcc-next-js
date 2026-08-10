@@ -47,16 +47,16 @@ function formatDate(dateStr: string): string {
 export default function CatalogCard({ item }: CatalogCardProps) {
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
-    toast.info(`Editando "${item.name}"...`);
+    toast.info(`Editando "${item.friendlyName}"...`);
   };
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    toast.error(`"${item.name}" removido do catálogo.`);
+    toast.error(`"${item.friendlyName}" removido do catálogo.`);
   };
 
   const handleViewDetails = () => {
-    toast.info(`Detalhes de "${item.name}" em breve!`);
+    toast.info(`Detalhes de "${item.friendlyName}" em breve!`);
   };
 
   return (
@@ -67,16 +67,16 @@ export default function CatalogCard({ item }: CatalogCardProps) {
       {/* Top: Avatar + Actions */}
       <div className="flex items-start justify-between mb-4">
         <div
-          className={`flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${getAvatarColor(item.name)} text-white font-semibold text-sm`}
+          className={`flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${getAvatarColor(item.friendlyName)} text-white font-semibold text-sm`}
         >
           {item.image ? (
             <img
               src={item.image}
-              alt={item.name}
+              alt={item.friendlyName}
               className="h-full w-full rounded-full object-cover"
             />
           ) : (
-            getInitials(item.name)
+            getInitials(item.friendlyName)
           )}
         </div>
         <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
@@ -100,19 +100,18 @@ export default function CatalogCard({ item }: CatalogCardProps) {
       {/* Body: Name, Brand, Badges */}
       <div className="mb-4">
         <h3 className="text-base font-semibold text-neutral-950 leading-tight">
-          {item.name}
+          {item.friendlyName}
         </h3>
         <p className="mt-0.5 text-sm text-neutral-500">{item.brand}</p>
         <div className="mt-2.5 flex flex-wrap gap-1.5">
           <Badge
             variant="secondary"
-            className={`text-[11px] font-medium ${
-              item.type === 'product'
+            className={`text-[11px] font-medium ${item.type === 'PRODUCT'
                 ? 'bg-blue-50 text-blue-700 border-blue-100'
                 : 'bg-violet-50 text-violet-700 border-violet-100'
-            }`}
+              }`}
           >
-            {item.type === 'product' ? 'Produto' : 'Serviço'}
+            {item.type === 'PRODUCT' ? 'Produto' : 'Serviço'}
           </Badge>
           <Badge
             variant="secondary"

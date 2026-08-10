@@ -2,15 +2,15 @@ export type ItemTypeEnum = 'PRODUCT' | 'SERVICE';
 
 export interface CategoryModel {
   id: string;
-  name: string;
-  typeId: number;
+  friendlyName: string;
+  type: ItemTypeEnum;
 }
 
 export interface CatalogViewItemModel {
   id: string;
-  name: string;
+  friendlyName: string;
   brand: string;
-  type: 'product' | 'service';
+  type: ItemTypeEnum;
   category: string;
   image: string | null;
   experiences: number;
@@ -23,19 +23,19 @@ export interface ItemModel {
   friendlyName: string;
   systemName: string;
   brand: string;
-  imageUrl?: string;
+  imageUrl: string | null;
 }
 
 export interface ItemIdModel extends ItemModel {
   id: string;
 }
 
-    // categoryId: string;
-    // friendlyName: string;
-    // systemName: string;
-    // brand: string;
-    // imageUrl: string | null;
-    // id: string;
-    // createdAt: Date;
-    // updatedAt: Date;
-    // userId: string;
+// categoryId: string;
+// friendlyName: string;
+// systemName: string;
+// brand: string;
+// imageUrl: string | null;
+// id: string;
+// createdAt: Date;
+// updatedAt: Date;
+// userId: string;

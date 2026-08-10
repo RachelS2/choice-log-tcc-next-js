@@ -5,30 +5,44 @@ import { CatalogViewItemModel, CategoryModel, ItemTypeEnum } from "@/models/dash
 import { ItemModel } from "@/models/dashboard/items";
 
 
-export async function fetchCategories( type?: ItemTypeEnum): Promise<CategoryModel[]> {
-  return  await prisma.category.findMany({
+export async function fetchCategoriesRepository(
+  type?: ItemTypeEnum
+): Promise<CategoryModel[]> {
+  const categories = await prisma.category.findMany({
     where: type
       ? {
-          type: {
-            name: type,
-          },
-        }
+        type,
+      }
       : undefined,
+    select: {
+      id: true,
+      friendlyName: true,
+      type: true,
+    },
     orderBy: {
-      name: "asc",
+      friendlyName: "asc",
     },
   });
+
+  return categories.map((category) => ({
+    id: category.id,
+    friendlyName: category.friendlyName,
+    type: category.type as ItemTypeEnum,
+  }));
 }
-export async function fetchCatalogItems(): Promise<CatalogViewItemModel[]> {
+
+export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum): Promise<CatalogViewItemModel[]> {
   const items = await prisma.item.findMany({
+    where: categoryType.
+      ? {
+        category,
+      }
+      : undefined,
     include: {
       category: {
-        include: {
-          type: {
-            select: {
-              name: true,
-            },
-          },
+        select: {
+          type: true,
+          friendlyName: true,
         },
       },
 
@@ -42,10 +56,10 @@ export async function fetchCatalogItems(): Promise<CatalogViewItemModel[]> {
 
   return items.map((item) => ({
     id: item.id,
-    name: item.friendlyName,
+    friendlyName: item.friendlyName,
     brand: item.brand,
-    type: item.category.type.name as 'product' | 'service',
-    category: item.category.name,
+    type: item.type,
+    category: item.category.friendlyName,
     image: item.imageUrl,
 
     experiences: item.consumptions.length,
@@ -56,7 +70,7 @@ export async function fetchCatalogItems(): Promise<CatalogViewItemModel[]> {
         : Number(
           (
             item.consumptions.reduce(
-              (sum, c) => sum + c.rating,
+              (sum, c) => sum + (c.rating === null ? 0 : c.rating),
               0
             ) / item.consumptions.length
           ).toFixed(1)
@@ -93,6 +107,7 @@ export async function insertItem({
       categoryId: item.categoryId,
       imageUrl: item.imageUrl,
       userId: userId,
+      
     },
   });
 }

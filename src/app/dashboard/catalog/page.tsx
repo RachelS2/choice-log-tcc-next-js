@@ -1,102 +1,34 @@
 'use client'
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import CatalogEmptyState from '@/components/dashboard/catalog/catalog-empty-state';
 import CatalogFilters from '@/components/dashboard/catalog/catalog-filter';
 import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
 import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
-import { fetchCatalogItems } from '@/lib/repository/catalog-repository';
+import { fetchCatalogItemsRepository } from '@/lib/repository/catalog-repository';
 import ItemFormModal from '@/components/dashboard/items/new-item/ItemFormModal';
-import { CatalogViewItemModel } from '@/models/dashboard/items';
-
-
-
-
-// const mockItems: CatalogViewItemModel[] = [
-//   {
-//     id: '1',
-//     name: 'Coca-Cola Zero',
-//     brand: 'Coca-Cola',
-//     type: 'product',
-//     category: 'Bebidas',
-//     image: null,
-//     experiences: 8,
-//     averageRating: 4.3,
-//     lastConsumed: '2026-07-20',
-//   },
-//   {
-//     id: '2',
-//     name: 'Spotify Premium',
-//     brand: 'Spotify',
-//     type: 'service',
-//     category: 'Entretenimento',
-//     image: null,
-//     experiences: 12,
-//     averageRating: 4.7,
-//     lastConsumed: '2026-08-01',
-//   },
-//   {
-//     id: '3',
-//     name: 'AirPods Pro',
-//     brand: 'Apple',
-//     type: 'product',
-//     category: 'Eletrônicos',
-//     image: null,
-//     experiences: 5,
-//     averageRating: 4.8,
-//     lastConsumed: '2026-07-15',
-//   },
-//   {
-//     id: '4',
-//     name: 'Netflix Standard',
-//     brand: 'Netflix',
-//     type: 'service',
-//     category: 'Entretenimento',
-//     image: null,
-//     experiences: 24,
-//     averageRating: 3.9,
-//     lastConsumed: '2026-08-03',
-//   },
-//   {
-//     id: '5',
-//     name: 'Café Especial Orfeu',
-//     brand: 'Orfeu',
-//     type: 'product',
-//     category: 'Alimentos',
-//     image: null,
-//     experiences: 15,
-//     averageRating: 4.5,
-//     lastConsumed: '2026-08-02',
-//   },
-//   {
-//     id: '6',
-//     name: 'Uber Black',
-//     brand: 'Uber',
-//     type: 'service',
-//     category: 'Transporte',
-//     image: null,
-//     experiences: 6,
-//     averageRating: 4.1,
-//     lastConsumed: '2026-07-28',
-//   },
-// ];
+import { CatalogViewItemModel, ItemTypeEnum } from '@/models/dashboard/items';
 
 export type SortOption = 'recent' | 'last_consumed' | 'most_experiences' | 'alphabetical';
-export type TypeFilter = 'all' | 'product' | 'service';
+export type TypeFilter = 'ALL' | 'PRODUCT' | 'SERVICE';
 
 export default function Catalog() {
   const [search, setSearch] = useState('');
-  const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
-  const [categoryFilter, setCategoryFilter] = useState('all');
-  const [brandFilter, setBrandFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>('ALL');
+  const [categoryFilter, setCategoryFilter] = useState('ALL');
+  const [brandFilter, setBrandFilter] = useState('ALL');
   const [sort, setSort] = useState<SortOption>('recent');
   const [catalogItems, setCatalogItems] = useState<CatalogViewItemModel[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
-
-  useEffect(() => {
-    fetch('/api/catalog')
-      .then((response) => response.json())
-      .then(setCatalogItems);
+  // Load categories when type changes
+  useCallback(async (type: ItemTypeEnum) => {
+    try {
+      const cats = await fetchCatalogItemsRepository(type);
+      setCatalogItems(cats);
+      console.log(cats)
+    } finally {
+    }
   }, []);
+
 
   const categories: string[] = useMemo(
     () => [...new Set(catalogItems.map((item) => item.category))],
@@ -114,11 +46,11 @@ export default function Catalog() {
     // Search filter
     if (search.trim()) {
       const query = search.toLowerCase();
-      items = items.filter((item) => item.name.toLowerCase().includes(query));
+      items = items.filter((item) => item.friendlyName.toLowerCase().includes(query));
     }
 
     // Type filter
-    if (typeFilter !== 'all') {
+    if (typeFilter !== 'ALL') {
       items = items.filter((item) => item.type === typeFilter);
     }
 
@@ -146,7 +78,7 @@ export default function Catalog() {
         items.sort((a, b) => b.experiences - a.experiences);
         break;
       case 'alphabetical':
-        items.sort((a, b) => a.name.localeCompare(b.name));
+        items.sort((a, b) => a.friendlyName.localeCompare(b.friendlyName));
         break;
     }
 

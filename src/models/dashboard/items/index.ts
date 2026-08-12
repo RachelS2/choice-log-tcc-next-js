@@ -2,7 +2,7 @@ export type ItemTypeEnum = 'PRODUCT' | 'SERVICE';
 
 export interface CategoryModel {
   id: string;
-  friendlyName: string;
+  name: string;
   type: ItemTypeEnum;
 }
 

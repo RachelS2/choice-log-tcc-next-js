@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,21 +16,17 @@ import {
 import { cn, getUserAuthData, toSystemName } from '@/lib/utils';
 import { itemFormSchema, type ItemFormSchema } from '../../../../zod-schemas/item-form-schema';
 import type { CategoryModel, ItemDisplayModel, ItemModel, ItemTypeEnum } from '../../../../models/dashboard/items';
-import { fetchCategoriesRepository, insertItem } from '@/lib/repository/catalog-repository';
 import { redirect } from 'next/navigation';
+import { fetchCategoriesController } from '@/lib/controller/category-controller';
+import { postItemController } from '@/lib/controller/item-controller';
 
 interface ItemFormProps {
   onSuccess: (item: ItemModel) => void;
   onCancel: () => void;
 }
 
-export default async function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
-  const userData = await getUserAuthData();
+export default function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
 
-  if (!userData) {
-    console.log("user is not logged in")
-    redirect("/sign-in")
-  }
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -60,11 +57,16 @@ export default async function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
   // Load categories when type changes
   const loadCategories = useCallback(async (type: ItemTypeEnum) => {
     setLoadingCategories(true);
+    setServerError(null);
     try {
-      const cats = await fetchCategoriesRepository();
+      const cats = await fetchCategoriesController(type);
       setCategories(cats);
       console.log("Categories: " + cats)
-    } finally {
+    }
+    catch (err) {
+        setServerError('Failed to load categories. Please try again later.');
+    }
+    finally {
       setLoadingCategories(false);
     }
   }, []);
@@ -80,16 +82,14 @@ export default async function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
     setSubmitting(true);
     setServerError(null);
     try {
-      const item = await insertItem({
-        item: {
-          categoryId: data.categoryId,
-          friendlyName: data.friendlyName,
-          systemName: toSystemName(data.friendlyName),
-          brand: data.brand,
-          imageUrl: data.imageUrl || null,
-        },
-        userId: userData.id,
-      });
+      const item = await postItemController({
+        categoryId: data.categoryId,
+        friendlyName: data.friendlyName,
+        systemName: toSystemName(data.friendlyName),
+        brand: data.brand,
+        imageUrl: data.imageUrl || null,
+      },
+      );
       onSuccess(item);
     } catch (err) {
       if (err instanceof Error && err.message === 'UNIQUE_CONSTRAINT_VIOLATION') {
@@ -185,7 +185,7 @@ export default async function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
             <SelectContent position="popper">
               {categories.map((cat) => (
                 <SelectItem key={cat.id} value={cat.id}>
-                  {cat.friendlyName}
+                  {cat.name}
                 </SelectItem>
               ))}
             </SelectContent>

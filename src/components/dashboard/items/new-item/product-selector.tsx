@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus, ArrowDown, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,6 +13,8 @@ import { toast } from 'sonner';
 import { AddNewExperienceFormModel } from '@/models/dashboard/experiences';
 import { Input } from '@/components/ui/input';
 import NewItemModal from './item-form-modal';
+import { getCatalogItemsController } from '@/lib/controller/item-controller';
+import { ItemDisplayModel } from '@/models/dashboard/items';
 
 
 interface ProductSelectorProps {
@@ -27,15 +29,25 @@ export default function ProductSelector({
     const [onOpen, setOpen] = useState(false);
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [search, setSearch] = useState("");
+     const [catalogItems, setCatalogItems] = useState<ItemDisplayModel[]>([]);
+    useEffect(() => {
+        const fetchCatalogItems = async () => {
+            try {
+                const cats = await getCatalogItemsController();
+                setCatalogItems(cats);
+                console.log(cats);
+            } 
+            
+            catch (error) {
+                toast.error('Failed to fetch catalog items');
+            }
+        };
 
-    const { data, error, loading } = useGetUserProducts();
+        fetchCatalogItems();
+    }, []);
 
-    if (error && !loading) {
-        toast.error("Failed to load products.", { description: error.message });
-        return null;
-    }
 
-    const filteredProducts = data?.filter((product) =>
+    const filteredProducts = catalogItems?.filter((product) =>
         `${product.friendlyName} ${product.brand}`
             .toLowerCase()
             .includes(search.toLowerCase())
@@ -90,7 +102,7 @@ export default function ProductSelector({
                                                     {product.friendlyName}
                                                 </span>
                                                 <span className="text-xs text-gray-600">
-                                                    {product.brand} · {product.categoryId}
+                                                    {product.brand} · {product.category.}
                                                 </span>
                                             </div>
                                         </CommandItem>
@@ -114,8 +126,7 @@ export default function ProductSelector({
             <NewItemModal
                 open={addModalOpen}
                 onOpenChange={setAddModalOpen}
-                itemType={itemType}
-                onCreate={(item) => {
+                onSuccess={(item) => {
                     // 👉 INTEGRAR COM O BANCO DEPOIS:
                     console.log(item);
 

@@ -1,12 +1,14 @@
 'use client'
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import CatalogEmptyState from '@/components/dashboard/catalog/catalog-empty-state';
 import CatalogFilters from '@/components/dashboard/catalog/catalog-filter';
 import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
 import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
-import { fetchCatalogItemsRepository } from '@/lib/repository/catalog-repository';
 import ItemFormModal from '@/components/dashboard/items/new-item/item-form-modal';
-import { ItemDisplayModel, ItemTypeEnum } from '@/models/dashboard/items';
+import { CategoryModel, ItemDisplayModel, ItemTypeEnum } from '@/models/dashboard/items';
+import { getCatalogItemsController } from '@/lib/controller/item-controller';
+import { toast } from 'sonner';
+import { fetchCategoriesController } from '@/lib/controller/category-controller';
 
 export type SortOption = 'recent' | 'last_consumed' | 'most_experiences' | 'alphabetical';
 export type TypeFilter = 'ALL' | 'PRODUCT' | 'SERVICE';
@@ -18,26 +20,38 @@ export default function Catalog() {
   const [brandFilter, setBrandFilter] = useState('ALL');
   const [sort, setSort] = useState<SortOption>('recent');
   const [catalogItems, setCatalogItems] = useState<ItemDisplayModel[]>([]);
+  const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
-  // Load categories when type changes
-  useCallback(async (type: ItemTypeEnum) => {
+
+  const fetchCatalogItems = async () => {
     try {
-      const cats = await fetchCatalogItemsRepository(type);
-      setCatalogItems(cats);
-      console.log(cats)
-    } finally {
+      const items = await getCatalogItemsController();
+      setCatalogItems(items);
+    } catch (error) {
+      toast.error('Failed to fetch catalog items');
     }
+  };
+
+  useEffect(() => {
+    fetchCatalogItems();
   }, []);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categories = await fetchCategoriesController(typeFilter === 'ALL' ? undefined : typeFilter as ItemTypeEnum);
+        setCategories(categories);
+      } catch (error) {
+        toast.error('Failed to fetch categories');
+      }
+    };
 
-  const categories: string[] = useMemo(
-    () => [...new Set(catalogItems.map((item) => item.category))],
-    []
-  );
+    fetchCategories();
+  }, [typeFilter]);
 
   const brands: string[] = useMemo(
     () => [...new Set(catalogItems.map((item) => item.brand))],
-    []
+    [catalogItems]
   );
 
   const filteredItems: ItemDisplayModel[] = useMemo(() => {
@@ -46,7 +60,10 @@ export default function Catalog() {
     // Search filter
     if (search.trim()) {
       const query = search.toLowerCase();
-      items = items.filter((item) => item.friendlyName.toLowerCase().includes(query));
+
+      items = items.filter((item) =>
+        item.friendlyName.toLowerCase().includes(query)
+      );
     }
 
     // Type filter
@@ -55,39 +72,62 @@ export default function Catalog() {
     }
 
     // Category filter
-    if (categoryFilter !== 'all') {
-      items = items.filter((item) => item.category === categoryFilter);
+    if (categoryFilter !== 'ALL') {
+      items = items.filter(
+        (item) => item.category === categoryFilter
+      );
     }
 
     // Brand filter
-    if (brandFilter !== 'all') {
-      items = items.filter((item) => item.brand === brandFilter);
+    if (brandFilter !== 'ALL') {
+      items = items.filter(
+        (item) => item.brand === brandFilter
+      );
     }
 
     // Sort
     switch (sort) {
       case 'recent':
-        // Keep original order (most recently added)
+        // Keep original order
         break;
+
       case 'last_consumed':
         items.sort(
-          (a, b) => new Date(b.lastConsumed).getTime() - new Date(a.lastConsumed).getTime()
+          (a, b) =>
+            new Date(b.lastConsumed).getTime() -
+            new Date(a.lastConsumed).getTime()
         );
         break;
+
       case 'most_experiences':
-        items.sort((a, b) => b.experiences - a.experiences);
+        items.sort(
+          (a, b) => b.experiences - a.experiences
+        );
         break;
+
       case 'alphabetical':
-        items.sort((a, b) => a.friendlyName.localeCompare(b.friendlyName));
+        items.sort((a, b) =>
+          a.friendlyName.localeCompare(b.friendlyName)
+        );
         break;
     }
 
     return items;
-  }, [search, typeFilter, categoryFilter, brandFilter, sort]);
+  }, [
+    catalogItems,
+    search,
+    typeFilter,
+    categoryFilter,
+    brandFilter,
+    sort,
+  ]);
 
   return (
     <div className="p-11 space-y-6">
-      <CatalogHeader onNewItem={() => setModalOpen(true)} />
+      <CatalogHeader
+        onNewItem={() => setModalOpen(true)}
+      />
+
       <CatalogFilters
         search={search}
         onSearchChange={setSearch}
@@ -102,17 +142,21 @@ export default function Catalog() {
         categories={categories}
         brands={brands}
       />
+
       {filteredItems.length > 0 ? (
         <CatalogGrid items={filteredItems} />
       ) : (
         <CatalogEmptyState />
       )}
+
       <ItemFormModal
         open={modalOpen}
         onOpenChange={setModalOpen}
-        onSuccess={(item) => { /* item criado */ }}
+        onSuccess={async () => {
+          await fetchCatalogItems();
+          setModalOpen(false);
+        }}
       />
-
     </div>
   );
 }

@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/select';
 import { cn } from "@/lib/utils";
 import { SortOption, TypeFilter } from '@/app/dashboard/catalog/page';
+import { CategoryModel } from '@/models/dashboard/items';
 
 interface CatalogFiltersProps {
   search: string;
@@ -21,7 +22,7 @@ interface CatalogFiltersProps {
   onBrandFilterChange: (value: string) => void;
   sort: SortOption;
   onSortChange: (value: SortOption) => void;
-  categories: string[];
+  categories: CategoryModel[];
   brands: string[];
 }
 
@@ -73,7 +74,7 @@ export default function CatalogFilters({
           onChange={onCategoryFilterChange}
           options={[
             { value: "all", label: "Todas as categorias" },
-            ...categories.map((cat) => ({ value: cat, label: cat })),
+            ...categories.map((cat) => ({ value: cat.id, label: cat.name })),
           ]}
         />
 

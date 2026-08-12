@@ -4,45 +4,22 @@ import { prisma } from "@/lib/prisma";
 import { ItemDisplayModel, CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
 import { ItemModel } from "@/models/dashboard/items";
 
-
-export async function fetchCategoriesRepository(
-  type?: ItemTypeEnum
-): Promise<CategoryModel[]> {
-  const categories = await prisma.category.findMany({
-    where: type
-      ? {
-        type,
-      }
-      : undefined,
-    select: {
-      id: true,
-      friendlyName: true,
-      type: true,
-    },
-    orderBy: {
-      friendlyName: "asc",
-    },
-  });
-
-  return categories.map((category) => ({
-    id: category.id,
-    friendlyName: category.friendlyName,
-    type: category.type as ItemTypeEnum,
-  }));
-}
-
 export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum): Promise<ItemDisplayModel[]> {
   const items = await prisma.item.findMany({
-    where: categoryType.
+    where: categoryType
       ? {
-        category,
+        category: {
+          type: {
+            name: categoryType,
+          },
+        },
       }
       : undefined,
     include: {
       category: {
         select: {
           type: true,
-          friendlyName: true,
+          name: true,
         },
       },
 
@@ -58,8 +35,8 @@ export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum): 
     id: item.id,
     friendlyName: item.friendlyName,
     brand: item.brand,
-    type: item.type,
-    category: item.category.friendlyName,
+    type: item.category.type.name as ItemTypeEnum,
+    category: item.category.name,
     image: item.imageUrl,
 
     experiences: item.consumptions.length,
@@ -82,31 +59,29 @@ export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum): 
 }
 
 
-export async function insertItem({
+export async function postItemRepository({
   item,
   userId,
 }: {
   item: ItemModel;
   userId: string;
-}): Promise<{
-  id: string;
-  friendlyName: string;
-  systemName: string;
-  brand: string;
-  categoryId: string;
-  imageUrl: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string;
-}> {
+}) {
   return await prisma.item.create({
     data: {
       friendlyName: item.friendlyName,
       systemName: item.systemName,
       brand: item.brand,
-      categoryId: item.categoryId,
+      category: {
+        connect: {
+          id: item.categoryId,
+        },
+      },
       imageUrl: item.imageUrl,
-      userId: userId,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
 
     },
   });

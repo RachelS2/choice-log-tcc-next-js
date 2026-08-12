@@ -20,9 +20,11 @@ export async function getUserAuthData(): Promise<UserAuthDTO | null> {
 
 export function toSystemName(friendlyName: string): string {
   return friendlyName
-    .trim()
-    .toUpperCase()
-    .replace(/[^A-Z0-9\s]/g, '')
-    .replace(/\s+/g, '_')
-    .slice(0, 30);
+  .trim()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toUpperCase()
+  .replace(/[^A-Z0-9\s]/g, "")
+  .replace(/\s+/g, "_")
+  .slice(0, 30);
 }

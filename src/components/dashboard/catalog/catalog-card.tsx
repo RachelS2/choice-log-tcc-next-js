@@ -4,9 +4,13 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import RatingStars from '@/components/ui/rating-starts';
 import { ItemDisplayModel } from '@/models/dashboard/items';
+import { deleteItemController } from '@/lib/controller/item-controller';
+import { useState } from "react";
+import Modal from '@/components/ui/modal';
 
 interface CatalogCardProps {
   item: ItemDisplayModel;
+  onDelete: (itemId: string) => void;
 }
 
 function getInitials(name: string): string {
@@ -44,24 +48,36 @@ function formatDate(dateStr: string): string {
 }
 
 
-export default function CatalogCard({ item }: CatalogCardProps) {
+export default function CatalogCard({ item, onDelete }: CatalogCardProps) {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
-    toast.info(`Editando "${item.friendlyName}"...`);
+    toast.info(`Editing "${item.friendlyName}"...`);
   };
 
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    toast.error(`"${item.friendlyName}" removido do catálogo.`);
+  async function handleDeleteModal() {
+    try {
+      await deleteItemController(item.id);
+
+      setDeleteModalOpen(false);
+
+      onDelete(item.id);
+    } catch (error) {
+      console.error("Failed to delete item:", error);
+      toast.error("Failed to delete item.");
+    }
+  }
+  const handleDelete = async (e: React.MouseEvent) => {
+    setDeleteModalOpen(true);
+
   };
 
   const handleViewDetails = () => {
-    toast.info(`Detalhes de "${item.friendlyName}" em breve!`);
+    toast.info(`Details for "${item.friendlyName}" coming soon!`);
   };
 
   return (
     <div
-      onClick={handleViewDetails}
       className="group cursor-pointer rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] hover:border-neutral-300"
     >
       {/* Top: Avatar + Actions */}
@@ -83,14 +99,14 @@ export default function CatalogCard({ item }: CatalogCardProps) {
           <button
             onClick={handleEdit}
             className="flex h-7 w-7 items-center cursor-pointer justify-center rounded-md text-neutral-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
-            aria-label="Editar"
+            aria-label="Edit"
           >
             <Pencil className="h-3.5 w-3.5" />
           </button>
           <button
             onClick={handleDelete}
             className="flex h-7 w-7 items-center justify-center cursor-pointer rounded-md text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600"
-            aria-label="Excluir"
+            aria-label="Delete"
           >
             <Trash2 className="h-3.5 w-3.5" />
           </button>
@@ -111,7 +127,7 @@ export default function CatalogCard({ item }: CatalogCardProps) {
               : 'bg-violet-50 text-violet-700 border-violet-100'
               }`}
           >
-            {item.type === 'PRODUCT' ? 'Produto' : 'Serviço'}
+            {item.type === 'PRODUCT' ? 'Product' : 'Service'}
           </Badge>
           <Badge
             variant="secondary"
@@ -125,18 +141,18 @@ export default function CatalogCard({ item }: CatalogCardProps) {
       {/* Stats */}
       <div className="space-y-2.5 border-t border-neutral-100 pt-4">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-neutral-500">Experiências</span>
+          <span className="text-xs text-neutral-500">Experiences</span>
           <span className="text-sm font-medium text-neutral-900">{item.experiences}</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-xs text-neutral-500">Avaliação média</span>
+          <span className="text-xs text-neutral-500">Average rating</span>
           <div className="flex items-center gap-1.5">
             <RatingStars rating={item.averageRating} />
             <span className="text-xs font-medium text-neutral-700">{item.averageRating}</span>
           </div>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-xs text-neutral-500">Último consumo</span>
+          <span className="text-xs text-neutral-500">Last consumed</span>
           <span className="text-xs font-medium text-neutral-700">
             {formatDate(item.lastConsumed)}
           </span>
@@ -154,9 +170,18 @@ export default function CatalogCard({ item }: CatalogCardProps) {
             handleViewDetails();
           }}
         >
-          Ver Detalhes
+          View Details
         </Button>
       </div>
+
+      <Modal
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        onConfirm={handleDeleteModal}
+        dialogTitle="Confirm Delete"
+        dialogDescription="Are you sure you want to delete this item?"
+        buttonText="Delete"
+      />
     </div>
   );
 }

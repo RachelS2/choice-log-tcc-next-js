@@ -12,11 +12,11 @@ export default async function DashboardPage() {
   if (!session) {
     redirect("/sign-in");
   }
-  const username: string = session.user.name || "usuário";
+  const username: string = session.user.name || "user";
   return (
     <div className="p-11 space-y-6 rounded-ful">
 
-      {/* Conteúdo */}
+      {/* Content */}
       <div className="relative z-10 space-y-6">
         <h1 className="text-2xl font-bold text-blue-600">
           Hello, {username} 👋

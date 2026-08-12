@@ -140,10 +140,10 @@ export default function WizardForm() {
           </div>
           <div className="space-y-2">
             <h2 className="text-2xl font-bold text-gray-900">
-              Experiência registrada!
+              Experience recorded!
             </h2>
             <p className="text-muted-foreground">
-              Sua experiência com <span className="font-medium text-blue-600">{formData.itemId}</span> foi salva com sucesso.
+              Your experience with <span className="font-medium text-blue-600">{formData.itemId}</span> was saved successfully.
             </p>
           </div>
           <div className="flex gap-3 pt-4">
@@ -152,7 +152,7 @@ export default function WizardForm() {
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               <Sparkles className="mr-2 h-4 w-4" />
-              Registrar outra
+              Record another
             </Button>
           </div>
         </CardContent>

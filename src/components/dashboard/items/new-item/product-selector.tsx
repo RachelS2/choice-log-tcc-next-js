@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { AddNewExperienceFormModel } from '@/models/dashboard/experiences';
 import { Input } from '@/components/ui/input';
 import NewItemModal from './item-form-modal';
-import { getCatalogItemsController } from '@/lib/controller/item-controller';
+import { getItemsController } from '@/lib/controller/item-controller';
 import { ItemDisplayModel } from '@/models/dashboard/items';
 
 
@@ -33,7 +33,7 @@ export default function ProductSelector({
     useEffect(() => {
         const fetchCatalogItems = async () => {
             try {
-                const cats = await getCatalogItemsController();
+                const cats = await getItemsController();
                 setCatalogItems(cats);
                 console.log(cats);
             } 

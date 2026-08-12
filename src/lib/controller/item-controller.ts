@@ -1,4 +1,5 @@
 import { ItemModel } from "@/models/dashboard/items";
+import { ItemDisplayModel, ItemTypeEnum } from "@/models/dashboard/items";
 
 export async function postItemController(item: ItemModel) {
   const response = await fetch("/api/item", {
@@ -24,9 +25,8 @@ export async function postItemController(item: ItemModel) {
   return response.json();
 }
 
-import { ItemDisplayModel, ItemTypeEnum } from "@/models/dashboard/items";
 
-export async function getCatalogItemsController(type?: ItemTypeEnum): Promise<ItemDisplayModel[]> {
+export async function getItemsController(type?: ItemTypeEnum): Promise<ItemDisplayModel[]> {
   const params = new URLSearchParams();
 
   if (type) {
@@ -39,6 +39,22 @@ export async function getCatalogItemsController(type?: ItemTypeEnum): Promise<It
 
   if (!response.ok) {
     throw new Error("FAILED_TO_FETCH_CATALOG");
+  }
+
+  return response.json();
+}
+
+
+export async function deleteItemController(itemId: string): Promise<ItemDisplayModel> {
+  const response = await fetch(
+    `/api/item?itemId=${encodeURIComponent(itemId)}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("FAILED_TO_DELETE_ITEM");
   }
 
   return response.json();

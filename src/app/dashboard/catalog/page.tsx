@@ -6,9 +6,10 @@ import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
 import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
 import ItemFormModal from '@/components/dashboard/items/new-item/item-form-modal';
 import { CategoryModel, ItemDisplayModel, ItemTypeEnum } from '@/models/dashboard/items';
-import { getCatalogItemsController } from '@/lib/controller/item-controller';
+import { getItemsController } from '@/lib/controller/item-controller';
 import { toast } from 'sonner';
 import { fetchCategoriesController } from '@/lib/controller/category-controller';
+import CatalogLoadingState from '@/components/dashboard/catalog/catalog-loading-state';
 
 export type SortOption = 'recent' | 'last_consumed' | 'most_experiences' | 'alphabetical';
 export type TypeFilter = 'ALL' | 'PRODUCT' | 'SERVICE';
@@ -23,12 +24,22 @@ export default function Catalog() {
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
 
+  function handleItemDelete(itemId: string) {
+    setCatalogItems((catalogItems) =>
+      catalogItems.filter((item) => item.id !== itemId)
+    );
+  }
+  const [loading, setIsLoading] = useState(false);
   const fetchCatalogItems = async () => {
+    setIsLoading(true);
     try {
-      const items = await getCatalogItemsController();
+      const items = await getItemsController();
       setCatalogItems(items);
     } catch (error) {
       toast.error('Failed to fetch catalog items');
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -143,8 +154,10 @@ export default function Catalog() {
         brands={brands}
       />
 
-      {filteredItems.length > 0 ? (
-        <CatalogGrid items={filteredItems} />
+      {loading ? (
+        <CatalogLoadingState />
+      ) : filteredItems.length > 0 ? (
+        <CatalogGrid items={filteredItems} onDelete={handleItemDelete} />
       ) : (
         <CatalogEmptyState />
       )}

@@ -47,7 +47,7 @@ export default function CatalogFilters({
         <div className="relative flex-1 min-w-0 lg:max-w-xs">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
           <Input
-            placeholder="Buscar por nome..."
+            placeholder="Search by name..."
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-9 text-black"
@@ -58,22 +58,22 @@ export default function CatalogFilters({
 
         <FilterSelect
           value={typeFilter}
-          placeholder="Tipo"
+          placeholder="Type"
           onChange={(v) => onTypeFilterChange(v as TypeFilter)}
           options={[
-            { value: "ALL", label: "Todos" },
-            { value: "PRODUCT", label: "Produtos" },
-            { value: "SERVICE", label: "Serviços" },
+            { value: "ALL", label: "All" },
+            { value: "PRODUCT", label: "Products" },
+            { value: "SERVICE", label: "Services" },
           ]}
         />
 
         {/* Category Filter */}
         <FilterSelect
           value={categoryFilter}
-          placeholder="Categoria"
+          placeholder="Category"
           onChange={onCategoryFilterChange}
           options={[
-            { value: "all", label: "Todas as categorias" },
+            { value: "all", label: "All categories" },
             ...categories.map((cat) => ({ value: cat.id, label: cat.name })),
           ]}
         />
@@ -82,10 +82,10 @@ export default function CatalogFilters({
         {/* Brand Filter */}
         <FilterSelect
           value={brandFilter}
-          placeholder="Marca"
+          placeholder="Brand"
           onChange={onBrandFilterChange}
           options={[
-            { value: "all", label: "Todas as marcas" },
+            { value: "all", label: "All brands" },
             ...brands.map((brand) => ({ value: brand, label: brand })),
           ]}
         />
@@ -93,13 +93,13 @@ export default function CatalogFilters({
         {/* Sort */}
         <FilterSelect
           value={sort}
-          placeholder="Ordenar"
+          placeholder="Sort by"
           onChange={(v) => onSortChange(v as SortOption)}
           options={[
-            { value: "recent", label: "Adicionados recentemente" },
-            { value: "last_consumed", label: "Último consumo" },
-            { value: "most_experiences", label: "Mais experiências" },
-            { value: "alphabetical", label: "Alfabética" },
+            { value: "recent", label: "Recently added" },
+            { value: "last_consumed", label: "Last consumed" },
+            { value: "most_experiences", label: "Most experiences" },
+            { value: "alphabetical", label: "Alphabetical" },
           ]}
         />
       </div>

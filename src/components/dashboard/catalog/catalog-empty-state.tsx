@@ -7,12 +7,13 @@ export default function CatalogEmptyState() {
         <Package className="h-8 w-8  text-blue-600" />
       </div>
       <h3 className="tracking-tight text-lg font-bold text-blue-600">
-        Nenhum item registrado ainda.
+        No items registered yet.
       </h3>
       <p className="mt-2 max-w-sm text-sm text-neutral-500 leading-relaxed">
-        Comece a construir seu catálogo pessoal registrando seu primeiro produto ou serviço.
+        Start building your personal catalog by registering your first product or service.
       </p>
 
     </div>
   );
 }
+

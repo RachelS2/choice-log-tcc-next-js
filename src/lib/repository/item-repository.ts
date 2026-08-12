@@ -86,3 +86,15 @@ export async function postItemRepository({
     },
   });
 }
+
+export async function deleteItemRepository({
+  itemId,
+}: {
+  itemId: string;
+}) {
+  return await prisma.item.delete({
+    where: {
+      id: itemId,
+    },
+  });
+}

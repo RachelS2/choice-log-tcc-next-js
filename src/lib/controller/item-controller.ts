@@ -1,7 +1,7 @@
 import { ItemModel } from "@/models/dashboard/items";
 import { ItemDisplayModel, ItemTypeEnum } from "@/models/dashboard/items";
 
-export async function postItemController(item: ItemModel) {
+export async function postItemController(item: ItemDisplayModel) : Promise<ItemDisplayModel> {
   const response = await fetch("/api/item", {
     method: "POST",
     headers: {

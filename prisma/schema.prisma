@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  provider        = "prisma-client-js"
+  output          = "../generated/prisma"
+  previewFeatures = ["partialIndexes"]
 }
 
 datasource db {
@@ -64,22 +65,18 @@ model Verification {
 }
 
 model Item {
-  id           String @id @default(cuid())
-  friendlyName String @db.VarChar(30)
-  systemName   String @db.VarChar(30)
-  brand        String @db.VarChar(30)
-
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  imageUrl  String?
-
+  friendlyName  String         @db.VarChar(30)
+  systemName    String         @db.VarChar(30)
+  categoryId    String
+  id            String         @id @default(cuid())
+  brand         String         @db.VarChar(30)
+  userId        String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  imageUrl      String?
   consumptions  Consumption[]
+  category      Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   wishListItems WishListItem[]
 
   @@unique([systemName, brand, userId])
@@ -88,35 +85,31 @@ model Item {
 }
 
 model ItemType {
-  id   Int          @id @default(autoincrement())
-  name ItemTypeEnum @unique
-
+  name               ItemTypeEnum        @unique
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @default(now()) @updatedAt
+  id                 Int                 @id @default(autoincrement())
   categories         Category[]
   consumptionReasons ConsumptionReason[]
   negativeAspects    NegativeAspect[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Category {
-  id           String @id @default(cuid())
-  name String @db.VarChar(30)
-
-  typeId Int
-  type   ItemType @relation(fields: [typeId], references: [id])
-
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  items Item[]
-  goals Goal[]
-
+  id            String         @id @default(cuid())
+  userId        String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @default(now()) @updatedAt
+  typeId        Int
+  name          String         @db.VarChar(30)
+  description   String?        @db.VarChar(200)
+  type          ItemType       @relation(fields: [typeId], references: [id])
+  user          User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goals         Goal[]
+  items         Item[]
   spendingGoals SpendingGoal[]
 
   @@unique([name, userId])
+  @@unique([name, userId], map: "unique_user_category", where: raw("(\"userId\" IS NOT NULL)"))
   @@index([typeId])
 }
 
@@ -134,9 +127,9 @@ model WishListItem {
   wishListId   String
   itemId       String
   priority     WishListItemPriority
-  note         String?              @db.VarChar(300)
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @default(now()) @updatedAt
+  note         String?              @db.VarChar(300)
   consumptions Consumption[]
   item         Item                 @relation(fields: [itemId], references: [id], onDelete: Cascade)
   wishList     WishList             @relation(fields: [wishListId], references: [id], onDelete: Cascade)
@@ -145,82 +138,62 @@ model WishListItem {
 }
 
 model ConsumptionReason {
-  id           Int    @id @default(autoincrement())
-  systemName   String @db.VarChar(30)
-  friendlyName String @db.VarChar(30)
-
-  typeId Int
-  type   ItemType @relation(fields: [typeId], references: [id])
-
+  systemName   String        @db.VarChar(30)
+  friendlyName String        @db.VarChar(30)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt
+  id           Int           @id @default(autoincrement())
+  typeId       Int
   consumptions Consumption[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  type         ItemType      @relation(fields: [typeId], references: [id])
 
   @@unique([systemName, typeId])
   @@index([typeId])
 }
 
 model ConsumptionInfluence {
-  id           Int    @id @default(autoincrement())
-  systemName   String @db.VarChar(30)
-  friendlyName String @db.VarChar(30)
-
+  systemName   String        @unique @db.VarChar(30)
+  friendlyName String        @db.VarChar(30)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt
+  id           Int           @id @default(autoincrement())
   consumptions Consumption[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-
-  @@unique([systemName])
 }
 
 model NegativeAspect {
-  id           Int    @id @default(autoincrement())
-  systemName   String @db.VarChar(30)
-  friendlyName String @db.VarChar(30)
-
-  typeId Int
-  type   ItemType @relation(fields: [typeId], references: [id])
-
+  systemName   String                      @db.VarChar(30)
+  friendlyName String                      @db.VarChar(30)
+  createdAt    DateTime                    @default(now())
+  updatedAt    DateTime                    @default(now()) @updatedAt
+  id           Int                         @id @default(autoincrement())
+  typeId       Int
   consumptions ConsumptionNegativeAspect[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  type         ItemType                    @relation(fields: [typeId], references: [id])
 
   @@unique([systemName, typeId])
   @@index([typeId])
 }
 
 model Consumption {
-  id String @id @default(cuid())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  itemId String
-  item   Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
-
-  wishListItemId String?
-  wishListItem   WishListItem? @relation(fields: [wishListItemId], references: [id])
-
-  reasonId Int
-  reason   ConsumptionReason @relation(fields: [reasonId], references: [id])
-
-  wouldBuyAgain Boolean?
-
-  influenceId Int
-  influence   ConsumptionInfluence @relation(fields: [influenceId], references: [id])
-
-  price  Float
-  rating Float
-
-  details String? @db.VarChar(300)
-  address String? @db.VarChar(255)
-
-  date      DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-
+  id              String                      @id @default(cuid())
+  userId          String
+  itemId          String
+  wishListItemId  String?
+  wouldBuyAgain   Boolean?
+  price           Float
+  rating          Float
+  details         String?                     @db.VarChar(300)
+  address         String?                     @db.VarChar(255)
+  createdAt       DateTime                    @default(now())
+  updatedAt       DateTime                    @default(now()) @updatedAt
+  date            DateTime
+  influenceId     Int
+  reasonId        Int
+  influence       ConsumptionInfluence        @relation(fields: [influenceId], references: [id])
+  item            Item                        @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  reason          ConsumptionReason           @relation(fields: [reasonId], references: [id])
+  user            User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wishListItem    WishListItem?               @relation(fields: [wishListItemId], references: [id])
   negativeAspects ConsumptionNegativeAspect[]
 
   @@index([itemId])
@@ -230,10 +203,9 @@ model Consumption {
 }
 
 model ConsumptionNegativeAspect {
-  consumptionId String
-  consumption   Consumption @relation(fields: [consumptionId], references: [id], onDelete: Cascade)
-
+  consumptionId    String
   negativeAspectId Int
+  consumption      Consumption    @relation(fields: [consumptionId], references: [id], onDelete: Cascade)
   negativeAspect   NegativeAspect @relation(fields: [negativeAspectId], references: [id], onDelete: Cascade)
 
   @@id([consumptionId, negativeAspectId])
@@ -241,48 +213,38 @@ model ConsumptionNegativeAspect {
 }
 
 model Goal {
-  id String @id @default(cuid())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  initialDate DateTime  @default(now())
-  finalDate   DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-
-  spendingGoal     SpendingGoal?
-  satisfactionGoal SatisfactionGoal?
-  impulsivityGoal  ImpulsivityGoal?
-  category         Category?         @relation(fields: [categoryId], references: [id])
+  id               String            @id @default(cuid())
+  userId           String
   categoryId       String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @default(now()) @updatedAt
+  finalDate        DateTime?
+  initialDate      DateTime          @default(now())
+  category         Category?         @relation(fields: [categoryId], references: [id])
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  impulsivityGoal  ImpulsivityGoal?
+  satisfactionGoal SatisfactionGoal?
+  spendingGoal     SpendingGoal?
 }
 
 model SpendingGoal {
-  goalId String @id
-  goal   Goal   @relation(fields: [goalId], references: [id], onDelete: Cascade)
-
+  goalId        String    @id
   spendingLimit Float
-
-  categoryId String?
-  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId    String?
+  category      Category? @relation(fields: [categoryId], references: [id])
+  goal          Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
 }
 
 model SatisfactionGoal {
-  goalId String @id
-
-  goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
-
+  goalId       String @id
   targetRating Float
+  goal         Goal   @relation(fields: [goalId], references: [id], onDelete: Cascade)
 }
 
 model ImpulsivityGoal {
-  goalId String @id
-
-  goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
-
+  goalId                   String @id
   targetDecreasePercentage Float
+  goal                     Goal   @relation(fields: [goalId], references: [id], onDelete: Cascade)
 }
 
 enum WishListItemPriority {

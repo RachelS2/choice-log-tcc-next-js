@@ -15,7 +15,7 @@ export interface ItemDisplayModel {
   image: string | null;
   experiences: number;
   averageRating: number;
-  lastConsumed: string;
+  lastConsumed: string | null;
 }
 
 export interface ItemModel {

@@ -73,7 +73,7 @@ export default function CatalogFilters({
           placeholder="Category"
           onChange={onCategoryFilterChange}
           options={[
-            { value: "all", label: "All categories" },
+            { value: "ALL", label: "All categories" },
             ...categories.map((cat) => ({ value: cat.id, label: cat.name })),
           ]}
         />
@@ -85,7 +85,7 @@ export default function CatalogFilters({
           placeholder="Brand"
           onChange={onBrandFilterChange}
           options={[
-            { value: "all", label: "All brands" },
+            { value: "ALL", label: "All brands" },
             ...brands.map((brand) => ({ value: brand, label: brand })),
           ]}
         />
@@ -132,7 +132,7 @@ function FilterSelect({
         <SelectTrigger
           className={cn(
             "h-11 w-full ",
-            value === "all" || value === "recent"
+            value === "ALL" || value === "recent"
               ? "text-muted-foreground"
               : "text-gray-900"
           )}

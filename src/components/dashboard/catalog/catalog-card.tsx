@@ -62,14 +62,15 @@ export default function CatalogCard({ item, onDelete }: CatalogCardProps) {
       setDeleteModalOpen(false);
 
       onDelete(item.id);
+      toast.success("Item deleted successfully.");
     } catch (error) {
       console.error("Failed to delete item:", error);
       toast.error("Failed to delete item.");
     }
   }
-  const handleDelete = async (e: React.MouseEvent) => {
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setDeleteModalOpen(true);
-
   };
 
   const handleViewDetails = () => {
@@ -122,7 +123,7 @@ export default function CatalogCard({ item, onDelete }: CatalogCardProps) {
         <div className="mt-2.5 flex flex-wrap gap-1.5">
           <Badge
             variant="secondary"
-            className={`text-[11px] font-medium ${item.type === 'PRODUCT'
+            className={`text-sm font-medium ${item.type === 'PRODUCT'
               ? 'bg-blue-50 text-blue-700 border-blue-100'
               : 'bg-violet-50 text-violet-700 border-violet-100'
               }`}
@@ -131,7 +132,7 @@ export default function CatalogCard({ item, onDelete }: CatalogCardProps) {
           </Badge>
           <Badge
             variant="secondary"
-            className="text-[11px] font-medium bg-neutral-100 text-neutral-600 border-neutral-200"
+            className="text-sm font-medium bg-neutral-100 text-neutral-600 border-neutral-200"
           >
             {item.category}
           </Badge>
@@ -141,20 +142,20 @@ export default function CatalogCard({ item, onDelete }: CatalogCardProps) {
       {/* Stats */}
       <div className="space-y-2.5 border-t border-neutral-100 pt-4">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-neutral-500">Experiences</span>
+          <span className="text-sm text-neutral-500">Experiences</span>
           <span className="text-sm font-medium text-neutral-900">{item.experiences}</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-xs text-neutral-500">Average rating</span>
+          <span className="text-sm text-neutral-500">Average rating</span>
           <div className="flex items-center gap-1.5">
             <RatingStars rating={item.averageRating} />
-            <span className="text-xs font-medium text-neutral-700">{item.averageRating}</span>
           </div>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-xs text-neutral-500">Last consumed</span>
-          <span className="text-xs font-medium text-neutral-700">
-            {formatDate(item.lastConsumed)}
+
+          <span className="text-sm text-neutral-500">Last consumed</span>
+          <span className="text-sm font-medium text-neutral-700">
+            {item.lastConsumed ? formatDate(item.lastConsumed) : '-'}
           </span>
         </div>
       </div>
@@ -179,7 +180,7 @@ export default function CatalogCard({ item, onDelete }: CatalogCardProps) {
         onOpenChange={setDeleteModalOpen}
         onConfirm={handleDeleteModal}
         dialogTitle="Confirm Delete"
-        dialogDescription="Are you sure you want to delete this item?"
+        dialogDescription="Are you sure you want to permanently delete this item?"
         buttonText="Delete"
       />
     </div>

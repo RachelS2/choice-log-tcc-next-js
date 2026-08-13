@@ -103,13 +103,27 @@ export default function Catalog() {
         break;
 
       case 'last_consumed':
-        items.sort(
-          (a, b) =>
+
+        items.sort((a, b) => {
+          if (a.lastConsumed === null && b.lastConsumed === null) {
+            return 0;
+          }
+
+          if (a.lastConsumed === null) {
+            return 1;
+          }
+
+          if (b.lastConsumed === null) {
+            return -1;
+          }
+
+          return (
             new Date(b.lastConsumed).getTime() -
             new Date(a.lastConsumed).getTime()
-        );
-        break;
+          );
+        });
 
+        break;
       case 'most_experiences':
         items.sort(
           (a, b) => b.experiences - a.experiences

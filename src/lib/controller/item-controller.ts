@@ -1,7 +1,7 @@
 import { ItemModel } from "@/models/dashboard/items";
 import { ItemDisplayModel, ItemTypeEnum } from "@/models/dashboard/items";
 
-export async function postItemController(item: ItemDisplayModel) : Promise<ItemDisplayModel> {
+export async function postItemController(item: ItemModel) : Promise<ItemModel> {
   const response = await fetch("/api/item", {
     method: "POST",
     headers: {
@@ -60,3 +60,34 @@ export async function deleteItemController(itemId: string): Promise<ItemDisplayM
   return response.json();
 }
 
+// src/controllers/item.ts
+
+
+export interface UpdateItemRequest {
+  id: string;
+  friendlyName: string;
+  brand: string;
+  categoryId: string;
+}
+
+export async function updateItemController(
+  item: UpdateItemRequest
+): Promise<ItemDisplayModel> {
+  const response = await fetch("/api/item", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(item),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+
+    throw new Error(
+      error?.error ?? "FAILED_TO_UPDATE_ITEM"
+    );
+  }
+
+  return response.json();
+}

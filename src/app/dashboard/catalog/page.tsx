@@ -4,15 +4,15 @@ import CatalogEmptyState from '@/components/dashboard/catalog/catalog-empty-stat
 import CatalogFilters from '@/components/dashboard/catalog/catalog-filter';
 import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
 import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
-import ItemFormModal from '@/components/dashboard/items/new-item/item-form-modal';
+import NewItemFormModal from '@/components/dashboard/items/new-item/new-item-form-modal';
 import { CategoryModel, ItemDisplayModel, ItemTypeEnum } from '@/models/dashboard/items';
 import { getItemsController } from '@/lib/controller/item-controller';
 import { toast } from 'sonner';
 import { fetchCategoriesController } from '@/lib/controller/category-controller';
 import CatalogLoadingState from '@/components/dashboard/catalog/catalog-loading-state';
 
-export type SortOption = 'recent' | 'last_consumed' | 'most_experiences' | 'alphabetical';
-export type TypeFilter = 'ALL' | 'PRODUCT' | 'SERVICE';
+export type SortOption = 'recent' | 'last_consumed' | 'most_experiences' | 'alphabetical' | 'most_spent';
+export type TypeFilter = 'ALL' | ItemTypeEnum;
 
 export default function Catalog() {
   const [search, setSearch] = useState('');
@@ -135,6 +135,11 @@ export default function Catalog() {
           a.friendlyName.localeCompare(b.friendlyName)
         );
         break;
+      case 'most_spent':
+        items.sort(
+          (a, b) => b.totalSpent - a.totalSpent
+        );
+        break;
     }
 
     return items;
@@ -176,7 +181,7 @@ export default function Catalog() {
         <CatalogEmptyState />
       )}
 
-      <ItemFormModal
+      <NewItemFormModal
         open={modalOpen}
         onOpenChange={setModalOpen}
         onSuccess={async () => {

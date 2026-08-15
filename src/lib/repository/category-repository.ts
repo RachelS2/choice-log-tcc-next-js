@@ -1,25 +1,37 @@
 // src/lib/catalog.ts
 
 import { prisma } from "@/lib/prisma";
-import {  CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
+import { CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
 
 
 export async function fetchCategoriesRepository(
+  userId?: string,
   type?: ItemTypeEnum
 ): Promise<CategoryModel[]> {
   const categories = await prisma.category.findMany({
-    where: type
-      ? {
+    where: {
+      OR: userId
+        ? [
+          { userId: null },
+          { userId },
+        ]
+        : [
+          { userId: null },
+        ],
+
+      ...(type && {
         type: {
           name: type,
         },
-      }
-      : undefined,
+      }),
+    },
+
     select: {
       id: true,
       name: true,
       type: true,
     },
+
     orderBy: {
       name: "asc",
     },

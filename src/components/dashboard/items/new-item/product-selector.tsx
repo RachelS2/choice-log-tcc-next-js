@@ -12,7 +12,7 @@ import { useGetUserProducts } from '@/hooks/use-products';
 import { toast } from 'sonner';
 import { AddNewExperienceFormModel } from '@/models/dashboard/experiences';
 import { Input } from '@/components/ui/input';
-import NewItemModal from './item-form-modal';
+import NewItemModal from './new-item-form-modal';
 import { getItemsController } from '@/lib/controller/item-controller';
 import { ItemDisplayModel } from '@/models/dashboard/items';
 

@@ -86,9 +86,9 @@ export default function CatalogCard({ item, onDelete }: CatalogCardProps) {
         <div
           className={`flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${getAvatarColor(item.friendlyName)} text-white font-semibold text-sm`}
         >
-          {item.image ? (
+          {item.imageUrl ? (
             <img
-              src={item.image}
+              src={item.imageUrl}
               alt={item.friendlyName}
               className="h-full w-full rounded-full object-cover"
             />

@@ -13,19 +13,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn, getUserAuthData, toSystemName } from '@/lib/utils';
-import { itemFormSchema, type ItemFormSchema } from '../../../../zod-schemas/item-form-schema';
-import type { CategoryModel, ItemDisplayModel, ItemModel, ItemTypeEnum } from '../../../../models/dashboard/items';
-import { redirect } from 'next/navigation';
+import { cn, toSystemName } from '@/lib/utils';
+import type { CategoryModel, ItemModel, ItemTypeEnum } from '../../../../models/dashboard/items';
 import { fetchCategoriesController } from '@/lib/controller/category-controller';
 import { postItemController } from '@/lib/controller/item-controller';
+import { newItemFormSchema , NewItemFormSchema } from '@/zod-schemas/item-form-schema';
 
-interface ItemFormProps {
+interface NewItemFormProps {
   onSuccess: (item: ItemModel) => void;
   onCancel: () => void;
 }
 
-export default function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
+export default function NewItemForm({ onSuccess, onCancel }: NewItemFormProps) {
 
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
@@ -40,8 +39,8 @@ export default function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
     formState: { errors },
     clearErrors,
     setError,
-  } = useForm<ItemFormSchema>({
-    resolver: zodResolver(itemFormSchema),
+  } = useForm<NewItemFormSchema>({
+    resolver: zodResolver(newItemFormSchema),
     defaultValues: {
       type: undefined,
       categoryId: '',
@@ -78,7 +77,7 @@ export default function ItemForm({ onSuccess, onCancel }: ItemFormProps) {
     }
   }, [selectedType, loadCategories, setValue]);
 
-  const onSubmit = async (data: ItemFormSchema) => {
+  const onSubmit = async (data: NewItemFormSchema) => {
     setSubmitting(true);
     setServerError(null);
     try {

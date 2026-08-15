@@ -6,18 +6,6 @@ export interface CategoryModel {
   type: ItemTypeEnum;
 }
 
-export interface ItemDisplayModel {
-  id: string;
-  friendlyName: string;
-  brand: string;
-  type: ItemTypeEnum;
-  category: string;
-  image: string | null;
-  experiences: number;
-  averageRating: number;
-  lastConsumed: string | null;
-}
-
 export interface ItemModel {
   categoryId: string;
   friendlyName: string;
@@ -26,9 +14,19 @@ export interface ItemModel {
   imageUrl: string | null;
 }
 
-export interface ItemIdModel extends ItemModel {
+export interface ItemDisplayModel extends ItemModel {
   id: string;
+  type: ItemTypeEnum;
+  category: string;
+  experiences: number;
+  averageRating: number;
+  lastConsumed: string | null;
+  totalSpent: number;
+
 }
+
+
+
 
 // categoryId: string;
 // friendlyName: string;

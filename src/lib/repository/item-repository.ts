@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { ItemDisplayModel, CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
 import { ItemModel } from "@/models/dashboard/items";
+import { toSystemName } from "../utils";
 
 export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum): Promise<ItemDisplayModel[]> {
   const items = await prisma.item.findMany({
@@ -34,13 +35,16 @@ export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum): 
   return items.map((item) => ({
     id: item.id,
     friendlyName: item.friendlyName,
+    systemName: item.systemName,
+    categoryId: item.categoryId,
     brand: item.brand,
     type: item.category.type.name as ItemTypeEnum,
     category: item.category.name,
-    image: item.imageUrl,
+    imageUrl: item.imageUrl,
 
     experiences: item.consumptions.length,
 
+    totalSpent: item.consumptions.reduce((sum, c) => sum + (c.price ?? 0), 0),
     averageRating:
       item.consumptions.length === 0
         ? 0
@@ -95,6 +99,40 @@ export async function deleteItemRepository({
   return await prisma.item.delete({
     where: {
       id: itemId,
+    },
+  });
+}
+
+// src/lib/item.ts
+
+export async function updateItemRepository({
+  item
+}: {
+  item: ItemDisplayModel;
+}) {
+  return await prisma.item.update({
+    where: {
+      id: item.id,
+    },
+
+    data: {
+      friendlyName: item.friendlyName,
+      systemName: toSystemName(item.friendlyName),
+      brand: item.brand,
+
+      category: {
+        connect: {
+          id: item.categoryId,
+        },
+      },
+    },
+
+    include: {
+      category: {
+        include: {
+          type: true,
+        },
+      },
     },
   });
 }

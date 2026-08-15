@@ -5,16 +5,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import ItemForm from './item-form';
+import ItemForm from './edit-item-form';
 import type { ItemModel } from '../../../../models/dashboard/items';
 
-interface ItemFormModalProps {
+interface EditItemFormModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess: (item: ItemModel) => void;
 }
 
-export default function ItemFormModal({ open, onOpenChange, onSuccess }: ItemFormModalProps) {
+export default function EditItemFormModal({ open, onOpenChange, onSuccess }: EditItemFormModalProps) {
   const handleSuccess = (item: ItemModel) => {
     onSuccess(item);
     onOpenChange(false);

@@ -1,11 +1,15 @@
 import { CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
 
-export async function fetchCategoriesController(type?: ItemTypeEnum): Promise<CategoryModel[]> {
+
+export async function fetchCategoriesController(filterByUser: boolean, type?: ItemTypeEnum): Promise<CategoryModel[]> {
   const params = new URLSearchParams();
 
   if (type) {
     params.set("type", type);
   }
+
+  params.set("filterByUser", filterByUser ? "true" : "false");
+
 
   const query = params.toString();
 

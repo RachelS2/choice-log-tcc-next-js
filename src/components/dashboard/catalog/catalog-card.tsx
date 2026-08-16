@@ -3,14 +3,17 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import RatingStars from '@/components/ui/rating-starts';
-import { ItemDisplayModel } from '@/models/dashboard/items';
+import { CategoryModel, ItemDisplayModel } from '@/models/dashboard/items';
 import { deleteItemController } from '@/lib/controller/item-controller';
 import { useState } from "react";
 import Modal from '@/components/ui/modal';
+import EditItemModal from '../items/edit-item/edit-item-form-modal';
 
-interface CatalogCardProps {
+export interface CatalogCardProps {
   item: ItemDisplayModel;
   onDelete: (itemId: string) => void;
+  onEdit: (item: ItemDisplayModel) => void;
+  categories: CategoryModel[];
 }
 
 function getInitials(name: string): string {
@@ -48,13 +51,14 @@ function formatDate(dateStr: string): string {
 }
 
 
-export default function CatalogCard({ item, onDelete }: CatalogCardProps) {
+export default function CatalogCard({ item, onDelete, onEdit, categories }: CatalogCardProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] =
+    useState(false);
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
-    toast.info(`Editing "${item.friendlyName}"...`);
+    setEditModalOpen(true);
   };
-
   async function handleDeleteModal() {
     try {
       await deleteItemController(item.id);
@@ -182,6 +186,13 @@ export default function CatalogCard({ item, onDelete }: CatalogCardProps) {
         dialogTitle="Confirm Delete"
         dialogDescription="Are you sure you want to permanently delete this item?"
         buttonText="Delete"
+      />
+      <EditItemModal
+        item={item}
+        categories={categories}
+        open={editModalOpen}
+        onOpenChange={setEditModalOpen}
+        onSuccess={onEdit}
       />
     </div>
   );

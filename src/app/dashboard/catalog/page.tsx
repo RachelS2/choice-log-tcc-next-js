@@ -10,11 +10,12 @@ import { getItemsController } from '@/lib/controller/item-controller';
 import { toast } from 'sonner';
 import { fetchCategoriesController } from '@/lib/controller/category-controller';
 import CatalogLoadingState from '@/components/dashboard/catalog/catalog-loading-state';
+import { useGetCategories } from '@/hooks/use-categories';
 
 export type SortOption = 'recent' | 'last_consumed' | 'most_experiences' | 'alphabetical' | 'most_spent';
 export type TypeFilter = 'ALL' | ItemTypeEnum;
 
-export default function Catalog() {
+export default function CatalogPage() {
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('ALL');
   const [categoryFilter, setCategoryFilter] = useState('ALL');
@@ -24,6 +25,17 @@ export default function Catalog() {
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const handleEditItem = (
+    updatedItem: ItemDisplayModel
+  ) => {
+    setCatalogItems((currentItems) =>
+      currentItems.map((item) =>
+        item.id === updatedItem.id
+          ? updatedItem
+          : item
+      )
+    );
+  };
   function handleItemDelete(itemId: string) {
     setCatalogItems((catalogItems) =>
       catalogItems.filter((item) => item.id !== itemId)
@@ -50,7 +62,7 @@ export default function Catalog() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const categories = await fetchCategoriesController(typeFilter === 'ALL' ? undefined : typeFilter as ItemTypeEnum);
+        const categories = await fetchCategoriesController(true, typeFilter === 'ALL' ? undefined : typeFilter as ItemTypeEnum);
         setCategories(categories);
       } catch (error) {
         toast.error('Failed to fetch categories');
@@ -176,7 +188,7 @@ export default function Catalog() {
       {loading ? (
         <CatalogLoadingState />
       ) : filteredItems.length > 0 ? (
-        <CatalogGrid items={filteredItems} onDelete={handleItemDelete} />
+        <CatalogGrid items={filteredItems} onDelete={handleItemDelete} onEdit={handleEditItem} categories={categories} />
       ) : (
         <CatalogEmptyState />
       )}
@@ -184,6 +196,8 @@ export default function Catalog() {
       <NewItemFormModal
         open={modalOpen}
         onOpenChange={setModalOpen}
+        dialogTitle='New Item'
+        dialogDescription='Register a product or service to use in your consumption records.'
         onSuccess={async () => {
           await fetchCatalogItems();
           setModalOpen(false);

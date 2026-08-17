@@ -14,17 +14,22 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn, toSystemName } from '@/lib/utils';
-import type { CategoryModel, ItemModel, ItemTypeEnum } from '../../../../models/dashboard/items';
+import type { CategoryModel, ItemDisplayModel, ItemModel, ItemTypeEnum } from '../../../models/dashboard/items';
 import { fetchCategoriesController } from '@/lib/controller/category-controller';
-import { postItemController } from '@/lib/controller/item-controller';
-import { newItemFormSchema , NewItemFormSchema } from '@/zod-schemas/item-form-schema';
+import { postItemController, updateItemController } from '@/lib/controller/item-controller';
+import { itemFormSchema, ItemFormSchema } from '@/zod-schemas/item-form-schema';
 
-interface NewItemFormProps {
-  onSuccess: (item: ItemModel) => void;
+interface CreateUpdateItemFormProps {
+  mode: "create" | "edit";
+
+  item?: ItemDisplayModel;
+
+  onSuccess: (item: ItemDisplayModel) => void;
+
   onCancel: () => void;
 }
 
-export default function NewItemForm({ onSuccess, onCancel }: NewItemFormProps) {
+export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode }: CreateUpdateItemFormProps) {
 
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
@@ -36,17 +41,19 @@ export default function NewItemForm({ onSuccess, onCancel }: NewItemFormProps) {
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
     clearErrors,
     setError,
-  } = useForm<NewItemFormSchema>({
-    resolver: zodResolver(newItemFormSchema),
+  } = useForm<ItemFormSchema>({
+    resolver: zodResolver(itemFormSchema),
+
     defaultValues: {
-      type: undefined,
-      categoryId: '',
-      friendlyName: '',
-      brand: '',
-      imageUrl: '',
+      type: item?.type,
+      categoryId: item?.categoryId ?? "",
+      friendlyName: item?.friendlyName ?? "",
+      brand: item?.brand ?? "",
+      imageUrl: item?.imageUrl ?? "",
     },
   });
 
@@ -58,12 +65,12 @@ export default function NewItemForm({ onSuccess, onCancel }: NewItemFormProps) {
     setLoadingCategories(true);
     setServerError(null);
     try {
-      const cats = await fetchCategoriesController(type);
+      const cats = await fetchCategoriesController(true, type);
       setCategories(cats);
       console.log("Categories: " + cats)
     }
     catch (err) {
-        setServerError('Failed to load categories. Please try again later.');
+      setServerError('Failed to load categories. Please try again later.');
     }
     finally {
       setLoadingCategories(false);
@@ -71,32 +78,72 @@ export default function NewItemForm({ onSuccess, onCancel }: NewItemFormProps) {
   }, []);
 
   useEffect(() => {
-    if (selectedType) {
-      loadCategories(selectedType);
-      setValue('categoryId', '');
-    }
-  }, [selectedType, loadCategories, setValue]);
+    if (!selectedType) return;
 
-  const onSubmit = async (data: NewItemFormSchema) => {
+    loadCategories(selectedType);
+
+    if (mode === "create") {
+      setValue("categoryId", "");
+    }
+  }, [selectedType, loadCategories, setValue, mode]);
+
+  useEffect(() => {
+    if (item) {
+      reset({
+        type: item.type,
+        categoryId: item.categoryId,
+        friendlyName: item.friendlyName,
+        brand: item.brand,
+        imageUrl: item.imageUrl ?? "",
+      });
+    }
+  }, [item, reset]);
+
+  const onSubmit = async (data: ItemFormSchema) => {
     setSubmitting(true);
     setServerError(null);
+
     try {
-      const item = await postItemController({
-        categoryId: data.categoryId,
-        friendlyName: data.friendlyName,
-        systemName: toSystemName(data.friendlyName),
-        brand: data.brand,
-        imageUrl: data.imageUrl || null,
-      },
-      );
-      onSuccess(item);
-    } catch (err) {
-      if (err instanceof Error && err.message === 'UNIQUE_CONSTRAINT_VIOLATION') {
-        setServerError('You already have an item with this name and brand.');
-        setError('friendlyName', { message: 'Duplicate combination.' });
-        setError('brand', { message: 'Duplicate combination.' });
+      let x: ItemModel | ItemDisplayModel;
+
+      if (mode === "create") {
+        x = await postItemController({
+          categoryId: data.categoryId,
+          friendlyName: data.friendlyName,
+          systemName: toSystemName(data.friendlyName),
+          brand: data.brand,
+          imageUrl: data.imageUrl || null,
+        });
       } else {
-        setServerError('An unexpected error occurred. Please try again.');
+        x = await updateItemController({
+          id: x!.id,
+          categoryId: data.categoryId,
+          friendlyName: data.friendlyName,
+          brand: data.brand,
+        });
+      }
+
+      onSuccess(x);
+    } catch (err) {
+      if (
+        err instanceof Error &&
+        err.message === "UNIQUE_CONSTRAINT_VIOLATION"
+      ) {
+        setServerError(
+          "You already have an item with this name and brand."
+        );
+
+        setError("friendlyName", {
+          message: "Duplicate combination.",
+        });
+
+        setError("brand", {
+          message: "Duplicate combination.",
+        });
+      } else {
+        setServerError(
+          "An unexpected error occurred. Please try again."
+        );
       }
     } finally {
       setSubmitting(false);
@@ -292,10 +339,15 @@ export default function NewItemForm({ onSuccess, onCancel }: NewItemFormProps) {
           {submitting ? (
             <span className="flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />
-              Adding...
+
+              {mode === "edit"
+                ? "Saving..."
+                : "Adding..."}
             </span>
           ) : (
-            'Add Item'
+            mode === "edit"
+              ? "Save Changes"
+              : "Add Item"
           )}
         </Button>
       </div>

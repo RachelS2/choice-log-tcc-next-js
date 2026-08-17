@@ -5,19 +5,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import NewItemForm from './new-item-form';
-import type { ItemModel } from '../../../../models/dashboard/items';
+import CreateUpdateItemForm from './create-update-item-form';
+import type { ItemDisplayModel, ItemModel } from '../../../models/dashboard/items';
 
-interface NewItemFormModalProps {
+interface CreateUpdateItemModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess: (item: ItemModel) => void;
-  dialogDescription: string;
-  dialogTitle: string;
+  onSuccess: (item: ItemDisplayModel) => void;
+  mode: "create" | "edit";
+  item?: ItemDisplayModel;
 }
 
-export default function NewItemFormModal({ open, onOpenChange, onSuccess, dialogDescription, dialogTitle }: NewItemFormModalProps) {
-  const handleSuccess = (item: ItemModel) => {
+export default function CreateUpdateItemModal({ open, onOpenChange, onSuccess, mode, item }: CreateUpdateItemModalProps) {
+  const handleSuccess = (item: ItemDisplayModel) => {
     onSuccess(item);
     onOpenChange(false);
   };
@@ -31,13 +31,13 @@ export default function NewItemFormModal({ open, onOpenChange, onSuccess, dialog
       <DialogContent className="sm:max-w-[540px] max-h-[90vh] overflow-y-auto p-0">
         <DialogHeader className="px-6 pt-6 pb-2">
           <DialogTitle className="text-xl font-semibold text-blue-500">
-            {dialogTitle}
+            {mode === "edit" ? "Edit Item" : "Create Item"}
           </DialogTitle>
           <DialogDescription className="text-md text-neutral-500">
-            {dialogDescription}
+            {mode === "edit" ? "Update the details of this item." : "Add a new item to your inventory."}
           </DialogDescription>
         </DialogHeader>
-        <NewItemForm onSuccess={handleSuccess} onCancel={handleCancel} />
+        <CreateUpdateItemForm mode={mode} onSuccess={handleSuccess} onCancel={handleCancel} item={item} />
       </DialogContent>
     </Dialog>
   );

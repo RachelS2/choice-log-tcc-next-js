@@ -5,9 +5,9 @@ import { ItemDisplayModel, CategoryModel, ItemTypeEnum } from "@/models/dashboar
 import { ItemModel } from "@/models/dashboard/items";
 import { toSystemName } from "../utils";
 
-export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum): Promise<ItemDisplayModel[]> {
+export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum, itemId?: string): Promise<ItemDisplayModel[]> {
   const items = await prisma.item.findMany({
-    where: categoryType
+    where: (categoryType
       ? {
         category: {
           type: {
@@ -15,7 +15,9 @@ export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum): 
           },
         },
       }
-      : undefined,
+      : undefined) && itemId ? {
+      id: itemId,
+    } : undefined,
     include: {
       category: {
         select: {
@@ -69,8 +71,8 @@ export async function postItemRepository({
 }: {
   item: ItemModel;
   userId: string;
-}) {
-  return await prisma.item.create({
+}) : Promise<ItemDisplayModel> {
+  const createdItem = await prisma.item.create({
     data: {
       friendlyName: item.friendlyName,
       systemName: item.systemName,
@@ -89,6 +91,13 @@ export async function postItemRepository({
 
     },
   });
+
+  const [createdCatalogItem] = await fetchCatalogItemsRepository(
+    undefined,
+    createdItem.id
+  );
+
+  return createdCatalogItem;
 }
 
 export async function deleteItemRepository({

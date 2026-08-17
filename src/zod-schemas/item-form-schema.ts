@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const newItemFormSchema = z.object({
+export const itemFormSchema = z.object({
   type: z.enum(['PRODUCT', 'SERVICE'], {
     required_error: 'Please select the item type.',
   }),
@@ -16,4 +16,4 @@ export const newItemFormSchema = z.object({
   imageUrl: z.string().url('Must be a valid URL.').optional().or(z.literal('')),
 });
 
-export type NewItemFormSchema = z.infer<typeof newItemFormSchema>;
+export type ItemFormSchema = z.infer<typeof itemFormSchema>;

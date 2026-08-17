@@ -4,7 +4,7 @@ import CatalogEmptyState from '@/components/dashboard/catalog/catalog-empty-stat
 import CatalogFilters from '@/components/dashboard/catalog/catalog-filter';
 import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
 import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
-import NewItemFormModal from '@/components/dashboard/items/new-item/new-item-form-modal';
+import CreateUpdateItemModal from '@/components/dashboard/items/create-item-modal';
 import { CategoryModel, ItemDisplayModel, ItemTypeEnum } from '@/models/dashboard/items';
 import { getItemsController } from '@/lib/controller/item-controller';
 import { toast } from 'sonner';
@@ -193,7 +193,7 @@ export default function CatalogPage() {
         <CatalogEmptyState />
       )}
 
-      <NewItemFormModal
+      <CreateUpdateItemModal
         open={modalOpen}
         onOpenChange={setModalOpen}
         dialogTitle='New Item'

@@ -7,7 +7,7 @@ import { CategoryModel, ItemDisplayModel } from '@/models/dashboard/items';
 import { deleteItemController } from '@/lib/controller/item-controller';
 import { useState } from "react";
 import Modal from '@/components/ui/modal';
-import EditItemModal from '../items/edit-item/edit-item-form-modal';
+import CreateUpdateItemModal from '../items/create-item-modal';
 
 export interface CatalogCardProps {
   item: ItemDisplayModel;
@@ -187,12 +187,12 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         dialogDescription="Are you sure you want to permanently delete this item?"
         buttonText="Delete"
       />
-      <EditItemModal
+      <CreateUpdateItemModal
         item={item}
-        categories={categories}
         open={editModalOpen}
         onOpenChange={setEditModalOpen}
         onSuccess={onEdit}
+        mode="edit"
       />
     </div>
   );

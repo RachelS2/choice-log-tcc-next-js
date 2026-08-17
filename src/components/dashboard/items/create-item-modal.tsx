@@ -6,18 +6,19 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import CreateUpdateItemForm from './create-update-item-form';
-import type { ItemDisplayModel, ItemModel } from '../../../models/dashboard/items';
+import type { CategoryModel, CreateUpdateItemModel } from '../../../models/dashboard/items';
 
 interface CreateUpdateItemModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess: (item: ItemDisplayModel) => void;
+  onSuccess: (item: CreateUpdateItemModel) => void;
   mode: "create" | "edit";
-  item?: ItemDisplayModel;
+  item?: CreateUpdateItemModel;
+  categories: CategoryModel[];
 }
 
-export default function CreateUpdateItemModal({ open, onOpenChange, onSuccess, mode, item }: CreateUpdateItemModalProps) {
-  const handleSuccess = (item: ItemDisplayModel) => {
+export default function CreateUpdateItemModal({ open, onOpenChange, onSuccess, mode, item, categories }: CreateUpdateItemModalProps) {
+  const handleSuccess = (item: CreateUpdateItemModel) => {
     onSuccess(item);
     onOpenChange(false);
   };
@@ -37,7 +38,7 @@ export default function CreateUpdateItemModal({ open, onOpenChange, onSuccess, m
             {mode === "edit" ? "Update the details of this item." : "Add a new item to your inventory."}
           </DialogDescription>
         </DialogHeader>
-        <CreateUpdateItemForm mode={mode} onSuccess={handleSuccess} onCancel={handleCancel} item={item} />
+        <CreateUpdateItemForm mode={mode} onSuccess={handleSuccess} onCancel={handleCancel} item={item} categories={categories} />
       </DialogContent>
     </Dialog>
   );

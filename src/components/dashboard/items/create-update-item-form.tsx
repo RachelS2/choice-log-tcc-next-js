@@ -14,25 +14,26 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn, toSystemName } from '@/lib/utils';
-import type { CategoryModel, ItemDisplayModel, ItemModel, ItemTypeEnum } from '../../../models/dashboard/items';
+import type { CategoryModel, CreateUpdateItemModel, ItemTypeEnum } from '../../../models/dashboard/items';
 import { fetchCategoriesController } from '@/lib/controller/category-controller';
 import { postItemController, updateItemController } from '@/lib/controller/item-controller';
 import { itemFormSchema, ItemFormSchema } from '@/zod-schemas/item-form-schema';
+import { stringify } from 'querystring';
 
 interface CreateUpdateItemFormProps {
   mode: "create" | "edit";
 
-  item?: ItemDisplayModel;
+  item?: CreateUpdateItemModel;
 
-  onSuccess: (item: ItemDisplayModel) => void;
+  onSuccess: (item: CreateUpdateItemModel) => void;
 
   onCancel: () => void;
+  categories: CategoryModel[];
+
 }
 
-export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode }: CreateUpdateItemFormProps) {
+export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, categories }: CreateUpdateItemFormProps) {
 
-  const [categories, setCategories] = useState<CategoryModel[]>([]);
-  const [loadingCategories, setLoadingCategories] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -50,42 +51,21 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode }
 
     defaultValues: {
       type: item?.type,
-      categoryId: item?.categoryId ?? "",
       friendlyName: item?.friendlyName ?? "",
       brand: item?.brand ?? "",
       imageUrl: item?.imageUrl ?? "",
+      categoryId: item?.categoryId ?? "",
     },
   });
 
   const selectedType = watch('type');
   const friendlyName = watch('friendlyName');
 
-  // Load categories when type changes
-  const loadCategories = useCallback(async (type: ItemTypeEnum) => {
-    setLoadingCategories(true);
-    setServerError(null);
-    try {
-      const cats = await fetchCategoriesController(true, type);
-      setCategories(cats);
-      console.log("Categories: " + cats)
-    }
-    catch (err) {
-      setServerError('Failed to load categories. Please try again later.');
-    }
-    finally {
-      setLoadingCategories(false);
-    }
-  }, []);
+  const categoryValue = watch("categoryId");
 
-  useEffect(() => {
-    if (!selectedType) return;
-
-    loadCategories(selectedType);
-
-    if (mode === "create") {
-      setValue("categoryId", "");
-    }
-  }, [selectedType, loadCategories, setValue, mode]);
+  const filteredCategories = categories.filter(
+    (category) => category.type === selectedType
+  );
 
   useEffect(() => {
     if (item) {
@@ -100,14 +80,15 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode }
   }, [item, reset]);
 
   const onSubmit = async (data: ItemFormSchema) => {
+    console.log(data)
     setSubmitting(true);
     setServerError(null);
 
     try {
-      let x: ItemModel | ItemDisplayModel;
+      let createdUpdatedItem: CreateUpdateItemModel;
 
       if (mode === "create") {
-        x = await postItemController({
+        createdUpdatedItem = await postItemController({
           categoryId: data.categoryId,
           friendlyName: data.friendlyName,
           systemName: toSystemName(data.friendlyName),
@@ -115,15 +96,18 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode }
           imageUrl: data.imageUrl || null,
         });
       } else {
-        x = await updateItemController({
-          id: x!.id,
+        if (!item) {
+          throw new Error("Item data is missing for edit mode.");
+        }
+        createdUpdatedItem = await updateItemController({
+          id: item.id,
           categoryId: data.categoryId,
           friendlyName: data.friendlyName,
           brand: data.brand,
         });
       }
 
-      onSuccess(x);
+      onSuccess(createdUpdatedItem);
     } catch (err) {
       if (
         err instanceof Error &&
@@ -150,6 +134,20 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode }
     }
   };
 
+  const handleTypeChange = (type: ItemTypeEnum) => {
+    setValue("type", type, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+
+    setValue("categoryId", "", {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+
+    clearErrors(["type", "categoryId"]);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="px-6 pb-6 space-y-5">
       {/* Server Error */}
@@ -165,38 +163,17 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode }
           Item Type <span className="text-red-500">*</span>
         </Label>
         <div className="grid grid-cols-2 gap-3">
-          <button
-            type="button"
-            onClick={() => {
-              setValue('type', 'PRODUCT');
-              clearErrors('type');
-            }}
-            className={cn(
-              'flex flex-col items-center cursor-pointer gap-2 rounded-xl border-2 p-4 transition-all',
-              selectedType === 'PRODUCT'
-                ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm'
-                : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50'
-            )}
-          >
-            <Package className="h-6 w-6" />
-            <span className="text-sm font-medium">Product</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setValue('type', 'SERVICE');
-              clearErrors('type');
-            }}
-            className={cn(
-              'flex flex-col items-center gap-2 cursor-pointer  rounded-xl border-2 p-4 transition-all',
-              selectedType === 'SERVICE'
-                ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm'
-                : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50'
-            )}
-          >
-            <Wrench className="h-6 w-6" />
-            <span className="text-sm font-medium">Service</span>
-          </button>
+          <ItemTypeButton
+            type="PRODUCT"
+            selectedType={selectedType}
+            onSelect={handleTypeChange}
+          />
+
+          <ItemTypeButton
+            type="SERVICE"
+            selectedType={selectedType}
+            onSelect={handleTypeChange}
+          />
         </div>
         {errors.type && (
           <p className="text-xs text-red-600 mt-1">{errors.type.message}</p>
@@ -212,24 +189,24 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode }
           <p className="text-xs text-neutral-400 italic">
             Select an item type first to see available categories.
           </p>
-        ) : loadingCategories ? (
-          <div className="flex items-center gap-2 text-sm text-neutral-500 py-2">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Loading categories...
-          </div>
         ) : (
           <Select
-            value={watch('categoryId')}
+            value={categoryValue}
             onValueChange={(value) => {
-              setValue('categoryId', value);
-              clearErrors('categoryId');
+              setValue("categoryId", value, {
+                shouldValidate: true,
+                shouldDirty: true,
+              });
+
+              clearErrors("categoryId");
             }}
           >
             <SelectTrigger id="categoryId" className="w-full">
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
+
             <SelectContent position="popper">
-              {categories.map((cat) => (
+              {filteredCategories.map((cat) => (
                 <SelectItem key={cat.id} value={cat.id}>
                   {cat.name}
                 </SelectItem>
@@ -238,7 +215,9 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode }
           </Select>
         )}
         {errors.categoryId && (
-          <p className="text-xs text-red-600 mt-1">{errors.categoryId.message}</p>
+          <p className="text-xs text-red-600 mt-1">
+            {errors.categoryId.message}
+          </p>
         )}
       </div>
 
@@ -291,7 +270,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode }
             <p className="text-xs text-neutral-400">
               {selectedType === 'SERVICE'
                 ? 'The company or professional providing the service.'
-                : 'The brand that makes this product.'}
+                : 'The brand that produces this item.'}
             </p>
           )}
           <span className="text-xs text-neutral-400">
@@ -352,5 +331,45 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode }
         </Button>
       </div>
     </form>
+  );
+}
+
+
+interface ItemTypeButtonProps {
+  type: ItemTypeEnum;
+  selectedType: ItemTypeEnum | undefined;
+  onSelect: (type: ItemTypeEnum) => void;
+}
+
+function ItemTypeButton({
+  type,
+  selectedType,
+  onSelect,
+}: ItemTypeButtonProps) {
+  const isSelected = selectedType === type;
+
+  const isProduct = type === "PRODUCT";
+
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(type)}
+      className={cn(
+        "flex flex-col items-center gap-2 cursor-pointer rounded-xl border-2 p-4 transition-all",
+        isSelected
+          ? "border-blue-600 bg-blue-50 text-blue-700 shadow-sm"
+          : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50"
+      )}
+    >
+      {isProduct ? (
+        <Package className="h-6 w-6" />
+      ) : (
+        <Wrench className="h-6 w-6" />
+      )}
+
+      <span className="text-sm font-medium">
+        {isProduct ? "Product" : "Service"}
+      </span>
+    </button>
   );
 }

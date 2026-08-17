@@ -14,7 +14,7 @@ import { AddNewExperienceFormModel } from '@/models/dashboard/experiences';
 import { Input } from '@/components/ui/input';
 import NewItemModal from '../create-item-modal';
 import { getItemsController } from '@/lib/controller/item-controller';
-import { ItemDisplayModel } from '@/models/dashboard/items';
+import { CreateUpdateItemModel } from '@/models/dashboard/items';
 
 
 interface ProductSelectorProps {
@@ -29,7 +29,7 @@ export default function ProductSelector({
     const [onOpen, setOpen] = useState(false);
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [search, setSearch] = useState("");
-     const [catalogItems, setCatalogItems] = useState<ItemDisplayModel[]>([]);
+     const [catalogItems, setCatalogItems] = useState<CreateUpdateItemModel[]>([]);
     useEffect(() => {
         const fetchCatalogItems = async () => {
             try {
@@ -102,7 +102,7 @@ export default function ProductSelector({
                                                     {product.friendlyName}
                                                 </span>
                                                 <span className="text-xs text-gray-600">
-                                                    {product.brand} · {product.category.}
+                                                    {product.brand} · {product.categoryName}
                                                 </span>
                                             </div>
                                         </CommandItem>

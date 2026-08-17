@@ -3,16 +3,16 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import RatingStars from '@/components/ui/rating-starts';
-import { CategoryModel, ItemDisplayModel } from '@/models/dashboard/items';
+import { CategoryModel, CreateUpdateItemModel } from '@/models/dashboard/items';
 import { deleteItemController } from '@/lib/controller/item-controller';
 import { useState } from "react";
 import Modal from '@/components/ui/modal';
 import CreateUpdateItemModal from '../items/create-item-modal';
 
 export interface CatalogCardProps {
-  item: ItemDisplayModel;
+  item: CreateUpdateItemModel;
   onDelete: (itemId: string) => void;
-  onEdit: (item: ItemDisplayModel) => void;
+  onEdit: (item: CreateUpdateItemModel) => void;
   categories: CategoryModel[];
 }
 
@@ -102,6 +102,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         </div>
         <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
           <button
+            disabled={categories.length === 0}
             onClick={handleEdit}
             className="flex h-7 w-7 items-center cursor-pointer justify-center rounded-md text-neutral-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
             aria-label="Edit"
@@ -138,7 +139,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
             variant="secondary"
             className="text-sm font-medium bg-neutral-100 text-neutral-600 border-neutral-200"
           >
-            {item.category}
+            {item.categoryName}
           </Badge>
         </div>
       </div>
@@ -189,6 +190,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
       />
       <CreateUpdateItemModal
         item={item}
+        categories={categories}
         open={editModalOpen}
         onOpenChange={setEditModalOpen}
         onSuccess={onEdit}

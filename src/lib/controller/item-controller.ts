@@ -1,7 +1,7 @@
-import { ItemModel } from "@/models/dashboard/items";
-import { ItemDisplayModel, ItemTypeEnum } from "@/models/dashboard/items";
+import { PostItemModel } from "@/models/dashboard/items";
+import { CreateUpdateItemModel, ItemTypeEnum } from "@/models/dashboard/items";
 
-export async function postItemController(item: ItemModel) : Promise<ItemModel> {
+export async function postItemController(item: PostItemModel) : Promise<CreateUpdateItemModel> {
   const response = await fetch("/api/item", {
     method: "POST",
     headers: {
@@ -26,7 +26,7 @@ export async function postItemController(item: ItemModel) : Promise<ItemModel> {
 }
 
 
-export async function getItemsController(type?: ItemTypeEnum): Promise<ItemDisplayModel[]> {
+export async function getItemsController(type?: ItemTypeEnum): Promise<CreateUpdateItemModel[]> {
   const params = new URLSearchParams();
 
   if (type) {
@@ -45,7 +45,7 @@ export async function getItemsController(type?: ItemTypeEnum): Promise<ItemDispl
 }
 
 
-export async function deleteItemController(itemId: string): Promise<ItemDisplayModel> {
+export async function deleteItemController(itemId: string): Promise<CreateUpdateItemModel> {
   const response = await fetch(
     `/api/item?itemId=${encodeURIComponent(itemId)}`,
     {
@@ -60,7 +60,6 @@ export async function deleteItemController(itemId: string): Promise<ItemDisplayM
   return response.json();
 }
 
-// src/controllers/item.ts
 
 
 export interface UpdateItemRequest {
@@ -72,7 +71,7 @@ export interface UpdateItemRequest {
 
 export async function updateItemController(
   item: UpdateItemRequest
-): Promise<ItemDisplayModel> {
+): Promise<CreateUpdateItemModel> {
   const response = await fetch("/api/item", {
     method: "PATCH",
     headers: {
@@ -80,9 +79,10 @@ export async function updateItemController(
     },
     body: JSON.stringify(item),
   });
-
+  console.log("resposta: " , response);
   if (!response.ok) {
     const error = await response.json().catch(() => null);
+    console.log("error: " + error?.error);
 
     throw new Error(
       error?.error ?? "FAILED_TO_UPDATE_ITEM"

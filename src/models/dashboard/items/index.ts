@@ -6,7 +6,7 @@ export interface CategoryModel {
   type: ItemTypeEnum;
 }
 
-export interface ItemModel {
+export interface PostItemModel {
   categoryId: string;
   friendlyName: string;
   systemName: string;
@@ -14,26 +14,13 @@ export interface ItemModel {
   imageUrl: string | null;
 }
 
-export interface ItemDisplayModel extends ItemModel {
+export interface CreateUpdateItemModel extends PostItemModel {
   id: string;
   type: ItemTypeEnum;
-  category: string;
   experiences: number;
   averageRating: number;
   lastConsumed: string | null;
   totalSpent: number;
+  categoryName: string;
 
 }
-
-
-
-
-// categoryId: string;
-// friendlyName: string;
-// systemName: string;
-// brand: string;
-// imageUrl: string | null;
-// id: string;
-// createdAt: Date;
-// updatedAt: Date;
-// userId: string;

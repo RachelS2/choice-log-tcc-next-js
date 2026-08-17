@@ -1,15 +1,14 @@
 import { auth } from "@/lib/auth";
-import { fetchCatalogItemsRepository, postItemRepository, deleteItemRepository } from "@/lib/repository/item-repository";
-import { ItemDisplayModel, ItemModel, ItemTypeEnum } from "@/models/dashboard/items";
+import { fetchCatalogItemsRepository, postItemRepository, updateItemRepository, deleteItemRepository } from "@/lib/repository/item-repository";
+import { CreateUpdateItemModel, PostItemModel, ItemTypeEnum } from "@/models/dashboard/items";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 
 
 export async function POST(request: Request) {
   try {
-    const body: ItemModel = await request.json();
     const userData = await auth.api.getSession({ headers: await headers() });
-
+    
     if (!userData) {
       console.log(userData)
       return NextResponse.json(
@@ -17,6 +16,7 @@ export async function POST(request: Request) {
         { status: 401 }
       );
     }
+    const body: PostItemModel = await request.json();
     const item = await postItemRepository({ item: body, userId: userData.user.id, });
 
     return NextResponse.json(item, { status: 201 });
@@ -32,12 +32,21 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
+    const userData = await auth.api.getSession({ headers: await headers() });
+
+    if (!userData) {
+      console.log(userData)
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
     const { searchParams } = new URL(request.url);
 
     console.log("Getting items");
     const typeParam = searchParams.get("type");
 
-    let categoryType: ItemTypeEnum | undefined;
+    let categoryType: ItemTypeEnum | undefined = undefined;
 
     if (typeParam) {
       if (!Object.values(["PRODUCT", "SERVICE"]).includes(typeParam.toUpperCase() as ItemTypeEnum)) {
@@ -50,8 +59,8 @@ export async function GET(request: Request) {
       categoryType = typeParam as ItemTypeEnum;
     }
 
-    const items: ItemDisplayModel[] =
-      await fetchCatalogItemsRepository(categoryType);
+    const items: CreateUpdateItemModel[] =
+      await fetchCatalogItemsRepository(userData.user.id, categoryType);
 
     return NextResponse.json(items, { status: 200 });
   } catch (error) {
@@ -67,6 +76,15 @@ export async function GET(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    const userData = await auth.api.getSession({ headers: await headers() });
+
+    if (!userData) {
+      console.log(userData)
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
     const { searchParams } = new URL(request.url);
     const itemId = searchParams.get("itemId");
 
@@ -85,6 +103,32 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json(
       { error: "Failed to delete item" },
+      { status: 500 }
+    );
+  }
+}
+
+
+export async function PATCH(request: Request) {
+  try {
+    const body: CreateUpdateItemModel = await request.json();
+    const userData = await auth.api.getSession({ headers: await headers() });
+
+    if (!userData) {
+      console.log(userData)
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+    const item = await updateItemRepository({ item: body });
+
+    return NextResponse.json(item, { status: 201 });
+  } catch (error) {
+    console.error("Error updating item:", error);
+
+    return NextResponse.json(
+      { error: "Failed to update item" },
       { status: 500 }
     );
   }

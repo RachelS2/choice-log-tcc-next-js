@@ -1,10 +1,10 @@
-import { CategoryModel, ItemDisplayModel } from '@/models/dashboard/items';
+import { CategoryModel, CreateUpdateItemModel } from '@/models/dashboard/items';
 import CatalogCard from './catalog-card';
 
 interface CatalogGridProps {
-  items: ItemDisplayModel[];
+  items: CreateUpdateItemModel[];
   onDelete: (itemId: string) => void;
-  onEdit: (item: ItemDisplayModel) => void;
+  onEdit: (item: CreateUpdateItemModel) => void;
   categories: CategoryModel[];
 }
 

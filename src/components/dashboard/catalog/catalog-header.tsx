@@ -1,11 +1,12 @@
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
+import { CategoryModel } from '@/models/dashboard/items';
 
 interface CatalogHeaderProps{
   onNewItem: () => void;
+  newItemBtnDisabled: boolean;
 }
-export default function CatalogHeader({onNewItem}: CatalogHeaderProps) {
+export default function CatalogHeader({onNewItem, newItemBtnDisabled}: CatalogHeaderProps) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
@@ -18,6 +19,7 @@ export default function CatalogHeader({onNewItem}: CatalogHeaderProps) {
       </div>
       <Button
         onClick={onNewItem}
+        disabled={newItemBtnDisabled}
         className="h-11 bg-blue-600  shadow-xl hover:bg-blue-700 text-white"
       >
         <Plus className="h-4 w-4" />

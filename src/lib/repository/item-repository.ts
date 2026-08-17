@@ -1,11 +1,11 @@
 // src/lib/catalog.ts
 
 import { prisma } from "@/lib/prisma";
-import { ItemDisplayModel, CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
-import { ItemModel } from "@/models/dashboard/items";
+import { CreateUpdateItemModel, CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
+import { PostItemModel } from "@/models/dashboard/items";
 import { toSystemName } from "../utils";
 
-export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum, itemId?: string): Promise<ItemDisplayModel[]> {
+export async function fetchCatalogItemsRepository(userId: string, categoryType?: ItemTypeEnum, itemId?: string): Promise<CreateUpdateItemModel[]> {
   const items = await prisma.item.findMany({
     where: (categoryType
       ? {
@@ -15,14 +15,20 @@ export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum, i
           },
         },
       }
-      : undefined) && itemId ? {
-      id: itemId,
-    } : undefined,
+      : undefined) 
+      &&
+      (itemId ? {
+        id: itemId,
+      } : undefined) 
+      && {
+      userId: userId,
+    },
     include: {
       category: {
         select: {
           type: true,
           name: true,
+          id: true,
         },
       },
 
@@ -38,7 +44,8 @@ export async function fetchCatalogItemsRepository(categoryType?: ItemTypeEnum, i
     id: item.id,
     friendlyName: item.friendlyName,
     systemName: item.systemName,
-    categoryId: item.categoryId,
+    categoryName: item.category.name,
+    categoryId: item.category.id,
     brand: item.brand,
     type: item.category.type.name as ItemTypeEnum,
     category: item.category.name,
@@ -69,9 +76,9 @@ export async function postItemRepository({
   item,
   userId,
 }: {
-  item: ItemModel;
+  item: PostItemModel;
   userId: string;
-}) : Promise<ItemDisplayModel> {
+}): Promise<CreateUpdateItemModel> {
   const createdItem = await prisma.item.create({
     data: {
       friendlyName: item.friendlyName,
@@ -83,21 +90,41 @@ export async function postItemRepository({
         },
       },
       imageUrl: item.imageUrl,
+
       user: {
         connect: {
           id: userId,
         },
       },
+    },
 
+    include: {
+      category: {
+        include: {
+          type: true,
+        },
+      },
     },
   });
 
-  const [createdCatalogItem] = await fetchCatalogItemsRepository(
-    undefined,
-    createdItem.id
-  );
+  return {
+    id: createdItem.id,
+    friendlyName: createdItem.friendlyName,
+    systemName: createdItem.systemName,
+    brand: createdItem.brand,
 
-  return createdCatalogItem;
+    categoryId: createdItem.category.id,
+    imageUrl: createdItem.imageUrl,
+
+    type: createdItem.category.type.name as ItemTypeEnum,
+
+    experiences: 0,
+    averageRating: 0,
+    lastConsumed: null,
+    totalSpent: 0,
+
+    categoryName: createdItem.category.name,
+  };
 }
 
 export async function deleteItemRepository({
@@ -112,12 +139,10 @@ export async function deleteItemRepository({
   });
 }
 
-// src/lib/item.ts
-
 export async function updateItemRepository({
   item
 }: {
-  item: ItemDisplayModel;
+  item: CreateUpdateItemModel;
 }) {
   return await prisma.item.update({
     where: {

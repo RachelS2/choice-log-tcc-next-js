@@ -5,7 +5,7 @@ import CatalogFilters from '@/components/dashboard/catalog/catalog-filter';
 import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
 import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
 import CreateUpdateItemModal from '@/components/dashboard/items/create-item-modal';
-import { CategoryModel, ItemDisplayModel, ItemTypeEnum } from '@/models/dashboard/items';
+import { CategoryModel, CreateUpdateItemModel, ItemTypeEnum } from '@/models/dashboard/items';
 import { getItemsController } from '@/lib/controller/item-controller';
 import { toast } from 'sonner';
 import { fetchCategoriesController } from '@/lib/controller/category-controller';
@@ -21,12 +21,12 @@ export default function CatalogPage() {
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [brandFilter, setBrandFilter] = useState('ALL');
   const [sort, setSort] = useState<SortOption>('recent');
-  const [catalogItems, setCatalogItems] = useState<ItemDisplayModel[]>([]);
+  const [catalogItems, setCatalogItems] = useState<CreateUpdateItemModel[]>([]);
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleEditItem = (
-    updatedItem: ItemDisplayModel
+    updatedItem: CreateUpdateItemModel
   ) => {
     setCatalogItems((currentItems) =>
       currentItems.map((item) =>
@@ -77,7 +77,7 @@ export default function CatalogPage() {
     [catalogItems]
   );
 
-  const filteredItems: ItemDisplayModel[] = useMemo(() => {
+  const filteredItems: CreateUpdateItemModel[] = useMemo(() => {
     let items = [...catalogItems];
 
     // Search filter
@@ -97,7 +97,7 @@ export default function CatalogPage() {
     // Category filter
     if (categoryFilter !== 'ALL') {
       items = items.filter(
-        (item) => item.category === categoryFilter
+        (item) => item.categoryId === categoryFilter
       );
     }
 
@@ -167,6 +167,7 @@ export default function CatalogPage() {
   return (
     <div className="p-11 space-y-6">
       <CatalogHeader
+        newItemBtnDisabled={categories.length === 0}
         onNewItem={() => setModalOpen(true)}
       />
 
@@ -195,9 +196,9 @@ export default function CatalogPage() {
 
       <CreateUpdateItemModal
         open={modalOpen}
+        mode="create"
         onOpenChange={setModalOpen}
-        dialogTitle='New Item'
-        dialogDescription='Register a product or service to use in your consumption records.'
+        categories={categories}
         onSuccess={async () => {
           await fetchCatalogItems();
           setModalOpen(false);

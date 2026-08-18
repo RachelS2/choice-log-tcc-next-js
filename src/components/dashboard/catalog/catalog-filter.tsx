@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from "@/lib/utils";
-import { SortOption, TypeFilter } from '@/app/dashboard/catalog/page';
+import { SortOption, TypeFilter } from '@/app/dashboard/catalog/items/page';
 import { CategoryModel } from '@/models/dashboard/items';
 import React from 'react';
 

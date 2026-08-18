@@ -6,7 +6,8 @@ import {
   BarChart3,
   Settings,
   ShoppingCart,
-  ChevronRight,
+  ChevronRight, Box,
+  Tags,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -37,14 +38,10 @@ export function SidebarNav() {
         <button
           type="button"
           onClick={() => setCatalogOpen((open) => !open)}
-          className={cn(
-            "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-            isCatalogActive
-              ? "bg-blue-50 text-blue-700"
-              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-          )}
+          className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
         >
           <Package className="h-4 w-4" />
+
           <span>Catalog</span>
 
           <ChevronRight
@@ -57,29 +54,35 @@ export function SidebarNav() {
 
         {catalogOpen && (
           <div className="ml-7 mt-1 space-y-1 border-l border-gray-200 pl-3">
+
+            {/* Items */}
             <Link
               href="/dashboard/catalog/items"
               className={cn(
-                "block rounded-md px-3 py-2 text-sm transition-colors",
+                "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                 pathname === "/dashboard/catalog/items"
                   ? "bg-blue-50 text-blue-700 font-medium"
                   : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
               )}
             >
+              <Box className="h-4 w-4" />
               Items
             </Link>
 
+            {/* Categories */}
             <Link
               href="/dashboard/catalog/categories"
               className={cn(
-                "block rounded-md px-3 py-2 text-sm transition-colors",
+                "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                 pathname === "/dashboard/catalog/categories"
                   ? "bg-blue-50 text-blue-700 font-medium"
                   : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
               )}
             >
+              <Tags className="h-4 w-4" />
               Categories
             </Link>
+
           </div>
         )}
       </div>

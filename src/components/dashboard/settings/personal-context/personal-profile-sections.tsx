@@ -109,6 +109,12 @@ export default function PersonalProfileSection() {
             router.refresh();
         } else {
             toast.error(result.message);
+            reset({
+                email: userProfileData.data.email,
+                username: userProfileData.data.name,
+                incomeRange: userProfileData.data.incomeRange,
+                image: userProfileData.data.image ?? undefined
+            }); // limpa dirty state
         }
         setIsEditing(false);
     };

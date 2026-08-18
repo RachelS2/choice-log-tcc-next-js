@@ -148,20 +148,27 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
       <div className="space-y-2.5 border-t border-neutral-100 pt-4">
         <div className="flex items-center justify-between">
           <span className="text-sm text-neutral-500">Experiences</span>
-          <span className="text-sm font-medium text-neutral-900">{item.experiences}</span>
+          <span className="text-sm font-medium text-neutral-600">{item.experiences}</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-neutral-500">Total Spent</span>
+          <span className="text-sm font-medium text-neutral-600">
+            
+            $ {item.totalSpent.toFixed(2)}
+          </span>
+        </div>
+        <div className="flex items-center justify-between">
+
+          <span className="text-sm text-neutral-500">Last consumed</span>
+          <span className="text-sm font-medium text-neutral-600">
+            {item.lastConsumed ? formatDate(item.lastConsumed) : '-'}
+          </span>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm text-neutral-500">Average rating</span>
           <div className="flex items-center gap-1.5">
             <RatingStars rating={item.averageRating} />
           </div>
-        </div>
-        <div className="flex items-center justify-between">
-
-          <span className="text-sm text-neutral-500">Last consumed</span>
-          <span className="text-sm font-medium text-neutral-700">
-            {item.lastConsumed ? formatDate(item.lastConsumed) : '-'}
-          </span>
         </div>
       </div>
 

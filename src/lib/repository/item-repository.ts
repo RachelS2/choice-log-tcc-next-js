@@ -4,25 +4,30 @@ import { prisma } from "@/lib/prisma";
 import { CreateUpdateItemModel, CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
 import { PostItemModel } from "@/models/dashboard/items";
 import { toSystemName } from "../utils";
+import { Prisma } from "../../../generated/prisma";
 
-export async function fetchCatalogItemsRepository(userId: string, categoryType?: ItemTypeEnum, itemId?: string): Promise<CreateUpdateItemModel[]> {
+export async function fetchItemRepository(userId?: string, categoryType?: ItemTypeEnum, itemId?: string): Promise<CreateUpdateItemModel[]> {
+  const where: Prisma.ItemWhereInput = {};
+
+  if (userId) {
+    where.userId = userId;
+  }
+
+  if (itemId) {
+    where.id = itemId;
+  }
+
+  if (categoryType) {
+    where.category = {
+      type: {
+        name: categoryType,
+      },
+    };
+  }
+  console.log("WHERE:", where);
+
   const items = await prisma.item.findMany({
-    where: (categoryType
-      ? {
-        category: {
-          type: {
-            name: categoryType,
-          },
-        },
-      }
-      : undefined) 
-      &&
-      (itemId ? {
-        id: itemId,
-      } : undefined) 
-      && {
-      userId: userId,
-    },
+    where,
     include: {
       category: {
         select: {
@@ -53,21 +58,27 @@ export async function fetchCatalogItemsRepository(userId: string, categoryType?:
 
     experiences: item.consumptions.length,
 
-    totalSpent: item.consumptions.reduce((sum, c) => sum + (c.price ?? 0), 0),
+    totalSpent: item.consumptions.reduce(
+      (sum, c) => sum + (c.price ?? 0),
+      0
+    ),
+
     averageRating:
       item.consumptions.length === 0
         ? 0
         : Number(
           (
             item.consumptions.reduce(
-              (sum, c) => sum + (c.rating === null ? 0 : c.rating),
+              (sum, c) => sum + (c.rating ?? 0),
               0
             ) / item.consumptions.length
           ).toFixed(1)
         ),
 
     lastConsumed:
-      item.consumptions[0]?.createdAt.toISOString().split("T")[0] ?? null,
+      item.consumptions[0]?.createdAt
+        .toISOString()
+        .split("T")[0] ?? null,
   }));
 }
 
@@ -144,7 +155,7 @@ export async function updateItemRepository({
 }: {
   item: CreateUpdateItemModel;
 }) {
-  return await prisma.item.update({
+  await prisma.item.update({
     where: {
       id: item.id,
     },
@@ -160,13 +171,8 @@ export async function updateItemRepository({
         },
       },
     },
-
-    include: {
-      category: {
-        include: {
-          type: true,
-        },
-      },
-    },
   });
+
+  const items: CreateUpdateItemModel[] = await fetchItemRepository(undefined, undefined, item.id);
+  return items[0];
 }

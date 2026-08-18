@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { fetchCatalogItemsRepository, postItemRepository, updateItemRepository, deleteItemRepository } from "@/lib/repository/item-repository";
+import { fetchItemRepository, postItemRepository, updateItemRepository, deleteItemRepository } from "@/lib/repository/item-repository";
 import { CreateUpdateItemModel, PostItemModel, ItemTypeEnum } from "@/models/dashboard/items";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
     }
 
     const items: CreateUpdateItemModel[] =
-      await fetchCatalogItemsRepository(userData.user.id, categoryType);
+      await fetchItemRepository(userData.user.id, categoryType);
 
     return NextResponse.json(items, { status: 200 });
   } catch (error) {

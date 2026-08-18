@@ -43,12 +43,11 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
     setValue,
     watch,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
     clearErrors,
     setError,
   } = useForm<ItemFormSchema>({
     resolver: zodResolver(itemFormSchema),
-
     defaultValues: {
       type: item?.type,
       friendlyName: item?.friendlyName ?? "",
@@ -80,6 +79,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
   }, [item, reset]);
 
   const onSubmit = async (data: ItemFormSchema) => {
+
     console.log(data)
     setSubmitting(true);
     setServerError(null);
@@ -159,7 +159,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
 
       {/* Item Type Selection */}
       <div className="space-y-2">
-        <Label className="text-sm font-medium text-neutral-700">
+        <Label className="text-md text-neutral-700">
           Item Type <span className="text-red-500">*</span>
         </Label>
         <div className="grid grid-cols-2 gap-3">
@@ -182,7 +182,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
 
       {/* Category */}
       <div className="space-y-2">
-        <Label htmlFor="categoryId" className="text-sm font-medium text-neutral-700">
+        <Label htmlFor="categoryId" className="text-md text-neutral-700">
           Category <span className="text-red-500">*</span>
         </Label>
         {!selectedType ? (
@@ -223,7 +223,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
 
       {/* Friendly Name */}
       <div className="space-y-2">
-        <Label htmlFor="friendlyName" className="text-sm font-medium text-neutral-700">
+        <Label htmlFor="friendlyName" className="text-md text-neutral-700">
           {!selectedType ? ('Item Name') : selectedType[0].toUpperCase() + selectedType.slice(1).toLowerCase()}  <span className="text-red-500">*</span>
         </Label>
         <Input
@@ -249,7 +249,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
 
       {/* Brand / Provider */}
       <div className="space-y-2">
-        <Label htmlFor="brand" className="text-sm font-medium text-neutral-700">
+        <Label htmlFor="brand" className="text-md text-neutral-700">
           {selectedType === 'SERVICE' ? 'Provider' : 'Brand'}{' '}
           <span className="text-red-500">*</span>
         </Label>
@@ -279,40 +279,20 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
         </div>
       </div>
 
-      {/* Image URL (optional)
-      <div className="space-y-2">
-        <Label htmlFor="imageUrl" className="text-sm font-medium text-neutral-700">
-          Image URL{' '}
-          <span className="text-xs font-normal text-neutral-400">(optional)</span>
-        </Label>
-        <div className="relative">
-          <ImageIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
-          <Input
-            id="imageUrl"
-            placeholder="https://example.com/image.jpg"
-            className="pl-9"
-            {...register('imageUrl')}
-          />
-        </div>
-        {errors.imageUrl && (
-          <p className="text-xs text-red-600 mt-1">{errors.imageUrl.message}</p>
-        )}
-      </div> */}
-
       {/* Actions */}
       <div className="flex items-center justify-end gap-3 pt-3 pb-3 border-t border-neutral-100">
         <Button
           type="button"
-          variant="outline"
           onClick={onCancel}
+          variant="outline"
           disabled={submitting}
-          className="border-neutral-300  h-10 hover:text-neutral-900 text-neutral-700"
+          className="w-24 h-10 text-red-500 bg-white/80 shadow-md hover:text-red-600"
         >
           Cancel
         </Button>
         <Button
           type="submit"
-          disabled={submitting}
+          disabled={!isDirty || submitting}
           className="bg-blue-600 text-white h-10 hover:bg-blue-700 min-w-[120px]"
         >
           {submitting ? (
@@ -367,7 +347,7 @@ function ItemTypeButton({
         <Wrench className="h-6 w-6" />
       )}
 
-      <span className="text-sm font-medium">
+      <span className="text-md font-medium">
         {isProduct ? "Product" : "Service"}
       </span>
     </button>

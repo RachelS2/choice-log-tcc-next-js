@@ -31,12 +31,13 @@ export default function CreateUpdateItemModal({ open, onOpenChange, onSuccess, m
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[540px] max-h-[90vh] overflow-y-auto p-0">
         <DialogHeader className="px-6 pt-6 pb-2">
-          <DialogTitle className="text-xl font-semibold text-blue-500">
-            {mode === "edit" ? "Edit Item" : "Create Item"}
-          </DialogTitle>
-          <DialogDescription className="text-md text-neutral-500">
-            {mode === "edit" ? "Update the details of this item." : "Add a new item to your inventory."}
-          </DialogDescription>
+          <div className="bg-blue-600 rounded-lg shadow-md p-2">
+            <DialogTitle className="text-xl text-center font-semibold text-white">
+              {mode === "edit" ? "Edit Item" : "Create Item"}
+            </DialogTitle>
+
+          </div>
+
         </DialogHeader>
         <CreateUpdateItemForm mode={mode} onSuccess={handleSuccess} onCancel={handleCancel} item={item} categories={categories} />
       </DialogContent>

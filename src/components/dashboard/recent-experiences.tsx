@@ -1,4 +1,4 @@
-import RatingStars from "../ui/rating-starts";
+import {RatingStars} from "../ui/rating-starts";
 import Link from 'next/link'
 
 const data = [
@@ -31,7 +31,7 @@ export default function RecentExperiences() {
               <p className="font-medium text-blue-600">
                 {item.title}
               </p>
-              <RatingStars rating={item.rating} />
+              <RatingStars value={item.rating} />
             </div>
 
             {/* coluna 2 */}

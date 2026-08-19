@@ -2,12 +2,13 @@ import { Pencil, Trash2, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import RatingStars from '@/components/ui/rating-starts';
+import {RatingStars} from '@/components/ui/rating-starts';
 import { CategoryModel, CreateUpdateItemModel } from '@/models/dashboard/items';
 import { deleteItemController } from '@/lib/controller/item-controller';
 import { useState } from "react";
 import Modal from '@/components/ui/modal';
 import CreateUpdateItemModal from '../items/create-item-modal';
+import { getAvatarColor, getInitials, formatDate } from '@/lib/utils';
 
 export interface CatalogCardProps {
   item: CreateUpdateItemModel;
@@ -16,39 +17,6 @@ export interface CatalogCardProps {
   categories: CategoryModel[];
 }
 
-function getInitials(name: string): string {
-  return name
-    .split(' ')
-    .filter((w) => w.length > 0)
-    .map((w) => w[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
-}
-
-function getAvatarColor(name: string): string {
-  const colors = [
-    'from-blue-500 to-blue-600',
-    'from-indigo-500 to-indigo-600',
-    'from-violet-500 to-violet-600',
-    'from-emerald-500 to-emerald-600',
-    'from-amber-500 to-amber-600',
-    'from-rose-500 to-rose-600',
-    'from-cyan-500 to-cyan-600',
-    'from-fuchsia-500 to-fuchsia-600',
-  ];
-  const index = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
-  return colors[index];
-}
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
-}
 
 
 export default function CatalogCard({ item, onDelete, onEdit, categories }: CatalogCardProps) {
@@ -167,7 +135,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         <div className="flex items-center justify-between">
           <span className="text-sm text-neutral-500">Average rating</span>
           <div className="flex items-center gap-1.5">
-            <RatingStars rating={item.averageRating} />
+            <RatingStars value={item.averageRating} />
           </div>
         </div>
       </div>

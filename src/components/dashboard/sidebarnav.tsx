@@ -5,7 +5,7 @@ import {
   Package,
   BarChart3,
   Settings,
-  ShoppingCart,
+  ShoppingCart, BookOpen,
   ChevronRight, Box,
   Tags,
 } from "lucide-react";
@@ -40,7 +40,7 @@ export function SidebarNav() {
           onClick={() => setCatalogOpen((open) => !open)}
           className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
         >
-          <Package className="h-4 w-4" />
+          <BookOpen className="h-4 w-4" />
 
           <span>Catalog</span>
 

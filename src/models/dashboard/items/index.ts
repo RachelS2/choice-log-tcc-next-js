@@ -6,6 +6,16 @@ export interface CategoryModel {
   type: ItemTypeEnum;
 }
 
+export interface BasicItemModel {
+  id: string;
+  friendlyName: string;
+  categoryName: string;
+  categoryId: string;
+  brand: string;
+  type: ItemTypeEnum;
+  imageUrl: string | null;
+}
+
 export interface PostItemModel {
   categoryId: string;
   friendlyName: string;

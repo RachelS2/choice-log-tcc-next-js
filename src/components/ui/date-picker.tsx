@@ -7,6 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Input } from "./input";
 import { Calendar } from "./calendar";
 import { format, parse, isValid } from "date-fns";
+import { Button } from "./button";
 
 interface DatePickerProps {
     value?: Date;
@@ -56,25 +57,26 @@ export default function DatePicker({
     };
 
     return (
-        <div className="space-y-1">
+        <div className="space-y-1 bg-white">
             <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                    <div>
-                        {putCalendarIcon ? (<CalendarIcon className="mr-2 h-4 w-4" onClick={() => setOpen((prev) => !prev)} />) : null}
-
-                        <Input
-                            value={inputValue}
-                            placeholder="dd/mm/aaaa"
-                            onChange={(e) => handleChange(e.target.value)}
-                            className={cn(
-                                error && "border-red-500 focus-visible:ring-red-500"
-                            )}
-                        />
-                    </div>
+                <PopoverTrigger className="bg-white hover:text-black" asChild>
+                    <Button
+                        type="button"
+                        className={cn(
+                            "h-11 w-full justify-start bg-white font-normal text-black",
+                            "hover:bg-white hover:text-black",
+                            "focus:bg-white focus:text-black",
+                            "focus-visible:bg-white focus-visible:text-black",
+                            !value && "text-muted-foreground",
+                        )}
+                    >
+                        <CalendarIcon className="size-4" />
+                        {value ? format(value, "PPP") : "Select a date"}
+                    </Button>
                 </PopoverTrigger>
-
-                <PopoverContent side="bottom" align="start" className="p-0">
+                <PopoverContent className="w-auto p-0 " align="start">
                     <Calendar
+                        className="rounded-2xl border border-neutral-200"
                         mode="single"
                         selected={value}
                         onSelect={(d) => {
@@ -84,9 +86,15 @@ export default function DatePicker({
                             }
                         }}
                         disabled={(d) => d > new Date()}
+                        autoFocus
+                        classNames={{
+                            day_button:
+                                "hover:!bg-blue-50 hover:!text-blue-600 focus:!bg-blue-50 focus:!text-blue-600",
+                        }}
                     />
                 </PopoverContent>
             </Popover>
+
 
             {error && (
                 <p className="text-sm text-red-600">{error}</p>

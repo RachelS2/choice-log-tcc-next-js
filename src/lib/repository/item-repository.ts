@@ -1,12 +1,58 @@
 // src/lib/catalog.ts
 
 import { prisma } from "@/lib/prisma";
-import { CreateUpdateItemModel, CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
+import { CreateUpdateItemModel, CategoryModel, ItemTypeEnum, BasicItemModel } from "@/models/dashboard/items";
 import { PostItemModel } from "@/models/dashboard/items";
 import { toSystemName } from "../utils";
 import { Prisma } from "../../../generated/prisma";
 
-export async function fetchItemRepository(userId?: string, categoryType?: ItemTypeEnum, itemId?: string): Promise<CreateUpdateItemModel[]> {
+
+
+export async function fetchItemBasicInfoRepository(userId?: string, categoryType?: ItemTypeEnum, itemId?: string): Promise<BasicItemModel[]> {
+  const where: Prisma.ItemWhereInput = {};
+
+  if (userId) {
+    where.userId = userId;
+  }
+
+  if (itemId) {
+    where.id = itemId;
+  }
+
+  if (categoryType) {
+    where.category = {
+      type: {
+        name: categoryType,
+      },
+    };
+  }
+  console.log("WHERE:", where);
+
+  const items = await prisma.item.findMany({
+    where,
+    include: {
+      category: {
+        select: {
+          type: true,
+          name: true,
+          id: true,
+        },
+      },
+    },
+  });
+
+  return items.map((item) => ({
+    id: item.id,
+    friendlyName: item.friendlyName,
+    categoryName: item.category.name,
+    categoryId: item.category.id,
+    brand: item.brand,
+    type: item.category.type.name as ItemTypeEnum,
+    category: item.category.name,
+    imageUrl: item.imageUrl,
+  }));
+}
+export async function fetchItemResumeRepository(userId?: string, categoryType?: ItemTypeEnum, itemId?: string): Promise<CreateUpdateItemModel[]> {
   const where: Prisma.ItemWhereInput = {};
 
   if (userId) {
@@ -173,6 +219,6 @@ export async function updateItemRepository({
     },
   });
 
-  const items: CreateUpdateItemModel[] = await fetchItemRepository(undefined, undefined, item.id);
+  const items: CreateUpdateItemModel[] = await fetchItemResumeRepository(undefined, undefined, item.id);
   return items[0];
 }

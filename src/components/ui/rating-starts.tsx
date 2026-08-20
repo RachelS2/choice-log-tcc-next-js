@@ -1,20 +1,14 @@
 "use client";
-import { Star, StarHalf } from "lucide-react";
 
+import { Star } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-
 const LABELS: Record<number, string> = {
-  0.5: "Not great",
   1: "Not great",
-  1.5: "Not great",
   2: "Okay",
-  2.5: "Okay",
   3: "Good",
-  3.5: "Good",
   4: "Very good",
-  4.5: "Very good",
   5: "Loved it",
 };
 
@@ -58,61 +52,81 @@ export function RatingStars({
   };
 
   const renderStar = (star: number) => {
-    const fillAmount = Math.max(0, Math.min(1, active - (star - 1)));
+    const fillAmount = Math.max(
+      0,
+      Math.min(1, active - (star - 1)),
+    );
 
     return (
-      <button
+      <div
         key={star}
-        type="button"
-        disabled={!editable}
-        aria-label={`${star - 0.5} to ${star} stars`}
-        onMouseMove={(e) => handleMouseMove(e, star)}
-        onClick={(e) => handleClick(e, star)}
-        className={cn(
-          "relative rounded-md p-1",
-          editable &&
-            "transition-transform duration-200 hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none",
-          !editable && "cursor-default",
-        )}
+        className="flex items-center gap-0.5"
       >
-        <div className="relative size-8">
-          {/* Empty star */}
-          <Star
-            className="absolute inset-0 size-8 text-muted-foreground/40"
-          />
-
-          {/* Filled portion */}
-          {fillAmount > 0 && (
-            <div
-              className="absolute inset-0 overflow-hidden"
-              style={{
-                width: `${fillAmount * 100}%`,
-              }}
-            >
-              <Star className="size-8 fill-primary text-primary" />
-            </div>
+        <button
+          type="button"
+          disabled={!editable}
+          aria-label={`${star} star${star > 1 ? "s" : ""}`}
+          onMouseMove={(e) => handleMouseMove(e, star)}
+          onClick={(e) => handleClick(e, star)}
+          className={cn(
+            "relative rounded-md p-1",
+            editable &&
+            "cursor-pointer transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+            !editable && "cursor-default",
           )}
-        </div>
-      </button>
+        >
+          <div className="relative size-8">
+            {/* Empty star */}
+            <Star
+              className="absolute inset-0 size-8  text-amber-400"
+            />
+
+            {/* Filled portion */}
+            {fillAmount > 0 && (
+              <div
+                className="absolute inset-0   fill-amber-400 overflow-hidden"
+                style={{
+                  width: `${fillAmount * 100}%`,
+                }}
+              >
+                <Star className="size-8 fill-amber-400   text-amber-400 " />
+              </div>
+            )}
+          </div>
+        </button>
+
+        {/* Hover label */}
+        {editable && (
+          <div
+            className="
+              pointer-events-none
+              absolute left-1/2 top-full z-50
+              mt-2 -translate-x-1/2
+              whitespace-nowrap
+              rounded-md
+              bg-gray-900
+              px-2.5 py-1.5
+              text-xs font-medium text-white
+              opacity-0
+              transition-opacity duration-150
+              group-hover:opacity-100
+            "
+          >
+            {LABELS[star]}
+          </div>
+        )}
+      </div>
     );
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <div
-        className="flex gap-1"
-        onMouseLeave={() => editable && setHover(null)}
-      >
+    <div
+      className="flex items-center"
+      onMouseLeave={() => editable && setHover(null)}
+    >
+      <div className="flex gap-1">
         {[1, 2, 3, 4, 5].map(renderStar)}
       </div>
-
-      <span className="text-sm text-muted-foreground">
-        {active > 0
-          ? `${LABELS[active]}`
-          : editable
-            ? "Tap to rate"
-            : "Not rated"}
-      </span>
     </div>
   );
 }

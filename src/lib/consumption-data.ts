@@ -2,24 +2,12 @@
 // (ConsumptionReason, ConsumptionInfluence, NegativeAspect).
 // Kept in one module so the UI never hardcodes options inline.
 
+import { ConsumptionReasonModel, NegativeAspectModel } from "@/models/dashboard/consumption";
+import { BasicItemModel } from "@/models/dashboard/items";
+
 export const ITEM_TYPE = { PRODUCT: 1, SERVICE: 2 } as const;
 export type ItemTypeId = (typeof ITEM_TYPE)[keyof typeof ITEM_TYPE];
 
-export interface Item {
-    id: string;
-    name: string;
-    brand: string;
-    category: string;
-    typeId: ItemTypeId;
-    imageUrl?: string;
-}
-
-export interface ConsumptionReason {
-    id: number;
-    systemName: string;
-    friendlyName: string;
-    typeId: ItemTypeId;
-}
 
 export interface ConsumptionInfluence {
     id: number;
@@ -27,38 +15,40 @@ export interface ConsumptionInfluence {
     friendlyName: string;
 }
 
-export interface NegativeAspect {
-    id: number;
-    systemName: string;
-    friendlyName: string;
-    typeId: ItemTypeId;
-}
 
-export const items: Item[] = [
+
+export const items: BasicItemModel[] = [
     {
         id: "itm_1",
-        name: "Cold Brew Signature",
+        friendlyName: "Cold Brew Signature",
         brand: "Nortada Coffee",
-        category: "Coffee & Drinks",
-        typeId: ITEM_TYPE.PRODUCT,
+        categoryName: "Coffee & Drinks",
+        type: "PRODUCT",
+        categoryId: "4",
+        imageUrl: ""
     },
     {
         id: "itm_2",
-        name: "Deep Tissue Massage",
+        friendlyName: "Deep Tissue Massage",
         brand: "Serena Spa",
-        category: "Wellness",
-        typeId: ITEM_TYPE.SERVICE,
+        categoryName: "Wellness",
+        type: "SERVICE",
+        categoryId: "3",
+        imageUrl: ""
+
     },
     {
         id: "itm_3",
-        name: "Running Shoes Pace 4",
+        friendlyName: "Running Shoes Pace 4",
         brand: "Atlan",
-        category: "Footwear",
-        typeId: ITEM_TYPE.PRODUCT,
+        categoryName: "Footwear",
+        type: "PRODUCT",
+        categoryId: "3",
+        imageUrl: ""
     },
 ];
 
-export const consumptionReasons: ConsumptionReason[] = [
+export const consumptionReasons: ConsumptionReasonModel[] = [
     { id: 1, systemName: "routine", friendlyName: "Part of my routine", typeId: ITEM_TYPE.PRODUCT },
     { id: 2, systemName: "necessity", friendlyName: "I needed it", typeId: ITEM_TYPE.PRODUCT },
     { id: 3, systemName: "impulse", friendlyName: "Impulse", typeId: ITEM_TYPE.PRODUCT },
@@ -82,7 +72,7 @@ export const consumptionInfluences: ConsumptionInfluence[] = [
     { id: 7, systemName: "habit", friendlyName: "Habit" },
 ];
 
-export const negativeAspects: NegativeAspect[] = [
+export const negativeAspects: NegativeAspectModel[] = [
     { id: 1, systemName: "expensive", friendlyName: "Too expensive", typeId: ITEM_TYPE.PRODUCT },
     { id: 2, systemName: "low_quality", friendlyName: "Low quality", typeId: ITEM_TYPE.PRODUCT },
     { id: 3, systemName: "packaging", friendlyName: "Poor packaging", typeId: ITEM_TYPE.PRODUCT },
@@ -102,15 +92,6 @@ export function reasonsForType(typeId: ItemTypeId) {
 
 export function negativeAspectsForType(typeId: ItemTypeId) {
     return negativeAspects.filter((a) => a.typeId === typeId);
-}
-
-export function itemInitials(name: string) {
-    return name
-        .split(" ")
-        .filter(Boolean)
-        .slice(0, 2)
-        .map((w) => w[0]?.toUpperCase() ?? "")
-        .join("");
 }
 
 /** "4990" -> "49,90" (BRL, digits-only masking) */

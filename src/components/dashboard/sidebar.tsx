@@ -7,9 +7,10 @@ import { SidebarNav } from './sidebarnav';
 import { Button } from '../ui/button';
 import { Bell } from 'lucide-react';
 import UserIcon from '../ui/user-icon';
+import { getUserAuthData } from '@/lib/utils';
 export default async function Sidebar() {
 
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getUserAuthData();
   if (!session) {
     redirect("/sign-in");
   }
@@ -27,13 +28,13 @@ export default async function Sidebar() {
       <div className="p-4 border-t border-gray-200">
         <div className="flex items-center gap-3">
           <UserIcon
-            name={session.user.name}
-            image={session.user.image}
+            name={session.name}
+            image={session.image}
             className="h-9 w-9"
           />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">{session.user.name}</p>
-            <p className="text-xs text-gray-500 truncate">{session.user.email}</p>
+            <p className="text-sm font-medium text-gray-900 truncate">{session.name}</p>
+            <p className="text-xs text-gray-500 truncate">{session.email}</p>
           </div>
           <div className="relative">
             <Button

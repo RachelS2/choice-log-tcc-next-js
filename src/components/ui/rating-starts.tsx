@@ -16,11 +16,37 @@ export function RatingStars({
   value,
   onChange,
   editable = false,
+  size = "md",
+
 }: {
   value: number;
   onChange?: (v: number) => void;
   editable?: boolean;
+  size?: "sm" | "md" | "lg";
+
 }) {
+
+  const sizeClasses = {
+    sm: {
+      container: "size-5",
+      star: "size-5",
+      button: "p-0",
+      gap: "gap-0.5",
+    },
+    md: {
+      container: "size-8",
+      star: "size-8",
+      button: "p-1",
+      gap: "gap-1",
+    },
+    lg: {
+      container: "size-10",
+      star: "size-10",
+      button: "p-1",
+      gap: "gap-1",
+    },
+  };
+  const currentSize = sizeClasses[size];
   const [hover, setHover] = useState<number | null>(null);
 
   const active = editable && hover !== null ? hover : value;
@@ -69,16 +95,19 @@ export function RatingStars({
           onMouseMove={(e) => handleMouseMove(e, star)}
           onClick={(e) => handleClick(e, star)}
           className={cn(
-            "relative rounded-md p-1",
+            "relative rounded-md",
+            currentSize.button,
             editable &&
             "cursor-pointer transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
             !editable && "cursor-default",
           )}
         >
-          <div className="relative size-8">
+          <div className={cn("relative", currentSize.container)}>
             {/* Empty star */}
             <Star
-              className="absolute inset-0 size-8  text-amber-400"
+              className={cn("absolute inset-0 text-amber-400", currentSize.star, {
+                "fill-amber-400": !editable, 
+              })}
             />
 
             {/* Filled portion */}
@@ -89,7 +118,7 @@ export function RatingStars({
                   width: `${fillAmount * 100}%`,
                 }}
               >
-                <Star className="size-8 fill-amber-400   text-amber-400 " />
+                <Star className={cn("fill-amber-400   text-amber-400 ", currentSize.star)} />
               </div>
             )}
           </div>
@@ -124,7 +153,7 @@ export function RatingStars({
       className="flex items-center"
       onMouseLeave={() => editable && setHover(null)}
     >
-      <div className="flex gap-1">
+      <div className={cn("flex", currentSize.gap)}>
         {[1, 2, 3, 4, 5].map(renderStar)}
       </div>
     </div>

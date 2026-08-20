@@ -11,6 +11,7 @@ import {
   Check,
   CircleCheck,
   Wallet,
+  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,21 +23,23 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { FieldError, FieldLabel, FormSection } from "@/components/dashboard/experiences/new-experience/form-section";
-import { SelectableChip } from "@/components/dashboard/experiences/new-experience/SelectableChip";
-import { YesNoChoice } from "@/components/dashboard/experiences/new-experience/would-you-buy-again-choice";
+import { SelectableChip } from "@/components/dashboard/experiences/new-experience/selectable-chip";
+import { YesNoChoice } from "@/components/dashboard/experiences/new-experience/would-you-buy-again-section";
 import { ItemHeroCard } from "@/components/dashboard/experiences/new-experience/what-did-you-consume-section";
 import {
   brlDigitsToNumber,
   consumptionInfluences,
   formatBRLFromDigits,
-  itemInitials,
-  items,
   negativeAspectsForType,
   reasonsForType,
 } from "@/lib/consumption-data";
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 import { RatingStars } from "@/components/ui/rating-starts";
 import DatePicker from "@/components/ui/date-picker";
+import ConsumptionCreatedPage from "./consumption-created-page";
+import { BasicItemModel, CreateUpdateItemModel, ItemTypeEnum } from "@/models/dashboard/items";
+import { getItemsController } from "@/lib/controller/item-controller";
+import { ConsumptionReasonModel, NegativeAspectModel } from "@/models/dashboard/consumption";
 
 interface Errors {
   item?: string;
@@ -49,9 +52,14 @@ interface Errors {
   address?: string;
 }
 
-export default function RegisterConsumptionPage() {
-  const [itemId, setItemId] = useState<string | null>(items[0]?.id ?? null);
+interface RegisterConsumptionProps {
+  items: BasicItemModel[];
+  reasons: ConsumptionReasonModel[];
+  aspects: NegativeAspectModel[];
+}
+export default function RegisterConsumptionPageClient({ items, reasons, aspects }: RegisterConsumptionProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [itemId, setItemId] = useState<string | null>(null);
   const [address, setAddress] = useState("");
   const [rating, setRating] = useState(0);
   const [details, setDetails] = useState("");
@@ -62,11 +70,23 @@ export default function RegisterConsumptionPage() {
   const [aspectIds, setAspectIds] = useState<number[]>([]);
   const [errors, setErrors] = useState<Errors>({});
   const [saved, setSaved] = useState(false);
+  const [itemSearch, setItemSearch] = useState("");
+  const [itemTypeFilter, setItemTypeFilter] = useState<"ALL" | ItemTypeEnum>("ALL");
+  const [selectedItem, setSelectedItem] = useState<BasicItemModel | undefined>(undefined);
+  const filteredItems = items.filter((item) => {
+    const search = itemSearch.toLowerCase().trim();
 
-  const item = useMemo(() => items.find((i) => i.id === itemId) ?? null, [itemId]);
-  const reasons = item ? reasonsForType(item.typeId) : [];
-  const aspects = item ? negativeAspectsForType(item.typeId) : [];
+    const matchesSearch =
+      !search ||
+      item.friendlyName.toLowerCase().includes(search) ||
+      item.brand?.toLowerCase().includes(search);
 
+    const matchesType =
+      itemTypeFilter === "ALL" ||
+      item.type === itemTypeFilter;
+
+    return matchesSearch && matchesType;
+  });
   const toggleAspect = (id: number) =>
     setAspectIds((prev) =>
       prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id],
@@ -81,7 +101,7 @@ export default function RegisterConsumptionPage() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const next: Errors = {};
-    if (!item) next.item = "Please choose the item you consumed.";
+    if (!selectedItem) next.item = "Please choose the item you consumed.";
     if (!date) next.date = "Please tell us when this happened.";
     if (!rating) next.rating = "Please rate your experience.";
     if (!reasonId) next.reason = "Please select why you chose this item.";
@@ -112,49 +132,20 @@ export default function RegisterConsumptionPage() {
     setSaved(true);
   };
 
-  if (saved && item) {
+  if (saved && selectedItem) {
     return (
-      <div
-        className="min-h-screen px-4 py-16"
-        style={{ background: "var(--gradient-subtle)" }}
-      >
-        <div
-          className="mx-auto max-w-md rounded-2xl border border-border bg-card p-10 text-center duration-500 animate-in fade-in slide-in-from-bottom-2"
-          style={{ boxShadow: "var(--shadow-card)" }}
-        >
-          <div className="mx-auto mb-5 grid size-14 place-items-center rounded-full bg-primary/10 text-primary">
-            <CircleCheck className="size-7" />
-          </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-            Consumption saved
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Your experience with {item.name} is now part of your ChoiceLog
-            history.
-          </p>
-          <div className="mt-6 space-y-3">
-            <Button
-              className="h-11 w-full"
-              onClick={() => {
-                setSaved(false);
-                setRating(0);
-                setDetails("");
-                setAddress("");
-                setReasonId(null);
-                setInfluenceId(null);
-                setPriceDigits("");
-                setWouldBuyAgain(null);
-                setAspectIds([]);
-              }}
-            >
-              Register another
-            </Button>
-            <Button asChild variant="ghost" className="h-11 w-full">
-              <Link href="/">Back home</Link>
-            </Button>
-          </div>
-        </div>
-      </div>
+
+      <ConsumptionCreatedPage itemName={selectedItem.friendlyName} onButtonClick={() => {
+        setSaved(false);
+        setRating(0);
+        setDetails("");
+        setAddress("");
+        setReasonId(null);
+        setInfluenceId(null);
+        setPriceDigits("");
+        setWouldBuyAgain(null);
+        setAspectIds([]);
+      }} />
     );
   }
 
@@ -181,37 +172,138 @@ export default function RegisterConsumptionPage() {
         </header>
 
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-          {item ? (
-            <ItemHeroCard item={item} onChange={() => setItemId(null)} />
+          {selectedItem ? (
+            <ItemHeroCard item={selectedItem} onChange={() => setItemId(null)} />
           ) : (
             <FormSection
               icon={Compass}
               title="What did you consume?"
               description="Pick one of your registered items to start."
             >
-              <div className="grid gap-3 sm:grid-cols-2">
-                {items.map((i) => (
-                  <button
-                    key={i.id}
-                    type="button"
-                    onClick={() => selectItem(i.id)}
-                    className="flex items-center gap-3 rounded-xl border border-border bg-background p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-accent/50"
-                  >
-                    <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-primary/10 text-sm font-semibold text-primary">
-                      {itemInitials(i.name)}
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block truncate text-sm font-medium text-foreground">
-                        {i.name}
-                      </span>
-                      <span className="block truncate text-xs text-muted-foreground">
-                        {i.brand} · {i.category}
-                      </span>
-                    </span>
-                  </button>
-                ))}
+              <div className="space-y-3">
+
+                {/* Search + Type filter */}
+                <div className="flex flex-col gap-2 sm:flex-row">
+
+                  {/* Search */}
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+
+                    <input
+                      type="text"
+                      value={itemSearch}
+                      onChange={(e) => setItemSearch(e.target.value)}
+                      placeholder="Search items..."
+                      className="
+            h-10 w-full rounded-lg
+            border border-border
+            bg-background
+            pl-9 pr-3
+            text-sm
+            outline-none
+            transition-colors
+            placeholder:text-muted-foreground
+            focus:border-primary
+            focus:ring-2
+            focus:ring-primary/20
+          "
+                    />
+                  </div>
+
+                  {/* Type filter */}
+                  <div className="flex h-10 rounded-lg border border-border bg-muted/30 p-1">
+                    {[
+                      { value: "ALL", label: "All" },
+                      { value: "PRODUCT", label: "Products" },
+                      { value: "SERVICE", label: "Services" },
+                    ].map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() =>
+                          setItemTypeFilter(
+                            option.value as "ALL" | "PRODUCT" | "SERVICE"
+                          )
+                        }
+                        className={cn(
+                          "rounded-md px-3 text-xs font-medium transition-colors",
+                          itemTypeFilter === option.value
+                            ? "bg-background text-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground"
+                        )}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Scrollable items */}
+                <div className="max-h-64 overflow-y-auto pr-1">
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {filteredItems.map((i) => (
+                      <button
+                        key={i.id}
+                        type="button"
+                        onClick={() => selectItem(i.id)}
+                        className="
+              flex items-center gap-3
+              rounded-xl
+              border border-border
+              bg-background
+              p-4
+              text-left
+              transition-all duration-200
+              hover:-translate-y-0.5
+              hover:border-primary/50
+              hover:bg-accent/50
+            "
+                      >
+                        {/* Item icon / initials */}
+                        <span
+                          className="
+                grid size-11 shrink-0 place-items-center
+                rounded-lg
+                bg-primary/10
+                text-sm font-semibold
+                text-primary
+              "
+                        >
+                          {getInitials(i.friendlyName)}
+                        </span>
+
+                        {/* Item information */}
+                        <span className="min-w-0">
+                          <span className="block truncate text-sm font-medium text-foreground">
+                            {i.friendlyName}
+                          </span>
+
+                          <span className="block truncate text-xs text-muted-foreground">
+                            {i.brand} · {i.categoryName}
+                          </span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Empty state */}
+                  {filteredItems.length === 0 && (
+                    <div className="flex flex-col items-center justify-center py-10 text-center">
+                      <Search className="mb-2 size-5 text-muted-foreground/60" />
+
+                      <p className="text-sm font-medium text-foreground">
+                        No items found
+                      </p>
+
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Try another search or filter.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <FieldError>{errors.item}</FieldError>
               </div>
-              <FieldError>{errors.item}</FieldError>
             </FormSection>
           )}
 

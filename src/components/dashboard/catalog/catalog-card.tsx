@@ -89,14 +89,14 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
 
       {/* Body: Name, Brand, Badges */}
       <div className="mb-4">
-        <h3 className="text-base font-semibold text-neutral-950 leading-tight">
+        <h3 className="text-lg font-semibold text-neutral-950 leading-tight">
           {item.friendlyName}
         </h3>
         <p className="mt-0.5 text-sm text-neutral-500">{item.brand}</p>
         <div className="mt-2.5 flex flex-wrap gap-1.5">
           <Badge
             variant="secondary"
-            className={`text-sm font-medium ${item.type === 'PRODUCT'
+            className={`text-md font-medium ${item.type === 'PRODUCT'
               ? 'bg-blue-50 text-blue-700 border-blue-100'
               : 'bg-violet-50 text-violet-700 border-violet-100'
               }`}
@@ -105,7 +105,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
           </Badge>
           <Badge
             variant="secondary"
-            className="text-sm font-medium bg-neutral-100 text-neutral-600 border-neutral-200"
+            className="text-md font-medium bg-neutral-100 text-neutral-600 border-neutral-200"
           >
             {item.categoryName}
           </Badge>
@@ -135,7 +135,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         <div className="flex items-center justify-between">
           <span className="text-sm text-neutral-500">Average rating</span>
           <div className="flex items-center gap-1.5">
-            <RatingStars value={item.averageRating} />
+            <RatingStars value={item.averageRating} size="sm" />
           </div>
         </div>
       </div>

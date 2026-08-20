@@ -46,7 +46,7 @@ export function SidebarNav() {
 
           <ChevronRight
             className={cn(
-              "ml-auto h-4 w-4 transition-transform",
+              "ml-auto h-4 cursor-pointer w-4 transition-transform",
               catalogOpen && "rotate-90"
             )}
           />

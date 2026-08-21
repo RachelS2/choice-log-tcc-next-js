@@ -1,8 +1,9 @@
 
-import { getUserAuthData } from "@/lib/utils";
+import { auth } from "@/lib/auth";
 import { useAsyncData } from "./generic-hook";
 import { fetchCategoriesRepository } from "@/lib/repository/category-repository";
 import { ItemTypeEnum } from "@/models/dashboard/items";
+import { headers } from "next/headers";
 
 
 
@@ -11,8 +12,10 @@ import { ItemTypeEnum } from "@/models/dashboard/items";
  */
 export function useGetCategories(type?: ItemTypeEnum) {
     return useAsyncData(async () => {
-        const user = await getUserAuthData();
+        const user = await auth.api.getSession({
+    headers: await headers(),
+});
         if (!user) return [];
-        return fetchCategoriesRepository(user.id, type);
+        return fetchCategoriesRepository(user.user.id, type);
     }, []);
 }

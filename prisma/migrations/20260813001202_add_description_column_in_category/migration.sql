@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE "Category" ADD COLUMN     "description" VARCHAR(200) NOT NULL;
+ALTER TABLE "Category" ADD COLUMN     "description" VARCHAR(200) NULL;

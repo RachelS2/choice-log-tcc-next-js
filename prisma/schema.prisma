@@ -8,62 +8,6 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id            String        @id @default(cuid())
-  name          String?
-  email         String        @unique
-  image         String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  emailVerified Boolean       @default(false)
-  incomeRange   IncomeRange   @default(PREFER_NOT_TO_SAY)
-  accounts      Account[]
-  categories    Category[]
-  consumptions  Consumption[]
-  goals         Goal[]
-  items         Item[]
-  sessions      Session[]
-  wishList      WishList?
-}
-
-model Session {
-  id        String   @id @default(cuid())
-  expiresAt DateTime
-  token     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Account {
-  id                    String    @id @default(cuid())
-  accountId             String
-  providerId            String
-  userId                String
-  accessToken           String?
-  refreshToken          String?
-  idToken               String?
-  accessTokenExpiresAt  DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope                 String?
-  password              String?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Verification {
-  id         String   @id @default(cuid())
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
-
 model Item {
   friendlyName  String         @db.VarChar(30)
   systemName    String         @db.VarChar(30)
@@ -109,7 +53,6 @@ model Category {
   spendingGoals SpendingGoal[]
 
   @@unique([name, userId])
-  @@unique([name, userId], map: "unique_user_category", where: raw("(\"userId\" IS NOT NULL)"))
   @@index([typeId])
 }
 
@@ -161,8 +104,8 @@ model ConsumptionInfluence {
 }
 
 model NegativeAspect {
-  systemName   String                      @db.VarChar(30)
-  friendlyName String                      @db.VarChar(30)
+  systemName   String                      @db.VarChar(80)
+  friendlyName String                      @db.VarChar(80)
   createdAt    DateTime                    @default(now())
   updatedAt    DateTime                    @default(now()) @updatedAt
   id           Int                         @id @default(autoincrement())
@@ -193,7 +136,7 @@ model Consumption {
   item            Item                        @relation(fields: [itemId], references: [id], onDelete: Cascade)
   reason          ConsumptionReason           @relation(fields: [reasonId], references: [id])
   user            User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  wishListItem    WishListItem?               @relation(fields: [wishListItemId], references: [id])
+  wishListItem    WishListItem?               @relation(fields: [wishListItemId], references: [id],   onDelete: SetNull)
   negativeAspects ConsumptionNegativeAspect[]
 
   @@index([itemId])
@@ -220,7 +163,7 @@ model Goal {
   updatedAt        DateTime          @default(now()) @updatedAt
   finalDate        DateTime?
   initialDate      DateTime          @default(now())
-  category         Category?         @relation(fields: [categoryId], references: [id])
+  category         Category?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   impulsivityGoal  ImpulsivityGoal?
   satisfactionGoal SatisfactionGoal?
@@ -231,7 +174,7 @@ model SpendingGoal {
   goalId        String    @id
   spendingLimit Float
   categoryId    String?
-  category      Category? @relation(fields: [categoryId], references: [id])
+  category      Category? @relation(fields: [categoryId], references: [id],   onDelete: SetNull)
   goal          Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
 }
 
@@ -245,6 +188,66 @@ model ImpulsivityGoal {
   goalId                   String @id
   targetDecreasePercentage Float
   goal                     Goal   @relation(fields: [goalId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issuer                String
+
+  @@unique([issuer, accountId], map: "account_issuer_accountId_uidx")
+  @@index([userId])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String        @id
+  name          String?
+  email         String        @unique
+  image         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime
+  emailVerified Boolean       @default(false)
+  incomeRange   IncomeRange   @default(PREFER_NOT_TO_SAY)
+  Account       Account[]
+  categories    Category[]
+  consumptions  Consumption[]
+  goals         Goal[]
+  items         Item[]
+  Session       Session[]
+  wishList      WishList?
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
 }
 
 enum WishListItemPriority {
@@ -263,6 +266,6 @@ enum IncomeRange {
 }
 
 enum ItemTypeEnum {
-  PRODUCT
+  PRODUCT 
   SERVICE
 }

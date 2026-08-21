@@ -31,7 +31,7 @@ export default function RecentExperiences() {
               <p className="font-medium text-blue-600">
                 {item.title}
               </p>
-              <RatingStars value={item.rating} />
+              <RatingStars value={item.rating} size="sm" />
             </div>
 
             {/* coluna 2 */}

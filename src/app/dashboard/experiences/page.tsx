@@ -1,9 +1,10 @@
 
 import RegisterConsumptionPageClient from "@/components/dashboard/experiences/new-experience/register-consumption-page-client";
+import { fetchCategoriesRepository } from "@/lib/repository/category-repository";
 import { fetchNegativeAspectsRepository, fetchConsumptionReasonsRepository } from "@/lib/repository/consumption-repository";
 import { fetchItemBasicInfoRepository } from "@/lib/repository/item-repository";
 import { NegativeAspectModel, ConsumptionReasonModel } from "@/models/dashboard/consumption";
-import { BasicItemModel } from "@/models/dashboard/items";
+import { BasicItemModel, CategoryModel } from "@/models/dashboard/items";
 
 
 export default async function RegisterConsumptionPage() {
@@ -13,11 +14,14 @@ export default async function RegisterConsumptionPage() {
   const consumptionReasons: ConsumptionReasonModel[] =
     await fetchConsumptionReasonsRepository();
 
+  const categories: CategoryModel[] = await fetchCategoriesRepository()
+
   return (
     <RegisterConsumptionPageClient
-      items={items}
+      initialItems={items}
       aspects={negativeAspects}
       reasons={consumptionReasons}
+      categories={categories}
     />
   );
 }

@@ -12,6 +12,7 @@ import {
   CircleCheck,
   Wallet,
   Search,
+  Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,9 +38,11 @@ import { cn, getInitials } from "@/lib/utils";
 import { RatingStars } from "@/components/ui/rating-starts";
 import DatePicker from "@/components/ui/date-picker";
 import ConsumptionCreatedPage from "./consumption-created-page";
-import { BasicItemModel, CreateUpdateItemModel, ItemTypeEnum } from "@/models/dashboard/items";
+import { BasicItemModel, CategoryModel, CreateUpdateItemModel, ItemTypeEnum } from "@/models/dashboard/items";
 import { getItemsController } from "@/lib/controller/item-controller";
 import { ConsumptionReasonModel, NegativeAspectModel } from "@/models/dashboard/consumption";
+import EmptyDataState from "@/components/ui/empty-state";
+import CreateUpdateItemModal from "../../items/create-item-modal";
 
 interface Errors {
   item?: string;
@@ -53,11 +56,12 @@ interface Errors {
 }
 
 interface RegisterConsumptionProps {
-  items: BasicItemModel[];
+  initialItems: BasicItemModel[];
   reasons: ConsumptionReasonModel[];
   aspects: NegativeAspectModel[];
+  categories: CategoryModel[];
 }
-export default function RegisterConsumptionPageClient({ items, reasons, aspects }: RegisterConsumptionProps) {
+export default function RegisterConsumptionPageClient({ initialItems, reasons, aspects, categories }: RegisterConsumptionProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [itemId, setItemId] = useState<string | null>(null);
   const [address, setAddress] = useState("");
@@ -73,6 +77,9 @@ export default function RegisterConsumptionPageClient({ items, reasons, aspects 
   const [itemSearch, setItemSearch] = useState("");
   const [itemTypeFilter, setItemTypeFilter] = useState<"ALL" | ItemTypeEnum>("ALL");
   const [selectedItem, setSelectedItem] = useState<BasicItemModel | undefined>(undefined);
+  const [newItemModalOpen, setNewItemModalOpen] = useState(false);
+  const [items, setItems] = useState<BasicItemModel[]>(initialItems);
+
   const filteredItems = items.filter((item) => {
     const search = itemSearch.toLowerCase().trim();
 
@@ -179,6 +186,17 @@ export default function RegisterConsumptionPageClient({ items, reasons, aspects 
               icon={Compass}
               title="What did you consume?"
               description="Pick one of your registered items to start."
+              headerAction={
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setNewItemModalOpen(true)}
+                  className="gap-2 rounded-lg shadow-md bg-blue-50 hover:text-white border-blue-50 h-11 text-blue-600 hover:bg-blue-500"
+                >
+                  <Plus className="size-4" />
+                  Add item
+                </Button>
+              }
             >
               <div className="space-y-3">
 
@@ -189,52 +207,52 @@ export default function RegisterConsumptionPageClient({ items, reasons, aspects 
                   <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
-                    <input
+                    <Input
                       type="text"
                       value={itemSearch}
                       onChange={(e) => setItemSearch(e.target.value)}
                       placeholder="Search items..."
                       className="
             h-10 w-full rounded-lg
-            border border-border
-            bg-background
             pl-9 pr-3
             text-sm
             outline-none
             transition-colors
             placeholder:text-muted-foreground
-            focus:border-primary
-            focus:ring-2
-            focus:ring-primary/20
+
           "
                     />
                   </div>
 
                   {/* Type filter */}
-                  <div className="flex h-10 rounded-lg border border-border bg-muted/30 p-1">
+                  <div className="flex h-10 rounded-lg items-center  gap-1 p-1">
                     {[
                       { value: "ALL", label: "All" },
                       { value: "PRODUCT", label: "Products" },
                       { value: "SERVICE", label: "Services" },
                     ].map((option) => (
-                      <button
+
+
+                      <Button
                         key={option.value}
                         type="button"
+                        variant="outline"
                         onClick={() =>
                           setItemTypeFilter(
                             option.value as "ALL" | "PRODUCT" | "SERVICE"
                           )
                         }
                         className={cn(
-                          "rounded-md px-3 text-xs font-medium transition-colors",
+                          "rounded-md h-10 hover:-translate-y-0.5  px-3 text-xs shadow-md font-medium hover:bg-blue-200 hover:font-semibold transition-colors",
                           itemTypeFilter === option.value
-                            ? "bg-background text-foreground shadow-sm"
-                            : "text-muted-foreground hover:text-foreground"
+                            ? "bg-blue-600 hover:bg-blue-700 border-blue-600 text-foreground "
+                            : "bg-blue-50 border-blue-100  text-blue-600 hover:text-blue-600"
                         )}
                       >
                         {option.label}
-                      </button>
+                      </Button>
                     ))}
+
                   </div>
                 </div>
 
@@ -288,17 +306,8 @@ export default function RegisterConsumptionPageClient({ items, reasons, aspects 
 
                   {/* Empty state */}
                   {filteredItems.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-10 text-center">
-                      <Search className="mb-2 size-5 text-muted-foreground/60" />
 
-                      <p className="text-sm font-medium text-foreground">
-                        No items found
-                      </p>
-
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        Try another search or filter.
-                      </p>
-                    </div>
+                    <EmptyDataState className="w-full min-h-[50px] py-8 border-none" mainTitle="No items found" description="Try another search or filter." />
                   )}
                 </div>
 
@@ -492,6 +501,21 @@ export default function RegisterConsumptionPageClient({ items, reasons, aspects 
           </div>
         </form>
       </div>
+      <CreateUpdateItemModal
+        open={newItemModalOpen}
+        mode="create"
+        onOpenChange={setNewItemModalOpen}
+        categories={categories}
+        onSuccess={async (newItem: CreateUpdateItemModel) => {
+          setNewItemModalOpen(false);
+          setItems((currentItems) => [
+            ...currentItems,
+            newItem,
+          ]);
+          selectItem(newItem.id);
+
+        }}
+      />
     </div>
   );
 }

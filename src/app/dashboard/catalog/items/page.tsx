@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import CatalogEmptyState from '@/components/dashboard/catalog/catalog-empty-state';
+import EmptyDataState from '@/components/ui/empty-state';
 import CatalogFilters from '@/components/dashboard/catalog/catalog-filter';
 import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
 import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
@@ -191,7 +191,7 @@ export default function CatalogPage() {
       ) : filteredItems.length > 0 ? (
         <CatalogGrid items={filteredItems} onDelete={handleItemDelete} onEdit={handleEditItem} categories={categories} />
       ) : (
-        <CatalogEmptyState />
+        <EmptyDataState className="border border-neutral-200 bg-white px-6 py-16 shadow-sm"/>
       )}
 
       <CreateUpdateItemModal

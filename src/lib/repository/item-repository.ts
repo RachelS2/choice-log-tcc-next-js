@@ -26,7 +26,6 @@ export async function fetchItemBasicInfoRepository(userId?: string, categoryType
       },
     };
   }
-  console.log("WHERE:", where);
 
   const items = await prisma.item.findMany({
     where,
@@ -70,7 +69,6 @@ export async function fetchItemResumeRepository(userId?: string, categoryType?: 
       },
     };
   }
-  console.log("WHERE:", where);
 
   const items = await prisma.item.findMany({
     where,

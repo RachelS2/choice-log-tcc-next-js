@@ -8,35 +8,50 @@ export function FormSection({
     title,
     description,
     children,
+    headerAction,
 }: {
     icon: LucideIcon;
     title: string;
     description?: string;
     children: ReactNode;
+    headerAction?: ReactNode;
 }) {
     return (
         <Card
-            className="rounded-2xl  border border-neutral-200 bg-white p-5 transition-all duration-200 hover:shadow-md hover:scale-[1.02] hover:border-neutral-300 bg-card p-6 sm:p-8"
-            style={{ boxShadow: "var(--shadow-card)" }}
+            className="rounded-2xl border shadow-md border-neutral-200 bg-white p-5 transition-all duration-200 hover:shadow-md hover:scale-[1.02] hover:border-neutral-300 bg-card sm:p-8"
         >
             <header className="mb-6 flex items-start gap-3">
-                <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-blue-100 text-blue-600">
+                <div className="grid size-10 shadow-md shrink-0 place-items-center rounded-xl bg-blue-100 text-blue-600">
                     <Icon className="size-5 " />
                 </div>
-                <div>
-                    <h2 className="text-lg text-black font-semibold tracking-tight">
-                        {title}
-                    </h2>
+
+                <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-4">
+                        <h2 className="text-lg font-semibold tracking-tight text-black">
+                            {title}
+                        </h2>
+
+                        {headerAction && (
+                            <div className="shrink-0">
+                                {headerAction}
+                            </div>
+                        )}
+                    </div>
+
                     {description ? (
-                        <p className="mt-0.5 text-base text-muted-foreground">{description}</p>
+                        <p className="mt-0.5 text-base text-muted-foreground">
+                            {description}
+                        </p>
                     ) : null}
                 </div>
             </header>
-            <div className="space-y-6">{children}</div>
+
+            <div className="space-y-6">
+                {children}
+            </div>
         </Card>
     );
 }
-
 export function FieldLabel({
     children,
     required,

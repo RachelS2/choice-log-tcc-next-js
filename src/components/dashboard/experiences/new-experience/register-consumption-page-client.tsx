@@ -63,7 +63,6 @@ interface RegisterConsumptionProps {
 }
 export default function RegisterConsumptionPageClient({ initialItems, reasons, aspects, categories }: RegisterConsumptionProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [itemId, setItemId] = useState<string | null>(null);
   const [address, setAddress] = useState("");
   const [rating, setRating] = useState(0);
   const [details, setDetails] = useState("");
@@ -100,9 +99,11 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
     );
 
   const selectItem = (id: string) => {
-    setItemId(id);
+    const newItem = items.find((item) => item.id === id);
     setReasonId(null);
+    setSelectedItem(newItem)
     setAspectIds([]);
+    console.log(id)
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -180,7 +181,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
           {selectedItem ? (
-            <ItemHeroCard item={selectedItem} onChange={() => setItemId(null)} />
+            <ItemHeroCard item={selectedItem} onChange={() => setSelectedItem(undefined)} />
           ) : (
             <FormSection
               icon={Compass}
@@ -257,34 +258,29 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                 </div>
 
                 {/* Scrollable items */}
-                <div className="max-h-64 overflow-y-auto pr-1">
+                <div className="max-h-64 pt-2 pb-2 overflow-y-auto pr-1">
                   <div className="grid gap-3 sm:grid-cols-2">
                     {filteredItems.map((i) => (
                       <button
                         key={i.id}
                         type="button"
                         onClick={() => selectItem(i.id)}
-                        className="
-              flex items-center gap-3
+                        className="flex items-center gap-3
               rounded-xl
-              border border-border
-              bg-background
-              p-4
+              border border-blue-50 cursor-pointer
+              p-4 shadow-md
+              shadow-blue-200
               text-left
               transition-all duration-200
               hover:-translate-y-0.5
-              hover:border-primary/50
-              hover:bg-accent/50
-            "
+              hover:bg-accent/50"
                       >
                         {/* Item icon / initials */}
                         <span
                           className="
                 grid size-11 shrink-0 place-items-center
-                rounded-lg
-                bg-primary/10
-                text-sm font-semibold
-                text-primary
+                rounded-xl bg-blue-100 text-blue-600
+                text-sm font-semibold shadow-md
               "
                         >
                           {getInitials(i.friendlyName)}
@@ -292,7 +288,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
                         {/* Item information */}
                         <span className="min-w-0">
-                          <span className="block truncate text-sm font-medium text-foreground">
+                          <span className="block truncate text-sm font-medium text-black">
                             {i.friendlyName}
                           </span>
 

@@ -18,7 +18,7 @@ export function FormSection({
 }) {
     return (
         <Card
-            className="rounded-2xl border shadow-md shadow-blue-200 border-blue-50 bg-white p-5 transition-all duration-200 hover:shadow-md hover:scale-[1.02] hover:border-neutral-300 bg-card sm:p-8"
+            className="rounded-2xl border shadow-md border bg-white p-5 transition-all duration-200 hover:shadow-md hover:scale-[1.02] hover:border-neutral-300  bg-card sm:p-8"
         >
             <header className="mb-6 flex items-start gap-3">
                 <div className="grid size-10 shadow-md shrink-0 place-items-center rounded-xl bg-blue-100 text-blue-600">

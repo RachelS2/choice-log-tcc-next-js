@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Cormorant_Garamond, Inter, Poppins, DM_Sans, DM_Serif_Display  } from "next/font/google";
 import "./globals.css" assert { type: "css" };
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
 // OBS: ugly fonts:
-// const poppins = Poppins({
-//   subsets: ['latin'],
-//   weight: ['300', '400', '500', '600', '700'],
-//   variable: '--font-poppins',
-// });
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-poppins',
+});
 
 // const kaiseiTokumin = Kaisei_Tokumin({
 //   subsets: ['latin'],
@@ -17,6 +17,16 @@ import { cn } from "@/lib/utils";
 //   variable: '--font-kaisei',
 // });
 
+const dmSans = DM_Sans({
+    subsets: ["latin"],
+    variable: "--font-dm-sans",
+});
+
+const dmSerif = DM_Serif_Display({
+    subsets: ["latin"],
+    variable: "--font-dm-serif",
+    weight: "400",
+});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,8 +53,9 @@ export default function RootLayout({
     <html lang="en">
     <body
       className={cn(
-        inter.className,
-        //cormorant.className,
+        dmSans.className,
+        dmSerif.variable,
+        poppins.variable,
         "font-sans antialiased"
       )}
     >

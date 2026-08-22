@@ -163,18 +163,24 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
       style={{ background: "var(--gradient-subtle)" }}
     >
       <div className="mx-auto w-full max-w-3xl">
-        <header className="mb-8 flex items-center flex-col text-center">
+        <header className="relative mb-10 flex flex-col items-center text-center sm:mb-14">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="h-px w-8 bg-blue-900 " />
+            <span className="text-[10px] font-semibold tracking-[0.24em] text-blue-900 uppercase">
+              Consumption journal
+            </span>
+            <span className="h-px w-8 bg-blue-900" />
+          </div>
 
-          <h1
-            className="mt-1 text-3xl font-bold tracking-tight text-blue-600"
-            style={{
-              textShadow: "0 3px 0 #dbeafe, 0 6px 12px rgba(37, 99, 235, 0.2)",
-            }}
+          <h1 className="font-[family-name:var(--font-dmSerif)] text-4xl font-semibold leading-[0.95] tracking-[-0.03em] text-blue-700 [text-shadow:0_6px_18px_rgba(30,64,175,0.16)] sm:text-5xl"
+            
           >
-            Register consumption
+            Register
+            <span className="block text-blue-800">Experience</span>
           </h1>
-          <p className="mt-2 max-w-xl text-md leading-relaxed text-muted-foreground">
-            A short reflection on what you consumed, how it felt and why you
+
+          <p className="mt-5 max-w-md text-sm leading-7 text-blue-900 sm:text-base">
+            A short reflection on what you consumed, how it felt, and why you
             chose it.
           </p>
         </header>
@@ -267,9 +273,9 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                         onClick={() => selectItem(i.id)}
                         className="flex items-center gap-3
               rounded-xl
-              border border-blue-50 cursor-pointer
+              border border cursor-pointer
               p-4 shadow-md
-              shadow-blue-200
+              
               text-left
               transition-all duration-200
               hover:-translate-y-0.5
@@ -315,7 +321,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
           <FormSection
             icon={CalendarIcon}
             title="When & Where"
-            description="When did this experience happen?"
+            description="When and where did this experience happen?"
           >
             <div className="grid gap-6 sm:grid-cols-2">
               <div>

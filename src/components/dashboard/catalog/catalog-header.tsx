@@ -30,7 +30,7 @@ export default function CatalogHeader({ onNewItem, newItemBtnDisabled }: Catalog
       sm:text-4xl
     "
         >
-          Catalog
+          Your Items
         </h1>
 
       </div>

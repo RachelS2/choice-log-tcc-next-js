@@ -1,5 +1,5 @@
 
-import RegisterConsumptionPageClient from "@/components/dashboard/experiences/new-experience/register-consumption-page-client";
+import RegisterConsumptionPageClient from "@/components/dashboard/experiences/new-experience/register-consumption-page";
 import { fetchCategoriesRepository } from "@/lib/repository/category-repository";
 import { fetchNegativeAspectsRepository, fetchConsumptionReasonsRepository } from "@/lib/repository/consumption-repository";
 import { fetchItemBasicInfoRepository, fetchItemTypesRepository } from "@/lib/repository/item-repository";

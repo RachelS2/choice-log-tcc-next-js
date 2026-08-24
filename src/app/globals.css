@@ -265,3 +265,48 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     @apply font-sans;
   }
 }
+
+@keyframes yes-feedback {
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.3);
+  }
+
+  70% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes no-feedback {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+
+  25% {
+    transform: translateX(-3px) rotate(-6deg);
+  }
+
+  50% {
+    transform: translateX(3px) rotate(6deg);
+  }
+
+  75% {
+    transform: translateX(-2px) rotate(-3deg);
+  }
+}
+
+.animate-yes-feedback {
+  animation: yes-feedback 400ms ease-out;
+}
+
+.animate-no-feedback {
+  animation: no-feedback 400ms ease-out;
+}

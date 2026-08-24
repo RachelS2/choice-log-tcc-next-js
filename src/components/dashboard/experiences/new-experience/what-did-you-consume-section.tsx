@@ -1,4 +1,4 @@
-import { Package, Sparkles, ChevronsUpDown } from "lucide-react";
+import { Package, Sparkles, Wrench, Loader2, ImageIcon, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getInitials } from "@/lib/utils";
 import { BasicItemModel } from "@/models/dashboard/items";
@@ -15,7 +15,7 @@ export function ItemHeroCard({
 
     return (
         <Card className="rounded-2xl flex items-center border border-border bg-card shadow-sm transition-shadow duration-200 hover:shadow-md">
-            <div className="flex items-center gap-5 p-5 sm:p-6">
+            <div className="flex items-center gap-8 p-5 sm:p-6">
                 {/* Item image */}
                 {item.imageUrl ? (
                     <img
@@ -84,7 +84,7 @@ export function ItemHeroCard({
 
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-800 shadow-md px-2.5 py-1 text-xs font-medium text-blue-50">
                             {isService ? (
-                                <Sparkles className="size-3.5" />
+                                <Wrench className="size-3.5" />
                             ) : (
                                 <Package className="size-3.5" />
                             )}

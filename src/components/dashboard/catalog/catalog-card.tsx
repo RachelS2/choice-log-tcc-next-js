@@ -1,14 +1,14 @@
-import { Pencil, Trash2, Star } from 'lucide-react';
+import { Pencil, Trash2, Star, Wrench, Package } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import {RatingStars} from '@/components/ui/rating-starts';
+import { RatingStars } from '@/components/ui/rating-starts';
 import { CategoryModel, CreateUpdateItemModel } from '@/models/dashboard/items';
 import { deleteItemController } from '@/lib/controller/item-controller';
 import { useState } from "react";
 import Modal from '@/components/ui/modal';
 import CreateUpdateItemModal from '../items/create-item-modal';
-import { getAvatarColor, getInitials, formatDate } from '@/lib/utils';
+import { getAvatarColor, getInitials, formatDate, cn } from '@/lib/utils';
 
 export interface CatalogCardProps {
   item: CreateUpdateItemModel;
@@ -51,110 +51,235 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
 
   return (
     <div
-      className="group cursor-pointer rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] hover:border-neutral-300"
+      className="
+    group relative flex h-full cursor-pointer flex-col
+    overflow-hidden rounded-2xl
+    border border-neutral-200
+    bg-white
+    shadow-sm
+    transition-all duration-300 ease-out
+    hover:-translate-y-1
+    hover:border-blue-200
+    hover:shadow-lg hover:shadow-blue-100/50
+  "
     >
-      {/* Top: Avatar + Actions */}
-      <div className="flex items-start justify-between mb-4">
-        <div
-          className={`flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${getAvatarColor(item.friendlyName)} text-white font-semibold text-sm`}
-        >
-          {item.imageUrl ? (
-            <img
-              src={item.imageUrl}
-              alt={item.friendlyName}
-              className="h-full w-full rounded-full object-cover"
-            />
-          ) : (
-            getInitials(item.friendlyName)
-          )}
-        </div>
-        <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-          <button
-            disabled={categories.length === 0}
-            onClick={handleEdit}
-            className="flex h-7 w-7 items-center cursor-pointer justify-center rounded-md text-neutral-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
-            aria-label="Edit"
-          >
-            <Pencil className="h-3.5 w-3.5" />
-          </button>
-          <button
-            onClick={handleDelete}
-            className="flex h-7 w-7 items-center justify-center cursor-pointer rounded-md text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600"
-            aria-label="Delete"
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-          </button>
-        </div>
-      </div>
 
-      {/* Body: Name, Brand, Badges */}
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold text-neutral-950 leading-tight">
-          {item.friendlyName}
-        </h3>
-        <p className="mt-0.5 text-sm text-neutral-500">{item.brand}</p>
-        <div className="mt-2.5 flex flex-wrap gap-1.5">
-          <Badge
-            variant="secondary"
-            className={`text-md font-medium ${item.type === 'PRODUCT'
-              ? 'bg-blue-50 text-blue-700 border-blue-100'
-              : 'bg-violet-50 text-violet-700 border-violet-100'
-              }`}
+      <div className="flex h-full flex-col p-5">
+        {/* Header */}
+        <div className="mb-5 flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            {/* Avatar */}
+            <div
+              className={cn(
+                "flex h-12 w-12 shrink-0 items-center justify-center",
+                "overflow-hidden rounded-full",
+                "border-2 border-white shadow-md",
+                "bg-gradient-to-br",
+                getAvatarColor(item.friendlyName),
+                "text-sm font-semibold text-white"
+              )}
+            >
+              {item.imageUrl ? (
+                <img
+                  src={item.imageUrl}
+                  alt={item.friendlyName}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                getInitials(item.friendlyName)
+              )}
+            </div>
+
+            {/* Name */}
+            <div className="min-w-0">
+              <h3 className="truncate text-base font-semibold leading-tight text-neutral-900">
+                {item.friendlyName}
+              </h3>
+
+              <p className="mt-1 truncate text-sm text-neutral-500">
+                {item.brand}
+              </p>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div
+            className="
+          flex items-center gap-1
+          opacity-0
+          transition-all duration-200
+          group-hover:opacity-100
+        "
           >
-            {item.type === 'PRODUCT' ? 'Product' : 'Service'}
-          </Badge>
+            <button
+              disabled={categories.length === 0}
+              onClick={handleEdit}
+              className="
+            flex h-8 w-8 cursor-pointer items-center justify-center
+            rounded-lg
+            text-neutral-400
+            transition-all
+            hover:bg-blue-50
+            hover:text-blue-600
+            hover:shadow-sm
+            disabled:cursor-not-allowed
+            disabled:opacity-40
+          "
+              aria-label="Edit"
+            >
+              <Pencil className="h-3.5 w-3.5" />
+            </button>
+
+            <button
+              onClick={handleDelete}
+              className="
+            flex h-8 w-8 cursor-pointer items-center justify-center
+            rounded-lg
+            text-neutral-400
+            transition-all
+            hover:bg-red-50
+            hover:text-red-600
+            hover:shadow-sm
+          "
+              aria-label="Delete"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Badges */}
+        <div className="mb-5 flex flex-wrap gap-2">
           <Badge
             variant="secondary"
-            className="text-md font-medium bg-neutral-100 text-neutral-600 border-neutral-200"
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-full",
+              "border px-2.5 py-1",
+              "text-xs font-semibold shadow-none",
+              "bg-white",
+              item.type === "SERVICE"
+                ? "border-blue-200 text-blue-500"
+                : "border-blue-300 text-blue-600"
+            )}
+          >
+            {item.type === "SERVICE" ? (
+              <Wrench className="size-3.5" />
+            ) : (
+              <Package className="size-3.5" />
+            )}
+
+            {item.type === "PRODUCT" ? "Product" : "Service"}
+          </Badge>
+
+          <Badge
+            variant="secondary"
+            className="
+          rounded-full
+          border border-neutral-200
+          bg-neutral-50
+          px-2.5 py-1
+          text-xs font-medium
+          text-neutral-500
+          shadow-none
+        "
           >
             {item.categoryName}
           </Badge>
         </div>
-      </div>
 
-      {/* Stats */}
-      <div className="space-y-2.5 border-t border-neutral-100 pt-4">
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-neutral-500">Experiences</span>
-          <span className="text-sm font-medium text-neutral-600">{item.experiences}</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-neutral-500">Total Spent</span>
-          <span className="text-sm font-medium text-neutral-600">
-            
-            $ {item.totalSpent.toFixed(2)}
-          </span>
-        </div>
-        <div className="flex items-center justify-between">
+        {/* Divider */}
+        <div className="mb-4 h-px bg-neutral-100" />
 
-          <span className="text-sm text-neutral-500">Last consumed</span>
-          <span className="text-sm font-medium text-neutral-600">
-            {item.lastConsumed ? formatDate(item.lastConsumed) : '-'}
-          </span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-neutral-500">Average rating</span>
-          <div className="flex items-center gap-1.5">
-            <RatingStars value={item.averageRating} size="sm" />
+        {/* Stats */}
+        <div className="flex-1 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-neutral-500">
+              Experiences
+            </span>
+
+            <span className="text-sm font-semibold text-neutral-700">
+              {item.experiences}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-neutral-500">
+              Total Spent
+            </span>
+
+            <span className="text-sm font-semibold text-neutral-700">
+              $ {item.totalSpent.toFixed(2)}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-neutral-500">
+              Last consumed
+            </span>
+
+            <span className="text-sm font-medium text-neutral-700">
+              {item.lastConsumed
+                ? formatDate(item.lastConsumed)
+                : "-"}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-neutral-500">
+              Average rating
+            </span>
+
+            {item.averageRating > 0 ? (
+              <div className="flex items-center gap-1.5">
+                <RatingStars
+                  value={item.averageRating}
+                  size="sm"
+                />
+
+                <span className="text-xs font-semibold text-neutral-600">
+                  {item.averageRating.toFixed(1)}
+                </span>
+              </div>
+            ) : (
+              <span className="text-sm text-neutral-400">
+                -
+              </span>
+            )}
           </div>
         </div>
+
+        {/* Footer */}
+        <div className="mt-5 border-t border-neutral-100 pt-4">
+          <Button
+            variant="outline"
+            size="sm"
+            className="
+          w-full
+          rounded-lg
+          border-blue-200
+          bg-blue-50
+          font-medium
+          text-blue-600
+          shadow-sm
+          transition-all duration-200
+          hover:-translate-y-0.5
+          hover:border-blue-300
+          hover:bg-blue-100
+          hover:text-blue-700
+          hover:shadow-md
+          active:translate-y-0
+        "
+            onClick={(e) => {
+              e.stopPropagation();
+              handleViewDetails();
+            }}
+          >
+            View Details
+          </Button>
+        </div>
       </div>
 
-      {/* Footer */}
-      <div className="mt-4 pt-3 border-t border-neutral-100">
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full border-blue-200 text-blue-600 bg-blue-50 hover:bg-blue-50 hover:font-bold hover:text-blue-700 transition-colors"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleViewDetails();
-          }}
-        >
-          View Details
-        </Button>
-      </div>
-
+      {/* Modals */}
       <Modal
         open={deleteModalOpen}
         onOpenChange={setDeleteModalOpen}
@@ -163,6 +288,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         dialogDescription="Are you sure you want to permanently delete this item?"
         buttonText="Delete"
       />
+
       <CreateUpdateItemModal
         item={item}
         categories={categories}
@@ -171,6 +297,8 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         onSuccess={onEdit}
         mode="edit"
       />
+      {/* Accent divider */}
+      <div className="h-1 rounded-full bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600" />
     </div>
   );
 }

@@ -270,7 +270,12 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                 </div>
 
                 {/* Scrollable items */}
-                <div className="max-h-64 pt-2 pb-2 overflow-y-auto pr-1">
+                <div className="h-64 pt-2 pb-2 overflow-y-auto pr-1     
+    [&::-webkit-scrollbar]:w-2
+    [&::-webkit-scrollbar-track]:bg-white
+    [&::-webkit-scrollbar-thumb]:rounded-full
+    [&::-webkit-scrollbar-thumb]:bg-gray-300
+    [&::-webkit-scrollbar-thumb:hover]:bg-gray-400">
                   <div className="grid gap-3 sm:grid-cols-2">
                     {filteredItems.map((i) => (
                       <button
@@ -478,8 +483,8 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                         {a.friendlyName}
                       </span>
                     </SelectableChip>
-                  );
-                })};
+                  )
+                })}
             </div>
           </FormSection>
 

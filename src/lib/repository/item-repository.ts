@@ -1,7 +1,7 @@
 // src/lib/catalog.ts
 
 import { prisma } from "@/lib/prisma";
-import { CreateUpdateItemModel, CategoryModel, ItemTypeEnum, BasicItemModel } from "@/models/dashboard/items";
+import { CreateUpdateItemModel, CategoryModel, ItemTypeEnum, BasicItemModel, ItemTypeModel } from "@/models/dashboard/items";
 import { PostItemModel } from "@/models/dashboard/items";
 import { toSystemName } from "../utils";
 import { Prisma } from "../../../generated/prisma";
@@ -219,4 +219,24 @@ export async function updateItemRepository({
 
   const items: CreateUpdateItemModel[] = await fetchItemResumeRepository(undefined, undefined, item.id);
   return items[0];
+}
+
+
+export async function fetchItemTypesRepository(): Promise<ItemTypeModel[]> {
+  const itemTypes = await prisma.itemType.findMany({
+
+    select: {
+      id: true,
+      name: true,
+    },
+
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return itemTypes.map((itemType) => ({
+    id: itemType.id,
+    name: itemType.name,
+  }));
 }

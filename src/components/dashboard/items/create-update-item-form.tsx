@@ -228,7 +228,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
         </Label>
         <Input
           id="friendlyName"
-          placeholder="e.g. Moisturizing Shampoo"
+          placeholder={selectedType == "SERVICE" ? ("e.g. Hair Stylist") : "e.g. Moisturizing Shasmpoo"}
           maxLength={30}
           {...register('friendlyName')}
         />

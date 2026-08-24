@@ -34,3 +34,8 @@ export interface CreateUpdateItemModel extends PostItemModel {
   categoryName: string;
 
 }
+
+export interface ItemTypeModel {
+  id: number;
+  name: ItemTypeEnum;
+}

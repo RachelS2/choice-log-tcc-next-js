@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useMemo, useState, type FormEvent } from "react";
-import { format } from "date-fns";
+import { useState, type FormEvent } from "react";
 import {
   CalendarIcon,
   MapPin,
@@ -9,7 +8,6 @@ import {
   Compass,
   ThumbsDown,
   Check,
-  CircleCheck,
   Wallet,
   Search,
   Plus,
@@ -17,12 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { FieldError, FieldLabel, FormSection } from "@/components/dashboard/experiences/new-experience/form-section";
 import { SelectableChip } from "@/components/dashboard/experiences/new-experience/selectable-chip";
 import { YesNoChoice } from "@/components/dashboard/experiences/new-experience/would-you-buy-again-section";
@@ -31,15 +23,12 @@ import {
   brlDigitsToNumber,
   consumptionInfluences,
   formatBRLFromDigits,
-  negativeAspectsForType,
-  reasonsForType,
 } from "@/lib/consumption-data";
 import { cn, getInitials } from "@/lib/utils";
 import { RatingStars } from "@/components/ui/rating-starts";
 import DatePicker from "@/components/ui/date-picker";
 import ConsumptionCreatedPage from "./consumption-created-page";
-import { BasicItemModel, CategoryModel, CreateUpdateItemModel, ItemTypeEnum } from "@/models/dashboard/items";
-import { getItemsController } from "@/lib/controller/item-controller";
+import { BasicItemModel, CategoryModel, CreateUpdateItemModel, ItemTypeEnum, ItemTypeModel } from "@/models/dashboard/items";
 import { ConsumptionReasonModel, NegativeAspectModel } from "@/models/dashboard/consumption";
 import EmptyDataState from "@/components/ui/empty-state";
 import CreateUpdateItemModal from "../../items/create-item-modal";
@@ -60,8 +49,16 @@ interface RegisterConsumptionProps {
   reasons: ConsumptionReasonModel[];
   aspects: NegativeAspectModel[];
   categories: CategoryModel[];
+  itemTypes: ItemTypeModel[];
 }
-export default function RegisterConsumptionPageClient({ initialItems, reasons, aspects, categories }: RegisterConsumptionProps) {
+function getItemTypeId(typeName: ItemTypeEnum, itemTypes: ItemTypeModel[]): number {
+  const itemTypeId: ItemTypeModel | undefined = itemTypes.find(x => x.name == typeName);
+  if (itemTypeId == undefined)
+    throw new Error();
+  return itemTypeId.id;
+}
+
+export default function RegisterConsumptionPageClient({ initialItems, reasons, aspects, categories, itemTypes }: RegisterConsumptionProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [address, setAddress] = useState("");
   const [rating, setRating] = useState(0);
@@ -78,7 +75,17 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
   const [selectedItem, setSelectedItem] = useState<BasicItemModel | undefined>(undefined);
   const [newItemModalOpen, setNewItemModalOpen] = useState(false);
   const [items, setItems] = useState<BasicItemModel[]>(initialItems);
+  const selectedItemTypeId = selectedItem
+    ? getItemTypeId(selectedItem.type, itemTypes)
+    : undefined;
 
+  const availableReasons = selectedItemTypeId
+    ? reasons.filter((r) => r.typeId === selectedItemTypeId)
+    : [];
+
+  const availableNegativeAspects = selectedItemTypeId
+    ? aspects.filter((a) => a.typeId === selectedItemTypeId)
+    : [];
   const filteredItems = items.filter((item) => {
     const search = itemSearch.toLowerCase().trim();
 
@@ -125,7 +132,6 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
     // Payload shaped for the Consumption model (no backend wired yet).
     const payload = {
-      itemId,
       date,
       address: address.trim() || null,
       rating,
@@ -173,7 +179,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
           </div>
 
           <h1 className="font-[family-name:var(--font-dmSerif)] text-4xl font-semibold leading-[0.95] tracking-[-0.03em] text-blue-700 [text-shadow:0_6px_18px_rgba(30,64,175,0.16)] sm:text-5xl"
-            
+
           >
             Register
             <span className="block text-blue-800">Experience</span>
@@ -404,16 +410,27 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
             <div>
               <FieldLabel required>Why did you choose it?</FieldLabel>
               <div className="flex flex-wrap gap-2">
-                {reasons.map((r) => (
-                  <SelectableChip
-                    key={r.id}
-                    selected={reasonId === r.id}
-                    invalid={Boolean(errors.reason)}
-                    onClick={() => { setReasonId(r.id); errors.reason = undefined; }}
-                  >
-                    {r.friendlyName}
-                  </SelectableChip>
-                ))}
+                {!selectedItem ? (
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Select an item above to see the available reasons.
+                  </p>
+                ) : (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {availableReasons.map((r) => (
+                      <SelectableChip
+                        key={r.id}
+                        selected={reasonId === r.id}
+                        invalid={Boolean(errors.reason)}
+                        onClick={() => {
+                          setReasonId(r.id);
+                          errors.reason = undefined;
+                        }}
+                      >
+                        {r.friendlyName}
+                      </SelectableChip>
+                    ))}
+                  </div>
+                )}
               </div>
               <FieldError>{errors.reason}</FieldError>
             </div>
@@ -443,21 +460,26 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
             description="Anything that bothered you? Select as many as you want — or none."
           >
             <div className="flex flex-wrap gap-2">
-              {aspects.map((a) => {
-                const selected = aspectIds.includes(a.id);
-                return (
-                  <SelectableChip
-                    key={a.id}
-                    selected={selected}
-                    onClick={() => toggleAspect(a.id)}
-                  >
-                    <span className="inline-flex items-center gap-1.5">
-                      {selected ? <Check className="size-3.5" /> : null}
-                      {a.friendlyName}
-                    </span>
-                  </SelectableChip>
-                );
-              })}
+              {!selectedItem ? (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Select an item above to see the available negative aspects.
+                </p>
+              ) :
+                availableNegativeAspects.map((a) => {
+                  const selected = aspectIds.includes(a.id);
+                  return (
+                    <SelectableChip
+                      key={a.id}
+                      selected={selected}
+                      onClick={() => toggleAspect(a.id)}
+                    >
+                      <span className="inline-flex items-center gap-1.5">
+                        {selected ? <Check className="size-3.5" /> : null}
+                        {a.friendlyName}
+                      </span>
+                    </SelectableChip>
+                  );
+                })};
             </div>
           </FormSection>
 

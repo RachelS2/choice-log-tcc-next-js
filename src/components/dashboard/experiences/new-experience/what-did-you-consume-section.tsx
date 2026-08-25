@@ -137,6 +137,7 @@ export function ItemHeroCard({
                         text-xs font-medium
                         text-slate-600
                         shadow-sm
+                        shadow-blue-200
                         backdrop-blur-sm
                     "
                         >

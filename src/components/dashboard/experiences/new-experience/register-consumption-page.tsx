@@ -573,7 +573,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
             </div>
           </FormSection>
-          <div className="sticky bottom-0 -mx-4 flex flex-col gap-3 border-t border-border bg-background/85 px-4 py-4 backdrop-blur sm:flex-row sm:justify-end sm:rounded-2xl sm:border sm:px-6">
+          <div className="sticky bottom-0 -mx-4 flex flex-col gap-3 border-t border-border px-4 py-4 backdrop-blur sm:flex-row sm:justify-end sm:rounded-2xl sm:border sm:px-6">
             <Button asChild type="button" variant="ghost" className="h-11 sm:w-32">
               <Link href="/">Cancel</Link>
             </Button>

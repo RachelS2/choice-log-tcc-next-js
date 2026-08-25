@@ -17,36 +17,37 @@ export function RatingStars({
   onChange,
   editable = false,
   size = "md",
-
 }: {
   value: number;
   onChange?: (v: number) => void;
   editable?: boolean;
   size?: "sm" | "md" | "lg";
-
 }) {
-
   const sizeClasses = {
     sm: {
-      container: "size-5",
-      star: "size-5",
+      container: "size-[clamp(1.25rem,6vw,1.5rem)]",
+      star: "size-[clamp(1.25rem,6vw,1.5rem)]",
       button: "p-0",
-      gap: "gap-0.5",
+      gap: "gap-[clamp(0.125rem,0.8vw,0.25rem)]",
     },
+
     md: {
-      container: "size-8",
-      star: "size-8",
+      container: "size-[clamp(1.5rem,7vw,2rem)]",
+      star: "size-[clamp(1.5rem,7vw,2rem)]",
       button: "p-1",
-      gap: "gap-1",
+      gap: "gap-[clamp(0.125rem,1vw,0.5rem)]",
     },
+
     lg: {
-      container: "size-10",
-      star: "size-10",
+      container: "size-[clamp(1.75rem,8vw,2.5rem)]",
+      star: "size-[clamp(1.75rem,8vw,2.5rem)]",
       button: "p-1",
-      gap: "gap-1",
+      gap: "gap-[clamp(0.125rem,1vw,0.5rem)]",
     },
   };
+
   const currentSize = sizeClasses[size];
+
   const [hover, setHover] = useState<number | null>(null);
 
   const active = editable && hover !== null ? hover : value;
@@ -58,7 +59,8 @@ export function RatingStars({
     if (!editable) return;
 
     const rect = e.currentTarget.getBoundingClientRect();
-    const isLeftHalf = e.clientX - rect.left < rect.width / 2;
+    const isLeftHalf =
+      e.clientX - rect.left < rect.width / 2;
 
     setHover(isLeftHalf ? star - 0.5 : star);
   };
@@ -70,7 +72,8 @@ export function RatingStars({
     if (!editable) return;
 
     const rect = e.currentTarget.getBoundingClientRect();
-    const isLeftHalf = e.clientX - rect.left < rect.width / 2;
+    const isLeftHalf =
+      e.clientX - rect.left < rect.width / 2;
 
     const rating = isLeftHalf ? star - 0.5 : star;
 
@@ -86,74 +89,96 @@ export function RatingStars({
     return (
       <div
         key={star}
-        className="flex items-center gap-0.5"
+        className="group relative flex shrink-0 items-center"
       >
         <button
           type="button"
           disabled={!editable}
           aria-label={`${star} star${star > 1 ? "s" : ""}`}
-          onMouseMove={(e) => handleMouseMove(e, star)}
-          onClick={(e) => handleClick(e, star)}
+          onMouseMove={(e) =>
+            handleMouseMove(e, star)
+          }
+          onClick={(e) =>
+            handleClick(e, star)
+          }
           className={cn(
-            "relative rounded-md",
+            "relative shrink-0 rounded-md",
             currentSize.button,
             editable &&
             "cursor-pointer transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
             !editable && "cursor-default",
           )}
         >
-          <div className={cn("relative", currentSize.container)}>
+          <div
+            className={cn(
+              "relative",
+              currentSize.container,
+            )}
+          >
             {/* Empty star */}
             <Star
-              className={cn("absolute inset-0 text-amber-400", currentSize.star, {
-                "fill-amber-400": !editable, 
-              })}
+              className={cn(
+                "absolute inset-0 text-amber-400",
+                currentSize.star,
+                {
+                  "fill-amber-400":
+                    !editable,
+                },
+              )}
             />
 
             {/* Filled portion */}
             {fillAmount > 0 && (
               <div
-                className="absolute inset-0   fill-amber-400 overflow-hidden"
+                className="absolute inset-0 overflow-hidden"
                 style={{
                   width: `${fillAmount * 100}%`,
                 }}
               >
-                <Star className={cn("fill-amber-400   text-amber-400 ", currentSize.star)} />
+                <Star
+                  className={cn(
+                    "fill-amber-400 text-amber-400",
+                    currentSize.star,
+                  )}
+                />
               </div>
             )}
           </div>
         </button>
 
-        {/* Hover label */}
-        {editable && (
+        {editable && (hover === star || hover === star + 0.5) ? (
           <div
             className="
-              pointer-events-none
-              absolute left-1/2 top-full z-50
-              mt-2 -translate-x-1/2
-              whitespace-nowrap
-              rounded-md
-              bg-gray-900
-              px-2.5 py-1.5
-              text-xs font-medium text-white
-              opacity-0
-              transition-opacity duration-150
-              group-hover:opacity-100
-            "
+            pointer-events-none
+            absolute left-1/2 top-full z-50
+            mt-2 -translate-x-1/2
+            whitespace-nowrap
+            rounded-md
+            bg-black
+            px-2.5 py-1.5
+            text-xs font-medium text-white
+        "
           >
             {LABELS[star]}
           </div>
-        )}
+        ) : null}
       </div>
     );
   };
 
   return (
     <div
-      className="flex items-center"
-      onMouseLeave={() => editable && setHover(null)}
+      className="flex w-full items-center justify-center"
+      onMouseLeave={() =>
+        editable && setHover(null)
+      }
     >
-      <div className={cn("flex", currentSize.gap)}>
+      <div
+        className={cn(
+          "flex max-w-full items-center",
+          currentSize.gap,
+        )}
+      >
         {[1, 2, 3, 4, 5].map(renderStar)}
       </div>
     </div>

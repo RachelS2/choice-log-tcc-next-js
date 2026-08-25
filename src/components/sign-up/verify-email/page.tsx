@@ -1,5 +1,5 @@
 import { ArrowLeft, MailCheck } from "lucide-react";
-import { EmailNotificationContent, EmailNotificationWrapper } from "../../ui/e-mail-notification";
+import { NotificationContent, NotificationWrapper } from "../../ui/notification";
 import { Button } from "../../ui/button";
 import Link from "next/link";
 
@@ -7,8 +7,8 @@ interface VerifyEmailPageProps {
     email: string;
 }
 export default function VerifyEmailPage({ email }: VerifyEmailPageProps) {
-    return <EmailNotificationWrapper>
-        <EmailNotificationContent
+    return <NotificationWrapper>
+        <NotificationContent
             icon={MailCheck}
             title="Verify your e-mail"
             description={
@@ -26,6 +26,6 @@ export default function VerifyEmailPage({ email }: VerifyEmailPageProps) {
                     Go to Login
                 </Link>
             </Button>
-        </EmailNotificationContent>
-    </EmailNotificationWrapper>
+        </NotificationContent>
+    </NotificationWrapper>
 }

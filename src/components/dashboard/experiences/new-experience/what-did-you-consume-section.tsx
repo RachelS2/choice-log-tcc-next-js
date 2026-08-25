@@ -1,5 +1,4 @@
-import { Package, Sparkles, Wrench, Loader2, ImageIcon, ChevronsUpDown, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Package, Wrench} from "lucide-react";
 import { getInitials } from "@/lib/utils";
 import { BasicItemModel } from "@/models/dashboard/items";
 import { Card } from "@/components/ui/card";
@@ -17,7 +16,7 @@ export function ItemHeroCard({
         <Card
             className="
         group relative overflow-hidden
-        rounded-2xl items-center
+        rounded-2xl items-center 
         border border-blue-100/80
         bg-gradient-to-br from-blue-50 to-sky-50/50
         bg-white
@@ -39,7 +38,7 @@ export function ItemHeroCard({
         "
             />
 
-            <div className="relative flex w-full items-center gap-5 p-5 sm:gap-6 sm:p-6">
+            <div className="relative mx-auto flex w-fit items-center justify-center gap-5 p-5 sm:gap-6 sm:p-6">
                 {/* Item image */}
                 <div className="relative shrink-0">
                     {item.imageUrl ? (
@@ -130,7 +129,7 @@ export function ItemHeroCard({
                             className="
                         inline-flex items-center
                         rounded-full
-                        border border-slate-200
+                        border border-blue-900
                         text-white
                         px-3 py-1
                         bg-blue-900

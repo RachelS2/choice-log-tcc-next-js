@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter, Poppins, DM_Sans, DM_Serif_Display  } from "next/font/google";
+import { Cormorant_Garamond, Inter, Poppins, DM_Sans, DM_Serif_Display } from "next/font/google";
 import "./globals.css" assert { type: "css" };
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 // OBS: ugly fonts:
 const poppins = Poppins({
@@ -18,14 +19,14 @@ const poppins = Poppins({
 // });
 
 const dmSans = DM_Sans({
-    subsets: ["latin"],
-    variable: "--font-dm-sans",
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
 });
 
 const dmSerif = DM_Serif_Display({
-    subsets: ["latin"],
-    variable: "--font-dm-serif",
-    weight: "400",
+  subsets: ["latin"],
+  variable: "--font-dm-serif",
+  weight: "400",
 });
 
 const inter = Inter({
@@ -51,17 +52,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-    <body
-      className={cn(
-        dmSans.className,
-        dmSerif.variable,
-        poppins.variable,
-        inter.variable, 
-        cormorant.variable,
-        "font-sans antialiased"
-      )}
-    >
-        {children}
+      <body
+        className={cn(
+          dmSans.className,
+          dmSerif.variable,
+          poppins.variable,
+          inter.variable,
+          cormorant.variable,
+          "font-sans antialiased"
+        )}
+      >
+        <TooltipProvider>
+          {children}
+        </TooltipProvider>
         <Toaster
           // richColors
           theme="light"

@@ -11,6 +11,9 @@ import {
   Wallet,
   Search,
   Plus,
+  Package,
+  Wrench,
+  LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,7 +35,6 @@ import { BasicItemModel, CategoryModel, CreateUpdateItemModel, ItemTypeEnum, Ite
 import { ConsumptionReasonModel, NegativeAspectModel } from "@/models/dashboard/consumption";
 import EmptyDataState from "@/components/ui/empty-state";
 import CreateUpdateItemModal from "../../items/create-item-modal";
-
 interface Errors {
   item?: string;
   date?: string;
@@ -75,6 +77,34 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
   const [selectedItem, setSelectedItem] = useState<BasicItemModel | undefined>(undefined);
   const [newItemModalOpen, setNewItemModalOpen] = useState(false);
   const [items, setItems] = useState<BasicItemModel[]>(initialItems);
+
+  interface FilterButtonProps {
+    type: ItemTypeEnum; icon: LucideIcon
+  }
+  function ItemTypeFilterButton({ type, icon: Icon }: FilterButtonProps) {
+    return (
+
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() =>
+          setItemTypeFilter(
+            itemTypeFilter === type ? "ALL" : type
+          )
+        }
+        className={cn(
+          "grid size-10 shrink-0 place-items-center rounded-xl bg-white text-blue-800 shadow-sm",
+          itemTypeFilter === type
+            ? "bg-blue-900 text-white hover:bg-blue-800"
+            : "bg-white text-blue-900 hover:bg-blue-900"
+        )}
+      >
+        <Icon className="size-4" />
+      </Button>
+
+    );
+  }
+
   const selectedItemTypeId = selectedItem
     ? getItemTypeId(selectedItem.type, itemTypes)
     : undefined;
@@ -132,6 +162,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
     // Payload shaped for the Consumption model (no backend wired yet).
     const payload = {
+      selectedItem, 
       date,
       address: address.trim() || null,
       rating,
@@ -143,6 +174,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
       negativeAspects: aspectIds,
     };
     void payload;
+    console.log(payload);
     setSaved(true);
   };
 
@@ -200,7 +232,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
           {selectedItem ? (
-            <div className="mx-auto w-full max-w-xl">
+            <div className="mx-auto w-full max-w-md">
 
               <ItemHeroCard item={selectedItem} onChange={() => setSelectedItem(undefined)} />
             </div>
@@ -209,26 +241,21 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
               icon={Compass}
               title="What did you consume?"
               description="Pick one of your registered items to start."
-              headerAction={
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setNewItemModalOpen(true)}
-                  className="gap-2 rounded-lg shadow-md bg-blue-50 hover:text-white border-blue-50 h-11 text-blue-600 hover:bg-blue-500"
-                >
-                  <Plus className="size-4" />
-                  Add item
-                </Button>
-              }
             >
               <div className="space-y-3">
 
-                {/* Search + Type filter */}
-                <div className="flex flex-col gap-2 sm:flex-row">
+                {/* Search + filters + add */}
+                <div className="flex items-center gap-2">
 
                   {/* Search */}
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <div className="relative min-w-0 flex-1">
+                    <Search
+                      className="
+          absolute left-3 top-1/2
+          size-4 -translate-y-1/2
+          text-muted-foreground
+        "
+                    />
 
                     <Input
                       type="text"
@@ -236,49 +263,50 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                       onChange={(e) => setItemSearch(e.target.value)}
                       placeholder="Search items..."
                       className="
-            h-10 w-full rounded-lg
-            pl-9 pr-3
-            text-sm
-            outline-none
-            transition-colors
-            placeholder:text-muted-foreground
-
-          "
+          h-10 w-full rounded-lg
+          pl-9 pr-3
+          text-sm
+        "
                     />
                   </div>
 
-                  {/* Type filter */}
-                  <div className="flex h-10 rounded-lg items-center  gap-1 p-1">
-                    {[
-                      { value: "ALL", label: "All" },
-                      { value: "PRODUCT", label: "Products" },
-                      { value: "SERVICE", label: "Services" },
-                    ].map((option) => (
+                  <ItemTypeFilterButton
+                    type="PRODUCT"
+                    icon={Package}
+                  />
 
 
-                      <Button
-                        key={option.value}
-                        type="button"
-                        variant="outline"
-                        onClick={() =>
-                          setItemTypeFilter(
-                            option.value as "ALL" | "PRODUCT" | "SERVICE"
-                          )
-                        }
-                        className={cn(
-                          "rounded-md h-10 hover:-translate-y-0.5  px-3 text-xs shadow-md font-medium hover:bg-blue-200 hover:font-semibold transition-colors",
-                          itemTypeFilter === option.value
-                            ? "bg-blue-600 hover:bg-blue-700 border-blue-600 text-foreground "
-                            : "bg-blue-50 border-blue-100  text-blue-600 hover:text-blue-600"
-                        )}
-                      >
-                        {option.label}
-                      </Button>
-                    ))}
+                  <ItemTypeFilterButton
+                    type="SERVICE"
+                    icon={Wrench}
+                  />
 
-                  </div>
+                  {/* Add item */}
+                  <Button
+                    type="button"
+                    onClick={() => setNewItemModalOpen(true)}
+                    className="
+        h-10 shrink-0
+        gap-2
+        rounded-lg
+        bg-gradient-to-br from-blue-100 to-blue-200
+        text-blue-800
+        border-blue-200 
+        px-4
+        shadow-sm
+        transition-all duration-200
+        hover:-translate-y-0.5
+        hover:bg-blue-700
+        hover:shadow-md
+      "
+                  >
+                    <Plus className="size-4" />
+                    <span className="hidden sm:inline">
+                      Add item
+                    </span>
+                  </Button>
+
                 </div>
-
                 {/* Scrollable items */}
                 <div className="h-64 pt-2 pb-2 overflow-y-auto pr-1     
     [&::-webkit-scrollbar]:w-2
@@ -573,13 +601,55 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
             </div>
           </FormSection>
-          <div className="sticky bottom-0 -mx-4 flex flex-col gap-3 border-t border-border px-4 py-4 backdrop-blur sm:flex-row sm:justify-end sm:rounded-2xl sm:border sm:px-6">
-            <Button asChild type="button" variant="ghost" className="h-11 sm:w-32">
-              <Link href="/">Cancel</Link>
-            </Button>
-            <Button type="submit" className="h-11 sm:w-48">
-              Save consumption
-            </Button>
+          <div className="rounded-2xl bg-transparent p-6">
+            <div className="flex justify-center gap-3">
+
+              {/* Cancel */}
+              <Button
+                asChild
+                type="button"
+                variant="ghost"
+                className="
+        h-11
+        sm:w-32
+        border border-blue-200
+        bg-blue-50
+        text-blue-700
+        shadow-sm
+        transition-all duration-300
+        hover:-translate-y-0.5
+        hover:border-blue-300
+        hover:bg-blue-100
+        hover:text-blue-800
+      "
+              >
+                <Link href="/dashboard/experiences">
+                  Cancel
+                </Link>
+              </Button>
+
+              {/* Save */}
+              <Button
+                type="submit"
+                className="
+        h-11
+        sm:w-48
+        border border-blue-800
+        bg-blue-800
+        text-white
+        shadow-sm
+        transition-all duration-300
+        hover:-translate-y-0.5
+        hover:border-blue-700
+        hover:bg-blue-700
+        hover:shadow-md
+        hover:shadow-blue-200/50
+      "
+              >
+                Save consumption
+              </Button>
+
+            </div>
           </div>
         </form>
       </div>

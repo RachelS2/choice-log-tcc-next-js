@@ -19,53 +19,45 @@ export function FormSection({
     return (
         <Card
             className="
-            group relative overflow-hidden
-            grid grid-cols-1 md:grid-cols-[280px_1fr]
-            gap-6
-            rounded-2xl 
-            border border-blue-100
-            p-6
-            shadow-sm
-            transition-all duration-300
-            hover:-translate-y-0.5
-            hover:border-blue-200
-            hover:shadow-lg hover:shadow-blue-100/50
-        "
+      group relative overflow-hidden
+      grid grid-cols-1 md:grid-cols-[280px_1fr]
+      gap-6
+      rounded-2xl
+      border border-blue-100
+      p-6
+      shadow-sm
+      transition-all duration-300
+      hover:-translate-y-0.5
+      hover:border-blue-200
+      hover:shadow-lg hover:shadow-blue-100/50
+    "
         >
             {/* COLUNA ESQUERDA */}
             <header
                 className="
-                flex flex-col
-                rounded-2xl
-                border border-blue-100
-                bg-gradient-to-br from-blue-50 to-sky-50/50
-                p-5
-            "
+        flex flex-col
+        rounded-2xl
+        border border-blue-100
+        bg-gradient-to-br from-blue-50 to-sky-50/50
+        p-5
+      "
             >
                 <div
                     className="
-                    grid size-10 shrink-0 place-items-center
-                    rounded-xl
-                    bg-white
-                    text-blue-800
-                    shadow-md
-                "
+          grid size-10 shrink-0 place-items-center
+          rounded-xl
+          bg-white
+          text-blue-800
+          shadow-md
+        "
                 >
                     <Icon className="size-5" />
                 </div>
 
                 <div className="mt-4 min-w-0">
-                    <div className="flex items-center justify-between gap-4">
-                        <h2 className="text-xl font-semibold tracking-tight text-blue-900">
-                            {title}
-                        </h2>
-
-                        {headerAction && (
-                            <div className="shrink-0">
-                                {headerAction}
-                            </div>
-                        )}
-                    </div>
+                    <h2 className="text-xl font-semibold tracking-tight text-blue-900">
+                        {title}
+                    </h2>
 
                     {description ? (
                         <p className="mt-1 text-sm leading-relaxed text-slate-600">
@@ -78,12 +70,18 @@ export function FormSection({
             {/* COLUNA DIREITA */}
             <div
                 className="
-                min-w-0
-                rounded-2xl
-                p-2
-                space-y-6
-            "
+        min-w-0
+        rounded-2xl
+        p-2
+        space-y-6
+      "
             >
+                {headerAction && (
+                    <div className="flex justify-end">
+                        {headerAction}
+                    </div>
+                )}
+
                 {children}
             </div>
         </Card>

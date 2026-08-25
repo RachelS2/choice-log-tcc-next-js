@@ -22,7 +22,7 @@ export function SelectableChip({
                 "hover:-translate-y-0.5  hover:text-blue-900 hover:border-blue-900",
                 "focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none",
                 selected
-                    ? "bg-blue-900 border-blue-900 text-white font-semibold shadow-sm"
+                    ? "bg-blue-800 border-blue-800 hover:text-white hover:bg-blue-900 text-white font-semibold shadow-sm"
                     : "border-border bg-white text-black ",
                 invalid && !selected && "border-destructive/40",
             )}

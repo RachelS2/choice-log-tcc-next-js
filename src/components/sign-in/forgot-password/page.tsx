@@ -3,7 +3,7 @@ import { Mail, MailCheck, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { EmailNotificationWrapper, EmailNotificationContent } from "../../ui/e-mail-notification";
+import { NotificationWrapper, NotificationContent } from "../../ui/notification";
 import Link from 'next/link'
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
@@ -36,9 +36,9 @@ export function ForgotPasswordPage() {
     };
 
     return (
-        <EmailNotificationWrapper>
+        <NotificationWrapper>
             {sent ? (
-                <EmailNotificationContent
+                <NotificationContent
                     icon={MailCheck}
                     title="Check your inbox"
                     description={
@@ -58,9 +58,9 @@ export function ForgotPasswordPage() {
                         Resend email
                     </Button>
                     {backToLoginButton()}
-                </EmailNotificationContent>
+                </NotificationContent>
             ) : (
-                <EmailNotificationContent
+                <NotificationContent
                     icon={Mail}
                     title="Forgot your password?"
                     description="Enter your email address and we'll send you a secure link to reset your password."
@@ -84,9 +84,9 @@ export function ForgotPasswordPage() {
                         </Button>
                     </form>
                     {backToLoginButton()}
-                </EmailNotificationContent>
+                </NotificationContent>
             )}
-        </EmailNotificationWrapper>
+        </NotificationWrapper>
     );
 }
 

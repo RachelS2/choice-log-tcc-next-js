@@ -18,16 +18,45 @@ export function FormSection({
 }) {
     return (
         <Card
-            className="rounded-2xl border shadow-md border bg-white p-5 transition-all duration-200 hover:shadow-md hover:scale-[1.02] hover:border-neutral-300  bg-card sm:p-8"
+            className="
+            group relative overflow-hidden
+            grid grid-cols-1 md:grid-cols-[280px_1fr]
+            gap-6
+            rounded-2xl 
+            border border-blue-100
+            p-6
+            shadow-sm
+            transition-all duration-300
+            hover:-translate-y-0.5
+            hover:border-blue-200
+            hover:shadow-lg hover:shadow-blue-100/50
+        "
         >
-            <header className="mb-6 flex items-start gap-3">
-                <div className="grid size-10 shadow-md shrink-0 place-items-center rounded-xl bg-blue-100 text-blue-600">
-                    <Icon className="size-5 " />
+            {/* COLUNA ESQUERDA */}
+            <header
+                className="
+                flex flex-col
+                rounded-2xl
+                border border-blue-100
+                bg-gradient-to-br from-blue-50 to-sky-50/50
+                p-5
+            "
+            >
+                <div
+                    className="
+                    grid size-10 shrink-0 place-items-center
+                    rounded-xl
+                    bg-white
+                    text-blue-800
+                    shadow-md
+                "
+                >
+                    <Icon className="size-5" />
                 </div>
 
-                <div className="min-w-0 flex-1">
+                <div className="mt-4 min-w-0">
                     <div className="flex items-center justify-between gap-4">
-                        <h2 className="text-lg font-semibold tracking-tight text-black">
+                        <h2 className="text-xl font-semibold tracking-tight text-blue-900">
                             {title}
                         </h2>
 
@@ -39,14 +68,22 @@ export function FormSection({
                     </div>
 
                     {description ? (
-                        <p className="mt-0.5 text-base text-muted-foreground">
+                        <p className="mt-1 text-sm leading-relaxed text-slate-600">
                             {description}
                         </p>
                     ) : null}
                 </div>
             </header>
 
-            <div className="space-y-6">
+            {/* COLUNA DIREITA */}
+            <div
+                className="
+                min-w-0
+                rounded-2xl
+                p-2
+                space-y-6
+            "
+            >
                 {children}
             </div>
         </Card>

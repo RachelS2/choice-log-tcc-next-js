@@ -56,6 +56,8 @@ export default function RootLayout({
         dmSans.className,
         dmSerif.variable,
         poppins.variable,
+        inter.variable, 
+        cormorant.variable,
         "font-sans antialiased"
       )}
     >

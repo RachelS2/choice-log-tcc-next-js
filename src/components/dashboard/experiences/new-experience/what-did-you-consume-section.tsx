@@ -1,4 +1,4 @@
-import { Package, Sparkles, Wrench, Loader2, ImageIcon, ChevronsUpDown } from "lucide-react";
+import { Package, Sparkles, Wrench, Loader2, ImageIcon, ChevronsUpDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getInitials } from "@/lib/utils";
 import { BasicItemModel } from "@/models/dashboard/items";
@@ -14,86 +14,162 @@ export function ItemHeroCard({
     const isService = item.type === "SERVICE";
 
     return (
-        <Card className="rounded-2xl flex items-center border border-border bg-card shadow-sm transition-shadow duration-200 hover:shadow-md">
-            <div className="flex items-center gap-8 p-5 sm:p-6">
+        <Card
+            className="
+        group relative overflow-hidden
+        rounded-2xl items-center
+        border border-blue-100/80
+        bg-gradient-to-br from-blue-50 to-sky-50/50
+        bg-white
+        shadow-sm
+        transition-all duration-300
+        hover:-translate-y-0.5
+        hover:border-blue-200
+        hover:shadow-lg hover:shadow-blue-100/50
+    "
+        >
+            {/* Decorative background */}
+            <div
+                className="
+            pointer-events-none absolute -right-16 -top-16
+            size-40 rounded-full
+            bg-blue-100/40 blur-3xl
+            transition-opacity duration-300
+            group-hover:bg-blue-200/50
+        "
+            />
+
+            <div className="relative flex w-full items-center gap-5 p-5 sm:gap-6 sm:p-6">
                 {/* Item image */}
-                {item.imageUrl ? (
-                    <img
-                        src={item.imageUrl}
-                        alt={item.friendlyName}
-                        loading="lazy"
-                        className="size-20 shrink-0 rounded-xl object-cover sm:size-24"
-                    />
-                ) : (
-                    <div className="grid size-20 shrink-0 place-items-center rounded-xl bg-blue-100 text-blue-600 shadow-md text-xl font-semibold sm:size-24 sm:text-2xl">
-                        {getInitials(item.friendlyName)}
-                    </div>
-                )}
+                <div className="relative shrink-0">
+                    {item.imageUrl ? (
+                        <img
+                            src={item.imageUrl}
+                            alt={item.friendlyName}
+                            loading="lazy"
+                            className="
+                        size-20 rounded-2xl
+                        object-cover
+                        ring-1 ring-blue-100
+                        shadow-md
+                        transition-transform duration-300
+                        group-hover:scale-[1.03]
+                        sm:size-24
+                    "
+                        />
+                    ) : (
+                        <div
+                            className="
+                        grid size-20 place-items-center
+                        rounded-2xl
+                        bg-gradient-to-br from-blue-100 to-blue-200
+                        text-blue-800
+                        shadow-md
+                        ring-1 ring-blue-100
+                        transition-transform duration-300
+                        group-hover:scale-[1.03]
+                        sm:size-24
+                    "
+                        >
+                            <span className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                                {getInitials(item.friendlyName)}
+                            </span>
+                        </div>
+                    )}
+                </div>
 
                 {/* Item information */}
                 <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {/* Label */}
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                         You consumed...
                     </p>
 
-                    {/* Title + Change */}
-                    <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+                    {/* Title */}
+                    <div className="mt-0.5">
                         <button
                             type="button"
                             onClick={onChange}
                             className="
-    min-w-0
-    cursor-pointer
-    truncate
-    text-left
-    text-xl
-    font-semibold
-    tracking-tight
-    text-blue-500
-    transition-all
-    duration-200
-    hover:text-blue-600
-    hover:-translate-y-0.5
-    focus-visible:outline-none
-    focus-visible:ring-2
-    focus-visible:ring-blue-500/40
-    focus-visible:ring-offset-2
-    sm:text-2xl
-  "
+                        min-w-0 max-w-full
+                        cursor-pointer truncate
+                        text-left
+                        text-xl font-semibold tracking-tight
+                        text-blue-800
+                        transition-all duration-200
+                        hover:-translate-y-0.5
+                        hover:text-blue-600
+                        focus-visible:outline-none
+                        focus-visible:ring-2
+                        focus-visible:ring-blue-500/40
+                        focus-visible:ring-offset-2
+                        font-[family-name:var(--font-inter)]
+                        sm:text-xl
+                    "
                             style={{
                                 textShadow:
-                                    "0 3px 0 #dbeafe, 0 6px 12px rgba(37, 99, 235, 0.2)",
+                                    "0 2px 0 #dbeafe, 0 5px 10px rgba(37, 99, 235, 0.15)",
                             }}
                         >
-                            {item.friendlyName}
+                            {item.friendlyName} 
+                            
                         </button>
+  
                     </div>
-
                     {/* Brand */}
                     {item.brand && (
-                        <p className="mt-0.5 text-sm text-muted-foreground">
+                        <p className="mt-0.5 truncate text-sm font-medium text-muted-foreground">
                             {item.brand}
                         </p>
                     )}
 
                     {/* Metadata */}
-                    <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <span className="rounded-full border border-border px-2.5 py-1 text-xs shadow-md font-medium text-muted-foreground">
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                        {/* Category */}
+                        <span
+                            className="
+                        inline-flex items-center
+                        rounded-full
+                        border border-slate-200
+                        text-white
+                        px-3 py-1
+                        bg-blue-900
+                        text-xs font-medium
+                        text-slate-600
+                        shadow-sm
+                        backdrop-blur-sm
+                    "
+                        >
                             {item.categoryName}
                         </span>
 
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-800 shadow-md px-2.5 py-1 text-xs font-medium text-blue-50">
+                        {/* Type */}
+                        <span
+                            className="
+                        inline-flex items-center gap-1.5
+                        rounded-full
+                        text-blue-800
+                        px-3 py-1
+                        bg-white
+                        border border-blue-800
+                        text-xs font-semibold
+                        shadow-sm shadow-blue-200
+                        transition-colors duration-200
+                    "
+                        >
                             {isService ? (
-                                <Wrench className="size-3.5" />
+                                <Wrench className="size-3.5" strokeWidth={2.2} />
                             ) : (
-                                <Package className="size-3.5" />
+                                <Package className="size-3.5" strokeWidth={2.2} />
                             )}
 
                             {isService ? "Service" : "Product"}
                         </span>
+
                     </div>
                 </div>
             </div>
+
         </Card>
     );
 }

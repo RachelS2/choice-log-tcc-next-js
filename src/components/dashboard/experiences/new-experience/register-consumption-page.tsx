@@ -177,23 +177,33 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
             </span>
             <span className="h-px w-8 bg-blue-900" />
           </div>
-
-          <h1 className="font-[family-name:var(--font-dmSerif)] text-4xl font-semibold leading-[0.95] tracking-[-0.03em] text-blue-700 [text-shadow:0_6px_18px_rgba(30,64,175,0.16)] sm:text-5xl"
-
+          <h1
+            className="
+        font-[family-name:var(--font-cormorant)]
+        text-2xl
+        font-semibold
+        leading-tight
+        tracking-[-0.02em]
+        text-blue-800
+        sm:text-4xl
+    "
           >
-            Register
-            <span className="block text-blue-800">Experience</span>
+            Register{" "}
+            <span className="text-blue-900/90">
+              Experience
+            </span>
           </h1>
-
           <p className="mt-5 max-w-md text-sm leading-7 text-blue-900 sm:text-base">
-            A short reflection on what you consumed, how it felt, and why you
-            chose it.
+            A short reflection on what you consumed, how it felt, and why.
           </p>
         </header>
 
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
           {selectedItem ? (
-            <ItemHeroCard item={selectedItem} onChange={() => setSelectedItem(undefined)} />
+            <div className="mx-auto w-full max-w-xl">
+
+              <ItemHeroCard item={selectedItem} onChange={() => setSelectedItem(undefined)} />
+            </div>
           ) : (
             <FormSection
               icon={Compass}
@@ -334,62 +344,76 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
             title="When & Where"
             description="When and where did this experience happen?"
           >
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="max-w-lg  grid gap-6">
               <div>
                 <FieldLabel required>Date</FieldLabel>
-                <DatePicker value={date} onChange={setDate} putCalendarIcon={true} />
+
+                <DatePicker
+                  value={date}
+                  onChange={setDate}
+                  putCalendarIcon={true}
+                />
+
                 <FieldError>{errors.date}</FieldError>
               </div>
 
               <div>
                 <FieldLabel htmlFor="address">Address</FieldLabel>
+
                 <div className="relative">
                   <MapPin className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+
                   <Input
                     id="address"
                     maxLength={255}
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     placeholder="Where did you consume it?"
-                    className="h-11 pl-9"
+                    className="h-11 bg-white pl-9"
                   />
                 </div>
+
                 <FieldError>{errors.address}</FieldError>
               </div>
             </div>
           </FormSection>
-
           <FormSection
-
             icon={Wallet}
             title="Purchase information"
             description="How much did the experience cost — and details about it."
           >
-
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="flex max-w-xl flex-col gap-6">
               <div>
-
-
                 <FieldLabel htmlFor="price" required>
                   Price
                 </FieldLabel>
+
                 <div className="relative">
                   <span className="absolute top-1/2 left-3 -translate-y-1/2 text-sm text-muted-foreground">
                     R$
                   </span>
+
                   <Input
                     id="price"
                     inputMode="numeric"
                     value={formatBRLFromDigits(priceDigits)}
-                    onChange={(e) => { setPriceDigits(e.target.value); errors.price = undefined; }}
+                    onChange={(e) => {
+                      setPriceDigits(e.target.value);
+                      errors.price = undefined;
+                    }}
                     placeholder="0,00"
-                    className="h-11 pl-10"
+                    className="h-11 bg-white pl-10"
                   />
                 </div>
+
                 <FieldError>{errors.price}</FieldError>
               </div>
+
               <div>
-                <FieldLabel htmlFor="details">Details</FieldLabel>
+                <FieldLabel htmlFor="details">
+                  Details
+                </FieldLabel>
+
                 <Textarea
                   id="details"
                   rows={6}
@@ -397,11 +421,15 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
                   placeholder="Tell us a little about your experience..."
-                  className="resize-none"
+                  className="resize-none bg-white"
                 />
+
                 <div className="mt-2 flex justify-between text-xs text-muted-foreground">
                   <FieldError>{errors.details}</FieldError>
-                  <span className="ml-auto">{details.length}/300</span>
+
+                  <span className="ml-auto">
+                    {details.length}/300
+                  </span>
                 </div>
               </div>
             </div>

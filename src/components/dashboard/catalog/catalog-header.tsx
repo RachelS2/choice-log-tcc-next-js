@@ -20,7 +20,7 @@ export default function CatalogHeader({ onNewItem, newItemBtnDisabled }: Catalog
 
         <h1
           className="
-      font-[family-name:var(--font-dmSerif)]
+      font-[family-name:var(--font-inter)]
       text-3xl
       font-semibold
       leading-[0.95]

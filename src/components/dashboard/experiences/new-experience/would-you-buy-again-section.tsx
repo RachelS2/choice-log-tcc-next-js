@@ -34,7 +34,7 @@ export function YesNoChoice({
 
                             // Estado normal
                             !selected &&
-                            "border-border bg-background text-muted-foreground",
+                            "border-border bg-white text-black",
 
                             // Hover Yes
                             !selected &&

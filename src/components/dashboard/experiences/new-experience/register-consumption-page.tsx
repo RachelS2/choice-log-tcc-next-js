@@ -179,7 +179,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
           </div>
           <h1
             className="
-        font-[family-name:var(--font-cormorant)]
+        font-[family-name:var(--font-inter)]
         text-2xl
         font-semibold
         leading-tight
@@ -340,49 +340,13 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
           )}
 
           <FormSection
-            icon={CalendarIcon}
-            title="When & Where"
-            description="When and where did this experience happen?"
-          >
-            <div className="max-w-lg  grid gap-6">
-              <div>
-                <FieldLabel required>Date</FieldLabel>
-
-                <DatePicker
-                  value={date}
-                  onChange={setDate}
-                  putCalendarIcon={true}
-                />
-
-                <FieldError>{errors.date}</FieldError>
-              </div>
-
-              <div>
-                <FieldLabel htmlFor="address">Address</FieldLabel>
-
-                <div className="relative">
-                  <MapPin className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-
-                  <Input
-                    id="address"
-                    maxLength={255}
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Where did you consume it?"
-                    className="h-11 bg-white pl-9"
-                  />
-                </div>
-
-                <FieldError>{errors.address}</FieldError>
-              </div>
-            </div>
-          </FormSection>
-          <FormSection
             icon={Wallet}
             title="Purchase information"
             description="How much did the experience cost — and details about it."
           >
-            <div className="flex max-w-xl flex-col gap-6">
+            <div className="grid max-w-3xl gap-6 sm:grid-cols-2">
+
+              {/* PRICE */}
               <div>
                 <FieldLabel htmlFor="price" required>
                   Price
@@ -409,19 +373,71 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                 <FieldError>{errors.price}</FieldError>
               </div>
 
+
+              {/* DATE */}
+              <div>
+                <FieldLabel required>
+                  Date
+                </FieldLabel>
+
+                <DatePicker
+                  value={date}
+                  onChange={setDate}
+                  putCalendarIcon={true}
+                />
+
+                <FieldError>{errors.date}</FieldError>
+              </div>
+
+
+              {/* ADDRESS */}
+              <div>
+                <FieldLabel htmlFor="address">
+                  Address
+                </FieldLabel>
+
+                <div className="relative">
+                  <MapPin
+                    className="
+                        absolute top-1/2 left-3
+                        size-4
+                        -translate-y-1/2
+                        text-muted-foreground
+                    "
+                  />
+
+                  <Input
+                    id="address"
+                    maxLength={255}
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="Where was it?"
+                    className="h-11 bg-white pl-9"
+                  />
+                </div>
+
+                <FieldError>{errors.address}</FieldError>
+              </div>
+
+
+              {/* DETAILS */}
               <div>
                 <FieldLabel htmlFor="details">
                   Details
                 </FieldLabel>
-
                 <Textarea
                   id="details"
                   rows={6}
                   maxLength={300}
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
-                  placeholder="Tell us a little about your experience..."
-                  className="resize-none bg-white"
+                  placeholder="Tell us more about your experience..."
+                  className="
+        h-20
+        resize-none
+        overflow-y-auto
+        bg-white
+    "
                 />
 
                 <div className="mt-2 flex justify-between text-xs text-muted-foreground">
@@ -432,6 +448,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                   </span>
                 </div>
               </div>
+
             </div>
           </FormSection>
 
@@ -515,15 +532,18 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                 })}
             </div>
           </FormSection>
-
           <FormSection
             icon={Star}
             title="Your experience"
             description="What is your final review?"
           >
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="flex max-w-xl flex-col gap-6">
+
+              {/* FINAL RATING */}
               <div className="flex flex-col items-center justify-center">
-                <FieldLabel required>Final Rating</FieldLabel>
+                <FieldLabel required>
+                  Final Rating
+                </FieldLabel>
 
                 <RatingStars
                   value={rating}
@@ -534,20 +554,25 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                   editable={true}
                 />
 
-                <FieldError>{errors.rating}</FieldError>
+                <FieldError>
+                  {errors.rating}
+                </FieldError>
               </div>
 
+              {/* WOULD BUY AGAIN */}
               <div className="flex flex-col items-center justify-center">
-                <FieldLabel>Would you consume it again?</FieldLabel>
+                <FieldLabel>
+                  Would you consume it again?
+                </FieldLabel>
 
                 <YesNoChoice
                   value={wouldBuyAgain}
                   onChange={setWouldBuyAgain}
                 />
               </div>
+
             </div>
           </FormSection>
-
           <div className="sticky bottom-0 -mx-4 flex flex-col gap-3 border-t border-border bg-background/85 px-4 py-4 backdrop-blur sm:flex-row sm:justify-end sm:rounded-2xl sm:border sm:px-6">
             <Button asChild type="button" variant="ghost" className="h-11 sm:w-32">
               <Link href="/">Cancel</Link>

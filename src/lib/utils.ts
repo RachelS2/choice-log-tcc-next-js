@@ -51,3 +51,18 @@ export function formatDate(dateStr: string): string {
     year: 'numeric',
   });
 }
+
+/** "4990" -> "49,90" (BRL, digits-only masking) */
+export function formatBRLFromDigits(digits: string) {
+  const clean = digits.replace(/\D/g, "").slice(0, 11);
+  if (!clean) return "";
+  const cents = clean.padStart(3, "0");
+  const int = cents.slice(0, -2).replace(/^0+(?=\d)/, "");
+  const dec = cents.slice(-2);
+  return `${int.replace(/\B(?=(\d{3})+(?!\d))/g, ".")},${dec}`;
+}
+
+export function brlDigitsToNumber(digits: string) {
+  const clean = digits.replace(/\D/g, "");
+  return clean ? Number(clean) / 100 : 0;
+}

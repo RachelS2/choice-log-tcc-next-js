@@ -24,17 +24,18 @@ import { YesNoChoice } from "@/components/dashboard/experiences/new-experience/w
 import { ItemHeroCard } from "@/components/dashboard/experiences/new-experience/what-did-you-consume-section";
 import {
   brlDigitsToNumber,
-  consumptionInfluences,
   formatBRLFromDigits,
-} from "@/lib/consumption-data";
+} from "@/lib/utils";
 import { cn, getInitials } from "@/lib/utils";
 import { RatingStars } from "@/components/ui/rating-starts";
 import DatePicker from "@/components/ui/date-picker";
 import ConsumptionCreatedPage from "./consumption-created-page";
 import { BasicItemModel, CategoryModel, CreateUpdateItemModel, ItemTypeEnum, ItemTypeModel } from "@/models/dashboard/items";
-import { ConsumptionReasonModel, NegativeAspectModel } from "@/models/dashboard/consumption";
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, CreateConsumptionModel, NegativeAspectModel } from "@/models/dashboard/consumption";
 import EmptyDataState from "@/components/ui/empty-state";
 import CreateUpdateItemModal from "../../items/create-item-modal";
+import { toast } from "sonner";
+
 interface Errors {
   item?: string;
   date?: string;
@@ -52,6 +53,10 @@ interface RegisterConsumptionProps {
   aspects: NegativeAspectModel[];
   categories: CategoryModel[];
   itemTypes: ItemTypeModel[];
+  consumptionInfluences: ConsumptionInfluenceModel[],
+  postConsumption: (
+    consumption: CreateConsumptionModel
+  ) => void;
 }
 function getItemTypeId(typeName: ItemTypeEnum, itemTypes: ItemTypeModel[]): number {
   const itemTypeId: ItemTypeModel | undefined = itemTypes.find(x => x.name == typeName);
@@ -60,7 +65,7 @@ function getItemTypeId(typeName: ItemTypeEnum, itemTypes: ItemTypeModel[]): numb
   return itemTypeId.id;
 }
 
-export default function RegisterConsumptionPageClient({ initialItems, reasons, aspects, categories, itemTypes }: RegisterConsumptionProps) {
+export default function RegisterConsumptionPageClient({ initialItems, reasons, aspects, categories, itemTypes, postConsumption, consumptionInfluences }: RegisterConsumptionProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [address, setAddress] = useState("");
   const [rating, setRating] = useState(0);
@@ -160,9 +165,17 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
+    const itemId = selectedItem?.id;
+    if (!itemId) throw Error("Item should have been selected!");
+    if (!date) throw Error("Date should have been entered!");
+    if (!reasonId) throw Error("Reason should have been selected!");
+    if (!influenceId) throw Error("Reason should have been selected!");
+
+    if (!wouldBuyAgain) throw Error("Would Buy Again should have been selected!");
+
     // Payload shaped for the Consumption model (no backend wired yet).
-    const payload = {
-      selectedItem, 
+    const payload: CreateConsumptionModel = {
+      itemId,
       date,
       address: address.trim() || null,
       rating,
@@ -173,9 +186,14 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
       wouldBuyAgain,
       negativeAspects: aspectIds,
     };
-    void payload;
     console.log(payload);
-    setSaved(true);
+    try {
+      postConsumption(payload)
+      setSaved(true);
+    }
+    catch (error) {
+      toast.warning("Erro ao tentar registrar consumo. Tente novamente mais tarde.")
+    }
   };
 
   if (saved && selectedItem) {
@@ -486,7 +504,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
             description="What led you to this choice?"
           >
             <div>
-              <FieldLabel required>Why did you choose it?</FieldLabel>
+              <FieldLabel required>Qual foi o propósito desta experiência?</FieldLabel>
               <div className="flex flex-wrap gap-2">
                 {!selectedItem ? (
                   <p className="mt-2 text-sm text-muted-foreground">

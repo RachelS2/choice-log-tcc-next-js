@@ -45,6 +45,7 @@ interface Errors {
   price?: string;
   details?: string;
   address?: string;
+  wouldBuyAgain?: string;
 }
 
 interface RegisterConsumptionProps {
@@ -150,20 +151,23 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const next: Errors = {};
-    if (!selectedItem) next.item = "Selecione o item consumido.";
-    if (!date) next.date = "Informe quando isso aconteceu.";
-    if (!rating) next.rating = "Avalie sua experiência.";
-    if (!reasonId) next.reason = "Selecione por que escolheu este item.";
+    const errors: Errors = {};
+    if (!selectedItem) errors.item = "Selecione o item consumido.";
+    if (errors.date  != undefined  ) errors.date = errors.date
+    if (!date) errors.date = "Informe quando isso aconteceu.";
+    if (!rating) errors.rating = "Avalie sua experiência.";
+    if (!reasonId) errors.reason = "Selecione por que escolheu este item.";
+    if (wouldBuyAgain === null) errors.wouldBuyAgain = "Informe se consumiria este item novamente.";
     if (!influenceId)
-      next.influence = "Selecione o que influenciou sua escolha.";
+      errors.influence = "Selecione o que influenciou sua escolha.";
     if (brlDigitsToNumber(priceDigits) <= 0)
-      next.price = "Informe quanto você pagou.";
-    if (details.length > 300) next.details = "Mantenha em até 300 caracteres.";
-    if (address.length > 255) next.address = "O endereço informado é muito longo.";
+      errors.price = "Informe quanto você pagou.";
+    if (details.length > 300) errors.details = "Mantenha em até 300 caracteres.";
+    if (address.length > 255) errors.address = "O endereço informado é muito longo.";
 
-    setErrors(next);
-    if (Object.keys(next).length > 0) return;
+    setErrors(errors);
+    console.log(errors.wouldBuyAgain);
+    if (Object.keys(errors).length > 0) return;
 
     const itemId = selectedItem?.id;
     if (!itemId) throw Error("Item should have been selected!");
@@ -171,7 +175,8 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
     if (!reasonId) throw Error("Reason should have been selected!");
     if (!influenceId) throw Error("Reason should have been selected!");
 
-    if (!wouldBuyAgain) throw Error("Would Buy Again should have been selected!");
+    if (wouldBuyAgain === null)
+      throw Error("Would Buy Again should have been selected!");
 
     // Payload shaped for the Consumption model (no backend wired yet).
     const payload: CreateConsumptionModel = {
@@ -430,9 +435,14 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                   value={date}
                   onChange={setDate}
                   putCalendarIcon={true}
+                  error={errors.date}
+                  setError={(error: string | undefined) =>
+                    setErrors((prev) => ({
+                      ...prev,
+                      date: error,
+                    }))
+                  }
                 />
-
-                <FieldError>{errors.date}</FieldError>
               </div>
 
 
@@ -613,8 +623,11 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
                 <YesNoChoice
                   value={wouldBuyAgain}
-                  onChange={setWouldBuyAgain}
+                  onChange={(x) => { setWouldBuyAgain(x); errors.wouldBuyAgain = undefined; }}
                 />
+                <FieldError>
+                  {errors.wouldBuyAgain}
+                </FieldError>
               </div>
 
             </div>

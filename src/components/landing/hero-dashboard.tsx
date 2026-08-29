@@ -38,7 +38,7 @@ export default function HeroDashboardSection() {
             </Badge>
 
             <h1 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent sm:text-5xl lg:text-6xl">
-              Decisões de compra melhores começam aqui.
+              Melhores decisões de consumo começam aqui.
             </h1>
 
             <p className="mt-6 max-w-xl text-xl leading-relaxed text-neutral-900">

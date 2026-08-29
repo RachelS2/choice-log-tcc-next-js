@@ -5,11 +5,11 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const LABELS: Record<number, string> = {
-  1: "Not great",
-  2: "Okay",
-  3: "Good",
-  4: "Very good",
-  5: "Loved it",
+  1: "Muito ruim",
+  2: "Ruim",
+  3: "Razoável",
+  4: "Muito bom",
+  5: "Excelente",
 };
 
 export function RatingStars({

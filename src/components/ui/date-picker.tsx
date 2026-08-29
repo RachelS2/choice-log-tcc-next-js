@@ -1,104 +1,151 @@
 'use client';
-
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, ChevronDown } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Input } from "./input";
 import { Calendar } from "./calendar";
-import { format, parse, isValid } from "date-fns";
+import { format, parse, isValid, isBefore } from "date-fns";
 import { Button } from "./button";
 
 interface DatePickerProps {
     value?: Date;
     onChange: (date: Date) => void;
-    error?: string;
+    setErrror?: () => void;
     putCalendarIcon: boolean
+    setError: (error: string | undefined) => void;
+    error: string | undefined;
 
-}
-
-function formatDateInput(value: string) {
-    const digits = value.replace(/\D/g, "").slice(0, 8);
-
-    if (digits.length <= 2) return digits;
-    if (digits.length <= 4)
-        return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-
-    return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
 }
 
 export default function DatePicker({
     value,
     onChange,
-    error,
     putCalendarIcon,
+    setError,
+    error,
 }: DatePickerProps) {
+    //const [error, setError] = useState("");
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
-
     useEffect(() => {
         if (value) {
             setInputValue(format(value, "dd/MM/yyyy"));
+        } else {
+            setInputValue("");
         }
     }, [value]);
 
-    const handleChange = (raw: string) => {
-        const masked = formatDateInput(raw);
-        setInputValue(masked);
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        let input = e.target.value.replace(/\D/g, "");
 
-        if (masked.length !== 10) return;
+        if (input.length > 8) {
+            input = input.slice(0, 8);
+        }
 
-        const parsed = parse(masked, "dd/MM/yyyy", new Date());
+        if (input.length >= 5) {
+            input = `${input.slice(0, 2)}/${input.slice(2, 4)}/${input.slice(4)}`;
+        } else if (input.length >= 3) {
+            input = `${input.slice(0, 2)}/${input.slice(2)}`;
+        }
 
-        if (!isValid(parsed)) return;
-        if (parsed > new Date()) return;
+        setInputValue(input);
 
-        onChange(parsed);
-    };
+        if (input.length === 10) {
+            const date = parse(
+                input,
+                "dd/MM/yyyy",
+                new Date()
+            );
 
-    return (
-        <div className="space-y-1 bg-white">
-            <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger className="bg-white hover:text-black" asChild>
-                    <Button
-                        type="button"
+            const today = new Date();
+
+            const validDate =
+                isValid(date) &&
+                input === format(date, "dd/MM/yyyy") &&
+                !isBefore(today, date);
+
+            setError("Invalid date.");
+
+            if (validDate) {
+                onChange(date);
+                setError("");
+                setOpen(false);
+            } else {
+                setError("Invalid date.");
+            }
+        };
+
+        return (
+            <div className="space-y-1 bg-white">
+                <Popover open={open} onOpenChange={setOpen}>
+                    <div
                         className={cn(
-                            "h-11 w-full justify-start bg-white font-normal text-black",
-                            "hover:bg-white hover:text-black",
-                            "focus:bg-white focus:text-black",
-                            "focus-visible:bg-white focus-visible:text-black",
-                            !value && "text-muted-foreground",
+                            "flex h-11 w-full items-center rounded-md border bg-white",
+                            error && "border-red-500"
                         )}
                     >
-                        <CalendarIcon className="size-4" />
-                        {value ? format(value, "PPP") : "Select a date"}
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 " align="start">
-                    <Calendar
-                        className="rounded-2xl border border-neutral-200"
-                        mode="single"
-                        selected={value}
-                        onSelect={(d) => {
-                            if (d) {
-                                onChange(d);
-                                setOpen(false);
-                            }
-                        }}
-                        disabled={(d) => d > new Date()}
-                        autoFocus
-                        classNames={{
-                            day_button:
-                                "hover:!bg-blue-50 hover:!text-blue-600 focus:!bg-blue-50 focus:!text-blue-600",
-                        }}
-                    />
-                </PopoverContent>
-            </Popover>
+                        {putCalendarIcon && (
+                            <CalendarIcon className="ml-3 size-4 shrink-0 text-neutral-500" />
+                        )}
 
+                        <input
+                            type="text"
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            onFocus={() => setOpen(true)}
+                            placeholder="dd/mm/aaaa"
+                            maxLength={10}
+                            className={cn(
+                                "h-full w-full  bg-transparent px-3 text-sm text-black outline-none",
+                                "placeholder:text-muted-foreground"
+                            )}
+                        />
 
-            {error && (
-                <p className="text-sm text-red-600">{error}</p>
-            )}
-        </div>
-    );
+                        <PopoverTrigger asChild>
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                className="mr-1 size-9 shrink-0 p-0 hover:bg-blue-50 hover:font-semibold hover:text-neutral-900"
+                            >
+                                <ChevronDown className="text-neutral-700 size-4" />
+                            </Button>
+                        </PopoverTrigger>
+                    </div>
+
+                    <PopoverContent
+                        className="w-auto p-0"
+                        align="start"
+                    >
+                        <Calendar
+                            className="rounded-2xl border border-neutral-200"
+                            mode="single"
+                            selected={value}
+                            onSelect={(d) => {
+                                if (d) {
+                                    onChange(d);
+                                    setInputValue(format(d, "dd/MM/yyyy"));
+                                    setOpen(false);
+                                }
+                            }}
+                            disabled={(d) => d > new Date()}
+                            autoFocus
+                            classNames={{
+                                day_button:
+                                    "hover:!bg-blue-50 hover:!text-blue-600 focus:!bg-blue-50 focus:!text-blue-600",
+                            }}
+                        />
+                    </PopoverContent>
+                </Popover>
+
+                {error && (
+                    <p className="text-sm text-red-600">
+                        {error}
+                    </p>
+                )}
+            </div>
+        );
+    }
 }

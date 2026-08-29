@@ -4,23 +4,23 @@ const steps = [
   {
     number: '01',
     icon: ShoppingBag,
-    title: 'Register a Purchase',
+    title: 'Registre uma compra',
     description:
-      'Add a product or service, its brand, the price paid, and the context that led to the purchase decision.',
+      'Adicione um produto ou serviço, sua marca, o valor pago e o contexto que levou à decisão de compra.',
   },
   {
     number: '02',
     icon: Star,
-    title: 'Evaluate The Experience',
+    title: 'Avalie a experiência',
     description:
-      "After consuming a product or a service, rate it and record what worked —or didn't work— in practice.",
+      'Depois de consumir um produto ou serviço, avalie e registre o que funcionou — ou não funcionou — na prática.',
   },
   {
     number: '03',
     icon: TrendingUp,
-    title: 'Improve Future Decisions',
+    title: 'Melhore decisões futuras',
     description:
-      'Analyze your history, find patterns, and make more informed purchasing decisions from now on.',
+      'Analise seu histórico, identifique padrões e faça compras mais bem informadas a partir de agora.',
   },
 ];
 
@@ -30,9 +30,10 @@ export default function HowItWorksSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent sm:text-4xl">
-            How It Works          </h2>
+            Como Funciona
+          </h2>
           <p className="mt-4 text-xl text-neutral-900">
-            Three simple steps to make you reflect about your last shop.
+            Três etapas simples para você refletir sobre sua última compra.
           </p>
         </div>
 

@@ -4,10 +4,10 @@ export default function SummaryCards() {
   return (
     <div className="grid grid-cols-4 gap-4">
       {[
-        { title: "Experiences", value: "12" },
-        { title: "Top Category", value: "Education" },
-        { title: "Satisfaction", value: "4.2 / 5" },
-        { title: "Achieved Goals", value: "75%" },
+        { title: "Experiências", value: "12" },
+        { title: "Categoria principal", value: "Educação" },
+        { title: "Satisfação", value: "4.2 / 5" },
+        { title: "Metas alcançadas", value: "75%" },
       ].map((card, i) => (
         <div key={i} className="bg-white p-4 flex flex-col items-center rounded-2xl shadow">
           <p className="text-black font-semibold">{card.title}</p>

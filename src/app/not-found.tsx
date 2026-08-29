@@ -56,15 +56,15 @@ export default async function NotFound() {
           </div>
 
           <p className="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-blue-100">
-            Error 404
+            Erro 404
           </p>
 
           <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-            Page not found
+            Página não encontrada
           </h1>
 
           <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-blue-100">
-            The page you are trying to access does not exist or may have been moved.
+            A página que você está tentando acessar não existe ou pode ter sido movida.
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -75,7 +75,7 @@ export default async function NotFound() {
               className="bg-white text-blue-700 hover:bg-blue-50"
             >
               <ArrowLeftIcon className="mr-2 h-4 w-4" />
-              <a href="/dashboard">Go Back</a>
+              <a href="/dashboard">Voltar</a>
             </Button>
 
             {!userIsLoggedIn ? (
@@ -85,7 +85,7 @@ export default async function NotFound() {
                 size="lg"
                 className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
               >
-                <a href="/">Return Home</a>
+                <a href="/">Voltar para o início</a>
               </Button>
             ) : null}
 

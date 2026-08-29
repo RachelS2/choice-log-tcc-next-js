@@ -8,8 +8,8 @@ interface EmptyStateProps {
 }
 
 export default function EmptyDataState({
-  mainTitle = "No items registered yet.",
-  description = "Start building your personal catalog by registering your first product or service.",
+  mainTitle = "Ainda não há itens cadastrados.",
+  description = "Comece a construir seu catálogo pessoal registrando seu primeiro produto ou serviço.",
   className,
 }: EmptyStateProps) {
   return (

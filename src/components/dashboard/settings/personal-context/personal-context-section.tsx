@@ -21,12 +21,12 @@ export interface PersonalContextSectionProps {
 
 
 const incomeOptions: { value: IncomeRange; label: string }[] = [
-    { value: 'UP_TO_1_MINIMUM_WAGE', label: 'Up to 1 minimum wage' },
-    { value: 'FROM_1_TO_3', label: 'From 1 to 3 minimum wages' },
-    { value: 'FROM_3_TO_5', label: 'From 3 to 5 minimum wages' },
-    { value: 'FROM_5_TO_10', label: 'From 5 to 10 minimum wages' },
-    { value: 'ABOVE_10', label: 'Above 10 minimum wages' },
-    { value: 'PREFER_NOT_TO_SAY', label: 'Prefer not to say' },
+    { value: 'UP_TO_1_MINIMUM_WAGE', label: 'Até 1 salário mínimo' },
+    { value: 'FROM_1_TO_3', label: 'De 1 a 3 salários mínimos' },
+    { value: 'FROM_3_TO_5', label: 'De 3 a 5 salários mínimos' },
+    { value: 'FROM_5_TO_10', label: 'De 5 a 10 salários mínimos' },
+    { value: 'ABOVE_10', label: 'Acima de 10 salários mínimos' },
+    { value: 'PREFER_NOT_TO_SAY', label: 'Prefiro não informar' },
 ];
 
 export default function PersonalContextSection({
@@ -41,10 +41,10 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
             {/* Header */}
             <CardHeader>
                 <CardTitle className="text-lg text-neutral-950">
-                    Personal Context
+                    Contexto pessoal
                 </CardTitle>
                 <CardDescription className="text-sm text-neutral-500">
-                    Optional information that helps personalize your insights.
+                    Informações opcionais que ajudam a personalizar suas análises.
                 </CardDescription>
             </CardHeader>
 
@@ -57,7 +57,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                         htmlFor="income-range"
                         className="text-sm font-medium text-neutral-700"
                     >
-                        Income Range
+                        Faixa de renda
                     </Label>
                     <Select
                         value={watch("incomeRange") ?? "PREFER_NOT_TO_SAY"}
@@ -80,7 +80,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                                 : "bg-white"
 
                         )}>
-                            <SelectValue placeholder="Select your income range" />
+                            <SelectValue placeholder="Selecione sua faixa de renda" />
                         </SelectTrigger>
 
                         <SelectContent position="popper"
@@ -102,13 +102,13 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
 
                     <div className="space-y-1">
                         <p className="text-xs font-medium text-blue-800">
-                            Why do we ask for this information?
+                            Por que perguntamos isso?
                         </p>
 
                         <p className="text-xs leading-relaxed text-blue-700/80">
-                            Your income range helps us contextualize your consumption insights —
-                            never to judge. This information is private and used only to generate
-                            more relevant insights about your purchasing habits.
+                            Sua faixa de renda nos ajuda a contextualizar suas análises de consumo. 
+                            Essas informação é privada e é usada apenas para gerar
+                            insights mais relevantes sobre seus hábitos de compra.
                         </p>
                     </div>
                 </div>

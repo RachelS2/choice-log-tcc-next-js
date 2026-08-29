@@ -46,11 +46,11 @@ border-blue-100
 shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
             <CardHeader>
                 <CardTitle className="text-lg text-neutral-950">
-                    Security
+                    Segurança
                 </CardTitle>
 
                 <CardDescription>
-                    Update your password and manage your account.
+                    Atualize sua senha e gerencie sua conta.
                 </CardDescription>
             </CardHeader>
 
@@ -67,9 +67,9 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                             </div>
 
                             <div>
-                                <p className="font-medium">Change password</p>
+                                <p className="font-medium">Alterar senha</p>
                                 <p className="text-sm text-neutral-500">
-                                    Choose a strong password to keep your account secure.
+                                    Escolha uma senha forte para manter sua conta segura.
                                 </p>
                             </div>
                         </div>
@@ -80,7 +80,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                             onClick={() => setShowPasswordForm(!showPasswordForm)}
                             className="w-24 h-9 text-blue-500 bg-white/80 shadow-md hover:text-blue-600"
                         >
-                            {showPasswordForm ? "Hide" : "Change"}
+                            {showPasswordForm ? "Ocultar" : "Alterar"}
                         </Button>
                     </div>
 
@@ -100,9 +100,9 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                         </div>
 
                         <div>
-                            <p className="font-medium">Log out</p>
+                            <p className="font-medium">Sair</p>
                             <p className="text-sm text-neutral-500">
-                                End your current session on this device.
+                                Encerrar sua sessão atual neste dispositivo.
                             </p>
                         </div>
                     </div>
@@ -121,10 +121,10 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
 
                         <div>
                             <p className="font-medium">
-                                Delete account
+                                Excluir conta
                             </p>
                             <p className="text-sm text-neutral-500">
-                                Permanently remove your account and all associated data.
+                                Remover permanentemente sua conta e todos os dados associados.
                             </p>
                         </div>
                     </div>
@@ -136,29 +136,29 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                                 variant="outline"
                                 className="w-24 h-9 text-red-500 bg-white/80 shadow-md hover:text-red-600"
                             >
-                                Delete
+                                Excluir
                             </Button>
                         </AlertDialogTrigger>
 
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>
-                                    Delete your account?
+                                    Excluir sua conta?
                                 </AlertDialogTitle>
 
                                 <AlertDialogDescription>
-                                    This action cannot be undone. All your data will be permanently removed.
+                                    Esta ação não pode ser desfeita. Todos os seus dados serão removidos permanentemente.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
 
                             <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
 
                                 <AlertDialogAction
                                     onClick={handleDeleteAccount}
                                     className="bg-red-600 hover:bg-red-700"
                                 >
-                                    Delete account
+                                    Excluir conta
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>

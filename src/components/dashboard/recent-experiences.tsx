@@ -19,7 +19,7 @@ const data = [
 export default function RecentExperiences() {
   return (
     <div className="bg-white p-6 rounded-2xl shadow">
-      <h2 className="font-semibold mb-4 text-black">Recent Experiences</h2>
+      <h2 className="font-semibold mb-4 text-black">Experiências recentes</h2>
 
       <div className="space-y-4">
         {data.map((item, i) => (
@@ -52,7 +52,7 @@ export default function RecentExperiences() {
           href="/dashboard/products"
           className="inline-flex text-sm items-center rounded-xl bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
         >
-          Check Complete History →
+          Ver histórico completo →
         </Link>
       </div>
     </div>

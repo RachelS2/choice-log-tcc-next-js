@@ -4,21 +4,21 @@ import { ClipboardCheck, Star, BarChart3 } from 'lucide-react';
 const benefits = [
   {
     icon: ClipboardCheck,
-    title: 'Record purchase decisions',
+    title: 'Registre suas decisões de compra',
     description:
-      'Keep a detailed record of each purchase — products, brands, prices, and the context of the decision for your future self.',
+      'Mantenha um registro detalhado de cada compra — produtos, marcas, preços e o contexto da decisão para ajudar o seu eu do futuro.',
   },
   {
     icon: Star,
-    title: 'Evaluate real experiences',
+    title: 'Avalie experiências reais',
     description:
-      'Assign ratings and write honest reflections about what you have consumed, based on the actual use of the product.',
+      'Atribua notas e escreva reflexões honestas sobre o que você consumiu, com base no uso real do produto ou serviço.',
   },
   {
     icon: BarChart3,
-    title: 'Discover your consumption patterns',
+    title: 'Descubra seus padrões de consumo',
     description:
-      'Visualize trends, identify recurring decisions, and improve your consumption habits over time.',
+      'Visualize tendências, identifique decisões recorrentes e melhore seus hábitos de consumo ao longo do tempo.',
   },
 ];
 
@@ -28,10 +28,10 @@ export default function BenefitsSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent sm:text-4xl">
-            Everything you need to make smarter shopping decisions
+            Tudo o que você precisa para tomar decisões de compra mais inteligentes
           </h2>
           <h3 className="mt-6 text-xl text-neutral-900">
-            A platform designed for those seeking greater awareness and clarity in their daily consumption decisions.
+            Uma plataforma pensada para quem busca mais consciência e clareza nas decisões diárias de consumo.
           </h3>
         </div>
 

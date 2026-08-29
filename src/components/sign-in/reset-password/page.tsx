@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { resetPassword } from '@/lib/repository/user-repository';
 
 type PasswordInputType = {
-    label: "New password" | "Confirm Password";
+    label: "Nova senha" | "Confirmar senha";
     register: UseFormRegister<ResetPasswordSchemaType>;
     name: Path<ResetPasswordSchemaType>;
     error?: string
@@ -65,13 +65,13 @@ export function ResetPasswordForm() {
 
     });
     const handleChangePassword = async (data: ResetPasswordSchemaType) => {
-        const loadingToast = toast.loading("Resetting password...");
+        const loadingToast = toast.loading("Redefinindo senha...");
         const result = await resetPassword(data, token);
         console.log("Resetting password with data:", data);
         toast.dismiss(loadingToast);
 
         if (result.success == true) {
-            toast.success("Password updated successfully.\nSign in to access your account.");
+            toast.success("Senha atualizada com sucesso.\nFaça login para acessar sua conta.");
             router.push("/sign-in");
         } else {
             toast.error(result.message);
@@ -80,8 +80,8 @@ export function ResetPasswordForm() {
     return (
         <Card className="bg-white p-8 shadow-sm rounded-xl">
             <CardHeader className=' text-center'>
-                <CardTitle className='text-2xl'>Reset Password</CardTitle>
-                <CardDescription className='text-sm'>Set a new password for your ChoiceLog account</CardDescription>
+                <CardTitle className='text-2xl'>Redefinir senha</CardTitle>
+                <CardDescription className='text-sm'>Defina uma nova senha para sua conta do ChoiceLog</CardDescription>
             </CardHeader>
 
             <form onSubmit={handleSubmit(handleChangePassword)} className="w-full max-w-md">
@@ -93,14 +93,14 @@ export function ResetPasswordForm() {
                         error={errors.newPassword?.message}
                         name="newPassword"
                         register={register}
-                        label="New password"
+                        label="Nova senha"
                     />
 
                     <CreatePasswordInput
                         error={errors.confirmPassword?.message}
                         name="confirmPassword"
                         register={register}
-                        label="Confirm Password"
+                        label="Confirmar senha"
                     />
                 </div>
 
@@ -114,7 +114,7 @@ export function ResetPasswordForm() {
                         }
                         className="bg-blue-600 w-full h-9 hover:bg-blue-500 shadow-lg"
                     >
-                        {isSubmitting ? "Resetting..." : "Reset Password"}
+                        {isSubmitting ? "Redefinindo..." : "Redefinir senha"}
                     </Button>
                 </div>
             </form>

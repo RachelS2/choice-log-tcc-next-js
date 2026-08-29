@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn } from "@/lib/utils";
+import { cn, formatItemTypeLabel } from "@/lib/utils";
 import { SortOption, TypeFilter } from '@/app/dashboard/catalog/items/page';
 import { CategoryModel } from '@/models/dashboard/items';
 import React from 'react';
@@ -48,7 +48,7 @@ export default function CatalogFilters({
         <div className="relative flex-1 min-w-0 lg:max-w-xs">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
           <Input
-            placeholder="Search by name..."
+            placeholder="Pesquisar por nome..."
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-9 text-black"
@@ -59,22 +59,22 @@ export default function CatalogFilters({
 
         <FilterSelect
           value={typeFilter}
-          placeholder="Type"
+          placeholder="Tipo"
           onChange={(v) => onTypeFilterChange(v as TypeFilter)}
           options={[
-            { value: "ALL", label: "All" },
-            { value: "PRODUCT", label: "Products" },
-            { value: "SERVICE", label: "Services" },
+            { value: "ALL", label: "Todos" },
+            { value: "PRODUCT", label: formatItemTypeLabel("PRODUCT") },
+            { value: "SERVICE", label: formatItemTypeLabel("SERVICE") },
           ]}
         />
 
         {/* Category Filter */}
         <FilterSelect
           value={categoryFilter}
-          placeholder="Category"
+          placeholder="Categoria"
           onChange={onCategoryFilterChange}
           options={[
-            { value: "ALL", label: "All categories" },
+            { value: "ALL", label: "Todas as categorias" },
 
             ...[...categories]
               .sort((a, b) => {
@@ -96,10 +96,10 @@ export default function CatalogFilters({
         {/* Brand Filter */}
         <FilterSelect
           value={brandFilter}
-          placeholder="Brand"
+          placeholder="Marca"
           onChange={onBrandFilterChange}
           options={[
-            { value: "ALL", label: "All brands" },
+            { value: "ALL", label: "Todas as marcas" },
             ...brands.map((brand) => ({ value: brand, label: brand })),
           ]}
         />
@@ -107,14 +107,14 @@ export default function CatalogFilters({
         {/* Sort */}
         <FilterSelect
           value={sort}
-          placeholder="Sort by"
+          placeholder="Ordenar por"
           onChange={(v) => onSortChange(v as SortOption)}
           options={[
-            { value: "recent", label: "Recently added" },
-            { value: "last_consumed", label: "Last consumed" },
-            { value: "most_experiences", label: "Most experiences" },
-            { value: "most_spent", label: "Most Spent" },
-            { value: "alphabetical", label: "Alphabetical" },
+            { value: "recent", label: "Adicionados recentemente" },
+            { value: "last_consumed", label: "Último consumo" },
+            { value: "most_experiences", label: "Mais experiências" },
+            { value: "most_spent", label: "Mais gastos" },
+            { value: "alphabetical", label: "Ordem Alfabética" },
           ]}
         />
       </div>
@@ -168,7 +168,7 @@ function FilterSelect({
               <React.Fragment key={option.value}>
                 {showGroupHeader && (
                   <div className="px-2 py-1.5 text-[14px] font-semibold uppercase tracking-wider text-neutral-400">
-                    {option.type === "PRODUCT" ? "Products Categories" : "Services Categories"}
+                    {option.type === "PRODUCT" ? "Categorias de produtos" : "Categorias de serviços"}
                   </div>
                 )}
 

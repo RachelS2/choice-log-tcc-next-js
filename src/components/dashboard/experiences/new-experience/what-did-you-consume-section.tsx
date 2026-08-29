@@ -81,7 +81,7 @@ export function ItemHeroCard({
                 <div className="min-w-0 flex-1">
                     {/* Label */}
                     <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                        You consumed...
+                        Você consumiu...
                     </p>
 
                     {/* Title */}
@@ -163,7 +163,7 @@ export function ItemHeroCard({
                                 <Package className="size-3.5" strokeWidth={2.2} />
                             )}
 
-                            {isService ? "Service" : "Product"}
+                            {isService ? "Serviço" : "Produto"}
                         </span>
 
                     </div>

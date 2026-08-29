@@ -31,7 +31,7 @@ export function SidebarNav() {
 
 
       {/* Experiences */}
-      {buildMenuOption(pathname, "/dashboard/experiences", "Experiences", ClipboardList)}
+      {buildMenuOption(pathname, "/dashboard/experiences", "Experiências", ClipboardList)}
 
       {/* Catalog */}
       <div>
@@ -42,7 +42,7 @@ export function SidebarNav() {
         >
           <BookOpen className="h-4 w-4" />
 
-          <span>Catalog</span>
+          <span>Catálogo</span>
 
           <ChevronRight
             className={cn(
@@ -66,7 +66,7 @@ export function SidebarNav() {
               )}
             >
               <Box className="h-4 w-4" />
-              Items
+              Itens
             </Link>
 
             {/* Categories */}
@@ -80,7 +80,7 @@ export function SidebarNav() {
               )}
             >
               <Tags className="h-4 w-4" />
-              Categories
+              Categorias
             </Link>
 
           </div>
@@ -88,13 +88,13 @@ export function SidebarNav() {
       </div>
 
       {/* Analytics */}
-      {buildMenuOption(pathname, "/dashboard/analytics", "Analytics", BarChart3)}
+      {buildMenuOption(pathname, "/dashboard/analytics", "Análises", BarChart3)}
 
       {/* Wish List */}
-      {buildMenuOption(pathname, "/dashboard/wishlist", "Wish List", ShoppingCart)}
+      {buildMenuOption(pathname, "/dashboard/wishlist", "Lista de Desejos", ShoppingCart)}
 
       {/* Settings */}
-      {buildMenuOption(pathname, "/dashboard/settings", "Settings", Settings)}
+      {buildMenuOption(pathname, "/dashboard/settings", "Configurações", Settings)}
 
     </nav>
   );

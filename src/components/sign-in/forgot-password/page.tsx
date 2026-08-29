@@ -24,12 +24,12 @@ export function ForgotPasswordPage() {
         if (error) {
             let errorMessage: string | undefined = error.message;
             if (!errorMessage) {
-                errorMessage = "Failed to send e-mail. Try again later."
+                errorMessage = "Falha ao enviar o e-mail. Tente novamente mais tarde."
             }
             console.log("Failed to send reset password e-mail. Received status code: " + error.status);
             toast.error(errorMessage);
         } else {
-            toast.success("If an account with this email exists, a password reset link will be sent.");
+            toast.success("Se houver uma conta com este e-mail, um link de redefinição de senha será enviado.");
             setSent(true);
         }
         setLoading(false);
@@ -40,47 +40,47 @@ export function ForgotPasswordPage() {
             {sent ? (
                 <NotificationContent
                     icon={MailCheck}
-                    title="Check your inbox"
+                    title="Verifique sua caixa de entrada"
                     description={
                         <>
-                            We've sent a password reset link to
-                            <span className="font-medium"> {email || "your email address"}</span>
-                            . The link expires in 30 minutes.
+                            Enviamos um link de redefinição de senha para
+                            <span className="font-medium"> {email || "seu e-mail"}</span>
+                            . O link expira em 30 minutos.
                         </>
                     }
-                    footer="Didn't receive it? Check your spam folder."
+                    footer="Não recebeu? Verifique sua pasta de spam."
                 >
                     <Button
 
                         className="h-11 w-full"
                         onClick={() => setSent(false)}
                     >
-                        Resend email
+                        Reenviar e-mail
                     </Button>
                     {backToLoginButton()}
                 </NotificationContent>
             ) : (
                 <NotificationContent
                     icon={Mail}
-                    title="Forgot your password?"
-                    description="Enter your email address and we'll send you a secure link to reset your password."
+                    title="Esqueceu sua senha?"
+                    description="Digite seu e-mail e enviaremos um link seguro para redefinir sua senha."
                 >
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-2">
-                            <Label htmlFor="email" className="text-lg">Email</Label>
+                            <Label htmlFor="email" className="text-lg">E-mail</Label>
                             <Input
                                 id="email"
                                 type="email"
                                 required
                                 autoComplete="email"
-                                placeholder="you@gmail.com"
+                                placeholder="voce@gmail.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="text-xl"
                             />
                         </div>
                         <Button type="submit" className="h-11 w-full" disabled={loading}>
-                            {loading ? "Sending..." : "Send reset link"}
+                            {loading ? "Enviando..." : "Enviar link de redefinição"}
                         </Button>
                     </form>
                     {backToLoginButton()}
@@ -95,7 +95,7 @@ function backToLoginButton() {
         <Button asChild variant="ghost" className="h-11 w-full hover:text-blue-500">
             <Link href="/sign-in">
                 <ArrowLeft className="size-4" />
-                Back to Login
+                Voltar ao login
             </Link>
         </Button>
     );

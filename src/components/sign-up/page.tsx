@@ -30,7 +30,13 @@ function createLabelsAndInputs(
         htmlFor === "password" ||
         htmlFor === "confirmPassword";
     const labelText =
-        htmlFor.charAt(0).toUpperCase() + htmlFor.slice(1);
+        htmlFor === "username"
+            ? "Nome de usuário"
+            : htmlFor === "email"
+                ? "E-mail"
+                : htmlFor === "password"
+                    ? "Senha"
+                    : "Confirmar senha";
 
     return (
         <div className="space-y-1 w-full">
@@ -93,7 +99,7 @@ export default function SignUpForm() {
         }, {
 
             onSuccess: () => {
-                toast.success("Successfully signed up!", { description: "Please login to get started." })
+                toast.success("Cadastro realizado com sucesso!", { description: "Faça login para começar." })
                 setEmail(signUpData.email);
                 setEmailSent(true);
             },
@@ -103,12 +109,12 @@ export default function SignUpForm() {
                 let message: string = "";
                 let description: string = "";
                 if (ctx.error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
-                    message = "User already exists";
-                    description = "Try logging in instead.";
+                    message = "Usuário já existe";
+                    description = "Tente fazer login em vez disso.";
                 }
                 else {
-                    message = "An error occurred during sign-up.";
-                    description = "Please try again with a different e-mail or contact support if the problem persists."
+                    message = "Ocorreu um erro durante o cadastro.";
+                    description = "Tente novamente com outro e-mail ou entre em contato com o suporte se o problema persistir."
                 }
                 toast.error(message, { description: description })
             },
@@ -122,24 +128,24 @@ export default function SignUpForm() {
                 <Card className="w-full min-w-[30rem] rounded-3xl border border-white/10 bg-white shadow-2xl">
                     <CardHeader className="space-y-1 text-center">
                         <CardTitle className="text-3xl">
-                            Sign Up
+                            Cadastre-se
                         </CardTitle>
 
                         <CardDescription className="text-base">
-                            Start tracking your shopping experiences
+                            Comece a acompanhar suas experiências de compra
                         </CardDescription>
                     </CardHeader>
 
                     <CardContent className="space-y-5 w-full">
                         {/* <div className="grid gap-5"> */}
 
-                        {createLabelsAndInputs("username", "Your username", User, errors.username, register)}
+                        {createLabelsAndInputs("username", "Seu nome de usuário", User, errors.username, register)}
 
-                        {createLabelsAndInputs("email", "you@example.com", Mail, errors.email, register)}
+                        {createLabelsAndInputs("email", "voce@exemplo.com", Mail, errors.email, register)}
 
-                        {createLabelsAndInputs("password", "At least 8 characters", Lock, errors.password, register)}
+                        {createLabelsAndInputs("password", "Mínimo de 8 caracteres", Lock, errors.password, register)}
 
-                        {createLabelsAndInputs("confirmPassword", "Confirm your password", Lock, errors.confirmPassword, register)}
+                        {createLabelsAndInputs("confirmPassword", "Confirme sua senha", Lock, errors.confirmPassword, register)}
 
                         {/* </div> */}
 
@@ -153,12 +159,12 @@ export default function SignUpForm() {
                                 (
                                     <>
                                         <Loader2 className="h-5 w-5 animate-spin" />
-                                        <span>Creating Account...</span>
+                                        <span>Criando conta...</span>
                                     </>
                                 ) :
                                 (
                                     <>
-                                        Create Account
+                                        Criar conta
                                         <ArrowRightIcon className="h-5 w-5" />
                                     </>
                                 )}
@@ -174,12 +180,12 @@ export default function SignUpForm() {
 
                         {/* FOOTER */}
                         <p className="text-center text-sm text-muted-foreground">
-                            Already have an account?{" "}
+                            Já tem uma conta?{" "}
                             <Link
                                 href="/sign-in"
                                 className="font-medium text-blue-600 hover:underline"
                             >
-                                Sign In
+                                Entrar
                             </Link>
                         </p>
                     </CardContent>

@@ -10,20 +10,20 @@ export default function VerifyEmailPage({ email }: VerifyEmailPageProps) {
     return <NotificationWrapper>
         <NotificationContent
             icon={MailCheck}
-            title="Verify your e-mail"
+            title="Verifique seu e-mail"
             description={
                 <>
-                    We've sent a link to verify your e-mail to
+                    Enviamos um link para verificar seu e-mail para
                     <span className="font-medium"> {email}</span>
-                    . The link expires in 30 minutes.
+                    . O link expira em 30 minutos.
                 </>
             }
-            footer="Didn't receive it? Check your spam folder."
+            footer="Não recebeu? Verifique sua pasta de spam."
         >
             <Button asChild variant="ghost" className="h-11 w-full bg-black text-white hover:bg-blue-600">
                 <Link href="/sign-in">
                     <ArrowLeft className="size-4" />
-                    Go to Login
+                    Ir para login
                 </Link>
             </Button>
         </NotificationContent>

@@ -34,10 +34,10 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
       setDeleteModalOpen(false);
 
       onDelete(item.id);
-      toast.success("Item deleted successfully.");
+      toast.success("Item excluído com sucesso.");
     } catch (error) {
-      console.error("Failed to delete item:", error);
-      toast.error("Failed to delete item.");
+      console.error("Falha ao excluir item:", error);
+      toast.error("Falha ao excluir item.");
     }
   }
   const handleDelete = (e: React.MouseEvent) => {
@@ -46,7 +46,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
   };
 
   const handleViewDetails = () => {
-    toast.info(`Details for "${item.friendlyName}" coming soon!`);
+    toast.info(`Detalhes de "${item.friendlyName}" em breve!`);
   };
 
   return (
@@ -168,7 +168,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
               <Package className="size-3.5" />
             )}
 
-            {item.type === "PRODUCT" ? "Product" : "Service"}
+            {item.type === "PRODUCT" ? "Produto" : "Serviço"}
           </Badge>
 
           <Badge
@@ -194,7 +194,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         <div className="flex-1 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-sm text-neutral-500">
-              Experiences
+              Experiências
             </span>
 
             <span className="text-sm font-semibold text-neutral-700">
@@ -204,17 +204,17 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
 
           <div className="flex items-center justify-between">
             <span className="text-sm text-neutral-500">
-              Total Spent
+              Total gasto
             </span>
 
             <span className="text-sm font-semibold text-neutral-700">
-              $ {item.totalSpent.toFixed(2)}
+              R$ {item.totalSpent.toFixed(2)}
             </span>
           </div>
 
           <div className="flex items-center justify-between">
             <span className="text-sm text-neutral-500">
-              Last consumed
+              Último consumo
             </span>
 
             <span className="text-sm font-medium text-neutral-700">
@@ -226,7 +226,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
 
           <div className="flex items-center justify-between">
             <span className="text-sm text-neutral-500">
-              Average rating
+              Avaliação média
             </span>
 
             {item.averageRating > 0 ? (

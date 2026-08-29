@@ -34,16 +34,16 @@ export default function HeroDashboardSection() {
               variant="outline"
               className="mb-6 rounded-full border-neutral-300 bg-white px-3 py-3 text-base font-medium text-neutral-700"
             >
-              Consumerism reflection platform
+              Plataforma de reflexão sobre consumo
             </Badge>
 
             <h1 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent sm:text-5xl lg:text-6xl">
-              Better shopping decisions start here.
+              Decisões de compra melhores começam aqui.
             </h1>
 
             <p className="mt-6 max-w-xl text-xl leading-relaxed text-neutral-900">
-              ChoiceLog helps you record, evaluate, and reflect on your shopping experiences —
-              transforming each purchase into a step toward more informed future decisions.
+              O ChoiceLog ajuda você a registrar, avaliar e refletir sobre suas experiências de compra —
+              transformando cada compra em um passo rumo a decisões futuras mais bem informadas.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -54,7 +54,7 @@ export default function HeroDashboardSection() {
                 className="bg-blue-600 text-white text-base hover:bg-blue-700 hover:text-white"
               >
                 <Link href="/sign-up">
-                  Start Now
+                  Começar agora
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -63,7 +63,7 @@ export default function HeroDashboardSection() {
                 variant="outline"
                 size="lg"
                 className="border-neutral-300 text-base bg-white text-neutral-950 hover:bg-neutral-100 hover:text-neutral-700 transition-colors">
-                <Link href="/experiences">Learn More</Link>
+                <Link href="/experiences">Saiba mais</Link>
               </Button>
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function HeroDashboardSection() {
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
-                    LAST EXPERIENCE
+                    ÚLTIMA EXPERIÊNCIA
                   </p>
                   <h3 className="mt-1 text-lg font-semibold text-neutral-950">
                     Fone Bluetooth Pro X
@@ -111,7 +111,7 @@ export default function HeroDashboardSection() {
               <div className="mt-6 rounded-xl bg-neutral-50 p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <span className="text-s font-medium text-neutral-600">
-                    Your consumption satisfaction over time
+                    Sua satisfação de consumo ao longo do tempo
                   </span>
                   <TrendingUp className="h-4 w-4 text-blue-600" />
                 </div>
@@ -130,9 +130,9 @@ export default function HeroDashboardSection() {
 
               {/* Small meta row */}
               <div className="mt-4 grid grid-cols-3 gap-3 text-center">
-                {GraphSubtitle({ subtitle: "Registered Experiences", value: "248" })}
-                {GraphSubtitle({ subtitle: "Average Satisfaction", value: "4.3" })}
-                {GraphSubtitle({ subtitle: "Economy", value: "+18%" })}
+                {GraphSubtitle({ subtitle: "Experiências Registradas", value: "248" })}
+                {GraphSubtitle({ subtitle: "Satisfação Média", value: "4.3" })}
+                {GraphSubtitle({ subtitle: "Economia", value: "+18%" })}
               </div>
             </div>
           </div>

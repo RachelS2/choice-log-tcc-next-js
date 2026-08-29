@@ -14,7 +14,7 @@ export default function CatalogHeader({ onNewItem, newItemBtnDisabled }: Catalog
           <span className="h-px w-6 bg-blue-900/70" />
 
           <span className="text-[10px] font-semibold tracking-[0.22em] text-blue-900 uppercase">
-           Browse and manage all the products and services you have registered.
+           Navegue e gerencie todos os produtos e serviços que você registrou.
           </span>
         </div>
 
@@ -30,7 +30,7 @@ export default function CatalogHeader({ onNewItem, newItemBtnDisabled }: Catalog
       sm:text-4xl
     "
         >
-          Your Items
+          Seus itens
         </h1>
 
       </div>
@@ -40,7 +40,7 @@ export default function CatalogHeader({ onNewItem, newItemBtnDisabled }: Catalog
         className="h-11 bg-blue-600  shadow-xl hover:bg-blue-700 text-white"
       >
         <Plus className="h-4 w-4" />
-        New Item
+        Novo item
       </Button>
     </div>
   );

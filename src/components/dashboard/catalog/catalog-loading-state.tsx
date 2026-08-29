@@ -12,12 +12,12 @@ export default function CatalogLoadingState() {
       </div>
 
       <h3 className="text-lg font-semibold tracking-tight text-neutral-800">
-        Loading your items
+        Carregando seus itens
       </h3>
 
       <p className="mt-2 max-w-sm text-sm leading-relaxed text-neutral-500">
-        We are preparing your catalog. This should only take a few
-        moments.
+        Estamos preparando seu catálogo. Isso deve levar apenas alguns
+        instantes.
       </p>
 
       <div className="mt-6 flex items-center gap-1.5">

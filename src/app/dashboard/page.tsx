@@ -19,20 +19,20 @@ export default async function DashboardPage() {
       {/* Content */}
       <div className="relative z-10 space-y-6">
         <h1 className="text-2xl font-bold text-blue-600">
-          Hello, {username} 👋
+          Olá, {username} 👋
         </h1>
 
         <Card className="rounded-2xl bg-white p-6 shadow">
           <div className="flex flex-col items-center gap-4 text-center">
             <CardDescription className="text-base text-black">
-              Register and think about your last consumption decision.
+              Registre e reflita sobre sua última decisão de consumo.
             </CardDescription>
 
             <Link
               href="/dashboard/experiences/new-experience"
               className="inline-flex items-center rounded-xl bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
             >
-              + New Experience
+              + Nova experiência
             </Link>
           </div>
         </Card>

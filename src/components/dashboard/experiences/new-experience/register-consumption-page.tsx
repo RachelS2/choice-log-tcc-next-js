@@ -151,16 +151,16 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const next: Errors = {};
-    if (!selectedItem) next.item = "Please choose the item you consumed.";
-    if (!date) next.date = "Please tell us when this happened.";
-    if (!rating) next.rating = "Please rate your experience.";
-    if (!reasonId) next.reason = "Please select why you chose this item.";
+    if (!selectedItem) next.item = "Selecione o item consumido.";
+    if (!date) next.date = "Informe quando isso aconteceu.";
+    if (!rating) next.rating = "Avalie sua experiência.";
+    if (!reasonId) next.reason = "Selecione por que escolheu este item.";
     if (!influenceId)
-      next.influence = "Please select what influenced your choice.";
+      next.influence = "Selecione o que influenciou sua escolha.";
     if (brlDigitsToNumber(priceDigits) <= 0)
-      next.price = "Please enter how much you paid.";
-    if (details.length > 300) next.details = "Keep it under 300 characters.";
-    if (address.length > 255) next.address = "This address is too long.";
+      next.price = "Informe quanto você pagou.";
+    if (details.length > 300) next.details = "Mantenha em até 300 caracteres.";
+    if (address.length > 255) next.address = "O endereço informado é muito longo.";
 
     setErrors(next);
     if (Object.keys(next).length > 0) return;
@@ -223,7 +223,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
           <div className="mb-4 flex items-center gap-3">
             <span className="h-px w-8 bg-blue-900 " />
             <span className="text-[10px] font-semibold tracking-[0.24em] text-blue-900 uppercase">
-              Consumption journal
+              Diário de consumo
             </span>
             <span className="h-px w-8 bg-blue-900" />
           </div>
@@ -238,13 +238,13 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
         sm:text-4xl
     "
           >
-            Register{" "}
+            Registrar{" "}
             <span className="text-blue-900/90">
-              Experience
+              Experiência
             </span>
           </h1>
           <p className="mt-5 max-w-md text-sm leading-7 text-blue-900 sm:text-base">
-            A short reflection on what you consumed, how it felt, and why.
+            Uma breve reflexão sobre o que você consumiu, como se sentiu e por quê.
           </p>
         </header>
 
@@ -257,8 +257,8 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
           ) : (
             <FormSection
               icon={Compass}
-              title="What did you consume?"
-              description="Pick one of your registered items to start."
+              title="O que você consumiu?"
+              description="Escolha um de seus itens cadastrados para começar."
             >
               <div className="space-y-3">
 
@@ -279,7 +279,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                       type="text"
                       value={itemSearch}
                       onChange={(e) => setItemSearch(e.target.value)}
-                      placeholder="Search items..."
+                      placeholder="Buscar itens..."
                       className="
           h-10 w-full rounded-lg
           pl-9 pr-3
@@ -320,7 +320,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                   >
                     <Plus className="size-4" />
                     <span className="hidden sm:inline">
-                      Add item
+                      Adicionar item
                     </span>
                   </Button>
 
@@ -376,7 +376,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                   {/* Empty state */}
                   {filteredItems.length === 0 && (
 
-                    <EmptyDataState className="w-full min-h-[50px] py-8 border-none" mainTitle="No items found" description="Try another search or filter." />
+                    <EmptyDataState className="w-full min-h-[50px] py-8 border-none" mainTitle="Nenhum item encontrado" description="Tente outro filtro." />
                   )}
                 </div>
 
@@ -387,15 +387,15 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
           <FormSection
             icon={Wallet}
-            title="Purchase information"
-            description="How much did the experience cost — and details about it."
+            title="Informações da compra"
+            description="Quanto a experiência custou e detalhes sobre ela."
           >
             <div className="grid max-w-3xl gap-6 sm:grid-cols-2">
 
               {/* PRICE */}
               <div>
                 <FieldLabel htmlFor="price" required>
-                  Price
+                  Preço
                 </FieldLabel>
 
                 <div className="relative">
@@ -423,7 +423,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
               {/* DATE */}
               <div>
                 <FieldLabel required>
-                  Date
+                  Data
                 </FieldLabel>
 
                 <DatePicker
@@ -439,7 +439,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
               {/* ADDRESS */}
               <div>
                 <FieldLabel htmlFor="address">
-                  Address
+                  Endereço
                 </FieldLabel>
 
                 <div className="relative">
@@ -457,7 +457,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                     maxLength={255}
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Where was it?"
+                    placeholder="Onde foi?"
                     className="h-11 bg-white pl-9"
                   />
                 </div>
@@ -469,7 +469,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
               {/* DETAILS */}
               <div>
                 <FieldLabel htmlFor="details">
-                  Details
+                  Detalhes
                 </FieldLabel>
                 <Textarea
                   id="details"
@@ -477,7 +477,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                   maxLength={300}
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
-                  placeholder="Tell us more about your experience..."
+                  placeholder="Conte mais sobre sua experiência."
                   className="
         h-20
         resize-none
@@ -500,15 +500,15 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
           <FormSection
             icon={Compass}
-            title="Your decision"
-            description="What led you to this choice?"
+            title="Sua decisão"
+            description="O que levou você a esta escolha?"
           >
             <div>
               <FieldLabel required>Qual foi o propósito desta experiência?</FieldLabel>
               <div className="flex flex-wrap gap-2">
                 {!selectedItem ? (
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Select an item above to see the available reasons.
+                    Selecione o item consumido para ver os motivos disponíveis.
                   </p>
                 ) : (
                   <div className="mt-2 flex flex-wrap gap-2">
@@ -532,7 +532,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
             </div>
 
             <div>
-              <FieldLabel required>What influenced your choice?</FieldLabel>
+              <FieldLabel required>O que influenciou sua escolha?</FieldLabel>
               <div className="flex flex-wrap gap-2 text-blue-600">
                 {consumptionInfluences.map((inf) => (
                   <SelectableChip
@@ -552,13 +552,13 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
           <FormSection
             icon={ThumbsDown}
-            title="Negative aspects"
-            description="Anything that bothered you? Select as many as you want — or none."
+            title="Aspectos negativos"
+            description="Algo que lhe incomodou? Selecione quantos quiser — ou nenhum."
           >
             <div className="flex flex-wrap gap-2">
               {!selectedItem ? (
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Select an item above to see the available negative aspects.
+                  Selecione o item consumido para ver os aspectos negativos disponíveis.
                 </p>
               ) :
                 availableNegativeAspects.map((a) => {
@@ -580,15 +580,15 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
           </FormSection>
           <FormSection
             icon={Star}
-            title="Your experience"
-            description="What is your final review?"
+            title="Sua experiência"
+            description="Qual é a sua avaliação final?"
           >
             <div className="flex max-w-xl flex-col gap-6">
 
               {/* FINAL RATING */}
               <div className="flex flex-col items-center justify-center">
                 <FieldLabel required>
-                  Final Rating
+                  Avaliação final
                 </FieldLabel>
 
                 <RatingStars
@@ -608,7 +608,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
               {/* WOULD BUY AGAIN */}
               <div className="flex flex-col items-center justify-center">
                 <FieldLabel>
-                  Would you consume it again?
+                  Você consumiria este item de novo?
                 </FieldLabel>
 
                 <YesNoChoice
@@ -642,7 +642,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
       "
               >
                 <Link href="/dashboard/experiences">
-                  Cancel
+                  Cancelar
                 </Link>
               </Button>
 
@@ -664,7 +664,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
         hover:shadow-blue-200/50
       "
               >
-                Save consumption
+                Salvar consumo
               </Button>
 
             </div>

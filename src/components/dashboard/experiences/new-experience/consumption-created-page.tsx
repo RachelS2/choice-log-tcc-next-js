@@ -15,11 +15,10 @@ export default function ConsumptionCreatedPage({ itemName, onButtonClick }: Cons
 
                 <NotificationContent
                     icon={CircleCheck}
-                    title="Consumption saved"
+                    title="Consumo salvo"
                     description={
                         <>
-                            Your experience with {itemName} is now part of your ChoiceLog
-                            history.
+                            Sua experiência com {itemName} agora faz parte do seu histórico.
                         </>
                     }
                 >
@@ -28,10 +27,10 @@ export default function ConsumptionCreatedPage({ itemName, onButtonClick }: Cons
                         onClick={onButtonClick}
                     >
                         
-                        Register another
+                        Registrar outro
                     </Button>
                     <Button asChild variant="ghost" className="h-11 hover:text-blue-500 w-full">
-                        <Link href="/dashboard/experiences">Check Experience <ArrowRight className="size-4" /></Link> 
+                        <Link href="/dashboard/experiences">Ver experiência <ArrowRight className="size-4" /></Link> 
                     </Button>
                 </NotificationContent>
             </NotificationWrapper>

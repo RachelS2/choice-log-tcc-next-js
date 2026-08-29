@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn, toSystemName } from '@/lib/utils';
+import { cn, formatItemTypeLabel, toSystemName } from '@/lib/utils';
 import type { CategoryModel, CreateUpdateItemModel, ItemTypeEnum } from '../../../models/dashboard/items';
 import { fetchCategoriesController } from '@/lib/controller/category-controller';
 import { postItemController, updateItemController } from '@/lib/controller/item-controller';
@@ -97,7 +97,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
         });
       } else {
         if (!item) {
-          throw new Error("Item data is missing for edit mode.");
+          throw new Error("Dados do item ausentes para edição.");
         }
         createdUpdatedItem = await updateItemController({
           id: item.id,
@@ -114,19 +114,19 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
         err.message === "UNIQUE_CONSTRAINT_VIOLATION"
       ) {
         setServerError(
-          "You already have an item with this name and brand."
+          "Você já possui um item com este nome e marca."
         );
 
         setError("friendlyName", {
-          message: "Duplicate combination.",
+          message: "Combinação duplicada.",
         });
 
         setError("brand", {
-          message: "Duplicate combination.",
+          message: "Combinação duplicada.",
         });
       } else {
         setServerError(
-          "An unexpected error occurred. Please try again."
+          "Ocorreu um erro inesperado. Tente novamente."
         );
       }
     } finally {
@@ -160,7 +160,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
       {/* Item Type Selection */}
       <div className="space-y-2">
         <Label className="text-md text-neutral-700">
-          Item Type <span className="text-red-500">*</span>
+          Tipo do item<span className="text-red-500">*</span>
         </Label>
         <div className="grid grid-cols-2 gap-3">
           <ItemTypeButton
@@ -183,11 +183,11 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
       {/* Category */}
       <div className="space-y-2">
         <Label htmlFor="categoryId" className="text-md text-neutral-700">
-          Category <span className="text-red-500">*</span>
+          Categoria <span className="text-red-500">*</span>
         </Label>
         {!selectedType ? (
           <p className="text-xs text-neutral-400 italic">
-            Select an item type first to see available categories.
+            Selecione primeiro o tipo do item para ver as categorias disponíveis.
           </p>
         ) : (
           <Select
@@ -202,7 +202,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
             }}
           >
             <SelectTrigger id="categoryId" className="w-full">
-              <SelectValue placeholder="Select a category" />
+              <SelectValue placeholder="Selecione uma categoria" />
             </SelectTrigger>
 
             <SelectContent position="popper">
@@ -224,11 +224,11 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
       {/* Friendly Name */}
       <div className="space-y-2">
         <Label htmlFor="friendlyName" className="text-md text-neutral-700">
-          {!selectedType ? ('Item Name') : selectedType[0].toUpperCase() + selectedType.slice(1).toLowerCase()}  <span className="text-red-500">*</span>
+          {!selectedType ? ('Nome do item') : formatItemTypeLabel(selectedType)}  <span className="text-red-500">*</span>
         </Label>
         <Input
           id="friendlyName"
-          placeholder={selectedType == "SERVICE" ? ("e.g. Hair Stylist") : "e.g. Moisturizing Shasmpoo"}
+          placeholder={selectedType == "SERVICE" ? ("ex.: Esteticista") : "ex.: Shampoo hidratante"}
           maxLength={30}
           {...register('friendlyName')}
         />
@@ -237,7 +237,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
             <p className="text-xs text-red-600">{errors.friendlyName.message}</p>
           ) : (
             <p className="text-xs text-neutral-400">
-              The name you use to identify this item.
+              O nome que você usa para identificar este item.
             </p>
           )}
           <span className="text-xs text-neutral-400">
@@ -250,15 +250,15 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
       {/* Brand / Provider */}
       <div className="space-y-2">
         <Label htmlFor="brand" className="text-md text-neutral-700">
-          {selectedType === 'SERVICE' ? 'Provider' : 'Brand'}{' '}
+          {selectedType === 'SERVICE' ? 'Prestador' : 'Marca'}{' '}
           <span className="text-red-500">*</span>
         </Label>
         <Input
           id="brand"
           placeholder={
             selectedType === 'SERVICE'
-              ? 'e.g. Studio Bella, Uber'
-              : 'e.g. Nike, Samsung, Dove'
+              ? 'ex.: Studio Bella, Uber'
+              : 'ex.: Nike, Samsung, Dove'
           }
           maxLength={30}
           {...register('brand')}
@@ -269,8 +269,8 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
           ) : (
             <p className="text-xs text-neutral-400">
               {selectedType === 'SERVICE'
-                ? 'The company or professional providing the service.'
-                : 'The brand that produces this item.'}
+                ? 'A empresa ou profissional que presta o serviço.'
+                : 'A marca que produz este item.'}
             </p>
           )}
           <span className="text-xs text-neutral-400">
@@ -288,7 +288,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
           disabled={submitting}
           className="w-24 h-10 text-red-500 bg-white/80 shadow-md hover:text-red-600"
         >
-          Cancel
+          Cancelar
         </Button>
         <Button
           type="submit"
@@ -300,13 +300,13 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
               <Loader2 className="h-4 w-4 animate-spin" />
 
               {mode === "edit"
-                ? "Saving..."
-                : "Adding..."}
+                ? "Salvando..."
+                : "Adicionando..."}
             </span>
           ) : (
             mode === "edit"
-              ? "Save Changes"
-              : "Add Item"
+              ? "Salvar alterações"
+              : "Adicionar item"
           )}
         </Button>
       </div>

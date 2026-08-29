@@ -49,10 +49,10 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
             {/* Header */}
             <CardHeader>
                 <CardTitle className="text-lg text-neutral-950">
-                    Personal Information
+                    Informações Pessoais
                 </CardTitle>
                 <CardDescription className="text-sm text-neutral-500">
-                    Update your profile photo and personal information.
+                    Atualize sua foto de perfil e seus dados pessoais.
                 </CardDescription>
             </CardHeader>
 
@@ -81,7 +81,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                         variant="ghost"
                         className="text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                     >
-                        Change photo
+                        Alterar foto
                     </Button>
 
                     <Input
@@ -99,7 +99,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                     {/* Name */}
                     <div className="space-y-2">
                         <Label className="text-sm font-medium text-neutral-700">
-                            Name
+                            Nome
                         </Label>
 
                         <InputSection
@@ -116,7 +116,7 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
 
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <Label>Email</Label>
+                                <Label>E-mail</Label>
 
                             </div>
                         </div>

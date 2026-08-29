@@ -9,15 +9,15 @@ export default function MotivationPage(){
 
                 <div className="relative max-w-xl space-y-8">
                     <div className='space-y-4'>
-                        <h1 className='text-5xl font-semibold tracking-tight'>Welcome back to smarter shopping.</h1>
-                        <p className='text-blue-100 text-lg'>Track experiences, learn from past purchases and make better future decisions.</p>
+                        <h1 className='text-5xl font-semibold tracking-tight'>Bem-vindo de volta a compras mais inteligentes.</h1>
+                        <p className='text-blue-100 text-lg'>Acompanhe experiências, aprenda com compras passadas e tome decisões melhores no futuro.</p>
                     </div>
                 <div className='grid gap-4'>
                     <Card className='bg-white/10 border-white/20 text-base text-white'>
-                        <CardContent className='p-4 flex items-center gap-3'><BarChart3 className='h-5 w-5'/><span>Discover patterns in your spending habits</span></CardContent>
+                        <CardContent className='p-4 flex items-center gap-3'><BarChart3 className='h-5 w-5'/><span>Descubra padrões nos seus hábitos de gasto</span></CardContent>
                     </Card>
                     <Card className='bg-white/10 border-white/20 text-base text-white'>
-                        <CardContent className='p-4 flex items-center gap-3'><ShoppingCart className='h-5 w-5'/><span>Keep your purchase history organized securely</span></CardContent>
+                        <CardContent className='p-4 flex items-center gap-3'><ShoppingCart className='h-5 w-5'/><span>Mantenha seu histórico de compras organizado e seguro</span></CardContent>
                     </Card>
                 </div>
             </div>

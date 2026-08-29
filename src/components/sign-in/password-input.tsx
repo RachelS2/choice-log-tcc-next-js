@@ -23,7 +23,7 @@ export default function PasswordInput<
 >({
   register,
   name,
-  placeholder = "Insert a password.",
+  placeholder = "Insira uma senha.",
   className
 }: PasswordInputProps<T>) {
   const [showPassword, setShowPassword] =

@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 
 type PasswordInputType = {
-    label: "Current Password" | "New password" | "Confirm Password";
+    label: "Senha atual" | "Nova senha" | "Confirmar senha";
     register: UseFormRegister<ChangePasswordSchemaType>;
     name: Path<ChangePasswordSchemaType>;
     error?: string
@@ -58,13 +58,13 @@ export function ChangePasswordFormSettings({
 
     });
     const handleChangePassword = async (data: ChangePasswordSchemaType) => {
-        const loadingToast = toast.loading("Updating password...");
+        const loadingToast = toast.loading("Atualizando senha...");
         const result = await updatePassword(data);
 
         toast.dismiss(loadingToast);
 
         if (result.success) {
-            toast.success("Password updated successfully.");
+            toast.success("Senha atualizada com sucesso.");
             onPasswordChanged?.()
         } else {
             toast.error(result.message);
@@ -83,21 +83,21 @@ export function ChangePasswordFormSettings({
                     error={errors.password?.message}
                     name="password"
                     register={register}
-                    label="Current Password"
+                    label="Senha atual"
                 />
 
                 <CreatePasswordInput
                     error={errors.newPassword?.message}
                     name="newPassword"
                     register={register}
-                    label="New password"
+                    label="Nova senha"
                 />
 
                 <CreatePasswordInput
                     error={errors.confirmPassword?.message}
                     name="confirmPassword"
                     register={register}
-                    label="Confirm Password"
+                    label="Confirmar senha"
                 />
             </div>
 
@@ -108,7 +108,7 @@ export function ChangePasswordFormSettings({
                     className="w-24 h-9 text-blue-500 bg-white/80 shadow-md hover:text-blue-600"
                     onClick={handleCancelChangePassword}
                 >
-                    Cancel
+                    Cancelar
                 </Button>
                     : <></>
                 }
@@ -122,7 +122,7 @@ export function ChangePasswordFormSettings({
                     }
                     className="bg-blue-600 h-9 hover:bg-blue-500 shadow-lg"
                 >
-                    {isSubmitting ? "Updating..." : "Update Password"}
+                    {isSubmitting ? "Atualizando..." : "Atualizar senha"}
                 </Button>
             </div>
         </form>

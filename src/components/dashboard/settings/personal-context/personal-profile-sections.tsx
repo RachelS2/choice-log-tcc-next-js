@@ -54,7 +54,7 @@ export default function PersonalProfileSection() {
     useEffect(() => {
         if (userProfileData.error) {
             toast.error(
-                "Failed to load user profile. Please try again later."
+                "Falha ao carregar o perfil do usuário. Tente novamente mais tarde."
             );
         }
     }, [userProfileData.error]);
@@ -74,20 +74,20 @@ export default function PersonalProfileSection() {
     }
 
     if (userProfileData.error) {
-        return <div><p className="text-red-500">Error loading profile</p></div>;
+        return <div><p className="text-red-500">Erro ao carregar perfil</p></div>;
     }
 
     if (!userProfileData.data) {
-        return <div><p className="text-red-500">No profile found</p></div>;
+        return <div><p className="text-red-500">Perfil não encontrado</p></div>;
     }
     const onSubmit = async (data: UserSettingsSchemaType) => {
         console.log("SUBMIT FIRED");
         console.log(data)
         if (!userProfileData.data) {
-            toast.error("User data is not available. Please try again later.");
+            toast.error("Os dados do usuário não estão disponíveis. Tente novamente mais tarde.");
             return;
         }
-        const updatingToast = toast.warning("Updating profile...")
+        const updatingToast = toast.warning("Atualizando perfil...")
         const completeData: UpdateUserProfileDTO = {
             email: data.email,
             name: data.username,
@@ -156,13 +156,13 @@ export default function PersonalProfileSection() {
             font-medium
         ">
                                     <AlertCircle className="h-4 w-4" />
-                                    Unsaved changes
+                                    Alterações não salvas
                                 </div>
                             )}
                             <Button type="submit" className="h-11 bg-blue-600  shadow-xl hover:bg-blue-700 text-white">
                                 <span className="flex items-center gap-2 text-md ">
                                     <Save className="h-4 w-4" />
-                                    Save Changes
+                                    Salvar alterações
                                 </span>
                             </Button>
 
@@ -174,7 +174,7 @@ export default function PersonalProfileSection() {
                             >
 
                                 <X className="h-4 w-4" />
-                                Cancel
+                                Cancelar
                             </Button>
 
                         </div>
@@ -199,7 +199,7 @@ shadow-xl
                         >
                             <span className="flex items-center gap-2 ">
                                 <PencilIcon className="h-4 w-4" />
-                                Edit Profile
+                                Editar perfil
                             </span>
                         </button>
                     )}

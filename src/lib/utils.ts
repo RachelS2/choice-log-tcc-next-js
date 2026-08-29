@@ -66,3 +66,16 @@ export function brlDigitsToNumber(digits: string) {
   const clean = digits.replace(/\D/g, "");
   return clean ? Number(clean) / 100 : 0;
 }
+
+export function formatItemTypeLabel(type?: string | null): string {
+  const normalized = (type ?? "").trim().toUpperCase();
+
+  switch (normalized) {
+    case "PRODUCT":
+      return "PRODUTO";
+    case "SERVICE":
+      return "SERVIÇO";
+    default:
+      return normalized;
+  }
+}

@@ -31,7 +31,7 @@ export default function LandingHeaderClient({ userIsLoggedIn }: { userIsLoggedIn
               href="/sign-in"
               className="hidden text-lg font-medium text-neutral-600 hover:text-blue-500 sm:inline-block"
             >
-              Sign In
+              Entrar
             </Link>
 
             <Button
@@ -39,7 +39,7 @@ export default function LandingHeaderClient({ userIsLoggedIn }: { userIsLoggedIn
               variant="ghost"
               className="bg-blue-600 text-lg text-white hover:bg-blue-700"
             >
-              <Link href="/sign-up">Sign Up</Link>
+              <Link href="/sign-up">Cadastre-se</Link>
             </Button>
           </nav>
         )}

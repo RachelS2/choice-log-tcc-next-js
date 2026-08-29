@@ -17,11 +17,10 @@ export default function FinalCTASection() {
           />
           <div className="relative">
             <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Ready to shop more consciously?
+              Pronto(a) para comprar com mais consciência?
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-xl text-blue-50 sm:text-2xl">
-              Learn from past purchases and improve the next ones.
-
+              Reflita sobre compras passadas e otimize as compras futuras.
             </p>
             <div className="mt-12">
               <Button
@@ -30,7 +29,7 @@ export default function FinalCTASection() {
                 className="bg-white text-lg text-blue-700 shadow-sm transition-all hover:bg-neutral-100 hover:shadow-md"
               >
                 <Link href="/sign-up">
-                  Register For Free
+                  Cadastre-se gratuitamente
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

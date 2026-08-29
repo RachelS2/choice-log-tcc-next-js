@@ -3,27 +3,27 @@ import Link from 'next/link';
 
 const columns = [
   {
-    title: 'Product',
+    title: 'Produto',
     links: [
-      { label: 'Functionalities', href: '/experiences' },
-      { label: 'Prices', href: '#' },
-      { label: 'Demo', href: '/experiences' },
+      { label: 'Funcionalidades', href: '/experiences' },
+      { label: 'Preços', href: '#' },
+      { label: 'Demonstração', href: '/experiences' },
     ],
   },
   {
-    title: 'Company',
+    title: 'Empresa',
     links: [
-      { label: 'About', href: '#' },
+      { label: 'Sobre', href: '#' },
       { label: 'Blog', href: '#' },
-      { label: 'Contact', href: '#' },
+      { label: 'Contato', href: '#' },
     ],
   },
   {
-    title: 'Resources',
+    title: 'Recursos',
     links: [
-      { label: 'Help', href: '#' },
-      { label: 'Use Guide', href: '#' },
-      { label: 'Privacy', href: '#' },
+      { label: 'Ajuda', href: '#' },
+      { label: 'Guia de uso', href: '#' },
+      { label: 'Privacidade', href: '#' },
     ],
   },
 ];
@@ -43,7 +43,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-neutral-600">
-              More conscious consumer decisions, based on reflection and real data.
+              Decisões de consumo mais conscientes, baseadas em reflexão e dados reais.
             </p>
           </div>
 
@@ -70,7 +70,7 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-neutral-200 pt-6 sm:flex-row">
           <p className="text-sm text-neutral-500">
-            © 2026 ChoiceLog. All rights reserved.
+            © 2026 ChoiceLog. Todos os direitos reservados.
           </p>
           <div className="flex items-center gap-4">
             <a

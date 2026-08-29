@@ -13,8 +13,8 @@ export function YesNoChoice({
         val: boolean;
         Icon: typeof ThumbsUp;
     }[] = [
-            { label: "Yes", val: true, Icon: ThumbsUp },
-            { label: "No", val: false, Icon: ThumbsDown },
+            { label: "Sim", val: true, Icon: ThumbsUp },
+            { label: "Não", val: false, Icon: ThumbsDown },
         ];
 
     return (

@@ -33,7 +33,7 @@ export default function CreateUpdateItemModal({ open, onOpenChange, onSuccess, m
         <DialogHeader className="px-6 pt-6 pb-2">
           <div className="bg-blue-600 rounded-lg shadow-md p-2">
             <DialogTitle className="text-xl text-center font-semibold text-white">
-              {mode === "edit" ? "Edit Item" : "Create Item"}
+              {mode === "edit" ? "Editar item" : "Criar item"}
             </DialogTitle>
 
           </div>

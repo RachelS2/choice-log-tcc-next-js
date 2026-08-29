@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { RatingStars } from '@/components/ui/rating-starts';
 import { CategoryModel, CreateUpdateItemModel } from '@/models/dashboard/items';
 import { deleteItemController } from '@/lib/controller/item-controller';
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import Modal from '@/components/ui/modal';
 import CreateUpdateItemModal from '../items/create-item-modal';
 import { getAvatarColor, getInitials, formatDate, cn } from '@/lib/utils';
@@ -59,7 +59,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
     shadow-sm
     transition-all duration-300 ease-out
     hover:-translate-y-1
-    hover:border-blue-200
+    hover:border-blue-800
     hover:shadow-lg hover:shadow-blue-100/50
   "
     >
@@ -72,7 +72,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
             <div
               className={cn(
                 "flex h-12 w-12 shrink-0 items-center justify-center",
-                "overflow-hidden rounded-full",
+                "overflow-hidden rounded-xl",
                 "border-2 border-white shadow-md",
                 "bg-gradient-to-br",
                 getAvatarColor(item.friendlyName),
@@ -154,12 +154,10 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
             variant="secondary"
             className={cn(
               "inline-flex items-center gap-1.5 rounded-full",
-              "border px-2.5 py-1",
-              "text-xs font-semibold shadow-none",
-              "bg-white",
-              item.type === "SERVICE"
-                ? "border-blue-200 text-blue-500"
-                : "border-blue-300 text-blue-600"
+              "border px-2.5 py-1 text-xs font-semibold shadow-none text-white bg-blue-900 border-blue-900",
+              // item.type === "SERVICE"
+              //   ? "bg-blue-900/90 border-blue-900/90"
+              //   : "bg-blue-900 border-blue-900"
             )}
           >
             {item.type === "SERVICE" ? (
@@ -173,79 +171,47 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
 
           <Badge
             variant="secondary"
-            className="
-          rounded-full
-          border border-neutral-200
-          bg-neutral-50
-          px-2.5 py-1
-          text-xs font-medium
-          text-neutral-500
-          shadow-none
-        "
+            className={cn("rounded-full bg-white px-2.5 py-1 text-xs font-medium shadow-none bg-white border-blue-900 text-blue-900",
+              // item.type === "SERVICE"
+              //   ? "border-blue-800 text-blue-800"
+              //   : "border-blue-900 text-blue-900"
+              )}
           >
             {item.categoryName}
           </Badge>
         </div>
 
         {/* Divider */}
-        <div className="mb-4 h-px bg-neutral-100" />
+        <div className="mb-4 h-px bg-neutral-200" />
 
         {/* Stats */}
         <div className="flex-1 space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-neutral-500">
-              Experiências
-            </span>
+          <ItemStats title="Experiências" data={item.experiences.toString()} />
 
-            <span className="text-sm font-semibold text-neutral-700">
-              {item.experiences}
-            </span>
-          </div>
+          <ItemStats title="Total gasto" data={"R$ " + item.totalSpent.toFixed(2)} />
 
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-neutral-500">
-              Total gasto
-            </span>
+          <ItemStats title="Último Consumo" data={item.lastConsumed
+            ? formatDate(item.lastConsumed)
+            : "-"} />
 
-            <span className="text-sm font-semibold text-neutral-700">
-              R$ {item.totalSpent.toFixed(2)}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-neutral-500">
-              Último consumo
-            </span>
-
-            <span className="text-sm font-medium text-neutral-700">
-              {item.lastConsumed
-                ? formatDate(item.lastConsumed)
-                : "-"}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-neutral-500">
-              Avaliação média
-            </span>
-
-            {item.averageRating > 0 ? (
-              <div className="flex items-center gap-1.5">
-                <RatingStars
-                  value={item.averageRating}
-                  size="sm"
-                />
-
-                <span className="text-xs font-semibold text-neutral-600">
-                  {item.averageRating.toFixed(1)}
+          <ItemStats
+            title="Avaliação média"
+            data={
+              item.averageRating > 0 ? (
+                <div className="flex items-center gap-1.5">
+                  <RatingStars
+                    value={item.averageRating}
+                    size="sm"
+                  />
+                </div>
+              ) : (
+                <span className="text-sm text-neutral-700">
+                  -
                 </span>
-              </div>
-            ) : (
-              <span className="text-sm text-neutral-400">
-                -
-              </span>
-            )}
-          </div>
+              )
+            }
+          />
+
         </div>
 
         {/* Footer */}
@@ -256,16 +222,16 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
             className="
           w-full
           rounded-lg
-          border-blue-200
-          bg-blue-50
+          border-blue-900
+          bg-blue-900
           font-medium
-          text-blue-600
+          text-white
           shadow-sm
           transition-all duration-200
           hover:-translate-y-0.5
-          hover:border-blue-300
-          hover:bg-blue-100
-          hover:text-blue-700
+          hover:border-blue-800
+          hover:bg-blue-800
+          
           hover:shadow-md
           active:translate-y-0
         "
@@ -297,8 +263,22 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         onSuccess={onEdit}
         mode="edit"
       />
-      {/* Accent divider */}
-      <div className="h-1 rounded-full bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600" />
+
     </div>
   );
+}
+
+
+function ItemStats({ title, data }: { title: string; data: string | ReactNode }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-sm text-neutral-600">
+        {title}
+      </span>
+
+      <span className="text-sm font-medium text-neutral-700">
+        {data}
+      </span>
+    </div>)
+
 }

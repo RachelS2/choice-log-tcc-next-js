@@ -114,7 +114,7 @@ export default function CatalogFilters({
             { value: "last_consumed", label: "Último consumo" },
             { value: "most_experiences", label: "Mais experiências" },
             { value: "most_spent", label: "Mais gastos" },
-            { value: "alphabetical", label: "Ordem Alfabética" },
+            { value: "alphabetical", label: "Ordem alfabética" },
           ]}
         />
       </div>
@@ -167,7 +167,7 @@ function FilterSelect({
             return (
               <React.Fragment key={option.value}>
                 {showGroupHeader && (
-                  <div className="px-2 py-1.5 text-[14px] font-semibold uppercase tracking-wider text-neutral-400">
+                  <div className="px-2 py-1.5 text-[14px] font-semibold uppercase tracking-wider text-blue-900">
                     {option.type === "PRODUCT" ? "Categorias de produtos" : "Categorias de serviços"}
                   </div>
                 )}

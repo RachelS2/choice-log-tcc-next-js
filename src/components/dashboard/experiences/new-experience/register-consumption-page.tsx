@@ -504,7 +504,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
             description="O que levou você a esta escolha?"
           >
             <div>
-              <FieldLabel required>Qual foi o propósito desta experiência?</FieldLabel>
+              <FieldLabel required>Qual foi o propósito deste consumo?</FieldLabel>
               <div className="flex flex-wrap gap-2">
                 {!selectedItem ? (
                   <p className="mt-2 text-sm text-muted-foreground">
@@ -532,7 +532,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
             </div>
 
             <div>
-              <FieldLabel required>O que influenciou sua escolha?</FieldLabel>
+              <FieldLabel required>O que mais influenciou sua escolha?</FieldLabel>
               <div className="flex flex-wrap gap-2 text-blue-600">
                 {consumptionInfluences.map((inf) => (
                   <SelectableChip

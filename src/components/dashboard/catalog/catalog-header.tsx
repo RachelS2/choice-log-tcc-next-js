@@ -14,7 +14,7 @@ export default function CatalogHeader({ onNewItem, newItemBtnDisabled }: Catalog
           <span className="h-px w-6 bg-blue-900/70" />
 
           <span className="text-[10px] font-semibold tracking-[0.22em] text-blue-900 uppercase">
-           Navegue e gerencie todos os produtos e serviços que você registrou.
+            Navegue e gerencie todos os produtos e serviços que você registrou.
           </span>
         </div>
 
@@ -23,14 +23,16 @@ export default function CatalogHeader({ onNewItem, newItemBtnDisabled }: Catalog
       font-[family-name:var(--font-inter)]
       text-3xl
       font-semibold
-      leading-[0.95]
-      tracking-[-0.03em]
-      text-blue-700
-      [text-shadow:0_6px_18px_rgba(30,64,175,0.16)]
+      leading-tight
+      tracking-[-0.02em]
+      text-blue-800
       sm:text-4xl
     "
         >
-          Seus itens
+          Seus{" "}
+          <span className="text-blue-900/90">
+            Itens
+          </span>
         </h1>
 
       </div>

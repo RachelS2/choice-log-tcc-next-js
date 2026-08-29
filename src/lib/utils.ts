@@ -44,11 +44,14 @@ export function getAvatarColor(name: string): string {
 }
 
 export function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
+  const [year, month, day] = dateStr.split("-").map(Number);
+
+  const date = new Date(year, month - 1, day);
+
+  return date.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
   });
 }
 
@@ -72,9 +75,9 @@ export function formatItemTypeLabel(type?: string | null): string {
 
   switch (normalized) {
     case "PRODUCT":
-      return "PRODUTO";
+      return "Produto";
     case "SERVICE":
-      return "SERVIÇO";
+      return "Serviço";
     default:
       return normalized;
   }

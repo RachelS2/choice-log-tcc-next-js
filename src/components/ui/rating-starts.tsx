@@ -120,10 +120,6 @@ export function RatingStars({
               className={cn(
                 "absolute inset-0 text-amber-400",
                 currentSize.star,
-                {
-                  "fill-amber-400":
-                    !editable,
-                },
               )}
             />
 

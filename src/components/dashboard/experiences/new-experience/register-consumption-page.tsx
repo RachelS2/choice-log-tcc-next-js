@@ -21,7 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { FieldError, FieldLabel, FormSection } from "@/components/dashboard/experiences/new-experience/form-section";
 import { SelectableChip } from "@/components/dashboard/experiences/new-experience/selectable-chip";
 import { YesNoChoice } from "@/components/dashboard/experiences/new-experience/would-you-buy-again-section";
-import { ItemHeroCard } from "@/components/dashboard/experiences/new-experience/what-did-you-consume-section";
+import { ItemHeroCard } from "@/components/dashboard/experiences/new-experience/item-hero-card";
 import {
   brlDigitsToNumber,
   formatBRLFromDigits,

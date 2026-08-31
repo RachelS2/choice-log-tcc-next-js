@@ -70,10 +70,10 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
             {/* Avatar */}
             <div
               className={cn(
-                "flex h-12 w-12 shrink-0 items-center justify-center",
+                "flex h-14 w-14 shrink-0 items-center justify-center",
                 "overflow-hidden rounded-xl",
                 "border-2 border-white shadow-md",
-                "bg-gradient-to-br",
+                " bg-gradient-to-br from-blue-50 to-sky-50/50",
                 getAvatarColor(item.friendlyName),
                 "text-sm font-semibold text-white"
               )}
@@ -92,50 +92,52 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
 
             {/* Name + Brand + Badges */}
             <div className="min-w-0 flex-1">
-              <h3 className="truncate text-base font-semibold leading-tight text-neutral-900">
-                {item.friendlyName}
-              </h3>
+              {/* Friendly Name + Brand */}
+              <div className="flex min-w-0 items-center gap-3">
+                {/* Friendly Name */}
+                <h3 className="min-w-0 truncate text-lg font-semibold leading-tight text-neutral-900">
+                  {item.friendlyName}
+                </h3>
 
-              <div className="mt-1 flex min-w-0 gap-3 items-center">
                 {/* Brand */}
-                <p className="min-w-0 flex-1 truncate text-sm text-neutral-500">
+                <p className="min-w-0 truncate text-sm text-neutral-500">
                   {item.brand}
                 </p>
+              </div>
 
-                {/* Badges */}
-                <div className="ml-4 flex shrink-0 items-center gap-2">
-                  {/* Type */}
-                  <Badge
-                    variant="secondary"
-                    className={cn(
-                      "inline-flex shrink-0 items-center gap-1.5",
-                      "rounded-full border px-2.5 py-1",
-                      "border-blue-900 bg-blue-900",
-                      "text-xs font-semibold text-white shadow-none"
-                    )}
-                  >
-                    {item.type === "SERVICE" ? (
-                      <Wrench className="size-3.5" />
-                    ) : (
-                      <Package className="size-3.5" />
-                    )}
+              {/* Type + Category */}
+              <div className="mt-1 flex min-w-0 items-center gap-2">
+                {/* Type */}
+                <Badge
+                  variant="secondary"
+                  className={cn(
+                    "inline-flex shrink-0 items-center gap-1.5",
+                    "rounded-full border px-2.5 py-1",
+                    "border-blue-900 bg-blue-900",
+                    "text-xs font-semibold text-white shadow-none"
+                  )}
+                >
+                  {item.type === "SERVICE" ? (
+                    <Wrench className="size-3.5" />
+                  ) : (
+                    <Package className="size-3.5" />
+                  )}
 
-                    {item.type === "PRODUCT" ? "Produto" : "Serviço"}
-                  </Badge>
+                  {item.type === "PRODUCT" ? "Produto" : "Serviço"}
+                </Badge>
 
-                  {/* Category */}
-                  <Badge
-                    variant="secondary"
-                    className={cn(
-                      "inline-flex shrink-0 items-center",
-                      "rounded-full border px-2.5 py-1",
-                      "border-blue-900 bg-white",
-                      "text-xs font-medium text-blue-900 shadow-none"
-                    )}
-                  >
-                    {item.categoryName}
-                  </Badge>
-                </div>
+                {/* Category */}
+                <Badge
+                  variant="secondary"
+                  className={cn(
+                    "inline-flex shrink-0 items-center",
+                    "rounded-full border px-2.5 py-1",
+                    "border-blue-900 bg-white",
+                    "text-xs font-medium text-blue-900 shadow-none"
+                  )}
+                >
+                  {item.categoryName}
+                </Badge>
               </div>
             </div>
           </div>

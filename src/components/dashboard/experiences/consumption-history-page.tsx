@@ -94,7 +94,7 @@ export default function ConsumptionsHistoryPage() {
                         </p>
                     </div>
                     <Button asChild className="h-11">
-                        <Link href="/register-consumption">
+                        <Link href="/new-experience">
                             <Plus className="size-4" />
                             Registrar consumo
                         </Link>
@@ -138,7 +138,7 @@ export default function ConsumptionsHistoryPage() {
                             description="Registre sua primeira experiência para começar a acompanhar seus padrões de consumo."
                             action={
                                 <Button asChild className="h-11">
-                                    <Link to="/register-consumption">
+                                    <Link href="/new-experience">
                                         <Plus className="size-4" />
                                         Registrar consumo
                                     </Link>
@@ -198,7 +198,7 @@ export default function ConsumptionsHistoryPage() {
                 }}
                 onEdit={() => {
                     setSelected(null);
-                    redirect("/register-consumption");
+                    redirect("/new-experience");
                 }}
                 onDelete={(c) => {
                     setData((prev) => prev.filter((x) => x.id !== c.id));

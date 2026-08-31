@@ -43,6 +43,17 @@ export function getAvatarColor(name: string): string {
   return colors[index];
 }
 
+export function formatDatetime(dateStr: string): string {
+  const date = new Date(dateStr);
+
+  return date.toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 export function formatDate(dateStr: string): string {
   const [year, month, day] = dateStr.split("-").map(Number);
 
@@ -50,7 +61,7 @@ export function formatDate(dateStr: string): string {
 
   return date.toLocaleDateString("pt-BR", {
     day: "2-digit",
-    month: "short",
+    month: "2-digit",
     year: "numeric",
   });
 }

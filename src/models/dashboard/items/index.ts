@@ -28,10 +28,11 @@ export interface CreateUpdateItemModel extends PostItemModel {
   id: string;
   type: ItemTypeEnum;
   experiences: number;
-  averageRating: number;
+  // averageRating: number;
   lastConsumed: string | null;
   totalSpent: number;
   categoryName: string;
+  updatedAt: Date;
 
 }
 

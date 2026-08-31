@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useMemo, useState } from "react";
 import { AlertTriangle, ClipboardList, PackageOpen, Plus, SearchX } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,7 @@ import { redirect } from "next/navigation";
 
 const PAGE_SIZE = 12;
 
-export function ConsumptionsHistoryPage() {
+export default function ConsumptionsHistoryPage() {
 
     const [data, setData] = useState<Consumption[]>([]);
     const [loading, setLoading] = useState(true);

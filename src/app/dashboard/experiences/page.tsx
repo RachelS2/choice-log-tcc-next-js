@@ -1,8 +1,5 @@
+import ConsumptionsHistoryPage from "@/components/dashboard/experiences/consumption-history-page";
 
-import { ConsumptionsHistoryPage } from "@/components/dashboard/experiences/consumption-history-page";
-
-
-
-export function MyConsumptionsPage() {
+export default function MyConsumptionsPage() {
     return <ConsumptionsHistoryPage />
 }

@@ -8,7 +8,7 @@ import { deleteItemController } from '@/lib/controller/item-controller';
 import { ReactNode, useState } from "react";
 import Modal from '@/components/ui/modal';
 import CreateUpdateItemModal from '../items/create-item-modal';
-import { getAvatarColor, getInitials, formatDate, cn } from '@/lib/utils';
+import { getAvatarColor, getInitials, formatDate, cn, formatDatetime } from '@/lib/utils';
 
 export interface CatalogCardProps {
   item: CreateUpdateItemModel;
@@ -16,8 +16,6 @@ export interface CatalogCardProps {
   onEdit: (item: CreateUpdateItemModel) => void;
   categories: CategoryModel[];
 }
-
-
 
 export default function CatalogCard({ item, onDelete, onEdit, categories }: CatalogCardProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -46,6 +44,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
   };
 
   const handleViewDetails = () => {
+    console.log("Marca" + item.brand);
     toast.info(`Detalhes de "${item.friendlyName}" em breve!`);
   };
 
@@ -59,7 +58,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
     shadow-sm
     transition-all duration-300 ease-out
     hover:-translate-y-1
-    hover:border-blue-800
+    hover:border-blue-900
     hover:shadow-lg hover:shadow-blue-100/50
   "
     >
@@ -67,7 +66,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
       <div className="flex h-full flex-col p-5">
         {/* Header */}
         <div className="mb-5 flex items-start justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center gap-3">
             {/* Avatar */}
             <div
               className={cn(
@@ -87,44 +86,83 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
                 />
               ) : (
                 getInitials(item.friendlyName)
+
               )}
             </div>
 
-            {/* Name */}
-            <div className="min-w-0">
+            {/* Name + Brand + Badges */}
+            <div className="min-w-0 flex-1">
               <h3 className="truncate text-base font-semibold leading-tight text-neutral-900">
                 {item.friendlyName}
               </h3>
 
-              <p className="mt-1 truncate text-sm text-neutral-500">
-                {item.brand}
-              </p>
+              <div className="mt-1 flex min-w-0 gap-3 items-center">
+                {/* Brand */}
+                <p className="min-w-0 flex-1 truncate text-sm text-neutral-500">
+                  {item.brand}
+                </p>
+
+                {/* Badges */}
+                <div className="ml-4 flex shrink-0 items-center gap-2">
+                  {/* Type */}
+                  <Badge
+                    variant="secondary"
+                    className={cn(
+                      "inline-flex shrink-0 items-center gap-1.5",
+                      "rounded-full border px-2.5 py-1",
+                      "border-blue-900 bg-blue-900",
+                      "text-xs font-semibold text-white shadow-none"
+                    )}
+                  >
+                    {item.type === "SERVICE" ? (
+                      <Wrench className="size-3.5" />
+                    ) : (
+                      <Package className="size-3.5" />
+                    )}
+
+                    {item.type === "PRODUCT" ? "Produto" : "Serviço"}
+                  </Badge>
+
+                  {/* Category */}
+                  <Badge
+                    variant="secondary"
+                    className={cn(
+                      "inline-flex shrink-0 items-center",
+                      "rounded-full border px-2.5 py-1",
+                      "border-blue-900 bg-white",
+                      "text-xs font-medium text-blue-900 shadow-none"
+                    )}
+                  >
+                    {item.categoryName}
+                  </Badge>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Actions */}
           <div
             className="
-          flex items-center gap-1
-          opacity-0
-          transition-all duration-200
-          group-hover:opacity-100
-        "
+        flex shrink-0 items-center gap-1
+        opacity-0
+        transition-all duration-200
+        group-hover:opacity-100
+      "
           >
             <button
               disabled={categories.length === 0}
               onClick={handleEdit}
               className="
-            flex h-8 w-8 cursor-pointer items-center justify-center
-            rounded-lg
-            text-neutral-400
-            transition-all
-            hover:bg-blue-50
-            hover:text-blue-600
-            hover:shadow-sm
-            disabled:cursor-not-allowed
-            disabled:opacity-40
-          "
+          flex h-8 w-8 cursor-pointer items-center justify-center
+          rounded-lg
+          text-neutral-400
+          transition-all
+          hover:bg-blue-50
+          hover:text-blue-600
+          hover:shadow-sm
+          disabled:cursor-not-allowed
+          disabled:opacity-40
+        "
               aria-label="Edit"
             >
               <Pencil className="h-3.5 w-3.5" />
@@ -133,52 +171,21 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
             <button
               onClick={handleDelete}
               className="
-            flex h-8 w-8 cursor-pointer items-center justify-center
-            rounded-lg
-            text-neutral-400
-            transition-all
-            hover:bg-red-50
-            hover:text-red-600
-            hover:shadow-sm
-          "
+          flex h-8 w-8 cursor-pointer items-center justify-center
+          rounded-lg
+          text-neutral-400
+          transition-all
+          hover:bg-red-50
+          hover:text-red-600
+          hover:shadow-sm
+        "
               aria-label="Delete"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
           </div>
-        </div>
 
-        {/* Badges */}
-        <div className="mb-5 flex flex-wrap gap-2">
-          <Badge
-            variant="secondary"
-            className={cn(
-              "inline-flex items-center gap-1.5 rounded-full",
-              "border px-2.5 py-1 text-xs font-semibold shadow-none text-white bg-blue-900 border-blue-900",
-              // item.type === "SERVICE"
-              //   ? "bg-blue-900/90 border-blue-900/90"
-              //   : "bg-blue-900 border-blue-900"
-            )}
-          >
-            {item.type === "SERVICE" ? (
-              <Wrench className="size-3.5" />
-            ) : (
-              <Package className="size-3.5" />
-            )}
 
-            {item.type === "PRODUCT" ? "Produto" : "Serviço"}
-          </Badge>
-
-          <Badge
-            variant="secondary"
-            className={cn("rounded-full bg-white px-2.5 py-1 text-xs font-medium shadow-none bg-white border-blue-900 text-blue-900",
-              // item.type === "SERVICE"
-              //   ? "border-blue-800 text-blue-800"
-              //   : "border-blue-900 text-blue-900"
-              )}
-          >
-            {item.categoryName}
-          </Badge>
         </div>
 
         {/* Divider */}
@@ -190,27 +197,28 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
 
           <ItemStats title="Total gasto" data={"R$ " + item.totalSpent.toFixed(2)} />
 
-          <ItemStats title="Último Consumo" data={item.lastConsumed
+          <ItemStats title="Último consumo" data={item.lastConsumed
             ? formatDate(item.lastConsumed)
             : "-"} />
 
-          <ItemStats
-            title="Avaliação média"
-            data={
-              item.averageRating > 0 ? (
-                <div className="flex items-center gap-1.5">
-                  <RatingStars
-                    value={item.averageRating}
-                    size="sm"
-                  />
-                </div>
-              ) : (
-                <span className="text-sm text-neutral-700">
-                  -
-                </span>
-              )
-            }
-          />
+          <ItemStats title="Atualizado em" data={formatDatetime(item.updatedAt.toString())} />
+          {/* <ItemStats
+          title="Avaliação média"
+          data={
+            item.averageRating > 0 ? (
+              <div className="flex items-center gap-1.5">
+                <RatingStars
+                  value={item.averageRating}
+                  size="sm"
+                />
+              </div>
+            ) : (
+              <span className="text-sm text-neutral-700">
+                -
+              </span>
+            )
+          }
+        /> */}
 
         </div>
 
@@ -223,15 +231,15 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
           w-full
           rounded-lg
           border-blue-900
-          bg-blue-900
           font-medium
-          text-white
+          text-blue-900/90
           shadow-sm
           transition-all duration-200
           hover:-translate-y-0.5
-          hover:border-blue-800
-          hover:bg-blue-800
-          
+          hover:border-blue-900
+          hover:bg-blue-900/90
+          cursor-pointer
+          hover:text-white
           hover:shadow-md
           active:translate-y-0
         "
@@ -240,7 +248,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
               handleViewDetails();
             }}
           >
-            View Details
+            Ver Detalhes
           </Button>
         </div>
       </div>
@@ -264,7 +272,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         mode="edit"
       />
 
-    </div>
+    </div >
   );
 }
 
@@ -272,7 +280,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
 function ItemStats({ title, data }: { title: string; data: string | ReactNode }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-sm text-neutral-600">
+      <span className="text-sm font-medium text-blue-950">
         {title}
       </span>
 

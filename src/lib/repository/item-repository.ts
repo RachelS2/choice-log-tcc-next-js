@@ -107,17 +107,19 @@ export async function fetchItemResumeRepository(userId?: string, categoryType?: 
       0
     ),
 
-    averageRating:
-      item.consumptions.length === 0
-        ? 0
-        : Number(
-          (
-            item.consumptions.reduce(
-              (sum, c) => sum + (c.rating ?? 0),
-              0
-            ) / item.consumptions.length
-          ).toFixed(1)
-        ),
+    // averageRating:
+    //   item.consumptions.length === 0
+    //     ? 0
+    //     : Number(
+    //       (
+    //         item.consumptions.reduce(
+    //           (sum, c) => sum + (c.rating ?? 0),
+    //           0
+    //         ) / item.consumptions.length
+    //       ).toFixed(1)
+    //     ),
+
+    updatedAt: item.updatedAt,
 
     lastConsumed:
       item.consumptions[0]?.createdAt
@@ -174,8 +176,9 @@ export async function postItemRepository({
     type: createdItem.category.type.name as ItemTypeEnum,
 
     experiences: 0,
-    averageRating: 0,
+   // averageRating: 0,
     lastConsumed: null,
+    updatedAt: createdItem.updatedAt,
     totalSpent: 0,
 
     categoryName: createdItem.category.name,

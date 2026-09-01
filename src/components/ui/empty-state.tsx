@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Package } from "lucide-react";
+import { PackageOpen } from "lucide-react";
 
 interface EmptyStateProps {
   mainTitle?: string;
@@ -19,15 +19,15 @@ export default function EmptyDataState({
         className
       )}
     >
-      <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-neutral-100 text-neutral-400">
-        <Package className="h-8 w-8 text-blue-500" />
+      <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-900 ">
+        <PackageOpen className="h-8 w-8 text-white" />
       </div>
 
-      <h3 className="text-lg font-bold tracking-tight text-blue-500">
+      <h3 className="text-xl font-bold tracking-tight text-blue-900">
         {mainTitle}
       </h3>
 
-      <p className="mt-2 max-w-sm text-sm leading-relaxed text-neutral-500">
+      <p className="mt-2 max-w-sm text-lg leading-relaxed text-neutral-500">
         {description}
       </p>
     </div>

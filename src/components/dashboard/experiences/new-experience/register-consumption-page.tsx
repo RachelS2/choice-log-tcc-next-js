@@ -248,7 +248,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
               Experiência
             </span>
           </h1>
-          <p className="mt-5 max-w-md text-sm leading-7 text-blue-900 sm:text-base">
+          <p className="mt-5 max-w-md text-base leading-7 text-blue-900 sm:text-base">
             Uma breve reflexão sobre o que você consumiu, como se sentiu e por quê.
           </p>
         </header>
@@ -288,7 +288,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                       className="
           h-10 w-full rounded-lg
           pl-9 pr-3
-          text-sm
+          text-base
         "
                     />
                   </div>
@@ -358,7 +358,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                           className="
                 grid size-11 shrink-0 place-items-center
                 rounded-xl bg-blue-100 text-blue-600
-                text-sm font-semibold shadow-md
+                text-base font-semibold shadow-md
               "
                         >
                           {getInitials(i.friendlyName)}
@@ -404,7 +404,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                 </FieldLabel>
 
                 <div className="relative">
-                  <span className="absolute top-1/2 left-3 -translate-y-1/2 text-sm text-muted-foreground">
+                  <span className="absolute top-1/2 left-3 -translate-y-1/2 text-base text-muted-foreground">
                     R$
                   </span>
 
@@ -517,7 +517,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
               <FieldLabel required>Qual foi o propósito deste consumo?</FieldLabel>
               <div className="flex flex-wrap gap-2">
                 {!selectedItem ? (
-                  <p className="mt-2 text-sm text-muted-foreground">
+                  <p className="mt-2 text-base text-muted-foreground">
                     Selecione o item consumido para ver os motivos disponíveis.
                   </p>
                 ) : (
@@ -567,7 +567,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
           >
             <div className="flex flex-wrap gap-2">
               {!selectedItem ? (
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className="mt-2 text-base text-muted-foreground">
                   Selecione o item consumido para ver os aspectos negativos disponíveis.
                 </p>
               ) :
@@ -677,7 +677,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
         hover:shadow-blue-200/50
       "
               >
-                Salvar consumo
+                Salvar experiência
               </Button>
 
             </div>

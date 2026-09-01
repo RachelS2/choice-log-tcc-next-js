@@ -187,11 +187,11 @@ export default function CatalogPage() {
       />
 
       {loading ? (
-        <CatalogLoadingState />
+        <CatalogLoadingState title="Carregando itens..." description="Estamos preparando seu catálogo. Isso deve levar apenas alguns instantes." />
       ) : filteredItems.length > 0 ? (
         <CatalogGrid items={filteredItems} onDelete={handleItemDelete} onEdit={handleEditItem} categories={categories} />
       ) : (
-        <EmptyDataState className="border border-neutral-200 bg-white px-6 py-16 shadow-sm"/>
+        <EmptyDataState className="px-6 py-16" />
       )}
 
       <CreateUpdateItemModal

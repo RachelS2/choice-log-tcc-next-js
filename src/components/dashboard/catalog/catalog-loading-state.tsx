@@ -1,8 +1,13 @@
 import { LoaderCircle } from "lucide-react";
 
-export default function CatalogLoadingState() {
+interface CatalogLoadingStateProps {
+  title: string;
+  description: string;
+}
+
+export default function CatalogLoadingState({ title, description }: CatalogLoadingStateProps) {
   return (
-    <div className="flex min-h-[360px] flex-col items-center justify-center rounded-3xl border border-neutral-200 bg-white px-6 py-16 text-center shadow-sm">
+    <div className="flex min-h-[360px] flex-col items-center justify-center rounded-3xl px-6 py-16 text-center">
       <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50">
         <div className="absolute inset-0 animate-ping rounded-2xl bg-blue-100 opacity-40" />
 
@@ -11,13 +16,12 @@ export default function CatalogLoadingState() {
         </div>
       </div>
 
-      <h3 className="text-lg font-semibold tracking-tight text-neutral-800">
-        Carregando seus itens
+      <h3 className="text-xl font-semibold tracking-tight text-blue-900">
+        {title}
       </h3>
 
-      <p className="mt-2 max-w-sm text-sm leading-relaxed text-neutral-500">
-        Estamos preparando seu catálogo. Isso deve levar apenas alguns
-        instantes.
+      <p className="mt-2 max-w-sm text-lg leading-relaxed text-neutral-500">
+        {description}
       </p>
 
       <div className="mt-6 flex items-center gap-1.5">

@@ -59,7 +59,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
     transition-all duration-300 ease-out
     hover:-translate-y-1
     hover:border-blue-900
-    hover:shadow-lg hover:shadow-blue-100/40
+    hover:shadow-lg hover:shadow-blue-100/0
   "
     >
 
@@ -130,7 +130,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
                 <Badge
                   variant="secondary"
                   className={cn(
-                    "inline-flex shrink-0 items-center",
+                    "inline-flex shrink-0 items-center mr-3",
                     "rounded-full border px-2.5 py-1",
                     "border-blue-900 bg-white",
                     "text-xs font-medium text-blue-900 shadow-none"

@@ -8,12 +8,22 @@ interface CatalogGridProps {
   categories: CategoryModel[];
 }
 
-export default function CatalogGrid({ items, onDelete, onEdit, categories }: CatalogGridProps) {
-
+export default function CatalogGrid({
+  items,
+  onDelete,
+  onEdit,
+  categories,
+}: CatalogGridProps) {
   return (
-    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+    <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
       {items.map((item) => (
-        <CatalogCard key={item.id} item={item} onDelete={onDelete} onEdit={onEdit} categories={categories}/>
+        <CatalogCard
+          key={item.id}
+          item={item}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          categories={categories}
+        />
       ))}
     </div>
   );

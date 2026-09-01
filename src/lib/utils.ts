@@ -30,14 +30,14 @@ export function getInitials(name: string): string {
 
 export function getAvatarColor(name: string): string {
   const colors = [
-    'from-blue-500 to-blue-600',
-    'from-indigo-500 to-indigo-600',
-    'from-violet-500 to-violet-600',
-    'from-emerald-500 to-emerald-600',
-    'from-amber-500 to-amber-600',
-    'from-rose-500 to-rose-600',
-    'from-cyan-500 to-cyan-600',
-    'from-fuchsia-500 to-fuchsia-600',
+    'from-blue-200 to-blue-300',
+    'from-indigo-200 to-indigo-300',
+    'from-violet-200 to-violet-300',
+    'from-emerald-200 to-emerald-300',
+    'from-amber-200 to-amber-300',
+    'from-rose-200 to-rose-300',
+    'from-cyan-200 to-cyan-300',
+    'from-fuchsia-200 to-fuchsia-300',
   ];
   const index = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
   return colors[index];

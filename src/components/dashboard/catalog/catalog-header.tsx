@@ -39,7 +39,7 @@ export default function CatalogHeader({ onNewItem, newItemBtnDisabled }: Catalog
       <Button
         onClick={onNewItem}
         disabled={newItemBtnDisabled}
-        className="h-11 bg-blue-600  shadow-xl hover:bg-blue-700 text-white"
+        className="h-11 bg-blue-900/90 hover:bg-blue-700 text-white"
       >
         <Plus className="h-4 w-4" />
         Novo item

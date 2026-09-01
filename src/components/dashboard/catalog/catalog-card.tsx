@@ -59,7 +59,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
     transition-all duration-300 ease-out
     hover:-translate-y-1
     hover:border-blue-900
-    hover:shadow-lg hover:shadow-blue-100/50
+    hover:shadow-lg hover:shadow-blue-100/40
   "
     >
 
@@ -93,16 +93,16 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
             {/* Name + Brand + Badges */}
             <div className="min-w-0 flex-1">
               {/* Friendly Name + Brand */}
-              <div className="flex min-w-0 items-center gap-3">
-                {/* Friendly Name */}
-                <h3 className="min-w-0 truncate text-lg font-semibold leading-tight text-neutral-900">
+              <div className="min-w-0 flex-1">
+                <h3 className="line-clamp-2 text-base font-semibold leading-tight text-neutral-800">
                   {item.friendlyName}
                 </h3>
 
-                {/* Brand */}
-                <p className="min-w-0 truncate text-sm text-neutral-500">
-                  {item.brand}
-                </p>
+                {item.brand && (
+                  <p className="mt-1 truncate text-sm leading-tight text-neutral-500">
+                    {item.brand}
+                  </p>
+                )}
               </div>
 
               {/* Type + Category */}
@@ -113,7 +113,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
                   className={cn(
                     "inline-flex shrink-0 items-center gap-1.5",
                     "rounded-full border px-2.5 py-1",
-                    "border-blue-900 bg-blue-900",
+                    "border-blue-900 bg-blue-900/90",
                     "text-xs font-semibold text-white shadow-none"
                   )}
                 >
@@ -225,23 +225,23 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         </div>
 
         {/* Footer */}
-        <div className="mt-5 border-t border-neutral-100 pt-4">
+        <div className="mt-3">
           <Button
             variant="outline"
             size="sm"
             className="
           w-full
           rounded-lg
-          border-blue-900
           font-medium
           text-blue-900/90
-          shadow-sm
+
           transition-all duration-200
           hover:-translate-y-0.5
           hover:border-blue-900
           hover:bg-blue-900/90
           cursor-pointer
           hover:text-white
+          bg-white
           hover:shadow-md
           active:translate-y-0
         "
@@ -261,8 +261,8 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         onOpenChange={setDeleteModalOpen}
         onConfirm={handleDeleteModal}
         dialogTitle="Confirm Delete"
-        dialogDescription="Are you sure you want to permanently delete this item?"
-        buttonText="Delete"
+        dialogDescription="Tem certeza que deseja excluir este item permanentemente?"
+        buttonText="Excluir"
       />
 
       <CreateUpdateItemModal
@@ -282,11 +282,11 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
 function ItemStats({ title, data }: { title: string; data: string | ReactNode }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-sm font-medium text-blue-950">
+      <span className="text-sm text-blue-950">
         {title}
       </span>
 
-      <span className="text-sm font-medium text-neutral-700">
+      <span className="text-sm text-neutral-600">
         {data}
       </span>
     </div>)

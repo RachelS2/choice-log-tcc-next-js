@@ -42,7 +42,7 @@ export default function CatalogFilters({
   brands,
 }: CatalogFiltersProps) {
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
+    <div className="rounded-2xl 0 p-4">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
         {/* Search */}
         <div className="relative flex-1 min-w-0 lg:max-w-xs">
@@ -51,7 +51,7 @@ export default function CatalogFilters({
             placeholder="Pesquisar por nome..."
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-9 text-black"
+            className="pl-9 text-black bg-white"
           />
         </div>
 
@@ -147,7 +147,7 @@ function FilterSelect({
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger
           className={cn(
-            "h-11 w-full",
+            "h-11 bg-white w-full",
             value === "ALL" || value === "recent"
               ? "text-muted-foreground"
               : "text-gray-900"

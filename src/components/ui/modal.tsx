@@ -44,7 +44,7 @@ export default function Modal({
             variant="outline"
             onClick={() => onOpenChange(false)}
           >
-            Cancel
+            Cancelar
           </Button>
 
           <Button

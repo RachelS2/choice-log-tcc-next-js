@@ -29,8 +29,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { ITEM_TYPE, itemInitials } from "@/lib/consumption-data";
-import { formatBRL, formatDate, type Consumption } from "@/lib/consumptions-mock";
+import { formatBRL, formatDate, type ConsumptionModel } from "@/lib/consumptions-mock";
 import { Stars } from "./stars";
+import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { ItemHero } from "@/components/ui/item-hero";
 
 function Row({
   label,
@@ -54,93 +56,94 @@ function NotProvided() {
 }
 
 export function ConsumptionDetails({
-  consumption,
+  data,
   onOpenChange,
   onEdit,
   onDelete,
 }: {
-  consumption: Consumption | null;
+  data: ReadConsumptionModel | null;
   onOpenChange: (open: boolean) => void;
-  onEdit: (c: Consumption) => void;
-  onDelete: (c: Consumption) => void;
+  onEdit: (c: ReadConsumptionModel) => void;
+  onDelete: (c: ReadConsumptionModel) => void;
 }) {
   const [confirming, setConfirming] = useState(false);
 
   return (
     <>
-      <Sheet open={!!consumption} onOpenChange={onOpenChange}>
+      <Sheet open={!!data} onOpenChange={onOpenChange}>
         <SheetContent
           side="right"
           className="w-full overflow-y-auto sm:max-w-xl"
         >
-          {consumption ? (
+          {data ? (
             <>
               <SheetHeader>
                 <SheetTitle>Detalhes do consumo</SheetTitle>
                 <SheetDescription>
-                  Registrado em {formatDate(consumption.createdAt)}
+                  Registrado em {formatDate(data.createdAt.toString())}
                 </SheetDescription>
               </SheetHeader>
 
               <div className="space-y-8 px-4 pb-8">
-                <section className="flex gap-4">
-                  {consumption.item.imageUrl ? (
+                <ItemHero item={data.item} />
+                {/* <section className="flex gap-4">
+                  {data.item.imageUrl ? (
                     <img
-                      src={consumption.item.imageUrl}
-                      alt={consumption.item.name}
+                      src={data.item.imageUrl}
+                      alt={data.item.friendlyName}
                       className="size-20 rounded-2xl object-cover"
                     />
                   ) : (
                     <div className="grid size-20 shrink-0 place-items-center rounded-2xl border border-primary/15 bg-primary/10 text-xl font-semibold text-primary">
-                      {itemInitials(consumption.item.name)}
+                      {itemInitials(data.item.friendlyName)}
                     </div>
                   )}
                   <div className="min-w-0">
                     <h3 className="text-lg font-semibold tracking-tight text-foreground">
-                      {consumption.item.name}
+                      {data.item.friendlyName}
                     </h3>
-                    {consumption.item.brand ? (
+                    {data.item.brand ? (
                       <p className="text-sm text-muted-foreground">
-                        {consumption.item.brand}
+                        {data.item.brand}
                       </p>
                     ) : null}
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-                        {consumption.item.typeId === ITEM_TYPE.SERVICE ? (
+                        {data.item.typeId === ITEM_TYPE.SERVICE ? (
                           <Sparkles className="size-3" />
                         ) : (
                           <Package className="size-3" />
                         )}
-                        {consumption.item.typeId === ITEM_TYPE.SERVICE
+                        {data.item.typeId === ITEM_TYPE.SERVICE
                           ? "Serviço"
                           : "Produto"}
                       </span>
                       <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-xs text-muted-foreground">
                         <Tag className="size-3" />
-                        {consumption.item.category}
+                        {data.item.category}
                       </span>
                     </div>
                   </div>
-                </section>
+                </section>  */}
 
                 <section>
                   <h4 className="mb-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                     Experiência
                   </h4>
                   <Row label="Avaliação">
-                    <Stars rating={consumption.rating} />
+                    <Stars rating={data.rating} />
                   </Row>
-                  <Row label="Preço">{formatBRL(consumption.price)}</Row>
+                  <Row label="Preço">{formatBRL(data.price)}</Row>
                   <Row label="Data do consumo">
                     <span className="inline-flex items-center gap-1.5">
                       <CalendarDays className="size-3.5 text-muted-foreground" />
-                      {formatDate(consumption.date)}
+                      {formatDate(data.date.toString())}
                     </span>
                   </Row>
                   <Row label="Compraria novamente">
-                    {consumption.wouldBuyAgain === null ? (
+                    {data.wouldBuyAgain === null ? (
                       <NotProvided />
-                    ) : consumption.wouldBuyAgain ? (
+                    ) : data.wouldBuyAgain ? (
                       <span className="inline-flex items-center gap-1.5 text-success">
                         <ThumbsUp className="size-3.5" /> Sim
                       </span>
@@ -151,28 +154,28 @@ export function ConsumptionDetails({
                     )}
                   </Row>
                   <Row label="Motivo do consumo">
-                    {consumption.reason.friendlyName}
+                    {data.reason.friendlyName}
                   </Row>
                   <Row label="Influência">
-                    {consumption.influence.friendlyName}
+                    {data.influence.friendlyName}
                   </Row>
-                  {consumption.address ? (
+                  {data.address ? (
                     <Row label="Endereço">
                       <span className="inline-flex items-center gap-1.5">
                         <MapPin className="size-3.5 text-muted-foreground" />
-                        {consumption.address}
+                        {data.address}
                       </span>
                     </Row>
                   ) : null}
                 </section>
 
-                {consumption.negativeAspects.length > 0 ? (
+                {data.negativeAspects.length > 0 ? (
                   <section>
                     <h4 className="mb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                       Aspectos negativos
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                      {consumption.negativeAspects.map((a) => (
+                      {data.negativeAspects.map((a) => (
                         <span
                           key={a.id}
                           className="rounded-full border border-destructive/25 bg-destructive/10 px-3 py-1 text-xs font-medium text-destructive"
@@ -184,13 +187,13 @@ export function ConsumptionDetails({
                   </section>
                 ) : null}
 
-                {consumption.details ? (
+                {data.details ? (
                   <section>
                     <h4 className="mb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                       Observações
                     </h4>
                     <p className="rounded-xl bg-muted/60 p-4 text-sm text-foreground">
-                      {consumption.details}
+                      {data.details}
                     </p>
                   </section>
                 ) : null}
@@ -198,7 +201,7 @@ export function ConsumptionDetails({
                 <div className="flex flex-col gap-2 sm:flex-row">
                   <Button
                     className="h-11 flex-1"
-                    onClick={() => onEdit(consumption)}
+                    onClick={() => onEdit(data)}
                   >
                     <Pencil className="size-4" />
                     Editar consumo
@@ -231,7 +234,7 @@ export function ConsumptionDetails({
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                if (consumption) onDelete(consumption);
+                if (data) onDelete(data);
                 setConfirming(false);
               }}
             >

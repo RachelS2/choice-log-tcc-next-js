@@ -178,7 +178,6 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
     if (wouldBuyAgain === null)
       throw Error("Would Buy Again should have been selected!");
 
-    // Payload shaped for the Consumption model (no backend wired yet).
     const payload: CreateConsumptionModel = {
       itemId,
       date,

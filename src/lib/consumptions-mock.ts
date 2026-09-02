@@ -1,4 +1,4 @@
-// Mock data shaped exactly like the `Consumption` model and its relations.
+// Mock data shaped exactly like the `ConsumptionModel` model and its relations.
 // Swap `listConsumptions` for a real query later — the UI only depends on
 // the types below.
 
@@ -13,7 +13,7 @@ import {
     type NegativeAspect,
 } from "./consumption-data";
 
-export interface Consumption {
+export interface ConsumptionModel {
     id: string;
     userId: string;
     itemId: string;
@@ -76,10 +76,10 @@ function rng(seed: number) {
     };
 }
 
-function buildConsumptions(total: number): Consumption[] {
+function buildConsumptions(total: number): ConsumptionModel[] {
     const rand = rng(20260829);
     const today = new Date("2026-08-29T12:00:00Z");
-    const list: Consumption[] = [];
+    const list: ConsumptionModel[] = [];
 
     for (let i = 0; i < total; i += 1) {
         const item = catalog[Math.floor(rand() * catalog.length)]!;

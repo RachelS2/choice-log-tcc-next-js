@@ -1,15 +1,20 @@
-import type { Consumption } from "@/lib/consumptions-mock";
-import { ConsumptionCard, ConsumptionCardSkeleton } from "./consumption-card";
+import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import {
+  ConsumptionCard,
+  ConsumptionCardSkeleton
+} from "./consumption-card";
 
+export interface ConsumptionListProps {
+  consumptions: ReadConsumptionModel[];
+  loading?: boolean;
+  onOpen: (c: ReadConsumptionModel) => void;
+}
 export function ConsumptionList({
   consumptions,
   loading,
   onOpen,
-}: {
-  consumptions: Consumption[];
-  loading?: boolean;
-  onOpen: (c: Consumption) => void;
-}) {
+}: ConsumptionListProps) {
+  console.log("Loading: " + loading);
   if (loading) {
     return (
       <div className="grid gap-4 xl:grid-cols-2">
@@ -23,7 +28,7 @@ export function ConsumptionList({
   return (
     <div className="grid gap-4 xl:grid-cols-2">
       {consumptions.map((c) => (
-        <ConsumptionCard key={c.id} consumption={c} onOpen={onOpen} />
+        <ConsumptionCard key={c.id} consumptionAndItem={c} onOpen={onOpen} />
       ))}
     </div>
   );

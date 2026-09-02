@@ -122,7 +122,7 @@ model Consumption {
   userId          String
   itemId          String
   wishListItemId  String?
-  wouldBuyAgain   Boolean?
+  wouldBuyAgain   Boolean
   price           Float
   rating          Float
   details         String?                     @db.VarChar(300)

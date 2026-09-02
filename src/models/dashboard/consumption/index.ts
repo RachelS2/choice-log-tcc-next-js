@@ -1,3 +1,4 @@
+import { BasicItemModel } from "../items";
 
 export interface ConsumptionInfluenceModel {
     systemName: string;
@@ -12,33 +13,30 @@ export interface NegativeAspectModel extends ConsumptionInfluenceModel {
 export interface ConsumptionReasonModel extends NegativeAspectModel {
 }
 
+interface ConsumptionBaseModel {
 
-export interface CreateConsumptionModel {
-    itemId: string;
     date: Date;
     address: string | null;
     rating: number;
     details: string | null;
-    reasonId: number;
-    influenceId: number;
     price: number;
     wouldBuyAgain: boolean;
+}
+
+export interface CreateConsumptionModel extends ConsumptionBaseModel {
+    itemId: string;
+    reasonId: number;
+    influenceId: number;
     negativeAspects: number[]
 }
 
-export interface ConsumptionModel {
+export interface ReadConsumptionModel extends ConsumptionBaseModel {
+    item: BasicItemModel;
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    userId: string;
-    date: Date;
-    wouldBuyAgain: boolean | null;
-    price: number;
-    rating: number;
-    details: string | null;
-    address: string | null;
-    itemId: string;
     wishListItemId: string | null;
-    influenceId: number;
-    reasonId: number;
+    reason: ConsumptionReasonModel;
+    influence: ConsumptionInfluenceModel;
+    negativeAspects: NegativeAspectModel[];
 }

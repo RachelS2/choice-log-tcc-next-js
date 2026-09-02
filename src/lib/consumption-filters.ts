@@ -1,4 +1,4 @@
-import type { Consumption } from "./consumptions-mock";
+import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 
 export type TypeFilter = "all" | "product" | "service";
 export type RatingFilter = "all" | "5" | "4" | "3" | "2" | "1";
@@ -81,7 +81,7 @@ function periodStart(period: PeriodFilter, now: Date) {
 }
 
 export function filterConsumptions(
-    data: Consumption[],
+    data: ReadConsumptionModel[],
     f: ConsumptionFilterState,
     now = new Date(),
 ) {
@@ -92,14 +92,13 @@ export function filterConsumptions(
 
     return data.filter((c) => {
         if (q) {
-            const hay = `${c.item.name} ${c.item.brand ?? ""}`.toLowerCase();
+            const hay = `${c.item.friendlyName} ${c.item.brand ?? ""}`.toLowerCase();
             if (!hay.includes(q)) return false;
         }
         if (f.type !== "all") {
-            const wanted = f.type === "product" ? 1 : 2;
-            if (c.item.typeId !== wanted) return false;
+            if (c.item.type.toLowerCase() !== f.type) return false;
         }
-        if (f.category !== "all" && c.item.category !== f.category) return false;
+        if (f.category !== "all" && c.item.categoryName !== f.category) return false;
         if (f.rating !== "all" && c.rating < Number(f.rating)) return false;
 
         const date = new Date(c.date);
@@ -111,36 +110,37 @@ export function filterConsumptions(
         if (f.buyAgain === "no" && c.wouldBuyAgain !== false) return false;
         if (f.buyAgain === "unknown" && c.wouldBuyAgain !== null) return false;
 
-        if (f.reasonId !== "all" && String(c.reasonId) !== f.reasonId) return false;
-        if (f.influenceId !== "all" && String(c.influenceId) !== f.influenceId)
+        if (f.reasonId !== "all" && String(c.reason.id) !== f.reasonId) return false;
+        if (f.influenceId !== "all" && String(c.influence.id) !== f.influenceId)
             return false;
 
         return true;
     });
 }
 
-export function sortConsumptions(data: Consumption[], sort: SortOption) {
+export function sortConsumptions(data: ReadConsumptionModel[], sort: SortOption) {
     const out = [...data];
-    out.sort((a, b) => {
+    out.sort((c1, c2) => {
+
         switch (sort) {
             case "oldest":
-                return +new Date(a.date) - +new Date(b.date);
+                return +new Date(c1.date) - +new Date(c2.date);
             case "rating_desc":
-                return b.rating - a.rating;
+                return c1.rating - c2.rating;
             case "rating_asc":
-                return a.rating - b.rating;
+                return c1.rating - c2.rating;
             case "price_desc":
-                return b.price - a.price;
+                return c1.price - c2.price;
             case "price_asc":
-                return a.price - b.price;
+                return c1.price - c2.price;
             default:
-                return +new Date(b.date) - +new Date(a.date);
+                return +new Date(c1.date) - +new Date(c2.date);
         }
     });
     return out;
 }
 
-export function summarize(data: Consumption[]) {
+export function summarize(data: ReadConsumptionModel[]) {
     const total = data.length;
     const avg = total
         ? data.reduce((s, c) => s + c.rating, 0) / total

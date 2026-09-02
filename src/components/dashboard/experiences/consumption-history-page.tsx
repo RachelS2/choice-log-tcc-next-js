@@ -16,16 +16,17 @@ import {
     type ConsumptionFilterState,
     type SortOption,
 } from "@/lib/consumption-filters";
-import { mockConsumptions, type Consumption } from "@/lib/consumptions-mock";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 
 
 const PAGE_SIZE = 12;
 
-export default function ConsumptionsHistoryPage() {
+export default function ConsumptionsHistoryPage({ consumptionsWithItems }: { consumptionsWithItems: ReadConsumptionModel[] }) {
 
-    const [data, setData] = useState<Consumption[]>([]);
+    // const onlyConsumptions = consumptionsWithItems.map((c) => c.consumption);
+    const [consumptions, setConsumptions] = useState<ReadConsumptionModel[]>(consumptionsWithItems);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [reloadKey, setReloadKey] = useState(0);
@@ -35,27 +36,11 @@ export default function ConsumptionsHistoryPage() {
     const [expanded, setExpanded] = useState(false);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
     const [page, setPage] = useState(1);
-    const [selected, setSelected] = useState<Consumption | null>(null);
-
-    // Placeholder para a futura consulta ao backend (Consumption + relações).
-    useEffect(() => {
-        let alive = true;
-        setLoading(true);
-        setError(false);
-        const t = setTimeout(() => {
-            if (!alive) return;
-            setData(mockConsumptions);
-            setLoading(false);
-        }, 550);
-        return () => {
-            alive = false;
-            clearTimeout(t);
-        };
-    }, [reloadKey]);
+    const [selected, setSelected] = useState<ReadConsumptionModel | null>(null);
 
     const filtered = useMemo(
-        () => sortConsumptions(filterConsumptions(data, filters), sort),
-        [data, filters, sort],
+        () => sortConsumptions(filterConsumptions(consumptions, filters), sort),
+        [consumptions, filters, sort],
     );
     const stats = useMemo(() => summarize(filtered), [filtered]);
 
@@ -76,7 +61,7 @@ export default function ConsumptionsHistoryPage() {
         setPage(1);
     }
 
-    const hasAny = data.length > 0;
+    const hasAny = consumptions.length > 0;
 
     return (
         <main
@@ -165,6 +150,7 @@ export default function ConsumptionsHistoryPage() {
                             />
                             <ConsumptionList
                                 consumptions={visible}
+                                loading={loading}
                                 onOpen={(c) => setSelected(c)}
                             />
                             <Pagination
@@ -186,22 +172,22 @@ export default function ConsumptionsHistoryPage() {
                 {!loading && !error && hasAny ? (
                     <p className="mt-8 flex items-center justify-center gap-2 text-xs text-muted-foreground">
                         <ClipboardList className="size-3.5" />
-                        Histórico pessoal — somente você vê estes registros.
+                        Histórico de Consumo — somente você vê estes registros.
                     </p>
                 ) : null}
             </div>
 
             <ConsumptionDetails
-                consumption={selected}
+                data={selected}
                 onOpenChange={(open) => {
                     if (!open) setSelected(null);
                 }}
                 onEdit={() => {
                     setSelected(null);
-                    redirect("/new-experience");
+                    redirect("/dashboard/experiences/new-experience");
                 }}
                 onDelete={(c) => {
-                    setData((prev) => prev.filter((x) => x.id !== c.id));
+                    setConsumptions((prev) => prev.filter((x) => x.id !== c.id));
                     setSelected(null);
                 }}
             />

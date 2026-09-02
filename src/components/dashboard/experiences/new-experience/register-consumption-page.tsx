@@ -35,6 +35,7 @@ import { ConsumptionInfluenceModel, ConsumptionReasonModel, CreateConsumptionMod
 import EmptyDataState from "@/components/ui/empty-state";
 import CreateUpdateItemModal from "../../items/create-item-modal";
 import { toast } from "sonner";
+import { PageTitle } from "@/components/ui/pages-title";
 
 interface Errors {
   item?: string;
@@ -223,34 +224,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
       style={{ background: "var(--gradient-subtle)" }}
     >
       <div className="mx-auto w-full max-w-3xl">
-        <header className="relative mb-10 flex flex-col items-center text-center sm:mb-14">
-          <div className="mb-4 flex items-center gap-3">
-            <span className="h-px w-8 bg-blue-900 " />
-            <span className="text-[10px] font-semibold tracking-[0.24em] text-blue-900 uppercase">
-              Diário de consumo
-            </span>
-            <span className="h-px w-8 bg-blue-900" />
-          </div>
-          <h1
-            className="
-        font-[family-name:var(--font-inter)]
-        text-2xl
-        font-semibold
-        leading-tight
-        tracking-[-0.02em]
-        text-blue-800
-        sm:text-4xl
-    "
-          >
-            Registrar{" "}
-            <span className="text-blue-900/90">
-              Experiência
-            </span>
-          </h1>
-          <p className="mt-5 max-w-md text-base leading-7 text-blue-900 sm:text-base">
-            Uma breve reflexão sobre o que você consumiu, como se sentiu e por quê.
-          </p>
-        </header>
+        <PageTitle title="Diário de consumo" subtitle="Registrar Experiência" description="Uma breve reflexão sobre o que você consumiu, como se sentiu e por quê." />
 
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
           {selectedItem ? (

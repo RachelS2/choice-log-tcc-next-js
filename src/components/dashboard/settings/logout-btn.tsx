@@ -36,16 +36,16 @@ export default function LogoutButton() {
         className="w-24 h-9 text-blue-500 bg-white/80 text-md shadow-md hover:text-blue-600"
         onClick={() => setOpen(true)}
       >
-        Logout
+        Sair
       </Button>
 
       <Modal
         open={open}
         onOpenChange={setOpen}
         onConfirm={handleLogout}
-        dialogTitle="Confirm Logout"
-        dialogDescription="Are you sure you want to logout?"
-        buttonText="Logout"
+        dialogTitle="Encerrar sessão"
+        dialogDescription="Tem certeza que deseja encerrar sua sessão?"
+        buttonText="Sim"
       />
     </>
   );

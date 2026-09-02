@@ -1,3 +1,5 @@
+import { PageTitle } from "@/components/ui/pages-title";
+
 export default function ProfileSettingsHeader() {
     return (
         <div>

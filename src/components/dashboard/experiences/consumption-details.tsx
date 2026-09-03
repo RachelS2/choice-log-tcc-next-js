@@ -28,8 +28,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { ITEM_TYPE, itemInitials } from "@/lib/consumption-data";
-import { formatBRL, formatDate, type ConsumptionModel } from "@/lib/consumptions-mock";
+import { formatBRLFromDigits, formatDate } from "@/lib/utils";
 import { Stars } from "./stars";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { ItemHero } from "@/components/ui/item-hero";
@@ -133,7 +132,7 @@ export function ConsumptionDetails({
                   <Row label="Avaliação">
                     <Stars rating={data.rating} />
                   </Row>
-                  <Row label="Preço">{formatBRL(data.price)}</Row>
+                  <Row label="Preço">{formatBRLFromDigits(data.price.toString())}</Row>
                   <Row label="Data do consumo">
                     <span className="inline-flex items-center gap-1.5">
                       <CalendarDays className="size-3.5 text-muted-foreground" />

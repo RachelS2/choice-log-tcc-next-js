@@ -13,13 +13,14 @@ import {
   consumptionInfluences,
   consumptionReasons,
 } from "@/lib/consumption-data";
-import { consumptionCategories } from "@/lib/consumptions-mock";
 import {
   activeFilterCount,
   sortLabels,
   type ConsumptionFilterState,
   type SortOption,
 } from "@/lib/consumption-filters";
+import { CategoryFilter, ConsumptionPeriodFilter, ItemTypeFilter, RatingFilter, WouldBuyAgainFilter } from "@/components/ui/choicelog-filters";
+import { CategoryModel } from "@/models/dashboard/items";
 
 function Field({
   label,
@@ -37,7 +38,6 @@ function Field({
     </div>
   );
 }
-
 export function ConsumptionFilters({
   filters,
   onChange,
@@ -46,6 +46,7 @@ export function ConsumptionFilters({
   onSortChange,
   expanded,
   onToggleExpanded,
+  categories,
 }: {
   filters: ConsumptionFilterState;
   onChange: (patch: Partial<ConsumptionFilterState>) => void;
@@ -54,6 +55,7 @@ export function ConsumptionFilters({
   onSortChange: (s: SortOption) => void;
   expanded: boolean;
   onToggleExpanded: () => void;
+  categories: CategoryModel[];
 }) {
   const count = activeFilterCount(filters);
 
@@ -63,10 +65,10 @@ export function ConsumptionFilters({
       label: `Busca: "${filters.search.trim()}"`,
       clear: () => onChange({ search: "" }),
     });
-  if (filters.type !== "all")
+  if (filters.type !== "ALL")
     chips.push({
-      label: filters.type === "product" ? "Produtos" : "Serviços",
-      clear: () => onChange({ type: "all" }),
+      label: filters.type === "PRODUCT" ? "Produtos" : "Serviços",
+      clear: () => onChange({ type: "ALL" }),
     });
   if (filters.category !== "all")
     chips.push({
@@ -87,34 +89,31 @@ export function ConsumptionFilters({
         filters.period === "custom"
           ? "Período personalizado"
           : {
-              "7d": "Últimos 7 dias",
-              "30d": "Últimos 30 dias",
-              "6m": "Últimos 6 meses",
-              "1y": "Último ano",
-            }[filters.period]!,
+            "7d": "Últimos 7 dias",
+            "30d": "Últimos 30 dias",
+            "6m": "Últimos 6 meses",
+            "1y": "Último ano",
+          }[filters.period]!,
       clear: () => onChange({ period: "all", from: "", to: "" }),
     });
   if (filters.buyAgain !== "all")
     chips.push({
-      label: `Compraria novamente: ${
-        { yes: "Sim", no: "Não", unknown: "Não informado" }[filters.buyAgain]
-      }`,
+      label: `Compraria novamente: ${{ yes: "Sim", no: "Não", unknown: "Não informado" }[filters.buyAgain]
+        }`,
       clear: () => onChange({ buyAgain: "all" }),
     });
   if (filters.reasonId !== "all")
     chips.push({
-      label: `Motivo: ${
-        consumptionReasons.find((r) => String(r.id) === filters.reasonId)
-          ?.friendlyName ?? ""
-      }`,
+      label: `Motivo: ${consumptionReasons.find((r) => String(r.id) === filters.reasonId)
+        ?.friendlyName ?? ""
+        }`,
       clear: () => onChange({ reasonId: "all" }),
     });
   if (filters.influenceId !== "all")
     chips.push({
-      label: `Influência: ${
-        consumptionInfluences.find((i) => String(i.id) === filters.influenceId)
-          ?.friendlyName ?? ""
-      }`,
+      label: `Influência: ${consumptionInfluences.find((i) => String(i.id) === filters.influenceId)
+        ?.friendlyName ?? ""
+        }`,
       clear: () => onChange({ influenceId: "all" }),
     });
 
@@ -174,78 +173,14 @@ export function ConsumptionFilters({
 
       {expanded ? (
         <div className="mt-4 grid grid-cols-1 gap-4 border-t border-border pt-4 duration-200 animate-in fade-in sm:grid-cols-2 lg:grid-cols-4">
-          <Field label="Tipo">
-            <Select
-              value={filters.type}
-              onValueChange={(v) => onChange({ type: v as never })}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="product">Produtos</SelectItem>
-                <SelectItem value="service">Serviços</SelectItem>
-              </SelectContent>
-            </Select>
-          </Field>
+          <ItemTypeFilter typeFilter={filters.type} onTypeFilterChange={(v) => onChange({ type: v })} />
 
-          <Field label="Categoria">
-            <Select
-              value={filters.category}
-              onValueChange={(v) => onChange({ category: v })}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas</SelectItem>
-                {consumptionCategories.map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Field>
+          <CategoryFilter categoryFilter={filters.category} onCategoryFilterChange={(v) => onChange({ category: v })} categories={categories} />
 
-          <Field label="Avaliação">
-            <Select
-              value={filters.rating}
-              onValueChange={(v) => onChange({ rating: v as never })}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas</SelectItem>
-                <SelectItem value="5">5 estrelas</SelectItem>
-                <SelectItem value="4">4 estrelas ou mais</SelectItem>
-                <SelectItem value="3">3 estrelas ou mais</SelectItem>
-                <SelectItem value="2">2 estrelas ou mais</SelectItem>
-                <SelectItem value="1">1 estrela ou mais</SelectItem>
-              </SelectContent>
-            </Select>
-          </Field>
+          <RatingFilter ratingFilter={filters.rating} onRatingFilterChange={(v) => onChange({ rating: v as never })} />
 
-          <Field label="Período">
-            <Select
-              value={filters.period}
-              onValueChange={(v) => onChange({ period: v as never })}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="7d">Últimos 7 dias</SelectItem>
-                <SelectItem value="30d">Últimos 30 dias</SelectItem>
-                <SelectItem value="6m">Últimos 6 meses</SelectItem>
-                <SelectItem value="1y">Último ano</SelectItem>
-                <SelectItem value="custom">Personalizado</SelectItem>
-              </SelectContent>
-            </Select>
-          </Field>
+          <ConsumptionPeriodFilter periodFilter={filters.period} onPeriodFilterChange={(v) => onChange({ period: v as never })} />
+
 
           {filters.period === "custom" ? (
             <>
@@ -266,22 +201,8 @@ export function ConsumptionFilters({
             </>
           ) : null}
 
-          <Field label="Compraria novamente?">
-            <Select
-              value={filters.buyAgain}
-              onValueChange={(v) => onChange({ buyAgain: v as never })}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="yes">Sim</SelectItem>
-                <SelectItem value="no">Não</SelectItem>
-                <SelectItem value="unknown">Não informado</SelectItem>
-              </SelectContent>
-            </Select>
-          </Field>
+          <WouldBuyAgainFilter buyAgainFilter={filters.buyAgain} onBuyAgainFilterChange={(v) => onChange({ buyAgain: v as never })} />
+
 
           <Field label="Motivo do consumo">
             <Select

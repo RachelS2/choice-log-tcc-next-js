@@ -8,7 +8,7 @@ interface CatalogHeaderProps {
 }
 export default function CatalogHeader({ onNewItem, newItemBtnDisabled }: CatalogHeaderProps) {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-4 mx-auto w-full max-w-7xl sm:flex-row sm:items-center sm:justify-between">
       <div className="flex flex-col">
         <div className="mb-3 flex items-center gap-2.5">
           <span className="h-px w-6 bg-blue-900/70" />

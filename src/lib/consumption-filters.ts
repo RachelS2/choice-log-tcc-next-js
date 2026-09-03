@@ -1,6 +1,6 @@
+import { TypeFilter } from "@/app/dashboard/catalog/items/page";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 
-export type TypeFilter = "all" | "product" | "service";
 export type RatingFilter = "all" | "5" | "4" | "3" | "2" | "1";
 export type PeriodFilter = "all" | "7d" | "30d" | "6m" | "1y" | "custom";
 export type BuyAgainFilter = "all" | "yes" | "no" | "unknown";
@@ -27,7 +27,7 @@ export interface ConsumptionFilterState {
 
 export const defaultFilters: ConsumptionFilterState = {
     search: "",
-    type: "all",
+    type: "ALL",
     category: "all",
     rating: "all",
     period: "all",
@@ -50,7 +50,7 @@ export const sortLabels: Record<SortOption, string> = {
 export function activeFilterCount(f: ConsumptionFilterState) {
     let n = 0;
     if (f.search.trim()) n += 1;
-    if (f.type !== "all") n += 1;
+    if (f.type !== "ALL") n += 1;
     if (f.category !== "all") n += 1;
     if (f.rating !== "all") n += 1;
     if (f.period !== "all") n += 1;
@@ -95,8 +95,8 @@ export function filterConsumptions(
             const hay = `${c.item.friendlyName} ${c.item.brand ?? ""}`.toLowerCase();
             if (!hay.includes(q)) return false;
         }
-        if (f.type !== "all") {
-            if (c.item.type.toLowerCase() !== f.type) return false;
+        if (f.type !== "ALL") {
+            if (c.item.type.toUpperCase() !== f.type) return false;
         }
         if (f.category !== "all" && c.item.categoryName !== f.category) return false;
         if (f.rating !== "all" && c.rating < Number(f.rating)) return false;

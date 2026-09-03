@@ -19,15 +19,15 @@ import {
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { CategoryModel } from "@/models/dashboard/items";
 
 
 const PAGE_SIZE = 12;
 
-export default function ConsumptionsHistoryPage({ consumptionsWithItems }: { consumptionsWithItems: ReadConsumptionModel[] }) {
+export default function ConsumptionsHistoryPage({ consumptionsWithItems, categories }: { consumptionsWithItems: ReadConsumptionModel[]; categories: CategoryModel[] }) {
 
     // const onlyConsumptions = consumptionsWithItems.map((c) => c.consumption);
     const [consumptions, setConsumptions] = useState<ReadConsumptionModel[]>(consumptionsWithItems);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [reloadKey, setReloadKey] = useState(0);
 
@@ -97,7 +97,10 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems }: { con
                             setPage(1);
                         }}
                         expanded={expanded}
-                        onToggleExpanded={() => setExpanded((v) => !v)}
+                        categories={categories}
+                        onToggleExpanded={() => setExpanded((v) => !v)
+
+                        }
                     />
 
                     {error ? (
@@ -111,11 +114,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems }: { con
                                 </Button>
                             }
                         />
-                    ) : loading ? (
-                        <>
-                            <div className="h-12 animate-pulse rounded-xl border border-border bg-card" />
-                            <ConsumptionList consumptions={[]} loading onOpen={() => { }} />
-                        </>
+
                     ) : !hasAny ? (
                         <EmptyState
                             icon={PackageOpen}
@@ -150,7 +149,6 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems }: { con
                             />
                             <ConsumptionList
                                 consumptions={visible}
-                                loading={loading}
                                 onOpen={(c) => setSelected(c)}
                             />
                             <Pagination
@@ -169,7 +167,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems }: { con
                     )}
                 </div>
 
-                {!loading && !error && hasAny ? (
+                {!error && hasAny ? (
                     <p className="mt-8 flex items-center justify-center gap-2 text-xs text-muted-foreground">
                         <ClipboardList className="size-3.5" />
                         Histórico de Consumo — somente você vê estes registros.

@@ -1,13 +1,9 @@
 import {
     CalendarDays,
-    ChevronRight,
-    Package,
-    Sparkles,
     ThumbsDown,
     ThumbsUp,
 } from "lucide-react";
-import { ITEM_TYPE, itemInitials } from "@/lib/consumption-data";
-import { formatBRL, formatDate } from "@/lib/consumptions-mock";
+import { formatBRLFromDigits, formatDate } from "@/lib/utils";
 import { Stars } from "./stars";
 import { ItemHero } from "@/components/ui/item-hero";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
@@ -40,7 +36,7 @@ export function ConsumptionCard({
                 <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
                     <Stars rating={consumption.rating} />
                     <span className="text-sm font-medium text-foreground">
-                        {formatBRL(consumption.price)}
+                        {formatBRLFromDigits(consumption.price.toString())}
                     </span>
                     <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                         <CalendarDays className="size-3.5" />

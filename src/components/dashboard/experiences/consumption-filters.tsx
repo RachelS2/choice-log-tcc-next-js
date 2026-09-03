@@ -19,7 +19,7 @@ import {
   type ConsumptionFilterState,
   type SortOption,
 } from "@/lib/consumption-filters";
-import { CategoryFilter, ConsumptionPeriodFilter, ItemTypeFilter, RatingFilter, WouldBuyAgainFilter } from "@/components/ui/choicelog-filters";
+import { CategoryFilter, ConsumptionPeriodFilter, ConsumptionReasonFilter, ItemTypeFilter, RatingFilter, WouldBuyAgainFilter } from "@/components/ui/choicelog-filters";
 import { CategoryModel } from "@/models/dashboard/items";
 
 function Field({
@@ -203,25 +203,8 @@ export function ConsumptionFilters({
 
           <WouldBuyAgainFilter buyAgainFilter={filters.buyAgain} onBuyAgainFilterChange={(v) => onChange({ buyAgain: v as never })} />
 
+          <ConsumptionReasonFilter reasonFilter={filters.reasonId} onReasonFilterChange={(v) => onChange({ reasonId: v })} consumptionReasons={consumptionReasons} />
 
-          <Field label="Motivo do consumo">
-            <Select
-              value={filters.reasonId}
-              onValueChange={(v) => onChange({ reasonId: v })}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                {consumptionReasons.map((r) => (
-                  <SelectItem key={r.id} value={String(r.id)}>
-                    {r.friendlyName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Field>
 
           <Field label="Influência">
             <Select

@@ -91,23 +91,10 @@ export function ConsumptionReasonFilter({ reasonFilter, onReasonFilterChange, co
   consumptionReasons: ConsumptionReason[]
 }) {
   return (
-    <Select
-      value={reasonFilter}
-      onValueChange={onReasonFilterChange}
-    >
-      <FilterSelect label="Motivo do consumo" value={reasonFilter} />
-      <SelectTrigger className="w-full">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="all">Todos</SelectItem>
-        {consumptionReasons.map((r) => (
-          <SelectItem key={r.id} value={String(r.id)}>
-            {r.friendlyName}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+
+    <FilterSelect label="Motivo do consumo" onChange={onReasonFilterChange} placeholder="Selecione um motivo..."
+      value={reasonFilter} options={consumptionReasons.map((r) => ({ value: String(r.id), label: r.friendlyName }))} />
+
   )
 }
 export function WouldBuyAgainFilter({ buyAgainFilter, onBuyAgainFilterChange }: { buyAgainFilter: string; onBuyAgainFilterChange: (value: string) => void; }) {
@@ -122,7 +109,7 @@ export function WouldBuyAgainFilter({ buyAgainFilter, onBuyAgainFilterChange }: 
         { value: "yes", label: "Sim" },
         { value: "no", label: "Não" },
         { value: "unknown", label: "Não informado" },
-      ]}
+      ]}/>
   )
 }
 export function ConsumptionPeriodFilter({ periodFilter, onPeriodFilterChange }: { periodFilter: string; onPeriodFilterChange: (value: string) => void; }) {
@@ -215,7 +202,7 @@ function FilterSelect({
           </SelectTrigger>
 
           <SelectContent sideOffset={1} position="popper"
-            className="max-h-100 overflow-y-auto">
+            className="max-h-80 overflow-y-auto">
             {options.map((option) => {
               const showGroupHeader =
                 option.type && option.type !== previousType;

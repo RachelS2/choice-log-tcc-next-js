@@ -45,7 +45,6 @@ export function PageTitle({
             className={cn(
                 `
                 font-[family-name:var(--font-inter)]
-                text-2xl
                 font-semibold
                 leading-tight
                 tracking-[-0.02em]

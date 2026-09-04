@@ -11,8 +11,8 @@ import { toast } from 'sonner';
 import { fetchCategoriesController } from '@/lib/controller/category-controller';
 import CatalogLoadingState from '@/components/dashboard/catalog/catalog-loading-state';
 import { useGetCategories } from '@/hooks/use-categories';
+import { SortItemsOptions } from '@/models/dashboard/consumption';
 
-export type SortOption = 'recent' | 'last_consumed' | 'most_experiences' | 'alphabetical' | 'most_spent';
 export type TypeFilter = 'ALL' | ItemTypeEnum;
 
 export default function CatalogPage() {
@@ -20,7 +20,7 @@ export default function CatalogPage() {
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('ALL');
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [brandFilter, setBrandFilter] = useState('ALL');
-  const [sort, setSort] = useState<SortOption>('recent');
+  const [sort, setSort] = useState<SortItemsOptions>('recent');
   const [catalogItems, setCatalogItems] = useState<CreateUpdateItemModel[]>([]);
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [modalOpen, setModalOpen] = useState(false);

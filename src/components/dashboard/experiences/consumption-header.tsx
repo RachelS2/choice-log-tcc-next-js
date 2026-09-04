@@ -13,7 +13,7 @@ export default function ConsumptionHeader() {
                     lineAfter
                 />
                 <PageTitle title="Suas Experiências" className="justify-center" />
-                <PageSubtitle subtitle="Analise e gerencie seu histórico de consumo." className="text-center" />
+                <PageSubtitle subtitle="Analise e gerencie seu histórico de consumo." className="justify-center" />
                 
             </div>
 

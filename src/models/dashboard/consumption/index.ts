@@ -40,3 +40,13 @@ export interface ReadConsumptionModel extends ConsumptionBaseModel {
     influence: ConsumptionInfluenceModel;
     negativeAspects: NegativeAspectModel[];
 }
+
+export type SortItemsOptions = 'recent' | 'last_consumed' | 'most_experiences' | 'alphabetical' | 'most_spent';
+
+export type SortConsumptionsOptions =
+    | "recent"
+    | "oldest"
+    | "rating_desc"
+    | "rating_asc"
+    | "most_spent"
+    | "least_spent";

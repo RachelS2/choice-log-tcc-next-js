@@ -21,7 +21,7 @@ export function FormSection({
             className="
       group relative overflow-hidden
       grid grid-cols-1 md:grid-cols-[280px_1fr]
-      gap-6
+      gap-6 bg-card
       rounded-2xl
       border border-blue-100
       p-6

@@ -1,7 +1,8 @@
 
-import { SortOption, TypeFilter } from '@/app/dashboard/catalog/items/page';
+import { TypeFilter } from '@/app/dashboard/catalog/items/page';
 import { CategoryModel } from '@/models/dashboard/items';
-import { BrandFilter, CategoryFilter, ItemTypeFilter, OrderByFilter, SearchFilter } from '@/components/ui/choicelog-filters';
+import { BrandFilter, CategoryFilter, ItemTypeFilter, ItensOrderByFilter, SearchFilter } from '@/components/ui/choicelog-filters';
+import { SortItemsOptions } from '@/models/dashboard/consumption';
 
 interface CatalogFiltersProps {
   search: string;
@@ -12,8 +13,8 @@ interface CatalogFiltersProps {
   onCategoryFilterChange: (value: string) => void;
   brandFilter: string;
   onBrandFilterChange: (value: string) => void;
-  sort: SortOption;
-  onSortChange: (value: SortOption) => void;
+  sort: SortItemsOptions;
+  onSortChange: (value: SortItemsOptions) => void;
   categories: CategoryModel[];
   brands: string[];
 }
@@ -35,7 +36,7 @@ export default function CatalogFilters({
   return (
     <div className="rounded-2xl 0 p-4">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-        
+
         <SearchFilter search={search} onSearchChange={onSearchChange} />
 
         <ItemTypeFilter typeFilter={typeFilter} onTypeFilterChange={(v) => onTypeFilterChange(v as TypeFilter)} />
@@ -44,8 +45,7 @@ export default function CatalogFilters({
 
         <BrandFilter brandFilter={brandFilter} onBrandFilterChange={onBrandFilterChange} brands={brands} />
 
-        <OrderByFilter sort={sort} onSortChange={onSortChange} />
-        
+        <ItensOrderByFilter sort={sort} onSortChange={onSortChange} />
       </div>
     </div >
   );

@@ -1,16 +1,10 @@
 import { TypeFilter } from "@/app/dashboard/catalog/items/page";
-import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { ReadConsumptionModel, SortConsumptionsOptions, SortItemsOptions } from "@/models/dashboard/consumption";
 
 export type RatingFilter = "all" | "5" | "4" | "3" | "2" | "1";
 export type PeriodFilter = "all" | "7d" | "30d" | "6m" | "1y" | "custom";
 export type BuyAgainFilter = "all" | "yes" | "no" | "unknown";
-export type SortOption =
-    | "recent"
-    | "oldest"
-    | "rating_desc"
-    | "rating_asc"
-    | "price_desc"
-    | "price_asc";
+
 
 export interface ConsumptionFilterState {
     search: string;
@@ -38,13 +32,13 @@ export const defaultFilters: ConsumptionFilterState = {
     influenceId: "all",
 };
 
-export const sortLabels: Record<SortOption, string> = {
+export const sortLabels: Record<SortConsumptionsOptions, string> = {
     recent: "Mais recentes",
     oldest: "Mais antigos",
     rating_desc: "Maior avaliação",
     rating_asc: "Menor avaliação",
-    price_desc: "Maior preço",
-    price_asc: "Menor preço",
+    most_spent: "Maior preço",
+    least_spent: "Menor preço",
 };
 
 export function activeFilterCount(f: ConsumptionFilterState) {
@@ -118,7 +112,7 @@ export function filterConsumptions(
     });
 }
 
-export function sortConsumptions(data: ReadConsumptionModel[], sort: SortOption) {
+export function sortConsumptions(data: ReadConsumptionModel[], sort: SortConsumptionsOptions) {
     const out = [...data];
     out.sort((c1, c2) => {
 
@@ -129,9 +123,9 @@ export function sortConsumptions(data: ReadConsumptionModel[], sort: SortOption)
                 return c1.rating - c2.rating;
             case "rating_asc":
                 return c1.rating - c2.rating;
-            case "price_desc":
+            case "most_spent":
                 return c1.price - c2.price;
-            case "price_asc":
+            case "least_spent":
                 return c1.price - c2.price;
             default:
                 return +new Date(c1.date) - +new Date(c2.date);

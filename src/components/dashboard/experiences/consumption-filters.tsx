@@ -15,13 +15,13 @@ import {
 } from "@/lib/consumption-data";
 import {
   activeFilterCount,
-  sortLabels,
   type ConsumptionFilterState,
-  type SortOption,
 } from "@/lib/consumption-filters";
-import { CategoryFilter, ConsumptionPeriodFilter, ConsumptionReasonFilter, ItemTypeFilter, OrderByFilter, RatingFilter, WouldBuyAgainFilter } from "@/components/ui/choicelog-filters";
+import { CategoryFilter, ConsumptionPeriodFilter, ConsumptionReasonFilter, ItemTypeFilter, ConsumptionsOrderByFilter, RatingFilter, WouldBuyAgainFilter, ConsumptionInfluenceFilter } from "@/components/ui/choicelog-filters";
 import { CategoryModel } from "@/models/dashboard/items";
 import Link from "next/link";
+import { Card } from "@/components/ui/card";
+import { SortConsumptionsOptions } from "@/models/dashboard/consumption";
 
 function Field({
   label,
@@ -52,8 +52,8 @@ export function ConsumptionFilters({
   filters: ConsumptionFilterState;
   onChange: (patch: Partial<ConsumptionFilterState>) => void;
   onClear: () => void;
-  sort: SortOption;
-  onSortChange: (s: SortOption) => void;
+  sort: SortConsumptionsOptions;
+  onSortChange: (s: SortConsumptionsOptions) => void;
   expanded: boolean;
   onToggleExpanded: () => void;
   categories: CategoryModel[];
@@ -119,26 +119,25 @@ export function ConsumptionFilters({
     });
 
   return (
-    <section
-      className="rounded-2xl border border-border bg-card p-4 sm:p-5"
-      style={{ boxShadow: "var(--shadow-card)" }}
+    <Card
+      className="rounded-2xl bg-none  p-4 sm:p-5"
     >
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-        <div className="relative flex-1">
-          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+        <div className="relative flex flex-1 items-center">
+          <Search className="pointer-events-none absolute  top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={filters.search}
             onChange={(e) => onChange({ search: e.target.value })}
             placeholder="Buscar por produto, serviço ou marca..."
             aria-label="Buscar consumos"
-            className="h-11 pl-9"
+            className="h-11 pl-9 bg-white"
           />
         </div>
 
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            className="h-11 flex-1 lg:flex-none"
+            className="h-11 flex-1 bg-white text-blue-900 hover:bg-foreground hover:text-blue-900 lg:flex-none"
             onClick={onToggleExpanded}
             aria-expanded={expanded}
           >
@@ -151,7 +150,7 @@ export function ConsumptionFilters({
             ) : null}
           </Button>
 
-          <Button asChild className="h-11">
+          <Button asChild className="h-11 bg-blue-800 hover:bg-blue-900 text-white hover:text-white">
             <Link href="/dashboard/experiences/new-experience">
               <Plus className="size-4" />
               Registrar consumo
@@ -165,31 +164,13 @@ export function ConsumptionFilters({
         <div className="mt-4 grid grid-cols-1 gap-4 border-t border-border pt-4 duration-200 animate-in fade-in sm:grid-cols-2 lg:grid-cols-4">
           <ItemTypeFilter typeFilter={filters.type} onTypeFilterChange={(v) => onChange({ type: v })} />
 
-          <CategoryFilter categoryFilter={filters.category} onCategoryFilterChange={(v) => onChange({ category: v })} categories={categories} />
+          <CategoryFilter categoryFilter={filters.category} onCategoryFilterChange={(v) => onChange({ category: v as never})} categories={categories} />
 
           <RatingFilter ratingFilter={filters.rating} onRatingFilterChange={(v) => onChange({ rating: v as never })} />
 
           <ConsumptionPeriodFilter periodFilter={filters.period} onPeriodFilterChange={(v) => onChange({ period: v as never })} />
-{/* 
-          <Select
-            value={sort}
-            onValueChange={(v) => onSortChange(v as SortOption)}
-          >
-            <SelectTrigger
-              className="h-11 flex-1 lg:w-48 lg:flex-none"
-              aria-label="Ordenar por"
-            >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {(Object.keys(sortLabels) as SortOption[]).map((k) => (
-                <SelectItem key={k} value={k}>
-                  {sortLabels[k]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
-          <OrderByFilter />
+
+          <ConsumptionsOrderByFilter sort={sort} onSortChange={onSortChange} />
 
           {filters.period === "custom" ? (
             <>
@@ -213,26 +194,9 @@ export function ConsumptionFilters({
           <WouldBuyAgainFilter buyAgainFilter={filters.buyAgain} onBuyAgainFilterChange={(v) => onChange({ buyAgain: v as never })} />
 
           <ConsumptionReasonFilter reasonFilter={filters.reasonId} onReasonFilterChange={(v) => onChange({ reasonId: v })} consumptionReasons={consumptionReasons} />
+          
+          <ConsumptionInfluenceFilter influenceFilter={filters.influenceId} onInfluenceFilterChange={(v) => onChange({ influenceId: v })} influences={consumptionInfluences} />
 
-
-          <Field label="Influência">
-            <Select
-              value={filters.influenceId}
-              onValueChange={(v) => onChange({ influenceId: v })}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas</SelectItem>
-                {consumptionInfluences.map((i) => (
-                  <SelectItem key={i.id} value={String(i.id)}>
-                    {i.friendlyName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Field>
         </div>
       ) : null}
 
@@ -260,6 +224,6 @@ export function ConsumptionFilters({
           </Button>
         </div>
       ) : null}
-    </section>
+    </Card>
   );
 }

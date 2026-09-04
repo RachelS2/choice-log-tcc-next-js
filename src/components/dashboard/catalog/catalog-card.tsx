@@ -6,10 +6,10 @@ import { RatingStars } from '@/components/ui/rating-starts';
 import { CategoryModel, CreateUpdateItemModel } from '@/models/dashboard/items';
 import { deleteItemController } from '@/lib/controller/item-controller';
 import { ReactNode, useState } from "react";
-import Modal from '@/components/ui/modal';
+import Modal from '@/components/ui/choicelog-modal';
 import CreateUpdateItemModal from '../items/create-item-modal';
 import { getAvatarColor, getInitials, formatDate, cn, formatDatetime } from '@/lib/utils';
-import { ItemHero } from '@/components/ui/item-hero';
+import { ItemHero } from '@/components/ui/choicelog-item-hero';
 
 export interface CatalogCardProps {
   item: CreateUpdateItemModel;

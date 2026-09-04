@@ -1,12 +1,12 @@
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import AppLogo from '../ui/app-logo';
+import AppLogo from '../ui/choicelog-app-logo';
 
 import { SidebarNav } from './sidebarnav';
 import { Button } from '../ui/button';
 import { Bell } from 'lucide-react';
-import UserIcon from '../ui/user-icon';
+import UserIcon from '../ui/choicelog-user-icon';
 export default async function Sidebar() {
   const session = await auth.api.getSession({
     headers: await headers(),

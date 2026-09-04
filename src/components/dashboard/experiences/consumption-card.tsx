@@ -5,7 +5,7 @@ import {
 } from "lucide-react";
 import { formatBRLFromDigits, formatDate } from "@/lib/utils";
 import { Stars } from "./stars";
-import { ItemHero } from "@/components/ui/item-hero";
+import { ItemHero } from "@/components/ui/choicelog-item-hero";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { BasicItemModel } from "@/models/dashboard/items";
 

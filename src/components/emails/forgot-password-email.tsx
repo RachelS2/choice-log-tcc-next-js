@@ -11,7 +11,6 @@ import {
     Tailwind,
     Text,
 } from "@react-email/components";
-import AppLogo from "../ui/app-logo";
 
 interface ForgotPasswordEmailProps {
     username: string;

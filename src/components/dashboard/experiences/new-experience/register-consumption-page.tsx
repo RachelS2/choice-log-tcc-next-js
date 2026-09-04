@@ -28,14 +28,14 @@ import {
 } from "@/lib/utils";
 import { cn, getInitials } from "@/lib/utils";
 import { RatingStars } from "@/components/ui/rating-starts";
-import DatePicker from "@/components/ui/date-picker";
+import DatePicker from "@/components/ui/choicelog-date-picker";
 import ConsumptionCreatedPage from "./consumption-created-page";
 import { BasicItemModel, CategoryModel, CreateUpdateItemModel, ItemTypeEnum, ItemTypeModel } from "@/models/dashboard/items";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, CreateConsumptionModel, NegativeAspectModel } from "@/models/dashboard/consumption";
 import EmptyDataState from "@/components/ui/empty-state";
 import CreateUpdateItemModal from "../../items/create-item-modal";
 import { toast } from "sonner";
-import { PageTitle } from "@/components/ui/pages-title";
+import { PageHeader, PageSubtitle, PageTitle } from "@/components/ui/pages-title";
 
 interface Errors {
   item?: string;
@@ -154,7 +154,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
     e.preventDefault();
     const errors: Errors = {};
     if (!selectedItem) errors.item = "Selecione o item consumido.";
-    if (errors.date  != undefined  ) errors.date = errors.date
+    if (errors.date != undefined) errors.date = errors.date
     if (!date) errors.date = "Informe quando isso aconteceu.";
     if (!rating) errors.rating = "Avalie sua experiência.";
     if (!reasonId) errors.reason = "Selecione por que escolheu este item.";
@@ -224,8 +224,19 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
       style={{ background: "var(--gradient-subtle)" }}
     >
       <div className="mx-auto w-full max-w-3xl">
-        <PageTitle title="Diário de consumo" subtitle="Registrar Experiência" description="Uma breve reflexão sobre o que você consumiu, como se sentiu e por quê." />
+        <header className="flex flex-col items-center text-center mb-5">
+          <PageHeader
+            header="Diário de consumo"
+            lineBefore
+            lineAfter
+          />
 
+          <PageTitle title="Registrar Experiência" />
+
+          <PageSubtitle
+            subtitle="Uma breve reflexão sobre o que você consumiu, como se sentiu e por quê."
+          />
+        </header>
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
           {selectedItem ? (
             <div className="mx-auto w-full max-w-md">

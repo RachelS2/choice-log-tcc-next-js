@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { UserSettingsSchemaType } from '@/zod-schemas/user-settings';
 import { UserAuthDTO } from '@/models/user';
-import UserIcon from '@/components/ui/user-icon';
+import UserIcon from '@/components/ui/choicelog-user-icon';
 
 
 interface ProfileSectionProps {

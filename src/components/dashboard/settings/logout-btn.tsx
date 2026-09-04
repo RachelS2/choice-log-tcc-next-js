@@ -7,7 +7,7 @@ import { authClient } from "@/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
 
-import Modal from "@/components/ui/modal";
+import Modal from "@/components/ui/choicelog-modal";
 
 export default function LogoutButton() {
   const router = useRouter();

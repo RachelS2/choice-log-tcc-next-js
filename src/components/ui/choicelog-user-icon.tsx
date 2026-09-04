@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 
 type UserIconProps = {
     name: string;
@@ -11,14 +11,7 @@ export default function UserIcon({
     image,
     className,
 }: UserIconProps) {
-    const initials =
-        name
-            .trim()
-            .split(/\s+/)
-            .map((part) => part[0])
-            .slice(0, 2)
-            .join("")
-            .toUpperCase() || "U";
+
 
     if (image) {
         return (
@@ -40,7 +33,7 @@ export default function UserIcon({
                 className
             )}
         >
-            {initials}
+            {getInitials(name)}
         </div>
     );
 }

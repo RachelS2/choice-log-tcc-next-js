@@ -31,7 +31,7 @@ import {
 import { formatBRLFromDigits, formatDate } from "@/lib/utils";
 import { Stars } from "./stars";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
-import { ItemHero } from "@/components/ui/item-hero";
+import { ItemHero } from "@/components/ui/choicelog-item-hero";
 
 function Row({
   label,

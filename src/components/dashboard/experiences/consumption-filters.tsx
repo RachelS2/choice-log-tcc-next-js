@@ -1,4 +1,4 @@
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Plus, Search, SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,8 +19,9 @@ import {
   type ConsumptionFilterState,
   type SortOption,
 } from "@/lib/consumption-filters";
-import { CategoryFilter, ConsumptionPeriodFilter, ConsumptionReasonFilter, ItemTypeFilter, RatingFilter, WouldBuyAgainFilter } from "@/components/ui/choicelog-filters";
+import { CategoryFilter, ConsumptionPeriodFilter, ConsumptionReasonFilter, ItemTypeFilter, OrderByFilter, RatingFilter, WouldBuyAgainFilter } from "@/components/ui/choicelog-filters";
 import { CategoryModel } from "@/models/dashboard/items";
+import Link from "next/link";
 
 function Field({
   label,
@@ -150,6 +151,26 @@ export function ConsumptionFilters({
             ) : null}
           </Button>
 
+          <Button asChild className="h-11">
+            <Link href="/dashboard/experiences/new-experience">
+              <Plus className="size-4" />
+              Registrar consumo
+            </Link>
+          </Button>
+
+        </div>
+      </div>
+
+      {expanded ? (
+        <div className="mt-4 grid grid-cols-1 gap-4 border-t border-border pt-4 duration-200 animate-in fade-in sm:grid-cols-2 lg:grid-cols-4">
+          <ItemTypeFilter typeFilter={filters.type} onTypeFilterChange={(v) => onChange({ type: v })} />
+
+          <CategoryFilter categoryFilter={filters.category} onCategoryFilterChange={(v) => onChange({ category: v })} categories={categories} />
+
+          <RatingFilter ratingFilter={filters.rating} onRatingFilterChange={(v) => onChange({ rating: v as never })} />
+
+          <ConsumptionPeriodFilter periodFilter={filters.period} onPeriodFilterChange={(v) => onChange({ period: v as never })} />
+{/* 
           <Select
             value={sort}
             onValueChange={(v) => onSortChange(v as SortOption)}
@@ -167,20 +188,8 @@ export function ConsumptionFilters({
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {expanded ? (
-        <div className="mt-4 grid grid-cols-1 gap-4 border-t border-border pt-4 duration-200 animate-in fade-in sm:grid-cols-2 lg:grid-cols-4">
-          <ItemTypeFilter typeFilter={filters.type} onTypeFilterChange={(v) => onChange({ type: v })} />
-
-          <CategoryFilter categoryFilter={filters.category} onCategoryFilterChange={(v) => onChange({ category: v })} categories={categories} />
-
-          <RatingFilter ratingFilter={filters.rating} onRatingFilterChange={(v) => onChange({ rating: v as never })} />
-
-          <ConsumptionPeriodFilter periodFilter={filters.period} onPeriodFilterChange={(v) => onChange({ period: v as never })} />
-
+          </Select> */}
+          <OrderByFilter />
 
           {filters.period === "custom" ? (
             <>

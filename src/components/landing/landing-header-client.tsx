@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import AppLogo from "@/components/ui/app-logo";
+import AppLogo from "@/components/ui/choicelog-app-logo";
 import { useState } from "react";
 
 

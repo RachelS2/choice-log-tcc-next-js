@@ -12,8 +12,8 @@ export interface ConsumptionFilterState {
     category: string; // "all" | category name
     rating: RatingFilter;
     period: PeriodFilter;
-    from: string; // yyyy-mm-dd, used when period === "custom"
-    to: string;
+    from: Date | undefined; 
+    to: Date | undefined; 
     buyAgain: BuyAgainFilter;
     reasonId: string; // "all" | id
     influenceId: string; // "all" | id
@@ -25,8 +25,8 @@ export const defaultFilters: ConsumptionFilterState = {
     category: "all",
     rating: "all",
     period: "all",
-    from: "",
-    to: "",
+    from: undefined,
+    to: undefined,
     buyAgain: "all",
     reasonId: "all",
     influenceId: "all",

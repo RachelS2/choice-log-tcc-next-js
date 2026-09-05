@@ -12,7 +12,7 @@ import { TypeFilter } from '@/app/dashboard/catalog/items/page';
 import { CategoryModel } from '@/models/dashboard/items';
 import React from 'react';
 import { Label } from './label';
-import { ConsumptionInfluence, ConsumptionReason } from '@/lib/consumption-data';
+import { ConsumptionInfluenceModel } from '@/models/dashboard/consumption';
 import { SortItemsOptions, SortConsumptionsOptions, ConsumptionReasonModel } from '@/models/dashboard/consumption';
 
 
@@ -67,7 +67,7 @@ export function CategoryFilter({ categoryFilter, onCategoryFilterChange, categor
           .map((cat) => ({
             value: cat.name + " (" + formatItemTypeLabel(cat.type) + ")",
             label: cat.name,
-            type: cat.type,    
+            type: cat.type,
           })),
       ]}
     />
@@ -88,9 +88,9 @@ export function RatingFilter({ ratingFilter, onRatingFilterChange }: { ratingFil
   )
 }
 
-export function ConsumptionInfluenceFilter({influenceFilter, onInfluenceFilterChange, influences }: {
+export function ConsumptionInfluenceFilter({ influenceFilter, onInfluenceFilterChange, influences }: {
   influenceFilter: string; onInfluenceFilterChange: (value: string) => void;
-  influences: ConsumptionInfluence[]
+  influences: ConsumptionInfluenceModel[]
 }) {
   return (
 

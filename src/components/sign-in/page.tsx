@@ -91,7 +91,7 @@ export default function LoginForm() {
     // rememberMe falso = sessão acaba ao fechar navegador, true = sessão persiste por 7 dias ou até o usuário deslogar manualmente
     return (
         <form onSubmit={handleSubmit(handleOnSubmit)} className="flex flex-col items-start w-full max-w-md min-h-[calc(100vh-96px)] justify-center p-10">
-            <Card className='w-full max-w-md rounded-3xl shadow-xl border-neutral-200'>
+            <Card className='w-full max-w-md rounded-3xl bg-card shadow-xl border-neutral-200'>
                 <CardHeader className=' text-center'>
                     <CardTitle className='text-3xl'>Entrar</CardTitle>
                     <CardDescription className='text-xl'>Acesse sua conta</CardDescription>

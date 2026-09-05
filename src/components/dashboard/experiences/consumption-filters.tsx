@@ -11,6 +11,7 @@ import { CategoryModel } from "@/models/dashboard/items";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
+import { DatePicker } from "@/components/ui/choicelog-date-picker";
 
 function Field({
   label,
@@ -31,7 +32,6 @@ function Field({
 export function ConsumptionFilters({
   filters,
   onChange,
-  onClear,
   sort,
   onSortChange,
   expanded,
@@ -42,7 +42,6 @@ export function ConsumptionFilters({
 }: {
   filters: ConsumptionFilterState;
   onChange: (patch: Partial<ConsumptionFilterState>) => void;
-  onClear: () => void;
   sort: SortConsumptionsOptions;
   onSortChange: (s: SortConsumptionsOptions) => void;
   expanded: boolean;
@@ -51,7 +50,7 @@ export function ConsumptionFilters({
   consumptionInfluences: ConsumptionInfluenceModel[],
   consumptionReasons: ConsumptionReasonModel[]
 }) {
-  console.log(consumptionInfluences, "consumptionInfluences")
+
   const count = activeFilterCount(filters);
 
   const chips: { label: string; clear: () => void }[] = [];
@@ -89,7 +88,7 @@ export function ConsumptionFilters({
             "6m": "Últimos 6 meses",
             "1y": "Último ano",
           }[filters.period]!,
-      clear: () => onChange({ period: "all", from: "", to: "" }),
+      clear: () => onChange({ period: "all", from: undefined, to: undefined }),
     });
   if (filters.buyAgain !== "all")
     chips.push({
@@ -118,14 +117,6 @@ export function ConsumptionFilters({
     >
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
         <div className="relative flex flex-1 items-center">
-          {/* <Search className="pointer-events-none absolute  top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            value={filters.search}
-            onChange={(e) => onChange({ search: e.target.value })}
-            placeholder="Buscar por produto, serviço ou marca..."
-            aria-label="Buscar consumos"
-            className="h-11 pl-9 bg-white"
-          /> */}
           <SearchFilter search={filters.search} placeholder="Buscar por produto, serviço ou marca..." onSearchChange={(value) => onChange({ search: value })} />
         </div>
 
@@ -170,18 +161,13 @@ export function ConsumptionFilters({
           {filters.period === "custom" ? (
             <>
               <Field label="De">
-                <Input
-                  type="date"
-                  value={filters.from}
-                  onChange={(e) => onChange({ from: e.target.value })}
-                />
+
+                <DatePicker value={filters.from} onChange={(date) => onChange({ from: date })} putCalendarIcon={true} />
+
               </Field>
               <Field label="Até">
-                <Input
-                  type="date"
-                  value={filters.to}
-                  onChange={(e) => onChange({ to: e.target.value })}
-                />
+
+                <DatePicker value={filters.to} onChange={(date) => onChange({ to: date })} putCalendarIcon={true} />
               </Field>
             </>
           ) : null}

@@ -1,7 +1,6 @@
 import { BasicItemModel } from "../items";
 
 export interface ConsumptionInfluenceModel {
-    systemName: string;
     friendlyName: string;
     id: number;
 }

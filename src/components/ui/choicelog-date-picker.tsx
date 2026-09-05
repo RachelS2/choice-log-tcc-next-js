@@ -11,14 +11,12 @@ import { Button } from "./button";
 interface DatePickerProps {
     value?: Date;
     onChange: (date: Date) => void;
-    setErrror?: () => void;
     putCalendarIcon: boolean
     setError: (error: string | undefined) => void;
     error: string | undefined;
-
 }
 
-export default function DatePicker({
+export function DatePicker({
     value,
     onChange,
     putCalendarIcon,
@@ -67,85 +65,85 @@ export default function DatePicker({
                 input === format(date, "dd/MM/yyyy") &&
                 !isBefore(today, date);
 
-            setError("Invalid date.");
+            setError("Data inválida.");
 
             if (validDate) {
                 onChange(date);
                 setError("");
                 setOpen(false);
             } else {
-                setError("Invalid date.");
+                setError("Data inválida.");
             }
-        };
+        }
+    };
 
-        return (
-            <div className="space-y-1 bg-white">
-                <Popover open={open} onOpenChange={setOpen}>
-                    <div
+    return (
+        <div className="space-y-1 bg-white">
+            <Popover open={open} onOpenChange={setOpen}>
+                <div
+                    className={cn(
+                        "flex h-11 w-full items-center rounded-md border bg-white",
+                        error && "border-red-500"
+                    )}
+                >
+                    {putCalendarIcon && (
+                        <CalendarIcon className="ml-3 size-4 shrink-0 text-neutral-500" />
+                    )}
+
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        onFocus={() => setOpen(true)}
+                        placeholder="dd/mm/aaaa"
+                        maxLength={10}
                         className={cn(
-                            "flex h-11 w-full items-center rounded-md border bg-white",
-                            error && "border-red-500"
+                            "h-full w-full  bg-transparent px-3 text-sm text-black outline-none",
+                            "placeholder:text-muted-foreground"
                         )}
-                    >
-                        {putCalendarIcon && (
-                            <CalendarIcon className="ml-3 size-4 shrink-0 text-neutral-500" />
-                        )}
+                    />
 
-                        <input
-                            type="text"
-                            value={inputValue}
-                            onChange={handleInputChange}
-                            onFocus={() => setOpen(true)}
-                            placeholder="dd/mm/aaaa"
-                            maxLength={10}
-                            className={cn(
-                                "h-full w-full  bg-transparent px-3 text-sm text-black outline-none",
-                                "placeholder:text-muted-foreground"
-                            )}
-                        />
+                    <PopoverTrigger asChild>
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            className="mr-1 size-9 shrink-0 p-0 hover:bg-blue-50 hover:font-semibold hover:text-neutral-900"
+                        >
+                            <ChevronDown className="text-neutral-700 size-4" />
+                        </Button>
+                    </PopoverTrigger>
+                </div>
 
-                        <PopoverTrigger asChild>
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                className="mr-1 size-9 shrink-0 p-0 hover:bg-blue-50 hover:font-semibold hover:text-neutral-900"
-                            >
-                                <ChevronDown className="text-neutral-700 size-4" />
-                            </Button>
-                        </PopoverTrigger>
-                    </div>
+                <PopoverContent
+                    className="w-auto p-0"
+                    align="start"
+                >
+                    <Calendar
+                        className="rounded-2xl border border-neutral-200"
+                        mode="single"
+                        selected={value}
+                        onSelect={(d) => {
+                            if (d) {
+                                onChange(d);
+                                setInputValue(format(d, "dd/MM/yyyy"));
+                                setOpen(false);
+                            }
+                        }}
+                        disabled={(d) => d > new Date()}
+                        autoFocus
+                        classNames={{
+                            day_button:
+                                "hover:!bg-blue-50 hover:!text-blue-600 focus:!bg-blue-50 focus:!text-blue-600",
+                        }}
+                    />
+                </PopoverContent>
+            </Popover>
 
-                    <PopoverContent
-                        className="w-auto p-0"
-                        align="start"
-                    >
-                        <Calendar
-                            className="rounded-2xl border border-neutral-200"
-                            mode="single"
-                            selected={value}
-                            onSelect={(d) => {
-                                if (d) {
-                                    onChange(d);
-                                    setInputValue(format(d, "dd/MM/yyyy"));
-                                    setOpen(false);
-                                }
-                            }}
-                            disabled={(d) => d > new Date()}
-                            autoFocus
-                            classNames={{
-                                day_button:
-                                    "hover:!bg-blue-50 hover:!text-blue-600 focus:!bg-blue-50 focus:!text-blue-600",
-                            }}
-                        />
-                    </PopoverContent>
-                </Popover>
-
-                {error && (
-                    <p className="text-sm text-red-600">
-                        {error}
-                    </p>
-                )}
-            </div>
-        );
-    }
+            {error && (
+                <p className="text-sm text-red-600">
+                    {error}
+                </p>
+            )}
+        </div>
+    );
 }

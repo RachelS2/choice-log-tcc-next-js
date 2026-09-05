@@ -81,7 +81,6 @@ model WishListItem {
 }
 
 model ConsumptionReason {
-  systemName   String        @db.VarChar(30)
   friendlyName String        @db.VarChar(30)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now()) @updatedAt
@@ -90,21 +89,20 @@ model ConsumptionReason {
   consumptions Consumption[]
   type         ItemType      @relation(fields: [typeId], references: [id])
 
-  @@unique([systemName, typeId])
+  @@unique([friendlyName, typeId])
   @@index([typeId])
 }
 
 model ConsumptionInfluence {
-  systemName   String        @unique @db.VarChar(30)
   friendlyName String        @db.VarChar(30)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now()) @updatedAt
   id           Int           @id @default(autoincrement())
   consumptions Consumption[]
+  @@unique([friendlyName])
 }
 
 model NegativeAspect {
-  systemName   String                      @db.VarChar(80)
   friendlyName String                      @db.VarChar(80)
   createdAt    DateTime                    @default(now())
   updatedAt    DateTime                    @default(now()) @updatedAt
@@ -113,7 +111,7 @@ model NegativeAspect {
   consumptions ConsumptionNegativeAspect[]
   type         ItemType                    @relation(fields: [typeId], references: [id])
 
-  @@unique([systemName, typeId])
+  @@unique([friendlyName, typeId])
   @@index([typeId])
 }
 

@@ -77,7 +77,6 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
                         filters={filters}
                         consumptionReasons={consumptionReasons}
                         onChange={patchFilters}
-                        onClear={clearFilters}
                         sort={sort}
                         onSortChange={(s) => {
                             setSort(s);

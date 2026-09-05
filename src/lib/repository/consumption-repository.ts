@@ -7,7 +7,6 @@ import { ConsumptionInfluenceModel, ReadConsumptionModel, ConsumptionReasonModel
 export async function fetchNegativeAspectsRepository(typeId?: number, id?: number): Promise<NegativeAspectModel[]> {
   return await prisma.negativeAspect.findMany({
     select: {
-      systemName: true,
       friendlyName: true,
       typeId: true,
       id: true,
@@ -22,7 +21,6 @@ export async function fetchNegativeAspectsRepository(typeId?: number, id?: numbe
 export async function fetchConsumptionInfluenceRepository(id?: number): Promise<ConsumptionInfluenceModel[]> {
   return await prisma.consumptionInfluence.findMany({
     select: {
-      systemName: true,
       friendlyName: true,
       id: true,
     },
@@ -35,7 +33,6 @@ export async function fetchConsumptionInfluenceRepository(id?: number): Promise<
 export async function fetchConsumptionReasonsRepository(typeId?: number, id?: number): Promise<ConsumptionReasonModel[]> {
   return await prisma.consumptionReason.findMany({
     select: {
-      systemName: true,
       friendlyName: true,
       typeId: true,
       id: true,
@@ -121,7 +118,6 @@ export async function fetchConsumptionRepository(
         select: {
           id: true,
           friendlyName: true,
-          systemName: true,
           typeId: true,
         },
       },
@@ -130,7 +126,6 @@ export async function fetchConsumptionRepository(
         select: {
           id: true,
           friendlyName: true,
-          systemName: true,
         },
       },
 
@@ -140,7 +135,6 @@ export async function fetchConsumptionRepository(
             select: {
               id: true,
               friendlyName: true,
-              systemName: true,
               typeId: true,
             },
           },

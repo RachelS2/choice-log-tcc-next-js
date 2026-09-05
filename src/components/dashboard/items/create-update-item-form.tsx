@@ -126,7 +126,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
         });
       } else {
         setServerError(
-          "Ocorreu um erro inesperado. Tente novamente."
+          "Você já possui um item com este nome e marca."
         );
       }
     } finally {
@@ -348,7 +348,7 @@ function ItemTypeButton({
       )}
 
       <span className="text-md font-medium">
-        {isProduct ? "Product" : "Service"}
+        {isProduct ? "Produto" : "Serviço"}
       </span>
     </button>
   );

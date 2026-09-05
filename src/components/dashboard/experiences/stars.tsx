@@ -1,6 +1,5 @@
 import { Star, StarHalf } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { formatRating } from "@/lib/consumptions-mock";
 
 export function Stars({
     rating,
@@ -46,10 +45,10 @@ export function Stars({
                         size === "lg" ? "text-base" : "text-sm",
                     )}
                 >
-                    {formatRating(rating)}
+                    {rating}
                 </span>
             ) : null}
-            <span className="sr-only">{formatRating(rating)} de 5</span>
+            <span className="sr-only">{rating} de 5</span>
         </div>
     );
 }

@@ -20,7 +20,6 @@ export function ConsumptionSummary({
             <span className="text-muted-foreground/50">·</span>
             <span className="inline-flex items-center gap-1.5 text-foreground">
                 <Star className="size-4 fill-primary text-primary" />
-                <strong className="font-semibold">{formatRating(avg)}</strong>
                 <span className="text-muted-foreground">média</span>
             </span>
             {buyAgainPct !== null ? (

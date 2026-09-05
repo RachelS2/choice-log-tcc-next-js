@@ -2,6 +2,8 @@
 // (ConsumptionReason, ConsumptionInfluence, NegativeAspect).
 // Kept in one module so the UI never hardcodes options inline.
 
+import { ConsumptionReasonModel } from "@/models/dashboard/consumption";
+
 export const ITEM_TYPE = { PRODUCT: 1, SERVICE: 2 } as const;
 export type ItemTypeId = (typeof ITEM_TYPE)[keyof typeof ITEM_TYPE];
 
@@ -58,29 +60,6 @@ export const items: Item[] = [
   },
 ];
 
-export const consumptionReasons: ConsumptionReason[] = [
-  { id: 1, systemName: "routine", friendlyName: "Faz parte da minha rotina", typeId: ITEM_TYPE.PRODUCT },
-  { id: 2, systemName: "necessity", friendlyName: "Eu precisava", typeId: ITEM_TYPE.PRODUCT },
-  { id: 3, systemName: "impulse", friendlyName: "Impulso", typeId: ITEM_TYPE.PRODUCT },
-  { id: 4, systemName: "gift", friendlyName: "Foi um presente", typeId: ITEM_TYPE.PRODUCT },
-  { id: 5, systemName: "replacement", friendlyName: "Substituição de algo antigo", typeId: ITEM_TYPE.PRODUCT },
-  { id: 6, systemName: "treat", friendlyName: "Me presentear", typeId: ITEM_TYPE.PRODUCT },
-  { id: 7, systemName: "maintenance", friendlyName: "Manutenção de rotina", typeId: ITEM_TYPE.SERVICE },
-  { id: 8, systemName: "urgent_need", friendlyName: "Necessidade urgente", typeId: ITEM_TYPE.SERVICE },
-  { id: 9, systemName: "self_care", friendlyName: "Autocuidado", typeId: ITEM_TYPE.SERVICE },
-  { id: 10, systemName: "recommended", friendlyName: "Alguém recomendou", typeId: ITEM_TYPE.SERVICE },
-  { id: 11, systemName: "celebration", friendlyName: "Ocasião especial", typeId: ITEM_TYPE.SERVICE },
-];
-
-export const consumptionInfluences: ConsumptionInfluence[] = [
-  { id: 1, systemName: "price", friendlyName: "Preço" },
-  { id: 2, systemName: "quality", friendlyName: "Qualidade" },
-  { id: 3, systemName: "brand", friendlyName: "Confiança na marca" },
-  { id: 4, systemName: "recommendation", friendlyName: "Recomendação" },
-  { id: 5, systemName: "advertising", friendlyName: "Publicidade" },
-  { id: 6, systemName: "convenience", friendlyName: "Conveniência" },
-  { id: 7, systemName: "habit", friendlyName: "Hábito" },
-];
 
 export const negativeAspects: NegativeAspect[] = [
   { id: 1, systemName: "expensive", friendlyName: "Muito caro", typeId: ITEM_TYPE.PRODUCT },
@@ -96,8 +75,8 @@ export const negativeAspects: NegativeAspect[] = [
   { id: 11, systemName: "location", friendlyName: "Localização inconveniente", typeId: ITEM_TYPE.SERVICE },
 ];
 
-export function reasonsForType(typeId: ItemTypeId) {
-  return consumptionReasons.filter((r) => r.typeId === typeId);
+export function reasonsForType(consumptionsReasons: ConsumptionReasonModel[], typeId: ItemTypeId) {
+  return consumptionsReasons.filter((r) => r.typeId === typeId);
 }
 
 export function negativeAspectsForType(typeId: ItemTypeId) {

@@ -13,15 +13,15 @@ import { CategoryModel } from '@/models/dashboard/items';
 import React from 'react';
 import { Label } from './label';
 import { ConsumptionInfluence, ConsumptionReason } from '@/lib/consumption-data';
-import { SortItemsOptions, SortConsumptionsOptions } from '@/models/dashboard/consumption';
+import { SortItemsOptions, SortConsumptionsOptions, ConsumptionReasonModel } from '@/models/dashboard/consumption';
 
 
-export function SearchFilter({ search, onSearchChange }: { search: string; onSearchChange: (value: string) => void }) {
+export function SearchFilter({ search, onSearchChange, placeholder }: { search: string; onSearchChange: (value: string) => void; placeholder?: string }) {
   return (
     <div className="relative flex-1 min-w-0 lg:max-w-xs">
       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
       <Input
-        placeholder="Pesquisar por nome..."
+        placeholder={placeholder || "Pesquisar por nome..."}
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
         className="pl-9 text-black bg-white"
@@ -102,7 +102,7 @@ export function ConsumptionInfluenceFilter({influenceFilter, onInfluenceFilterCh
 
 export function ConsumptionReasonFilter({ reasonFilter, onReasonFilterChange, consumptionReasons }: {
   reasonFilter: string; onReasonFilterChange: (value: string) => void;
-  consumptionReasons: ConsumptionReason[]
+  consumptionReasons: ConsumptionReasonModel[]
 }) {
   return (
 
@@ -218,7 +218,7 @@ function FilterSelect({
 
   return (
     <div className="space-y-1.5">
-      <Label className="text-xs font-medium text-muted-foreground">
+      <Label className="text-xs font-medium text-blue-900">
         {label}
       </Label>
       <div className="flex-1">

@@ -8,27 +8,34 @@ import { NegativeAspectModel, ConsumptionReasonModel, ConsumptionInfluenceModel 
 import { BasicItemModel, CategoryModel, ItemTypeModel } from "@/models/dashboard/items";
 
 
-
 export default async function RegisterConsumptionPage() {
-  const items: BasicItemModel[] = await fetchItemBasicInfoRepository();
-  const negativeAspects: NegativeAspectModel[] =
-    await fetchNegativeAspectsRepository();
-  const consumptionReasons: ConsumptionReasonModel[] =
-    await fetchConsumptionReasonsRepository();
 
-  const categories: CategoryModel[] = await fetchCategoriesRepository()
-  const itemTypes: ItemTypeModel[] = await fetchItemTypesRepository()
+  try {
 
-  const consumptionInfluence: ConsumptionInfluenceModel[] = await fetchConsumptionInfluenceRepository()
-  return (
-    <RegisterConsumptionPageClient
-      initialItems={items}
-      aspects={negativeAspects}
-      reasons={consumptionReasons}
-      categories={categories}
-      itemTypes={itemTypes}
-      consumptionInfluences={consumptionInfluence}
-      postConsumption={postConsumptionController}
-    />
-  );
+    const items: BasicItemModel[] = await fetchItemBasicInfoRepository();
+    const negativeAspects: NegativeAspectModel[] =
+      await fetchNegativeAspectsRepository();
+    const consumptionReasons: ConsumptionReasonModel[] =
+      await fetchConsumptionReasonsRepository();
+
+    const categories: CategoryModel[] = await fetchCategoriesRepository()
+    const itemTypes: ItemTypeModel[] = await fetchItemTypesRepository()
+
+    const consumptionInfluence: ConsumptionInfluenceModel[] = await fetchConsumptionInfluenceRepository()
+    return (
+      <RegisterConsumptionPageClient
+        initialItems={items}
+        aspects={negativeAspects}
+        reasons={consumptionReasons}
+        categories={categories}
+        itemTypes={itemTypes}
+        consumptionInfluences={consumptionInfluence}
+        postConsumption={postConsumptionController}
+      />);
+  }
+
+  catch (error) {
+    console.error("Error fetching data for RegisterConsumptionPage:", error);
+    throw new Error("Failed to fetch data for register consumption page ");
+  }
 }

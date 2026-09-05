@@ -14,18 +14,17 @@ import {
     sortConsumptions,
     summarize,
     type ConsumptionFilterState,
-    type SortOption,
 } from "@/lib/consumption-filters";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { CategoryModel } from "@/models/dashboard/items";
 import ConsumptionHeader from "./consumption-header";
 
 
 const PAGE_SIZE = 12;
 
-export default function ConsumptionsHistoryPage({ consumptionsWithItems, categories }: { consumptionsWithItems: ReadConsumptionModel[]; categories: CategoryModel[] }) {
+export default function ConsumptionsHistoryPage({ consumptionsWithItems, categories, consumptionInfluences, consumptionReasons }: { consumptionsWithItems: ReadConsumptionModel[]; categories: CategoryModel[]; consumptionInfluences: ConsumptionInfluenceModel[]; consumptionReasons: ConsumptionReasonModel[] }) {
 
     // const onlyConsumptions = consumptionsWithItems.map((c) => c.consumption);
     const [consumptions, setConsumptions] = useState<ReadConsumptionModel[]>(consumptionsWithItems);
@@ -33,7 +32,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
     const [reloadKey, setReloadKey] = useState(0);
 
     const [filters, setFilters] = useState<ConsumptionFilterState>(defaultFilters);
-    const [sort, setSort] = useState<SortOption>("recent");
+    const [sort, setSort] = useState<SortConsumptionsOptions>("recent");
     const [expanded, setExpanded] = useState(false);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
     const [page, setPage] = useState(1);
@@ -74,7 +73,9 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
 
                 <div className="mt-6 space-y-5">
                     <ConsumptionFilters
+                        consumptionInfluences={consumptionInfluences}
                         filters={filters}
+                        consumptionReasons={consumptionReasons}
                         onChange={patchFilters}
                         onClear={clearFilters}
                         sort={sort}
@@ -85,6 +86,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
                         expanded={expanded}
                         categories={categories}
                         onToggleExpanded={() => setExpanded((v) => !v)
+
 
                         }
                     />

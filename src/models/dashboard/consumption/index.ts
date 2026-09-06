@@ -5,12 +5,13 @@ export interface ConsumptionInfluenceModel {
     id: number;
 }
 
-export interface NegativeAspectModel extends ConsumptionInfluenceModel {
+export interface ConsumptionReasonModel extends ConsumptionInfluenceModel {
+}
+
+export interface NegativeAspectModel extends ConsumptionReasonModel {
     typeId: number;
 }
 
-export interface ConsumptionReasonModel extends ConsumptionInfluenceModel {
-}
 
 interface ConsumptionBaseModel {
 

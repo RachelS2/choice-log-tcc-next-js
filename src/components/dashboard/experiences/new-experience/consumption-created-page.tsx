@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { NotificationContent, NotificationWrapper } from "@/components/ui/notification";
+import { NotificationContent } from "@/components/ui/choicelog-notification-card";
 import { CircleCheck, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { MouseEventHandler } from "react";
@@ -11,7 +11,6 @@ interface ConsumptionCreatedPage {
 export default function ConsumptionCreatedPage({ itemName, onButtonClick }: ConsumptionCreatedPage) {
     return (
 
-            <NotificationWrapper>
 
                 <NotificationContent
                     icon={CircleCheck}
@@ -23,16 +22,15 @@ export default function ConsumptionCreatedPage({ itemName, onButtonClick }: Cons
                     }
                 >
                     <Button
-                        className="h-11 bg-blue-700 hover:bg-blue-600 shadow-md w-full"
+                        className="h-11 bg-blue-900 hover:bg-blue-800 shadow-md w-full"
                         onClick={onButtonClick}
                     >
                         
                         Registrar outro
                     </Button>
-                    <Button asChild variant="ghost" className="h-11 hover:text-blue-500 w-full">
+                    <Button asChild variant="ghost" className="h-11 hover:text-blue-900 w-full">
                         <Link href="/dashboard/experiences">Ver experiência <ArrowRight className="size-4" /></Link> 
                     </Button>
                 </NotificationContent>
-            </NotificationWrapper>
     );
 }

@@ -32,10 +32,10 @@ import { DatePicker } from "@/components/ui/choicelog-date-picker";
 import ConsumptionCreatedPage from "./consumption-created-page";
 import { BasicItemModel, CategoryModel, CreateUpdateItemModel, ItemTypeEnum, ItemTypeModel } from "@/models/dashboard/items";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, CreateConsumptionModel, NegativeAspectModel } from "@/models/dashboard/consumption";
-import { EmptyState } from "@/components/ui/empty-state";
 import CreateUpdateItemModal from "../../items/create-item-modal";
 import { toast } from "sonner";
 import { PageHeader, PageSubtitle, PageTitle } from "@/components/ui/choicelog-pages-title";
+import { NotificationContent } from "@/components/ui/choicelog-notification-card";
 
 interface Errors {
   item?: string;
@@ -115,10 +115,6 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
   const selectedItemTypeId = selectedItem
     ? getItemTypeId(selectedItem.type, itemTypes)
     : undefined;
-
-  const availableReasons = selectedItemTypeId
-    ? reasons.filter((r) => r.typeId === selectedItemTypeId)
-    : [];
 
   const availableNegativeAspects = selectedItemTypeId
     ? aspects.filter((a) => a.typeId === selectedItemTypeId)
@@ -365,7 +361,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                   {/* Empty state */}
                   {filteredItems.length === 0 && (
 
-                    <EmptyState icon={PackageOpen} title="Nenhuma experiência encontrada" description="Tente outro filtro." />
+                    <NotificationContent icon={PackageOpen} title="Nenhuma experiência encontrada" description="Tente outro filtro." />
                   )}
                 </div>
 
@@ -500,33 +496,28 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
             <div>
               <FieldLabel required>Qual foi o propósito deste consumo?</FieldLabel>
               <div className="flex flex-wrap gap-2">
-                {!selectedItem ? (
-                  <p className="mt-2 text-base text-muted-foreground">
-                    Selecione o item consumido para ver os motivos disponíveis.
-                  </p>
-                ) : (
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {availableReasons.map((r) => (
-                      <SelectableChip
-                        key={r.id}
-                        selected={reasonId === r.id}
-                        invalid={Boolean(errors.reason)}
-                        onClick={() => {
-                          setReasonId(r.id);
-                          errors.reason = undefined;
-                        }}
-                      >
-                        {r.friendlyName}
-                      </SelectableChip>
-                    ))}
-                  </div>
-                )}
+
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {reasons.map((r) => (
+                    <SelectableChip
+                      key={r.id}
+                      selected={reasonId === r.id}
+                      invalid={Boolean(errors.reason)}
+                      onClick={() => {
+                        setReasonId(r.id);
+                        errors.reason = undefined;
+                      }}
+                    >
+                      {r.friendlyName}
+                    </SelectableChip>
+                  ))}
+                </div>
               </div>
               <FieldError>{errors.reason}</FieldError>
             </div>
 
             <div>
-              <FieldLabel required>O que mais influenciou sua escolha?</FieldLabel>
+              <FieldLabel required>O que te levou a escolher este item?</FieldLabel>
               <div className="flex flex-wrap gap-2 text-blue-600">
                 {consumptionInfluences.map((inf) => (
                   <SelectableChip

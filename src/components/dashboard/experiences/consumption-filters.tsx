@@ -118,11 +118,14 @@ export function ConsumptionFilters({
     <Card
       className="rounded-2xl bg-none  p-4 sm:p-5"
     >
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-        <div className="relative flex flex-1 items-center">
-          <SearchFilter search={filters.search} placeholder="Buscar por produto, serviço ou marca..." onSearchChange={(value) => onChange({ search: value })} />
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-3 lg:flex-row lg:items-center lg:justify-center">
+        <div className="w-full lg:w-[420px]">
+          <SearchFilter
+            search={filters.search}
+            placeholder="Buscar por produto, serviço ou marca..."
+            onSearchChange={(value) => onChange({ search: value })}
+          />
         </div>
-
         <div className="flex items-center gap-2">
           <Button
             variant="default"
@@ -132,20 +135,23 @@ export function ConsumptionFilters({
           >
             <SlidersHorizontal className="size-4" />
             Filtros
-            {count > 0 ? (
+
+            {count > 0 && (
               <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
                 {count}
               </span>
-            ) : null}
+            )}
           </Button>
 
-          <Button asChild className="h-11 bg-blue-800 hover:bg-blue-900 text-white hover:text-white">
+          <Button
+            asChild
+            className="h-11 bg-blue-800 text-white hover:bg-blue-900 hover:text-white"
+          >
             <Link href="/dashboard/experiences/new-experience">
               <Plus className="size-4" />
               Registrar consumo
             </Link>
           </Button>
-
         </div>
       </div>
 

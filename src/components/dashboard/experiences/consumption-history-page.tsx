@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { AlertTriangle, ClipboardList, PackageOpen, Plus, SearchX } from "lucide-react";
+import {  ClipboardList, PackageOpen, Plus, SearchX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConsumptionFilters } from "@/components/dashboard/experiences/consumption-filters";
 import { ConsumptionList } from "@/components/dashboard/experiences/consumption-list";
@@ -14,17 +14,17 @@ import {
     summarize,
     type ConsumptionFilterState,
 } from "@/lib/consumption-filters";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { CategoryModel } from "@/models/dashboard/items";
 import ConsumptionHeader from "./consumption-header";
-import { EmptyState } from "@/components/ui/empty-state";
+import { NotificationContent } from "@/components/ui/choicelog-notification-card";
 
 
 const PAGE_SIZE = 12;
 
-export default function ConsumptionsHistoryPage({ consumptionsWithItems, categories, consumptionInfluences, consumptionReasons }: { consumptionsWithItems: ReadConsumptionModel[]; categories: CategoryModel[]; consumptionInfluences: ConsumptionInfluenceModel[]; consumptionReasons: ConsumptionReasonModel[] }) {
+export default function ConsumptionsHistoryPage({ consumptionsWithItems, categories, consumptionInfluences, consumptionReasons }:
+    { consumptionsWithItems: ReadConsumptionModel[]; categories: CategoryModel[]; consumptionInfluences: ConsumptionInfluenceModel[]; consumptionReasons: ConsumptionReasonModel[] }) {
 
     // const onlyConsumptions = consumptionsWithItems.map((c) => c.consumption);
     const [consumptions, setConsumptions] = useState<ReadConsumptionModel[]>(consumptionsWithItems);
@@ -83,25 +83,23 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
                     />
 
                     {!hasAny ? (
-                        <EmptyState
-                            icon={PackageOpen}
-                            title="Você ainda não registrou nenhum consumo."
-                            description="Registre sua primeira experiência para começar a acompanhar seus padrões de consumo."
-                            action={
-                                <Button asChild className="h-11">
-                                    <Link href="/dashboard/experiences/new-experience">
-                                        <Plus className="size-4" />
-                                        Registrar consumo
-                                    </Link>
-                                </Button>
-                            }
-                        />
+                        <div className="flex flex-col items-center justify-center gap-4">
+                            <div className="max-w-lg mt-8 shadow-md border-b border-blue-900 flex items-center justify-center w-full rounded-2xl bg-white max-w-5xl px-4 sm:px-6">
+
+                                <NotificationContent
+                                    icon={PackageOpen}
+                                    title="Você ainda não registrou nenhum consumo."
+                                    description="Registre sua primeira experiência para começar a acompanhar seus padrões de consumo."
+
+                                />
+                            </div>
+                        </div>
                     ) : filtered.length === 0 ? (
-                        <EmptyState
+                        <NotificationContent
                             icon={SearchX}
                             title="Nenhum consumo encontrado."
                             description="Tente alterar ou remover alguns filtros."
-                            action={
+                            children={
                                 <Button variant="outline" className="bg-white text-blue-900 hover:bg-muted hover:text-blue-900 hover:font-semibold" onClick={clearFilters}>
                                     Limpar filtros
                                 </Button>

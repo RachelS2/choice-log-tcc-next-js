@@ -30,15 +30,13 @@ export async function fetchConsumptionInfluenceRepository(id?: number): Promise<
   })
 }
 
-export async function fetchConsumptionReasonsRepository(typeId?: number, id?: number): Promise<ConsumptionReasonModel[]> {
+export async function fetchConsumptionReasonsRepository(id?: number): Promise<ConsumptionReasonModel[]> {
   return await prisma.consumptionReason.findMany({
     select: {
       friendlyName: true,
-      typeId: true,
       id: true,
     },
     where: {
-      typeId: typeId,
       id: id
     }
   })
@@ -118,7 +116,6 @@ export async function fetchConsumptionRepository(
         select: {
           id: true,
           friendlyName: true,
-          typeId: true,
         },
       },
 

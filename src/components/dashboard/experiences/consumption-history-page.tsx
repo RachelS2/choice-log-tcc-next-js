@@ -1,8 +1,8 @@
 "use client";
 import { useMemo, useState } from "react";
-import {  ClipboardList, PackageOpen, Plus, SearchX } from "lucide-react";
+import { ClipboardList, PackageOpen, SearchX } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ConsumptionFilters } from "@/components/dashboard/experiences/consumption-filters";
+import { ConsumptionFilters, ConsumptionFiltersPanel } from "@/components/dashboard/experiences/consumption-filters";
 import { ConsumptionList } from "@/components/dashboard/experiences/consumption-list";
 import { ConsumptionSummary } from "@/components/dashboard/experiences/consumption-summary";
 import { ConsumptionDetails } from "@/components/dashboard/experiences/consumption-details";
@@ -19,6 +19,8 @@ import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel
 import { CategoryModel } from "@/models/dashboard/items";
 import ConsumptionHeader from "./consumption-header";
 import { NotificationContent } from "@/components/ui/choicelog-notification-card";
+import { ActiveFilterChip, ActiveFiltersChips } from "@/components/ui/choicelog-chips";
+import { buildConsumptionFilterChips } from "./consumption-chips-builder";
 
 
 const PAGE_SIZE = 12;
@@ -58,7 +60,15 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
         setPage(1);
     }
 
+    const chips: ActiveFilterChip[] = buildConsumptionFilterChips({
+        filters,
+        patchFilters,
+        consumptionReasons,
+        consumptionInfluences,
+    });
+
     const hasAny = consumptions.length > 0;
+    const [filtersExpanded, setFiltersExpanded] = useState(false);
 
     return (
         <main
@@ -66,45 +76,62 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
             style={{ background: "var(--gradient-subtle)" }}
         >
             <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
-                <ConsumptionHeader />
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                    <ConsumptionHeader />
 
-                <div className="mt-6 space-y-5">
                     <ConsumptionFilters
-                        consumptionInfluences={consumptionInfluences}
                         filters={filters}
-                        consumptionReasons={consumptionReasons}
                         onChange={patchFilters}
-                        sort={sort}
-                        onSortChange={(s) => {
-                            setSort(s);
-                            setPage(1);
-                        }}
-                        categories={categories}
+                        expanded={filtersExpanded}
+                        setExpanded={setFiltersExpanded}
                     />
 
+                </div>
+
+                <div className="mt-6 border-b border-border" />
+
+                {/* Filtros expandidos */}
+                {filtersExpanded && (
+                    <div className="pt-6">
+                        <ConsumptionFiltersPanel
+                            consumptionInfluences={consumptionInfluences}
+                            consumptionReasons={consumptionReasons}
+                            filters={filters}
+                            onChange={patchFilters}
+                            sort={sort}
+                            onSortChange={(sort) => {
+                                setSort(sort);
+                                setPage(1);
+                            }}
+                            categories={categories}
+                        />
+                    </div>
+                )}
+                <div className="mt-5">
+                    <ActiveFiltersChips chips={chips} />
+                </div>
+
+                <div className="mt-8">
                     {!hasAny ? (
-                        <div className="flex flex-col items-center justify-center gap-4">
-                            <div className="max-w-lg mt-8 shadow-md border-b border-blue-900 flex items-center justify-center w-full rounded-2xl bg-white max-w-5xl px-4 sm:px-6">
-
-                                <NotificationContent
-                                    icon={PackageOpen}
-                                    title="Você ainda não registrou nenhum consumo."
-                                    description="Registre sua primeira experiência para começar a acompanhar seus padrões de consumo."
-
-                                />
-                            </div>
-                        </div>
+                        <NotificationContent
+                            icon={PackageOpen}
+                            title="Você ainda não registrou nenhum consumo."
+                            description="Registre sua primeira experiência para começar a acompanhar seus padrões de consumo."
+                        />
                     ) : filtered.length === 0 ? (
                         <NotificationContent
                             icon={SearchX}
                             title="Nenhum consumo encontrado."
                             description="Tente alterar ou remover alguns filtros."
-                            children={
-                                <Button variant="outline" className="bg-white text-blue-900 hover:bg-muted hover:text-blue-900 hover:font-semibold" onClick={clearFilters}>
-                                    Limpar filtros
-                                </Button>
-                            }
-                        />
+                        >
+                            <Button
+                                variant="outline"
+                                className="bg-blue-900 text-white hover:bg-blue-950 justify-center  hover:font-semibold"
+                                onClick={clearFilters}
+                            >
+                                Limpar filtros
+                            </Button>
+                        </NotificationContent>
                     ) : (
                         <>
                             <ConsumptionSummary
@@ -132,6 +159,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
                     )}
                 </div>
 
+
                 {hasAny ? (
                     <p className="mt-8 flex items-center justify-center gap-2 text-xs text-muted-foreground">
                         <ClipboardList className="size-3.5" />
@@ -154,6 +182,6 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
                     setSelected(null);
                 }}
             />
-        </main>
+        </main >
     );
 }

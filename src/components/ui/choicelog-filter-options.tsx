@@ -15,27 +15,33 @@ import { Label } from './label';
 import { ConsumptionInfluenceModel } from '@/models/dashboard/consumption';
 import { SortItemsOptions, SortConsumptionsOptions, ConsumptionReasonModel } from '@/models/dashboard/consumption';
 
+export interface BaseFilterProps<T extends string | undefined = string> {
+  value: T;
+  onChange: (value: T) => void;
+}
 
-export function SearchFilter({ search, onSearchChange, placeholder }: { search: string; onSearchChange: (value: string) => void; placeholder?: string }) {
+export function SearchFilter({ value, onChange, placeholder }: BaseFilterProps<string> & { placeholder?: string }) {
   return (
     <div className="relative flex-1 min-w-0 lg:max-w-xs">
       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
       <Input
         placeholder={placeholder || "Pesquisar por nome..."}
-        value={search}
-        onChange={(e) => onSearchChange(e.target.value)}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         className="pl-9 text-black bg-white"
       />
     </div>
   )
 }
-export function ItemTypeFilter({ typeFilter, onTypeFilterChange }: { typeFilter: TypeFilter; onTypeFilterChange: (value: TypeFilter) => void }) {
+
+
+export function ItemTypeFilter({ value, onChange }: BaseFilterProps<string>) {
   return (
     <FilterSelect
       label={"Tipo"}
-      value={typeFilter}
+      value={value}
       placeholder="Selecione o tipo dos itens consumidos..."
-      onChange={(v) => onTypeFilterChange(v as TypeFilter)}
+      onChange={onChange}
       options={[
         { value: "ALL", label: "Todos" },
         { value: "PRODUCT", label: formatItemTypeLabel("PRODUCT") },
@@ -45,19 +51,22 @@ export function ItemTypeFilter({ typeFilter, onTypeFilterChange }: { typeFilter:
   )
 }
 
-export function CategoryFilter({ categoryFilter, onCategoryFilterChange, categories }:
-  { categoryFilter: string; onCategoryFilterChange: (value: string) => void; categories: CategoryModel[]; }) {
-  console.log(categoryFilter)
+interface CategoryFilterProps<T extends string>
+  extends BaseFilterProps<T> {
+  options: CategoryModel[];
+}
+
+export function CategoryFilter({ value, onChange, options }: CategoryFilterProps<string>) {
   return (
     <FilterSelect
-      value={categoryFilter}
+      value={value}
       label={"Categoria"}
       placeholder="Selecione uma categoria..."
-      onChange={onCategoryFilterChange}
+      onChange={onChange}
       options={[
         { value: "ALL", label: "Todas as categorias" },
 
-        ...[...categories]
+        ...[...options]
           .sort((a, b) => {
             if (a.type === b.type) {
               return a.name.localeCompare(b.name);
@@ -75,9 +84,9 @@ export function CategoryFilter({ categoryFilter, onCategoryFilterChange, categor
   )
 }
 
-export function RatingFilter({ ratingFilter, onRatingFilterChange }: { ratingFilter: string; onRatingFilterChange: (value: string) => void; }) {
+export function RatingFilter({ value, onChange }: BaseFilterProps<string>) {
   return (
-    <FilterSelect label={"Avaliação"} value={ratingFilter} placeholder="Selecione a avaliação..." onChange={onRatingFilterChange} options={[
+    <FilterSelect label={"Avaliação"} value={value} placeholder="Selecione a avaliação..." onChange={onChange} options={[
       { value: "all", label: "Todas as avaliações" },
       { value: "5", label: "5 estrelas" },
       { value: "4", label: "4 estrelas ou mais" },
@@ -89,50 +98,122 @@ export function RatingFilter({ ratingFilter, onRatingFilterChange }: { ratingFil
   )
 }
 
-export function ConsumptionInfluenceFilter({ influenceFilter, onInfluenceFilterChange, influences }: {
-  influenceFilter: string; onInfluenceFilterChange: (value: string) => void;
-  influences: ConsumptionInfluenceModel[]
-}) {
-  return (
+export const CONSUMPTION_SORT_OPTIONS: FilterOption<SortConsumptionsOptions>[] = [
+  { value: "recent", label: "Mais recentes" },
+  { value: "oldest", label: "Mais antigos" },
+  { value: "rating_desc", label: "Maior avaliação" },
+  { value: "rating_asc", label: "Menor avaliação" },
+  { value: "most_spent", label: "Maior valor" },
+  { value: "least_spent", label: "Menor valor" },
+];
 
-    <FilterSelect label="Influência" onChange={onInfluenceFilterChange} placeholder="Selecione um motivo..."
-      value={influenceFilter} options={influences.map((r) => ({ value: String(r.id), label: r.friendlyName }))} />
+export const ITEM_SORT_OPTIONS: FilterOption<SortItemsOptions>[] = [
+  { value: "recent", label: "Adicionados recentemente" },
+  { value: "last_consumed", label: "Último consumo" },
+  { value: "most_experiences", label: "Mais experiências" },
+  { value: "most_spent", label: "Mais gastos" },
+  { value: "alphabetical", label: "Ordem alfabética" },
+];
 
-  )
+interface OrderByFilterProps<T extends string>
+  extends BaseFilterProps<T> {
+  options: FilterOption<T>[];
 }
 
-export function ConsumptionReasonFilter({ reasonFilter, onReasonFilterChange, consumptionReasons }: {
-  reasonFilter: string; onReasonFilterChange: (value: string) => void;
-  consumptionReasons: ConsumptionReasonModel[]
-}) {
-  return (
-
-    <FilterSelect label="Motivo do consumo" onChange={onReasonFilterChange} placeholder="Selecione o que te influenciou..."
-      value={reasonFilter} options={consumptionReasons.map((r) => ({ value: String(r.id), label: r.friendlyName }))} />
-
-  )
-}
-export function WouldBuyAgainFilter({ buyAgainFilter, onBuyAgainFilterChange }: { buyAgainFilter: string; onBuyAgainFilterChange: (value: string) => void; }) {
+export function OrderByFilter<T extends string>({
+  value,
+  onChange,
+  options,
+}: OrderByFilterProps<T>) {
   return (
     <FilterSelect
-      label={"Compraria novamente?"}
-      value={buyAgainFilter}
+      label="Ordenar por"
+      value={value}
+      placeholder="Ordenar por"
+      onChange={onChange}
+      options={options}
+    />
+  );
+}
+
+
+interface ConsumptionInfluenceFilterProps
+  extends BaseFilterProps {
+  influences: ConsumptionInfluenceModel[];
+}
+
+export function ConsumptionInfluenceFilter({
+  value,
+  onChange,
+  influences,
+}: ConsumptionInfluenceFilterProps) {
+  return (
+    <FilterSelect
+      label="Influência"
+      value={value}
+      placeholder="Selecione uma influência..."
+      onChange={onChange}
+      options={influences.map((influence) => ({
+        value: String(influence.id),
+        label: influence.friendlyName,
+      }))}
+    />
+  );
+}
+
+interface ConsumptionReasonFilterProps
+  extends BaseFilterProps {
+  consumptionReasons: ConsumptionReasonModel[];
+}
+
+export function ConsumptionReasonFilter({
+  value,
+  onChange,
+  consumptionReasons,
+}: ConsumptionReasonFilterProps) {
+  return (
+    <FilterSelect
+      label="Motivo do consumo"
+      value={value}
+      placeholder="Selecione um motivo..."
+      onChange={onChange}
+      options={consumptionReasons.map((reason) => ({
+        value: String(reason.id),
+        label: reason.friendlyName,
+      }))}
+    />
+  );
+}
+
+export function WouldBuyAgainFilter({
+  value,
+  onChange,
+}: BaseFilterProps) {
+  return (
+    <FilterSelect
+      label="Compraria novamente?"
+      value={value}
       placeholder="Selecione uma opção..."
-      onChange={onBuyAgainFilterChange}
+      onChange={onChange}
       options={[
         { value: "all", label: "Todos" },
         { value: "yes", label: "Sim" },
         { value: "no", label: "Não" },
-      ]} />
-  )
+      ]}
+    />
+  );
 }
-export function ConsumptionPeriodFilter({ periodFilter, onPeriodFilterChange }: { periodFilter: string; onPeriodFilterChange: (value: string) => void; }) {
+
+export function ConsumptionPeriodFilter({
+  value,
+  onChange,
+}: BaseFilterProps) {
   return (
     <FilterSelect
-      label={"Período"}
-      value={periodFilter}
+      label="Período"
+      value={value}
       placeholder="Selecione o período..."
-      onChange={onPeriodFilterChange}
+      onChange={onChange}
       options={[
         { value: "all", label: "Todos" },
         { value: "7d", label: "Últimos 7 dias" },
@@ -142,14 +223,24 @@ export function ConsumptionPeriodFilter({ periodFilter, onPeriodFilterChange }: 
         { value: "custom", label: "Personalizado" },
       ]}
     />
-  )
+  );
 }
-export function BrandFilter({ brandFilter, onBrandFilterChange, brands }: { brandFilter: string; onBrandFilterChange: (value: string) => void; brands: string[]; }) {
+
+interface BrandFilterProps
+  extends BaseFilterProps {
+  brands: string[];
+}
+
+
+export function BrandFilter({ value,
+  onChange,
+  brands
+}: BrandFilterProps) {
   return (<FilterSelect
-    value={brandFilter}
+    value={value}
     label={"Marca"}
     placeholder="Selecione uma marca..."
-    onChange={onBrandFilterChange}
+    onChange={onChange}
     options={[
       { value: "ALL", label: "Todas as marcas" },
       ...brands.map((brand) => ({ value: brand, label: brand })),
@@ -157,13 +248,16 @@ export function BrandFilter({ brandFilter, onBrandFilterChange, brands }: { bran
   />)
 }
 
-export function ConsumptionsOrderByFilter({ sort, onSortChange }: { sort: SortConsumptionsOptions; onSortChange: (value: SortConsumptionsOptions) => void; }) {
+
+export function ConsumptionsOrderByFilter({ value,
+  onChange,
+}: BaseFilterProps) {
   return (
     <FilterSelect
       label={"Ordenar por"}
-      value={sort}
+      value={value}
       placeholder="Ordenar por"
-      onChange={(v) => onSortChange(v as SortConsumptionsOptions)}
+      onChange={onChange}
       options={[
         { value: "recent", label: "Adicionados recentemente" },
         { value: "last_consumed", label: "Último consumo" },
@@ -175,13 +269,13 @@ export function ConsumptionsOrderByFilter({ sort, onSortChange }: { sort: SortCo
   )
 }
 
-export function ItensOrderByFilter({ sort, onSortChange }: { sort: SortItemsOptions; onSortChange: (value: SortItemsOptions) => void; }) {
+export function ItensOrderByFilter({ value, onChange }: BaseFilterProps) {
   return (
     <FilterSelect
       label={"Ordenar por"}
-      value={sort}
+      value={value}
       placeholder="Ordenar por"
-      onChange={(v) => onSortChange(v as SortItemsOptions)}
+      onChange={onChange}
       options={[
         { value: "recent", label: "Adicionados recentemente" },
         { value: "last_consumed", label: "Último consumo" },
@@ -193,27 +287,27 @@ export function ItensOrderByFilter({ sort, onSortChange }: { sort: SortItemsOpti
   )
 }
 
-interface Option {
-  value: string;
+export interface FilterOption<T extends string = string> {
+  value: T;
   label: string;
   type?: TypeFilter;
 }
 
-interface FilterSelectProps {
+interface FilterSelectProps<T extends string> {
   label: string;
-  value: string;
+  value: T;
   placeholder: string;
-  onChange: (value: string) => void;
-  options: Option[];
+  onChange: (value: T) => void;
+  options: FilterOption<T>[];
 }
 
-function FilterSelect({
+function FilterSelect<T extends string>({
   label,
   value,
   placeholder,
   onChange,
   options,
-}: FilterSelectProps) {
+}: FilterSelectProps<T>) {
   let previousType: string | undefined;
 
   return (
@@ -262,4 +356,3 @@ function FilterSelect({
     </div>
   );
 }
-

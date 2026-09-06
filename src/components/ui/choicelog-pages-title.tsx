@@ -14,7 +14,7 @@ export function PageHeader({
     return (
         <div
             className={cn(
-                "mb-4 flex items-center  gap-3",
+                "flex items-center  gap-3",
                 className
             )}
         >
@@ -70,7 +70,7 @@ export function PageSubtitle({
     return (
         <p
             className={cn(
-                "mt-5 max-w-md text-base leading-7 text-blue-900 sm:text-base",
+                "max-w-md text-base leading-7 text-blue-900 sm:text-base",
                 className
             )}
         >

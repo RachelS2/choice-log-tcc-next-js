@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 const LABELS: Record<number, string> = {
   1: "Muito ruim",
   2: "Ruim",
-  3: "Razoável",
+  3: "Bom",
   4: "Muito bom",
   5: "Excelente",
 };

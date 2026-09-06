@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import {
-  CalendarIcon,
   MapPin,
   Star,
   Compass,
@@ -14,6 +13,7 @@ import {
   Package,
   Wrench,
   LucideIcon,
+  PackageOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,10 +32,10 @@ import { DatePicker } from "@/components/ui/choicelog-date-picker";
 import ConsumptionCreatedPage from "./consumption-created-page";
 import { BasicItemModel, CategoryModel, CreateUpdateItemModel, ItemTypeEnum, ItemTypeModel } from "@/models/dashboard/items";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, CreateConsumptionModel, NegativeAspectModel } from "@/models/dashboard/consumption";
-import EmptyDataState from "@/components/ui/empty-state";
+import { EmptyState } from "@/components/ui/empty-state";
 import CreateUpdateItemModal from "../../items/create-item-modal";
 import { toast } from "sonner";
-import { PageHeader, PageSubtitle, PageTitle } from "@/components/ui/pages-title";
+import { PageHeader, PageSubtitle, PageTitle } from "@/components/ui/choicelog-pages-title";
 
 interface Errors {
   item?: string;
@@ -365,7 +365,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                   {/* Empty state */}
                   {filteredItems.length === 0 && (
 
-                    <EmptyDataState className="w-full min-h-[50px] py-8 border-none" mainTitle="Nenhum item encontrado" description="Tente outro filtro." />
+                    <EmptyState icon={PackageOpen} title="Nenhuma experiência encontrada" description="Tente outro filtro." />
                   )}
                 </div>
 
@@ -412,7 +412,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
               {/* DATE */}
               <div>
                 <FieldLabel required>
-                  Data
+                  Data do consumo
                 </FieldLabel>
 
                 <DatePicker
@@ -547,7 +547,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
           <FormSection
             icon={ThumbsDown}
             title="Aspectos negativos"
-            description="Algo que lhe incomodou? Selecione quantos quiser — ou nenhum."
+            description="Algo que lhe incomodou? Selecione quantos pontos negativos quiser, incluse, nenhum."
           >
             <div className="flex flex-wrap gap-2">
               {!selectedItem ? (
@@ -601,7 +601,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
 
               {/* WOULD BUY AGAIN */}
               <div className="flex flex-col items-center justify-center">
-                <FieldLabel>
+                <FieldLabel required>
                   Você consumiria este item de novo?
                 </FieldLabel>
 

@@ -1,12 +1,11 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { AlertTriangle, ClipboardList, PackageOpen, Plus, SearchX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConsumptionFilters } from "@/components/dashboard/experiences/consumption-filters";
 import { ConsumptionList } from "@/components/dashboard/experiences/consumption-list";
 import { ConsumptionSummary } from "@/components/dashboard/experiences/consumption-summary";
 import { ConsumptionDetails } from "@/components/dashboard/experiences/consumption-details";
-import { EmptyState } from "@/components/dashboard/experiences/empty-state";
 import { Pagination } from "@/components/dashboard/experiences/pagination";
 import {
     defaultFilters,
@@ -20,6 +19,7 @@ import { redirect } from "next/navigation";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { CategoryModel } from "@/models/dashboard/items";
 import ConsumptionHeader from "./consumption-header";
+import { EmptyState } from "@/components/ui/empty-state";
 
 
 const PAGE_SIZE = 12;
@@ -28,12 +28,9 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
 
     // const onlyConsumptions = consumptionsWithItems.map((c) => c.consumption);
     const [consumptions, setConsumptions] = useState<ReadConsumptionModel[]>(consumptionsWithItems);
-    const [error, setError] = useState(false);
-    const [reloadKey, setReloadKey] = useState(0);
 
     const [filters, setFilters] = useState<ConsumptionFilterState>(defaultFilters);
     const [sort, setSort] = useState<SortConsumptionsOptions>("recent");
-    const [expanded, setExpanded] = useState(false);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
     const [page, setPage] = useState(1);
     const [selected, setSelected] = useState<ReadConsumptionModel | null>(null);
@@ -82,27 +79,10 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
                             setSort(s);
                             setPage(1);
                         }}
-                        expanded={expanded}
                         categories={categories}
-                        onToggleExpanded={() => setExpanded((v) => !v)
-
-
-                        }
                     />
 
-                    {error ? (
-                        <EmptyState
-                            icon={AlertTriangle}
-                            title="Não foi possível carregar seus consumos."
-                            description="Ocorreu um erro ao buscar o histórico. Tente novamente em instantes."
-                            action={
-                                <Button onClick={() => setReloadKey((k) => k + 1)}>
-                                    Tentar novamente
-                                </Button>
-                            }
-                        />
-
-                    ) : !hasAny ? (
+                    {!hasAny ? (
                         <EmptyState
                             icon={PackageOpen}
                             title="Você ainda não registrou nenhum consumo."
@@ -122,7 +102,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
                             title="Nenhum consumo encontrado."
                             description="Tente alterar ou remover alguns filtros."
                             action={
-                                <Button variant="outline" onClick={clearFilters}>
+                                <Button variant="outline" className="bg-white text-blue-900 hover:bg-muted hover:text-blue-900 hover:font-semibold" onClick={clearFilters}>
                                     Limpar filtros
                                 </Button>
                             }
@@ -154,7 +134,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
                     )}
                 </div>
 
-                {!error && hasAny ? (
+                {hasAny ? (
                     <p className="mt-8 flex items-center justify-center gap-2 text-xs text-muted-foreground">
                         <ClipboardList className="size-3.5" />
                         Histórico de Consumo — somente você vê estes registros.

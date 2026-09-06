@@ -47,6 +47,7 @@ export function ItemTypeFilter({ typeFilter, onTypeFilterChange }: { typeFilter:
 
 export function CategoryFilter({ categoryFilter, onCategoryFilterChange, categories }:
   { categoryFilter: string; onCategoryFilterChange: (value: string) => void; categories: CategoryModel[]; }) {
+  console.log(categoryFilter)
   return (
     <FilterSelect
       value={categoryFilter}
@@ -94,7 +95,7 @@ export function ConsumptionInfluenceFilter({ influenceFilter, onInfluenceFilterC
 }) {
   return (
 
-    <FilterSelect label="Motivo do consumo" onChange={onInfluenceFilterChange} placeholder="Selecione um motivo..."
+    <FilterSelect label="Influência" onChange={onInfluenceFilterChange} placeholder="Selecione um motivo..."
       value={influenceFilter} options={influences.map((r) => ({ value: String(r.id), label: r.friendlyName }))} />
 
   )
@@ -106,7 +107,7 @@ export function ConsumptionReasonFilter({ reasonFilter, onReasonFilterChange, co
 }) {
   return (
 
-    <FilterSelect label="Influência" onChange={onReasonFilterChange} placeholder="Selecione o que te influenciou..."
+    <FilterSelect label="Motivo do consumo" onChange={onReasonFilterChange} placeholder="Selecione o que te influenciou..."
       value={reasonFilter} options={consumptionReasons.map((r) => ({ value: String(r.id), label: r.friendlyName }))} />
 
   )
@@ -122,7 +123,6 @@ export function WouldBuyAgainFilter({ buyAgainFilter, onBuyAgainFilterChange }: 
         { value: "all", label: "Todos" },
         { value: "yes", label: "Sim" },
         { value: "no", label: "Não" },
-        { value: "unknown", label: "Não informado" },
       ]} />
   )
 }

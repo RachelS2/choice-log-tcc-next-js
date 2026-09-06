@@ -34,7 +34,6 @@ model ItemType {
   updatedAt          DateTime            @default(now()) @updatedAt
   id                 Int                 @id @default(autoincrement())
   categories         Category[]
-  consumptionReasons ConsumptionReason[]
   negativeAspects    NegativeAspect[]
 }
 
@@ -85,12 +84,8 @@ model ConsumptionReason {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now()) @updatedAt
   id           Int           @id @default(autoincrement())
-  typeId       Int
   consumptions Consumption[]
-  type         ItemType      @relation(fields: [typeId], references: [id])
-
-  @@unique([friendlyName, typeId])
-  @@index([typeId])
+  @@unique([friendlyName])
 }
 
 model ConsumptionInfluence {

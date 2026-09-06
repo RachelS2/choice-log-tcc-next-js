@@ -1,3 +1,4 @@
+"use client";
 import { Plus, Search, SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { DatePicker } from "@/components/ui/choicelog-date-picker";
+import { useState } from "react";
 
 function Field({
   label,
@@ -22,36 +24,37 @@ function Field({
 }) {
   return (
     <div className="space-y-1.5">
-      <Label className="text-xs font-medium text-muted-foreground">
+      <Label className="text-xs font-medium text-blue-900">
         {label}
       </Label>
       {children}
     </div>
   );
 }
+
+interface ConsumptionFiltersProps {
+  filters: ConsumptionFilterState;
+  onChange: (patch: Partial<ConsumptionFilterState>) => void;
+  sort: SortConsumptionsOptions;
+  onSortChange: (s: SortConsumptionsOptions) => void;
+  categories: CategoryModel[];
+  consumptionInfluences: ConsumptionInfluenceModel[],
+  consumptionReasons: ConsumptionReasonModel[]
+}
 export function ConsumptionFilters({
   filters,
   onChange,
   sort,
   onSortChange,
-  expanded,
-  onToggleExpanded,
   categories,
   consumptionInfluences,
   consumptionReasons
-}: {
-  filters: ConsumptionFilterState;
-  onChange: (patch: Partial<ConsumptionFilterState>) => void;
-  sort: SortConsumptionsOptions;
-  onSortChange: (s: SortConsumptionsOptions) => void;
-  expanded: boolean;
-  onToggleExpanded: () => void;
-  categories: CategoryModel[];
-  consumptionInfluences: ConsumptionInfluenceModel[],
-  consumptionReasons: ConsumptionReasonModel[]
-}) {
+}: ConsumptionFiltersProps) {
+  const [fromDateError, setFromDateError] = useState<string | undefined>(undefined);
+  const [toDateError, setToDateError] = useState<string | undefined>(undefined);
 
   const count = activeFilterCount(filters);
+  const [expanded, setExpanded] = useState(false);
 
   const chips: { label: string; clear: () => void }[] = [];
   if (filters.search.trim())
@@ -92,7 +95,7 @@ export function ConsumptionFilters({
     });
   if (filters.buyAgain !== "all")
     chips.push({
-      label: `Compraria novamente: ${{ yes: "Sim", no: "Não", unknown: "Não informado" }[filters.buyAgain]
+      label: `Compraria novamente: ${{ yes: "Sim", no: "Não" }[filters.buyAgain]
         }`,
       clear: () => onChange({ buyAgain: "all" }),
     });
@@ -124,7 +127,7 @@ export function ConsumptionFilters({
           <Button
             variant="default"
             className="h-11 flex-1 bg-white text-blue-900 hover:bg-foreground hover:text-blue-900 lg:flex-none"
-            onClick={onToggleExpanded}
+            onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
           >
             <SlidersHorizontal className="size-4" />
@@ -162,12 +165,18 @@ export function ConsumptionFilters({
             <>
               <Field label="De">
 
-                <DatePicker value={filters.from} onChange={(date) => onChange({ from: date })} putCalendarIcon={true} />
+                <DatePicker error={fromDateError}
+                  setError={(error: string | undefined) =>
+                    setFromDateError(error)
+                  } value={filters.from} onChange={(date) => onChange({ from: date })} putCalendarIcon={true} />
 
               </Field>
               <Field label="Até">
 
-                <DatePicker value={filters.to} onChange={(date) => onChange({ to: date })} putCalendarIcon={true} />
+                <DatePicker error={toDateError}
+                  setError={(error: string | undefined) =>
+                    setToDateError(error)
+                  } value={filters.to} onChange={(date) => onChange({ to: date })} putCalendarIcon={true} />
               </Field>
             </>
           ) : null}

@@ -3,7 +3,7 @@ import { ReadConsumptionModel, SortConsumptionsOptions, SortItemsOptions } from 
 
 export type RatingFilter = "all" | "5" | "4" | "3" | "2" | "1";
 export type PeriodFilter = "all" | "7d" | "30d" | "6m" | "1y" | "custom";
-export type BuyAgainFilter = "all" | "yes" | "no" | "unknown";
+export type BuyAgainFilter = "all" | "yes" | "no";
 
 
 export interface ConsumptionFilterState {
@@ -102,7 +102,7 @@ export function filterConsumptions(
 
         if (f.buyAgain === "yes" && c.wouldBuyAgain !== true) return false;
         if (f.buyAgain === "no" && c.wouldBuyAgain !== false) return false;
-        if (f.buyAgain === "unknown" && c.wouldBuyAgain !== null) return false;
+        if (f.buyAgain === "all" && c.wouldBuyAgain === null) return false;
 
         if (f.reasonId !== "all" && String(c.reason.id) !== f.reasonId) return false;
         if (f.influenceId !== "all" && String(c.influence.id) !== f.influenceId)

@@ -1,30 +1,33 @@
-import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+"use client";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { AlertTriangle, type LucideIcon } from "lucide-react";
+import { redirect } from "next/navigation";
+import ConsumptionHeader from "./consumption-header";
+import DecorativeBackground from "@/components/ui/choicelog-decorative-background";
 
-export function EmptyState({
-    icon: Icon,
-    title,
-    description,
-    action,
-}: {
-    icon: LucideIcon;
-    title: string;
-    description: string;
-    action?: ReactNode;
-}) {
+export function ErrorConsumptionsState() {
     return (
-        <div
-            className="flex flex-col items-center rounded-2xl border border-dashed border-border bg-card px-6 py-14 text-center"
-            style={{ boxShadow: "var(--shadow-card)" }}
+        <main
+            className="min-h-screen py-10 flex flex-col items-center justify-center"
         >
-            <div className="grid size-14 place-items-center rounded-full bg-primary/10 text-primary">
-                <Icon className="size-6" />
+            <DecorativeBackground />
+            <div className="max-w-xl shadow-md border-b border-blue-900 flex items-center justify-center w-full rounded-2xl bg-white max-w-5xl px-4 sm:px-6"
+            >
+
+                <EmptyState
+                    icon={AlertTriangle}
+                    title="Não foi possível carregar seus consumos."
+                    description="Ocorreu um erro ao buscar o histórico. Tente novamente em instantes."
+                    action={
+                        <Button className="bg-blue-900 text-white hover:bg-blue-800" onClick={() => {
+                            redirect("/dashboard/experiences")
+                        }}>
+                            Tentar novamente
+                        </Button>
+                    }
+                />
             </div>
-            <h3 className="mt-4 text-base font-semibold tracking-tight text-foreground">
-                {title}
-            </h3>
-            <p className="mt-1 max-w-sm text-sm text-muted-foreground">{description}</p>
-            {action ? <div className="mt-6">{action}</div> : null}
-        </div>
-    );
+        </main>
+    )
 }

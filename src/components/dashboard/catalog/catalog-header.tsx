@@ -1,7 +1,6 @@
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { CategoryModel } from '@/models/dashboard/items';
-import { PageHeader, PageTitle } from '@/components/ui/pages-title';
+import { PageHeader, PageTitle } from '@/components/ui/choicelog-pages-title';
 
 interface CatalogHeaderProps {
   onNewItem: () => void;

@@ -186,7 +186,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         open={deleteModalOpen}
         onOpenChange={setDeleteModalOpen}
         onConfirm={handleDeleteModal}
-        dialogTitle="Confirm Delete"
+        dialogTitle="Confirmar Exclusão"
         dialogDescription="Tem certeza que deseja excluir este item permanentemente?"
         buttonText="Excluir"
       />

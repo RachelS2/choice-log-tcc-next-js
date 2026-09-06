@@ -27,7 +27,7 @@ export default function AppLogo({
         }
       `}
     >
-      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 shrink-0">
+      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-700 shrink-0">
         <ShoppingBag className="h-4 w-4 text-white" />
       </div>
 

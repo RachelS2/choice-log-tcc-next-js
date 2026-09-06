@@ -9,7 +9,7 @@ export interface NegativeAspectModel extends ConsumptionInfluenceModel {
     typeId: number;
 }
 
-export interface ConsumptionReasonModel extends NegativeAspectModel {
+export interface ConsumptionReasonModel extends ConsumptionInfluenceModel {
 }
 
 interface ConsumptionBaseModel {

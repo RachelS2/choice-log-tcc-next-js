@@ -1,7 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { PageHeader, PageSubtitle, PageTitle } from "@/components/ui/pages-title";
-import { Plus } from "lucide-react";
-import Link from "next/link";
+import { PageHeader, PageSubtitle, PageTitle } from "@/components/ui/choicelog-pages-title";
 
 export default function ConsumptionHeader() {
     return (

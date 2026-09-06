@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import EmptyDataState from '@/components/ui/empty-state';
+import { EmptyState } from '@/components/ui/empty-state';
 import CatalogFilters from '@/components/dashboard/catalog/catalog-filter';
 import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
 import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
@@ -12,6 +12,7 @@ import { fetchCategoriesController } from '@/lib/controller/category-controller'
 import CatalogLoadingState from '@/components/dashboard/catalog/catalog-loading-state';
 import { useGetCategories } from '@/hooks/use-categories';
 import { SortItemsOptions } from '@/models/dashboard/consumption';
+import { PackageOpen } from 'lucide-react';
 
 export type TypeFilter = 'ALL' | ItemTypeEnum;
 
@@ -191,7 +192,7 @@ export default function CatalogPage() {
       ) : filteredItems.length > 0 ? (
         <CatalogGrid items={filteredItems} onDelete={handleItemDelete} onEdit={handleEditItem} categories={categories} />
       ) : (
-        <EmptyDataState className="px-6 py-16" />
+        <EmptyState icon={PackageOpen} title="Nenhum item encontrado" description="Tente outro filtro." />
       )}
 
       <CreateUpdateItemModal

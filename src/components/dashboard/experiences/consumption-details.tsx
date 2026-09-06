@@ -50,9 +50,6 @@ function Row({
   );
 }
 
-function NotProvided() {
-  return <span className="text-sm font-normal text-muted-foreground/70">Não informado</span>;
-}
 
 export function ConsumptionDetails({
   data,
@@ -140,9 +137,7 @@ export function ConsumptionDetails({
                     </span>
                   </Row>
                   <Row label="Compraria novamente">
-                    {data.wouldBuyAgain === null ? (
-                      <NotProvided />
-                    ) : data.wouldBuyAgain ? (
+                    {data.wouldBuyAgain ? (
                       <span className="inline-flex items-center gap-1.5 text-success">
                         <ThumbsUp className="size-3.5" /> Sim
                       </span>

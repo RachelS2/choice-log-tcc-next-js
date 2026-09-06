@@ -78,11 +78,11 @@ export function DatePicker({
     };
 
     return (
-        <div className="space-y-1 bg-white">
+        <div className="space-y-1">
             <Popover open={open} onOpenChange={setOpen}>
                 <div
                     className={cn(
-                        "flex h-11 w-full items-center rounded-md border bg-white",
+                        "flex h-11 w-full shadow-sm items-center rounded-md border bg-white",
                         error && "border-red-500"
                     )}
                 >

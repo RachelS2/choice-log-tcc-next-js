@@ -2,6 +2,7 @@ import { Package, Wrench} from "lucide-react";
 import { getInitials } from "@/lib/utils";
 import { BasicItemModel } from "@/models/dashboard/items";
 import { Card } from "@/components/ui/card";
+import DecorativeBackground from "@/components/ui/choicelog-decorative-background";
 
 export function ItemHeroCard({
     item,
@@ -27,17 +28,7 @@ export function ItemHeroCard({
         hover:shadow-lg hover:shadow-blue-100/50
     "
         >
-            {/* Decorative background */}
-            <div
-                className="
-            pointer-events-none absolute -right-16 -top-16
-            size-40 rounded-full
-            bg-blue-100/40 blur-3xl
-            transition-opacity duration-300
-            group-hover:bg-blue-200/50
-        "
-            />
-
+            <DecorativeBackground />
             <div className="relative mx-auto flex w-fit items-center justify-center gap-5 p-5 sm:gap-6 sm:p-6">
                 {/* Item image */}
                 <div className="relative shrink-0">

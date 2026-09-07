@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import CatalogFilters from '@/components/dashboard/catalog/catalog-filter';
+import CatalogFiltersPanel from '@/components/dashboard/catalog/catalog-filter';
 import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
 import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
 import CreateUpdateItemModal from '@/components/dashboard/items/create-item-modal';
@@ -9,10 +9,10 @@ import { getItemsController } from '@/lib/controller/item-controller';
 import { toast } from 'sonner';
 import { fetchCategoriesController } from '@/lib/controller/category-controller';
 import CatalogLoadingState from '@/components/dashboard/catalog/catalog-loading-state';
-import { useGetCategories } from '@/hooks/use-categories';
 import { SortItemsOptions } from '@/models/dashboard/consumption';
 import { PackageOpen } from 'lucide-react';
 import { NotificationContent } from '@/components/ui/choicelog-notification-card';
+import { ActiveFiltersChips } from '@/components/ui/choicelog-chips';
 
 export type TypeFilter = 'ALL' | ItemTypeEnum;
 
@@ -164,47 +164,64 @@ export default function CatalogPage() {
     brandFilter,
     sort,
   ]);
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
 
   return (
-    <div className="p-11 space-y-6">
-      <CatalogHeader
-        newItemBtnDisabled={categories.length === 0}
-        onNewItem={() => setModalOpen(true)}
-      />
+    <main className="min-h-screen py-10">
+      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
 
-      <CatalogFilters
-        search={search}
-        onSearchChange={setSearch}
-        typeFilter={typeFilter}
-        onTypeFilterChange={setTypeFilter}
-        categoryFilter={categoryFilter}
-        onCategoryFilterChange={setCategoryFilter}
-        brandFilter={brandFilter}
-        onBrandFilterChange={setBrandFilter}
-        sort={sort}
-        onSortChange={setSort}
-        categories={categories}
-        brands={brands}
-      />
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <CatalogHeader
+            newItemBtnDisabled={categories.length === 0}
+            onNewItem={() => setModalOpen(true)}
+          />
 
-      {loading ? (
-        <CatalogLoadingState title="Carregando itens..." description="Estamos preparando seu catálogo. Isso deve levar apenas alguns instantes." />
-      ) : filteredItems.length > 0 ? (
-        <CatalogGrid items={filteredItems} onDelete={handleItemDelete} onEdit={handleEditItem} categories={categories} />
-      ) : (
-        <NotificationContent icon={PackageOpen} title="Nenhum item encontrado" description="Tente outro filtro." />
-      )}
 
-      <CreateUpdateItemModal
-        open={modalOpen}
-        mode="create"
-        onOpenChange={setModalOpen}
-        categories={categories}
-        onSuccess={async () => {
-          await fetchCatalogItems();
-          setModalOpen(false);
-        }}
-      />
-    </div>
+        </div>
+
+        <div className="mt-6 border-b border-border" />
+
+
+        {/* Filtros expandidos */}
+        {filtersExpanded && (
+          <div className="pt-6">
+            <CatalogFiltersPanel
+              typeFilter={typeFilter}
+              onTypeFilterChange={setTypeFilter}
+              categoryFilter={categoryFilter}
+              onCategoryFilterChange={setCategoryFilter}
+              brandFilter={brandFilter}
+              onBrandFilterChange={setBrandFilter}
+              sort={sort}
+              onSortChange={setSort}
+              categories={categories}
+              brands={brands}
+            />
+          </div>
+        )}
+        <div className="mt-5">
+          <ActiveFiltersChips chips={chips} />
+        </div>
+
+        {loading ? (
+          <CatalogLoadingState title="Carregando itens..." description="Estamos preparando seu catálogo. Isso deve levar apenas alguns instantes." />
+        ) : filteredItems.length > 0 ? (
+          <CatalogGrid items={filteredItems} onDelete={handleItemDelete} onEdit={handleEditItem} categories={categories} />
+        ) : (
+          <NotificationContent icon={PackageOpen} title="Nenhum item encontrado" description="Tente outro filtro." />
+        )}
+
+        <CreateUpdateItemModal
+          open={modalOpen}
+          mode="create"
+          onOpenChange={setModalOpen}
+          categories={categories}
+          onSuccess={async () => {
+            await fetchCatalogItems();
+            setModalOpen(false);
+          }}
+        />
+      </div>
+    </main>
   );
 }

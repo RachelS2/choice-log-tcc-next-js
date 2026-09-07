@@ -12,7 +12,7 @@ import {
     filterConsumptions,
     sortConsumptions,
     summarize,
-    type ConsumptionFilterState,
+    type ConsumptionFilterState, buildConsumptionFilterChips
 } from "@/lib/consumption-filters";
 import { redirect } from "next/navigation";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
@@ -20,7 +20,6 @@ import { CategoryModel } from "@/models/dashboard/items";
 import ConsumptionHeader from "./consumption-header";
 import { NotificationContent } from "@/components/ui/choicelog-notification-card";
 import { ActiveFilterChip, ActiveFiltersChips } from "@/components/ui/choicelog-chips";
-import { buildConsumptionFilterChips } from "./consumption-chips-builder";
 
 
 const PAGE_SIZE = 12;

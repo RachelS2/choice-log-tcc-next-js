@@ -15,7 +15,7 @@ export default function CatalogGrid({
   categories,
 }: CatalogGridProps) {
   return (
-    <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+    <div className="mx-auto grid w-full max-w-8xl grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3">
       {items.map((item) => (
         <CatalogCard
           key={item.id}

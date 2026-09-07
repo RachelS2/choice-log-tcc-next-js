@@ -1,6 +1,7 @@
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { PageHeader, PageTitle } from '@/components/ui/choicelog-pages-title';
+import { PageHeader, PageSubtitle, PageTitle } from '@/components/ui/choicelog-pages-title';
+import { Card } from '@/components/ui/card';
 
 interface CatalogHeaderProps {
   onNewItem: () => void;
@@ -8,21 +9,27 @@ interface CatalogHeaderProps {
 }
 export default function CatalogHeader({ onNewItem, newItemBtnDisabled }: CatalogHeaderProps) {
   return (
-    <div className="flex flex-col gap-2 mx-auto w-full max-w-7xl sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex flex-col">
-          <PageHeader header="Navegue e gerencie todos os produtos e serviços que você registrou." lineBefore/>
-          
-          <PageTitle title="Seus Itens" />
 
+    <Card className="flex flex-col p-4 sm:p-4 items-start text-left">
+      <div className="flex  w-full flex-col gap-2 lg:w-auto lg:min-w-[420px]">
+
+        <PageHeader
+          header="Produtos e Serviços Registrados"
+          className="justify-start"
+          lineBefore
+          lineAfter={false}
+        />
+
+        <PageTitle
+          title="Seus Itens"
+          className="justify-start"
+        />
+
+        <PageSubtitle
+          subtitle="Navegue e gerencie todos os produtos e serviços que você registrou."
+          className="justify-start"
+        />
       </div>
-      <Button
-        onClick={onNewItem}
-        disabled={newItemBtnDisabled}
-        className="h-11 bg-blue-900/90 hover:bg-blue-700 text-white"
-      >
-        <Plus className="h-4 w-4" />
-        Novo item
-      </Button>
-    </div>
+    </Card>
   );
 }

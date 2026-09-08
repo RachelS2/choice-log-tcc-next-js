@@ -50,3 +50,10 @@ export type SortConsumptionsOptions =
     | "rating_asc"
     | "most_spent"
     | "least_spent";
+
+export interface ConsumptionSummaryModel {
+    total: number
+    avg: number
+    totalSpent: number
+    buyAgainPct: number | null
+};

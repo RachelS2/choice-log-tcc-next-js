@@ -3,11 +3,8 @@ import { Button } from '@/components/ui/button';
 import { PageHeader, PageSubtitle, PageTitle } from '@/components/ui/choicelog-pages-title';
 import { Card } from '@/components/ui/card';
 
-interface CatalogHeaderProps {
-  onNewItem: () => void;
-  newItemBtnDisabled: boolean;
-}
-export default function CatalogHeader({ onNewItem, newItemBtnDisabled }: CatalogHeaderProps) {
+
+export default function CatalogHeader() {
   return (
 
     <Card className="flex flex-col p-4 sm:p-4 items-start text-left">

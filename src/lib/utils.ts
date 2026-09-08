@@ -1,4 +1,3 @@
-import { ActiveFilterChip } from "@/components/ui/choicelog-chips";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -6,25 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-
-
 export function getDateTime(date: string | null) {
   return date ? new Date(date).getTime() : 0;
-}
-
-
-
-export function createChip(
-  condition: boolean,
-  label: string,
-  clear: () => void
-): ActiveFilterChip | null {
-  return condition
-    ? {
-      label,
-      clear,
-    }
-    : null;
 }
 
 export function toSystemName(friendlyName: string): string {

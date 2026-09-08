@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import CatalogFiltersPanel from '@/components/dashboard/catalog/catalog-filter';
+import CatalogFiltersPanel, { CatalogFilters } from '@/components/dashboard/catalog/catalog-filter';
 import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
 import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
 import CreateUpdateItemModal from '@/components/dashboard/items/create-item-modal';
@@ -12,19 +12,105 @@ import CatalogLoadingState from '@/components/dashboard/catalog/catalog-loading-
 import { SortItemsOptions } from '@/models/dashboard/consumption';
 import { PackageOpen } from 'lucide-react';
 import { NotificationContent } from '@/components/ui/choicelog-notification-card';
-import { ActiveFiltersChips } from '@/components/ui/choicelog-chips';
+import { ActiveFilterChip, ActiveFiltersChips } from '@/components/ui/choicelog-chips';
+import { buildCatalogFilterChips, CatalogFilterState, defaultFilters, filterItems, sortItems } from '@/lib/catalog-filters';
+import { Button } from '@/components/ui/button';
 
 export type TypeFilter = 'ALL' | ItemTypeEnum;
 
 export default function CatalogPage() {
-  const [search, setSearch] = useState('');
-  const [typeFilter, setTypeFilter] = useState<TypeFilter>('ALL');
-  const [categoryFilter, setCategoryFilter] = useState('ALL');
-  const [brandFilter, setBrandFilter] = useState('ALL');
-  const [sort, setSort] = useState<SortItemsOptions>('recent');
-  const [catalogItems, setCatalogItems] = useState<CreateUpdateItemModel[]>([]);
-  const [categories, setCategories] = useState<CategoryModel[]>([]);
+  const [filters, setFilters] =
+    useState<CatalogFilterState>(defaultFilters);
+
+  const [sort, setSort] =
+    useState<SortItemsOptions>("recent");
+
+  const [catalogItems, setCatalogItems] =
+    useState<CreateUpdateItemModel[]>([]);
+
+  const [categories, setCategories] =
+    useState<CategoryModel[]>([]);
+
   const [modalOpen, setModalOpen] = useState(false);
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
+  const [loading, setIsLoading] = useState(false);
+
+  const patchFilters = (
+    patch: Partial<CatalogFilterState>
+  ) => {
+    
+    setFilters((current) => ({
+      ...current,
+      ...patch,
+    }));
+    console.log("DEFAULT FILTERS: " + defaultFilters);
+  };
+  function clearFilters() {
+    setFilters(defaultFilters);
+  }
+  const fetchCatalogItems = async () => {
+    setIsLoading(true);
+
+    try {
+      const items = await getItemsController();
+      setCatalogItems(items);
+    } catch {
+      toast.error("Failed to fetch catalog items");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCatalogItems();
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categories =
+          await fetchCategoriesController(
+            true,
+            filters.type === "ALL"
+              ? undefined
+              : (filters.type as ItemTypeEnum)
+          );
+
+        setCategories(categories);
+      } catch {
+        toast.error("Erro ao buscar categorias.");
+      }
+    };
+
+    fetchCategories();
+  }, [filters.type]);
+
+  const brands = useMemo(
+    () => [
+      ...new Set(
+        catalogItems
+          .map((item) => item.brand)
+          .filter(Boolean)
+      ),
+    ],
+    [catalogItems]
+  );
+
+  const filteredItems = useMemo(() => {
+    const filtered = filterItems(
+      catalogItems,
+      filters
+    );
+
+    return sortItems(filtered, sort);
+  }, [catalogItems, filters, sort]);
+
+  const chips = buildCatalogFilterChips({
+    filters,
+    patchFilters, categories
+  });
+
+  console.log(chips)
 
   const handleEditItem = (
     updatedItem: CreateUpdateItemModel
@@ -37,161 +123,54 @@ export default function CatalogPage() {
       )
     );
   };
-  function handleItemDelete(itemId: string) {
-    setCatalogItems((catalogItems) =>
-      catalogItems.filter((item) => item.id !== itemId)
+
+  const handleItemDelete = (itemId: string) => {
+    setCatalogItems((currentItems) =>
+      currentItems.filter(
+        (item) => item.id !== itemId
+      )
     );
-  }
-  const [loading, setIsLoading] = useState(false);
-  const fetchCatalogItems = async () => {
-    setIsLoading(true);
-    try {
-      const items = await getItemsController();
-      setCatalogItems(items);
-    } catch (error) {
-      toast.error('Failed to fetch catalog items');
-    }
-    finally {
-      setIsLoading(false);
-    }
   };
-
-  useEffect(() => {
-    fetchCatalogItems();
-  }, []);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categories = await fetchCategoriesController(true, typeFilter === 'ALL' ? undefined : typeFilter as ItemTypeEnum);
-        setCategories(categories);
-      } catch (error) {
-        toast.error('Failed to fetch categories');
-      }
-    };
-
-    fetchCategories();
-  }, [typeFilter]);
-
-  const brands: string[] = useMemo(
-    () => [...new Set(catalogItems.map((item) => item.brand))],
-    [catalogItems]
-  );
-
-  const filteredItems: CreateUpdateItemModel[] = useMemo(() => {
-    let items = [...catalogItems];
-
-    // Search filter
-    if (search.trim()) {
-      const query = search.toLowerCase();
-
-      items = items.filter((item) =>
-        item.friendlyName.toLowerCase().includes(query)
-      );
-    }
-
-    // Type filter
-    if (typeFilter !== 'ALL') {
-      items = items.filter((item) => item.type === typeFilter);
-    }
-
-    // Category filter
-    if (categoryFilter !== 'ALL') {
-      items = items.filter(
-        (item) => item.categoryId === categoryFilter
-      );
-    }
-
-    // Brand filter
-    if (brandFilter !== 'ALL') {
-      items = items.filter(
-        (item) => item.brand === brandFilter
-      );
-    }
-
-    // Sort
-    switch (sort) {
-      case 'recent':
-        // Keep original order
-        break;
-
-      case 'last_consumed':
-
-        items.sort((a, b) => {
-          if (a.lastConsumed === null && b.lastConsumed === null) {
-            return 0;
-          }
-
-          if (a.lastConsumed === null) {
-            return 1;
-          }
-
-          if (b.lastConsumed === null) {
-            return -1;
-          }
-
-          return (
-            new Date(b.lastConsumed).getTime() -
-            new Date(a.lastConsumed).getTime()
-          );
-        });
-
-        break;
-      case 'most_experiences':
-        items.sort(
-          (a, b) => b.experiences - a.experiences
-        );
-        break;
-
-      case 'alphabetical':
-        items.sort((a, b) =>
-          a.friendlyName.localeCompare(b.friendlyName)
-        );
-        break;
-      case 'most_spent':
-        items.sort(
-          (a, b) => b.totalSpent - a.totalSpent
-        );
-        break;
-    }
-
-    return items;
-  }, [
-    catalogItems,
-    search,
-    typeFilter,
-    categoryFilter,
-    brandFilter,
-    sort,
-  ]);
-  const [filtersExpanded, setFiltersExpanded] = useState(false);
 
   return (
     <main className="min-h-screen py-10">
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
-
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <CatalogHeader
-            newItemBtnDisabled={categories.length === 0}
+
+          <CatalogHeader />
+
+          <CatalogFilters
+            filters={filters}
+            onChange={patchFilters}
+            expanded={filtersExpanded}
+            setExpanded={setFiltersExpanded}
+
             onNewItem={() => setModalOpen(true)}
+
           />
-
-
         </div>
-
         <div className="mt-6 border-b border-border" />
-
 
         {/* Filtros expandidos */}
         {filtersExpanded && (
           <div className="pt-6">
             <CatalogFiltersPanel
-              typeFilter={typeFilter}
-              onTypeFilterChange={setTypeFilter}
-              categoryFilter={categoryFilter}
-              onCategoryFilterChange={setCategoryFilter}
-              brandFilter={brandFilter}
-              onBrandFilterChange={setBrandFilter}
+              typeFilter={filters.type}
+              onTypeFilterChange={(type) =>
+                patchFilters({
+                  type,
+                  // importante ao trocar o tipo
+                  category: "all",
+                })
+              }
+              categoryFilter={filters.category}
+              onCategoryFilterChange={(category) =>
+                patchFilters({ category })
+              }
+              brandFilter={filters.brand}
+              onBrandFilterChange={(brand) =>
+                patchFilters({ brand })
+              }
               sort={sort}
               onSortChange={setSort}
               categories={categories}
@@ -203,13 +182,34 @@ export default function CatalogPage() {
           <ActiveFiltersChips chips={chips} />
         </div>
 
-        {loading ? (
-          <CatalogLoadingState title="Carregando itens..." description="Estamos preparando seu catálogo. Isso deve levar apenas alguns instantes." />
-        ) : filteredItems.length > 0 ? (
-          <CatalogGrid items={filteredItems} onDelete={handleItemDelete} onEdit={handleEditItem} categories={categories} />
-        ) : (
-          <NotificationContent icon={PackageOpen} title="Nenhum item encontrado" description="Tente outro filtro." />
-        )}
+        <div className="mt-8">
+          {loading ? (
+            <CatalogLoadingState
+              title="Carregando itens..."
+              description="Estamos preparando seu catálogo. Isso deve levar apenas alguns instantes."
+            />
+          ) : filteredItems.length > 0 ? (
+            <CatalogGrid
+              items={filteredItems}
+              onDelete={handleItemDelete}
+              onEdit={handleEditItem}
+              categories={categories}
+            />
+          ) : (
+            <NotificationContent
+              icon={PackageOpen}
+              title="Nenhum item encontrado"
+              description="Tente alterar ou remover alguns filtros.">
+              <Button
+                variant="outline"
+                className="bg-blue-900 text-white hover:bg-blue-950 justify-center  hover:font-semibold"
+                onClick={clearFilters}
+              >
+                Limpar filtros
+              </Button>
+            </NotificationContent>
+          )}
+        </div>
 
         <CreateUpdateItemModal
           open={modalOpen}
@@ -222,6 +222,6 @@ export default function CatalogPage() {
           }}
         />
       </div>
-    </main>
+    </main >
   );
 }

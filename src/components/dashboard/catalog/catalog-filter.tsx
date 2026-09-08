@@ -7,63 +7,30 @@ import { SortItemsOptions } from '@/models/dashboard/consumption';
 import { Button } from '@/components/ui/button';
 import { Plus, SlidersHorizontal } from 'lucide-react';
 import Link from 'next/link';
-import { activeFilterCount } from '@/lib/consumption-filters';
+import { activeFilterCount } from '@/lib/catalog-filters';
+import { CatalogFilterState } from '@/lib/catalog-filters';
+import { cn } from '@/lib/utils';
+import { FiltersSearchAndButton } from '@/components/ui/choicelog-filters-and-btn';
 
 
 
-interface ConsumptionFiltersProps {
-  filters: ConsumptionFilterState;
-  onChange: (patch: Partial<ConsumptionFilterState>) => void;
+interface CatalogFiltersProps {
+  filters: CatalogFilterState;
+  onChange: (patch: Partial<CatalogFilterState>) => void;
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
+  onNewItem: () => void;
 }
 
-export function ConsumptionFilters({
+export function CatalogFilters({
   filters,
   onChange,
   expanded,
-  setExpanded,
-}: ConsumptionFiltersProps) {
+  setExpanded, onNewItem
+}: CatalogFiltersProps) {
   const count = activeFilterCount(filters);
-
   return (
-    <div className="flex w-full flex-col  gap-2 lg:w-[420px]">
-      <div className="flex items-center justify-end gap-2">
-        <SearchFilter
-          value={filters.search}
-          placeholder="Buscar por produto, serviço ou marca..."
-          onChange={(value) => onChange({ search: value })}
-        />
-      </div>
-      <div className="flex items-center justify-end gap-2">
-        <Button
-          variant="default"
-          className={!expanded ? cn("h-11 bg-white text-blue-900 hover:bg-foreground hover:text-blue-900") : "h-11 bg-foreground text-blue-900 hover:bg-foreground-600"}
-          onClick={() => setExpanded(!expanded)}
-          aria-expanded={expanded}
-        >
-          <SlidersHorizontal className="size-4" />
-
-          Filtros
-
-          {count > 0 && (
-            <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
-              {count}
-            </span>
-          )}
-        </Button>
-
-        <Button
-          asChild
-          className="h-11 bg-blue-800 text-white hover:bg-blue-900 hover:text-white"
-        >
-          <Link href="/dashboard/experiences/new-experience">
-            <Plus className="size-4" />
-            Registrar consumo
-          </Link>
-        </Button>
-      </div>
-    </div>
+    <FiltersSearchAndButton btnTxt={"Novo item"} onButtonClick={onNewItem} count={count} setExpanded={setExpanded} expanded={expanded} filters={filters} onChange={onChange} />
   );
 }
 
@@ -95,7 +62,6 @@ export default function CatalogFiltersPanel({
 }: CatalogFiltersPanelProps) {
   return (
     <FiltersPanel >
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
 
         <ItemTypeFilter value={typeFilter} onChange={(v) => onTypeFilterChange(v as TypeFilter)} />
 
@@ -107,7 +73,6 @@ export default function CatalogFiltersPanel({
           value={sort}
           onChange={(value) => onSortChange(value as SortItemsOptions)}
         />
-      </div>
     </FiltersPanel >
 
   );

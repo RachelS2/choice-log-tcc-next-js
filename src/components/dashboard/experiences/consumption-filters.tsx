@@ -1,16 +1,14 @@
 "use client";
-import { Plus, Search, SlidersHorizontal, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   activeFilterCount,
   type ConsumptionFilterState,
 } from "@/lib/consumption-filters";
 import { CategoryFilter, ConsumptionPeriodFilter, ConsumptionReasonFilter, ItemTypeFilter, ConsumptionsOrderByFilter, RatingFilter, WouldBuyAgainFilter, ConsumptionInfluenceFilter, SearchFilter, OrderByFilter, CONSUMPTION_SORT_OPTIONS } from "@/components/ui/choicelog-filter-options";
 import { CategoryModel } from "@/models/dashboard/items";
-import Link from "next/link";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { FiltersPanel } from "@/components/ui/choicelog-filter-painel";
-import { cn } from "@/lib/utils";
+import { FiltersSearchAndButton } from "@/components/ui/choicelog-filters-and-btn";
+import { redirect } from "next/navigation";
 
 
 interface ConsumptionFiltersProps {
@@ -28,44 +26,11 @@ export function ConsumptionFilters({
 }: ConsumptionFiltersProps) {
   const count = activeFilterCount(filters);
 
+  function onButtonClick() {
+    redirect("/dashboard/experiences/new-experience")
+  }
   return (
-    <div className="flex w-full flex-col  gap-2 lg:w-[420px]">
-      <div className="flex items-center justify-end gap-2">
-        <SearchFilter
-          value={filters.search}
-          placeholder="Buscar por produto, serviço ou marca..."
-          onChange={(value) => onChange({ search: value })}
-        />
-      </div>
-      <div className="flex items-center justify-end gap-2">
-        <Button
-          variant="default"
-          className={!expanded ? cn("h-11 bg-white text-blue-900 hover:bg-foreground hover:text-blue-900") : "h-11 bg-foreground text-blue-900 hover:bg-foreground-600" }
-          onClick={() => setExpanded(!expanded)}
-          aria-expanded={expanded}
-        >
-          <SlidersHorizontal className="size-4" />
-
-          Filtros
-
-          {count > 0 && (
-            <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
-              {count}
-            </span>
-          )}
-        </Button>
-
-        <Button
-          asChild
-          className="h-11 bg-blue-800 text-white hover:bg-blue-900 hover:text-white"
-        >
-          <Link href="/dashboard/experiences/new-experience">
-            <Plus className="size-4" />
-            Registrar consumo
-          </Link>
-        </Button>
-      </div>
-    </div>
+    <FiltersSearchAndButton btnTxt={"Registrar consumo"} onButtonClick={onButtonClick} count={count} setExpanded={setExpanded} expanded={expanded} filters={filters} onChange={onChange} />
   );
 }
 

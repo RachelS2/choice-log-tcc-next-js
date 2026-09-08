@@ -44,6 +44,7 @@ export function ItemTypeFilter({ value, onChange }: BaseFilterProps<string>) {
       onChange={onChange}
       options={[
         { value: "ALL", label: "Todos" },
+
         { value: "PRODUCT", label: formatItemTypeLabel("PRODUCT") },
         { value: "SERVICE", label: formatItemTypeLabel("SERVICE") },
       ]}
@@ -64,7 +65,6 @@ export function CategoryFilter({ value, onChange, options }: CategoryFilterProps
       placeholder="Selecione uma categoria..."
       onChange={onChange}
       options={[
-        { value: "ALL", label: "Todas as categorias" },
 
         ...[...options]
           .sort((a, b) => {
@@ -75,8 +75,8 @@ export function CategoryFilter({ value, onChange, options }: CategoryFilterProps
             return a.type === "PRODUCT" ? -1 : 1;
           })
           .map((cat) => ({
-            value: cat.name + " (" + formatItemTypeLabel(cat.type) + ")",
-            label: cat.name,
+            value: String(cat.id),
+            label: `${cat.name}`,
             type: cat.type,
           })),
       ]}
@@ -242,7 +242,7 @@ export function BrandFilter({ value,
     placeholder="Selecione uma marca..."
     onChange={onChange}
     options={[
-      { value: "ALL", label: "Todas as marcas" },
+
       ...brands.map((brand) => ({ value: brand, label: brand })),
     ]}
   />)
@@ -344,7 +344,10 @@ function FilterSelect<T extends string>({
                     </div>
                   )}
 
-                  <SelectItem value={option.value}>
+                  <SelectItem
+                    key={option.value}
+                    value={option.value}
+                  >
                     {option.label}
                   </SelectItem>
                 </React.Fragment>

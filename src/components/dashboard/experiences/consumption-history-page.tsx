@@ -63,7 +63,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
         filters,
         patchFilters,
         consumptionReasons,
-        consumptionInfluences,
+        consumptionInfluences, categories
     });
 
     const hasAny = consumptions.length > 0;
@@ -134,14 +134,15 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
                     ) : (
                         <>
                             <ConsumptionSummary
-                                total={stats.total}
-                                avg={stats.avg}
-                                buyAgainPct={stats.buyAgainPct}
+                                summary={stats}
                             />
-                            <ConsumptionList
-                                consumptions={visible}
-                                onOpen={(c) => setSelected(c)}
-                            />
+                            <div className="mt-8">
+
+                                <ConsumptionList
+                                    consumptions={visible}
+                                    onOpen={(c) => setSelected(c)}
+                                />
+                            </div>
                             <Pagination
                                 shown={visible.length}
                                 total={filtered.length}

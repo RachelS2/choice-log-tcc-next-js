@@ -1,37 +1,79 @@
-import { Star, ThumbsUp, ListChecks } from "lucide-react";
-import { formatRating } from "@/lib/consumptions-mock";
+import { RatingStars } from "@/components/ui/rating-starts";
+import { ConsumptionSummaryModel } from "@/models/dashboard/consumption";
+
+import {
+    ListChecks,
+    ThumbsUp,
+    Wallet,
+} from "lucide-react";
 
 export function ConsumptionSummary({
-    total,
-    avg,
-    buyAgainPct,
+    summary
 }: {
-    total: number;
-    avg: number;
-    buyAgainPct: number | null;
+    summary: ConsumptionSummaryModel
 }) {
     return (
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-card px-4 py-3 text-sm">
-            <span className="inline-flex items-center gap-1.5 text-foreground">
-                <ListChecks className="size-4 text-muted-foreground" />
-                <strong className="font-semibold">{total}</strong>
-                {total === 1 ? "consumo" : "consumos"}
-            </span>
-            <span className="text-muted-foreground/50">·</span>
-            <span className="inline-flex items-center gap-1.5 text-foreground">
-                <Star className="size-4 fill-primary text-primary" />
-                <span className="text-muted-foreground">média</span>
-            </span>
-            {buyAgainPct !== null ? (
-                <>
-                    <span className="text-muted-foreground/50">·</span>
-                    <span className="inline-flex items-center gap-1.5 text-foreground">
-                        <ThumbsUp className="size-4 text-muted-foreground" />
-                        <strong className="font-semibold">{buyAgainPct}%</strong>
-                        <span className="text-muted-foreground">compraria novamente</span>
-                    </span>
-                </>
-            ) : null}
+        <div className="flex flex-wrap items-center justify-center gap-2.5">
+            <SummaryBadge>
+                <ListChecks className="size-4" />
+                <strong className="font-semibold">
+                    {summary.total}
+                </strong>
+                <span>
+                    {summary.total === 1 ? "consumo" : "consumos"}
+                </span>
+            </SummaryBadge>
+
+            <SummaryBadge>
+                <RatingStars
+                    value={summary.avg}
+                    size="sm"
+                    editable={false}
+                />
+                <span>média</span>
+            </SummaryBadge>
+
+            <SummaryBadge>
+                <Wallet className="size-4" />
+                <strong className="font-semibold">
+                    {summary.totalSpent.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                    })}
+                </strong>
+                <span>gastos</span>
+            </SummaryBadge>
+
+            {summary.buyAgainPct !== null && (
+                <SummaryBadge>
+                    <ThumbsUp className="size-4" />
+                    <strong className="font-semibold">
+                        {summary.buyAgainPct}%
+                    </strong>
+                    <span>compraria novamente</span>
+                </SummaryBadge>
+            )}
+        </div>
+    );
+}
+
+function SummaryBadge({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    return (
+        <div
+            className="
+        inline-flex items-center gap-1.5
+        rounded-full
+        border-b border-foreground-200
+        bg-foreground h-11
+        px-3 py-1.5 shadow-sm
+        text-sm text-blue-900
+      "
+        >
+            {children}
         </div>
     );
 }

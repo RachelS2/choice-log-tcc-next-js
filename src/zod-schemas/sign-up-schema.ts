@@ -2,34 +2,34 @@ import z from "zod";
 
 export const userNameSchema: z.ZodString = z
   .string()
-  .nonempty("Username is required.")
-  .min(5, "Username must have at least 5 characters.")
-  .max(15, "Username must have at tops 15 characters.")
+  .nonempty("Nome de usuário é obrigatório.")
+  .min(5, "Nome de usuário deve ter no mínimo 5 caracteres.")
+  .max(15, "Nome de usuário deve ter no máximo 15 caracteres.")
   .regex(
     /^[a-zA-Z0-9_ ]+$/,
-    "Username must contain only letters, white spaces, numbers and underscores."
+    "Nome de usuário must contain only letters, white spaces, numbers and underscores."
   );
 
 export const passwordSchema: z.ZodString = z
   .string()
-  .nonempty("Password is required.")
-  .min(6, "Password must have at least 6 characters.")
-  .max(30, "Password must have at tops 30 characters.")
+  .nonempty("Senha é obrigatório.")
+  .min(6, "Senha deve ter no mínimo 6 caracteres.")
+  .max(30, "Senha deve ter no máximo 30 caracteres.")
   .regex(
     /[a-z]/,
-    "The password must contain at least one lowercase letter."
+    "A senha deve conter pelo menos uma letra minúscula."
   )
   .regex(
     /[A-Z]/,
-    "The password must contain at least one uppercase letter."
+    "A senha deve conter pelo menos uma letra maiúscula."
   )
   .regex(
     /[0-9]/,
-    "The password must contain at least one number."
+    "A senha deve conter pelo menos um número."
   )
   .regex(
     /[^a-zA-Z0-9]/,
-    "The password must contain at least one special character."
+    "A senha deve conter pelo menos um caractere especial."
   );
 
 
@@ -41,10 +41,10 @@ export const signUpSchema: z.ZodObject<{
   confirmPassword: z.ZodString;
 }, z.core.$strip> = z
   .object({
-    email: z.email("Invalid e-mail format."),
+    email: z.email("Formato de e-mail inválido."),
     username: userNameSchema,
     password: passwordSchema,
-    confirmPassword: z.string().nonempty("Password confirmation is required."),
+    confirmPassword: z.string().nonempty("Confirmação de senha é obrigatória."),
   })
   .superRefine((data, ctx) => {
     const passwordCheck = passwordSchema.safeParse(data.password);
@@ -53,7 +53,7 @@ export const signUpSchema: z.ZodObject<{
     if (data.password !== data.confirmPassword) {
       ctx.addIssue({
         path: ["confirmPassword"],
-        message: "Passwords do not match.",
+        message: "As senhas não são iguais.",
         code: z.ZodIssueCode.custom,
       });
     }

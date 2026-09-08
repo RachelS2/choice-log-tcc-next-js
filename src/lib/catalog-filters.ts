@@ -2,7 +2,9 @@ import { TypeFilter } from "@/app/dashboard/catalog/items/page";
 import { SortItemsOptions } from "@/models/dashboard/consumption";
 import { ActiveFilterChip } from "@/components/ui/choicelog-chips";
 import { ConsumptionReasonModel, ConsumptionInfluenceModel } from "@/models/dashboard/consumption";
-import { CreateUpdateItemModel } from "@/models/dashboard/items";
+import { CategoryModel, CreateUpdateItemModel } from "@/models/dashboard/items";
+import { getDateTime } from "./utils";
+import { createBrandChip, createCategoryChip, createSearchChip, createTypeChip } from "./chips";
 
 
 export interface CatalogFilterState {
@@ -67,7 +69,7 @@ export function filterItems(
 
         if (
             filters.category !== "all" &&
-            item.categoryName !== filters.category
+            item.categoryId !== filters.category
         ) {
             return false;
         }
@@ -124,74 +126,31 @@ export function sortItems(
 }
 
 
-interface BuildConsumptionFilterChipsParams {
+interface BuildCatalogFilterChipsParams {
     filters: CatalogFilterState;
-    patchFilters: (patch: Partial<CatalogFilterState>) => void;
-    consumptionReasons: ConsumptionReasonModel[];
-    consumptionInfluences: ConsumptionInfluenceModel[];
+    patchFilters: (
+        patch: Partial<CatalogFilterState>
+    ) => void;
+    categories: CategoryModel[],
 }
 
-export function buildConsumptionFilterChips({
+export function buildCatalogFilterChips({
     filters,
     patchFilters,
-    consumptionReasons,
-    consumptionInfluences,
-}: BuildConsumptionFilterChipsParams): ActiveFilterChip[] {
-    const periodLabels = {
-        "7d": "Últimos 7 dias",
-        "30d": "Últimos 30 dias",
-        "6m": "Últimos 6 meses",
-        "1y": "Último ano",
-    } as const;
-
-    const reason = consumptionReasons.find(
-        (reason) => String(reason.id) === filters.reasonId
-    );
-
-    const influence = consumptionInfluences.find(
-        (influence) => String(influence.id) === filters.influenceId
-    );
-
+    categories,
+}: BuildCatalogFilterChipsParams): ActiveFilterChip[] {
     return [
-        createChip(
-            !!filters.search.trim(),
-            `Busca: "${filters.search.trim()}"`,
-            () => patchFilters({ search: "" })
-        ),
+        createSearchChip(filters.search, patchFilters),
 
-        createChip(
-            filters.type !== "ALL",
-            filters.type === "PRODUCT" ? "Produtos" : "Serviços",
-            () => patchFilters({ type: "ALL" })
-        ),
 
-        createChip(
-            filters.category !== "all",
-            filters.category,
-            () => patchFilters({ category: "all" })
-        ),
+        createTypeChip(filters.type, patchFilters),
 
-        createChip(
-            filters.rating !== "all",
-            filters.rating === "5"
-                ? "5 estrelas"
-                : `${filters.rating} estrelas ou mais`,
-            () => patchFilters({ rating: "all" })
-        ),
+        createCategoryChip(filters.category, patchFilters, categories),
 
-        createChip(
-            filters.period !== "all",
-            filters.period === "custom"
-                ? "Período personalizado"
-                : periodLabels[filters.period as keyof typeof periodLabels],
-            () =>
-                patchFilters({
-                    period: "all",
-                    from: undefined,
-                    to: undefined,
-                })
-        ),
+        createBrandChip(filters.brand, patchFilters)
+
     ].filter(
-        (chip): chip is ActiveFilterChip => chip !== null
+        (chip): chip is ActiveFilterChip =>
+            chip !== null
     );
 }

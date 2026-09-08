@@ -1,12 +1,13 @@
 import { TypeFilter } from "@/app/dashboard/catalog/items/page";
-import { ReadConsumptionModel, SortConsumptionsOptions, SortItemsOptions } from "@/models/dashboard/consumption";
+import { ConsumptionSummaryModel, ReadConsumptionModel, SortConsumptionsOptions, SortItemsOptions } from "@/models/dashboard/consumption";
 
 export type RatingFilter = "all" | "5" | "4" | "3" | "2" | "1";
 export type PeriodFilter = "all" | "7d" | "30d" | "6m" | "1y" | "custom";
 export type BuyAgainFilter = "all" | "yes" | "no";
 import { ActiveFilterChip } from "@/components/ui/choicelog-chips";
 import { ConsumptionReasonModel, ConsumptionInfluenceModel } from "@/models/dashboard/consumption";
-import { createChip } from "./utils";
+import { createCategoryChip, createConsumptionInfluenceChip, createConsumptionReasonChip, createCustomPeriodChip, createRatingsChip, createSearchChip, createTypeChip, createWouldBuyAgainChip } from "./chips";
+import { CategoryModel } from "@/models/dashboard/items";
 
 export interface ConsumptionFilterState {
     search: string;
@@ -94,7 +95,7 @@ export function filterConsumptions(
         if (f.type !== "ALL") {
             if (c.item.type.toUpperCase() !== f.type) return false;
         }
-        if (f.category !== "all" && c.item.categoryName !== f.category) return false;
+        if (f.category !== "all" && c.item.categoryId !== f.category) return false;
         if (f.rating !== "all" && c.rating < Number(f.rating)) return false;
 
         const date = new Date(c.date);
@@ -136,20 +137,37 @@ export function sortConsumptions(data: ReadConsumptionModel[], sort: SortConsump
     return out;
 }
 
-export function summarize(data: ReadConsumptionModel[]) {
+export function summarize(data: ReadConsumptionModel[]): ConsumptionSummaryModel {
     const total = data.length;
+
     const avg = total
-        ? data.reduce((s, c) => s + c.rating, 0) / total
+        ? data.reduce((sum, consumption) => sum + consumption.rating, 0) / total
         : 0;
-    const answered = data.filter((c) => c.wouldBuyAgain !== null);
-    const yes = answered.filter((c) => c.wouldBuyAgain === true).length;
+
+    const totalSpent = data.reduce(
+        (sum, consumption) => sum + consumption.price,
+        0
+    );
+
+    const answered = data.filter(
+        (c) => c.wouldBuyAgain !== null
+    );
+
+    const yes = answered.filter(
+        (c) => c.wouldBuyAgain === true
+    ).length;
+
     const buyAgainPct = answered.length
         ? Math.round((yes / answered.length) * 100)
         : null;
-    return { total, avg, buyAgainPct };
+
+    return {
+        total,
+        avg,
+        totalSpent,
+        buyAgainPct,
+    };
 }
-
-
 
 
 interface BuildConsumptionFilterChipsParams {
@@ -157,87 +175,33 @@ interface BuildConsumptionFilterChipsParams {
     patchFilters: (patch: Partial<ConsumptionFilterState>) => void;
     consumptionReasons: ConsumptionReasonModel[];
     consumptionInfluences: ConsumptionInfluenceModel[];
+    categories: CategoryModel[],
 }
 
 export function buildConsumptionFilterChips({
     filters,
     patchFilters,
     consumptionReasons,
-    consumptionInfluences,
+    consumptionInfluences, categories
 }: BuildConsumptionFilterChipsParams): ActiveFilterChip[] {
-    const periodLabels = {
-        "7d": "Últimos 7 dias",
-        "30d": "Últimos 30 dias",
-        "6m": "Últimos 6 meses",
-        "1y": "Último ano",
-    } as const;
-
-    const reason = consumptionReasons.find(
-        (reason) => String(reason.id) === filters.reasonId
-    );
-
-    const influence = consumptionInfluences.find(
-        (influence) => String(influence.id) === filters.influenceId
-    );
-
     return [
-        createChip(
-            !!filters.search.trim(),
-            `Busca: "${filters.search.trim()}"`,
-            () => patchFilters({ search: "" })
-        ),
 
-        createChip(
-            filters.type !== "ALL",
-            filters.type === "PRODUCT" ? "Produtos" : "Serviços",
-            () => patchFilters({ type: "ALL" })
-        ),
+        createSearchChip(filters.search, patchFilters),
 
-        createChip(
-            filters.category !== "all",
-            filters.category,
-            () => patchFilters({ category: "all" })
-        ),
+        createTypeChip(filters.type, patchFilters),
 
-        createChip(
-            filters.rating !== "all",
-            filters.rating === "5"
-                ? "5 estrelas"
-                : `${filters.rating} estrelas ou mais`,
-            () => patchFilters({ rating: "all" })
-        ),
+        createCategoryChip(filters.category, patchFilters, categories),
 
-        createChip(
-            filters.period !== "all",
-            filters.period === "custom"
-                ? "Período personalizado"
-                : periodLabels[filters.period as keyof typeof periodLabels],
-            () =>
-                patchFilters({
-                    period: "all",
-                    from: undefined,
-                    to: undefined,
-                })
-        ),
+        createRatingsChip(filters.rating, patchFilters),
 
-        createChip(
-            filters.buyAgain !== "all",
-            `Compraria novamente: ${filters.buyAgain === "yes" ? "Sim" : "Não"
-            }`,
-            () => patchFilters({ buyAgain: "all" })
-        ),
+        createCustomPeriodChip(filters.period, patchFilters),
 
-        createChip(
-            filters.reasonId !== "all",
-            `Motivo: ${reason?.friendlyName ?? ""}`,
-            () => patchFilters({ reasonId: "all" })
-        ),
+        createWouldBuyAgainChip(filters.buyAgain, patchFilters),
 
-        createChip(
-            filters.influenceId !== "all",
-            `Influência: ${influence?.friendlyName ?? ""}`,
-            () => patchFilters({ influenceId: "all" })
-        ),
+        createConsumptionReasonChip(filters.reasonId, patchFilters, consumptionReasons),
+
+        createConsumptionInfluenceChip(filters.influenceId, patchFilters, consumptionInfluences),
+
     ].filter(
         (chip): chip is ActiveFilterChip => chip !== null
     );

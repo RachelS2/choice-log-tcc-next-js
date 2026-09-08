@@ -55,7 +55,7 @@ export default function CatalogPage() {
       const items = await getItemsController();
       setCatalogItems(items);
     } catch {
-      toast.error("Failed to fetch catalog items");
+      toast.error("Erro ao buscar itens.");
     } finally {
       setIsLoading(false);
     }

@@ -3,7 +3,7 @@ import { BasicItemModel } from "@/models/dashboard/items";
 import { Badge } from "./badge";
 import { Wrench, Package } from "lucide-react";
 
-export function ItemHero({ item }: { item: BasicItemModel }) {
+export function ItemHero({ item, friendlyNameClassName, brandClassName, }: { item: BasicItemModel, friendlyNameClassName?: string , brandClassName?: string}) {
 
     return (
         <div className="flex min-w-0 items-center gap-3">
@@ -34,12 +34,12 @@ export function ItemHero({ item }: { item: BasicItemModel }) {
             <div className="min-w-0 flex-1">
                 {/* Friendly Name + Brand */}
                 <div className="min-w-0 flex-1">
-                    <h3 className="line-clamp-2 text-base font-semibold leading-tight text-neutral-800">
+                    <h3 className={cn("line-clamp-2 text-base font-semibold leading-tight text-neutral-800", friendlyNameClassName)}>
                         {item.friendlyName}
                     </h3>
 
                     {item.brand && (
-                        <p className="mt-1 truncate text-sm leading-tight text-neutral-500">
+                        <p className={cn("mt-1 truncate text-sm leading-tight text-neutral-500", brandClassName)}>
                             {item.brand}
                         </p>
                     )}

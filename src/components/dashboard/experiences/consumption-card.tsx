@@ -36,7 +36,7 @@ export function ConsumptionCard({
                 <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
                     <Stars rating={consumption.rating} />
                     <span className="text-sm font-medium text-foreground">
-                        {formatBRLFromDigits(consumption.price.toString())}
+                        {"R$ " + consumption.price.toFixed(2)}
                     </span>
                     <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                         <CalendarDays className="size-3.5" />

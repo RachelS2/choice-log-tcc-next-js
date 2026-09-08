@@ -1,14 +1,12 @@
 import { Pencil, Trash2, Star, Wrench, Package } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { RatingStars } from '@/components/ui/rating-starts';
 import { CategoryModel, CreateUpdateItemModel } from '@/models/dashboard/items';
 import { deleteItemController } from '@/lib/controller/item-controller';
 import { ReactNode, useState } from "react";
 import Modal from '@/components/ui/choicelog-modal';
 import CreateUpdateItemModal from '../items/create-item-modal';
-import { getAvatarColor, getInitials, formatDate, cn, formatDatetime } from '@/lib/utils';
+import {formatDate, formatDateTime, } from '@/lib/utils';
 import { ItemHero } from '@/components/ui/choicelog-item-hero';
 
 export interface CatalogCardProps {
@@ -126,27 +124,10 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
           <ItemStats title="Total gasto" data={"R$ " + item.totalSpent.toFixed(2)} />
 
           <ItemStats title="Último consumo" data={item.lastConsumed
-            ? formatDate(item.lastConsumed)
+            ? formatDate(new Date(item.lastConsumed))
             : "-"} />
 
-          <ItemStats title="Atualizado em" data={formatDatetime(item.updatedAt.toString())} />
-          {/* <ItemStats
-          title="Avaliação média"
-          data={
-            item.averageRating > 0 ? (
-              <div className="flex items-center gap-1.5">
-                <RatingStars
-                  value={item.averageRating}
-                  size="sm"
-                />
-              </div>
-            ) : (
-              <span className="text-sm text-neutral-700">
-                -
-              </span>
-            )
-          }
-        /> */}
+          <ItemStats title="Atualizado em" data={formatDateTime(item.updatedAt)} />
 
         </div>
 

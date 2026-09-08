@@ -1,14 +1,18 @@
 import { useState } from "react";
 import {
   CalendarDays,
+  CircleHelp,
+  Clock,
+  LucideIcon,
   MapPin,
-  Package,
   Pencil,
+  RefreshCw,
   Sparkles,
-  Tag,
+  Star,
   ThumbsDown,
   ThumbsUp,
   Trash2,
+  Wallet,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,40 +21,69 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
+
 } from "@/components/ui/sheet";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { formatBRLFromDigits, formatDate } from "@/lib/utils";
-import { Stars } from "./stars";
+import { formatDate, formatDateTime } from "@/lib/utils";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { ItemHero } from "@/components/ui/choicelog-item-hero";
+import { RatingStars } from "@/components/ui/rating-starts";
+import { PageHeader } from "@/components/ui/choicelog-pages-title";
+import Modal from "@/components/ui/choicelog-modal";
 
 function Row({
   label,
+  icon: Icon,
   children,
 }: {
   label: string;
+  icon?: LucideIcon;
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-0.5 border-b border-border py-3 last:border-0 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium text-foreground sm:text-right">
-        {children}
+    <div
+      className="
+        flex
+        items-center
+        justify-between
+        gap-6
+        border-b
+        border-border
+        px-4
+        py-3.5
+        last:border-b-0
+      "
+    >
+      <span
+        className="
+          inline-flex
+          items-center
+          gap-2
+          bg-blue-50
+          px-3 py-1.5
+          text-md
+          text-blue-900
+        "
+      >
+        {Icon && (
+          <Icon className="size-4 shrink-0 text-blue-700" />
+        )}
+
+        {label}
       </span>
+
+      <div
+        className="
+          text-right
+          text-md
+          font-medium
+          text-blue-950/90
+        "
+      >
+        {children}
+      </div>
     </div>
   );
 }
-
-
 export function ConsumptionDetails({
   data,
   onOpenChange,
@@ -64,179 +97,246 @@ export function ConsumptionDetails({
 }) {
   const [confirming, setConfirming] = useState(false);
 
+  async function onDeleteConsumptionBtnClick(): Promise<void> {
+    if (data) onDelete(data);
+    setConfirming(false);
+  }
   return (
     <>
       <Sheet open={!!data} onOpenChange={onOpenChange}>
         <SheetContent
           side="right"
-          className="w-full overflow-y-auto sm:max-w-xl"
+          className="
+      w-full overflow-y-auto 
+      bg-background
+      p-0
+      sm:max-w-xl
+    "
         >
           {data ? (
-            <>
+            <div className="min-h-full 
+          bg-gradient-to-br
+          from-blue-700
+          via-blue-600
+          to-blue-500">
+
               <SheetHeader>
-                <SheetTitle>Detalhes do consumo</SheetTitle>
+                <SheetTitle>
+
+                </SheetTitle>
                 <SheetDescription>
-                  Registrado em {formatDate(data.createdAt.toString())}
+
                 </SheetDescription>
               </SheetHeader>
+              {/* HERO */}
+              <div className="
 
-              <div className="space-y-8 px-4 pb-8">
-                <ItemHero item={data.item} />
-                {/* <section className="flex gap-4">
-                  {data.item.imageUrl ? (
-                    <img
-                      src={data.item.imageUrl}
-                      alt={data.item.friendlyName}
-                      className="size-20 rounded-2xl object-cover"
+          px-6
+          pb-6
+          text-white
+        ">
+
+                <PageHeader
+                  header="Experiência"
+                  textClassName="text-base text-foreground"
+                  lineAfter
+                  lineClassName="bg-foreground"
+                />
+                <div className="mt-6 p-3 justify-center items-center bg-blue-50 shadow-md rounded-2xl ">
+                  <ItemHero item={data.item} />
+                </div>
+                <div className="p-3 border-b border-blue-900" />
+              </div>
+
+              {/* CONTENT */}
+              <div className="space-y-6 px-6">
+
+                {/* MAIN INFO */}
+                <section
+                  className="
+              overflow-hidden
+              rounded-2xl
+              border border-border
+              bg-blue-50
+              shadow-md
+            "
+                >
+                  <Row
+                    label="Registrado em"
+                    icon={Clock}
+                  >
+                    {formatDateTime(data.createdAt)}
+                  </Row>
+
+                  <Row
+                    label="Avaliação"
+                    icon={Star}
+                  >
+                    <RatingStars
+                      size="sm"
+                      value={data.rating}
                     />
-                  ) : (
-                    <div className="grid size-20 shrink-0 place-items-center rounded-2xl border border-primary/15 bg-primary/10 text-xl font-semibold text-primary">
-                      {itemInitials(data.item.friendlyName)}
-                    </div>
-                  )}
-                  <div className="min-w-0">
-                    <h3 className="text-lg font-semibold tracking-tight text-foreground">
-                      {data.item.friendlyName}
-                    </h3>
-                    {data.item.brand ? (
-                      <p className="text-sm text-muted-foreground">
-                        {data.item.brand}
-                      </p>
-                    ) : null}
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-                        {data.item.typeId === ITEM_TYPE.SERVICE ? (
-                          <Sparkles className="size-3" />
-                        ) : (
-                          <Package className="size-3" />
-                        )}
-                        {data.item.typeId === ITEM_TYPE.SERVICE
-                          ? "Serviço"
-                          : "Produto"}
-                      </span>
-                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-xs text-muted-foreground">
-                        <Tag className="size-3" />
-                        {data.item.category}
-                      </span>
-                    </div>
-                  </div>
-                </section>  */}
+                  </Row>
 
-                <section>
-                  <h4 className="mb-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                    Experiência
-                  </h4>
-                  <Row label="Avaliação">
-                    <Stars rating={data.rating} />
+                  <Row
+                    label="Preço"
+                    icon={Wallet}
+                  >
+                    {"R$ " + data.price.toFixed(2)}
                   </Row>
-                  <Row label="Preço">{formatBRLFromDigits(data.price.toString())}</Row>
-                  <Row label="Data do consumo">
-                    <span className="inline-flex items-center gap-1.5">
-                      <CalendarDays className="size-3.5 text-muted-foreground" />
-                      {formatDate(data.date.toString())}
-                    </span>
+
+                  <Row
+                    label="Data do consumo"
+                    icon={CalendarDays}
+                  >
+                    {formatDate(data.date)}
                   </Row>
-                  <Row label="Compraria novamente">
+
+                  <Row
+                    label="Compraria novamente"
+                    icon={RefreshCw}
+                  >
                     {data.wouldBuyAgain ? (
-                      <span className="inline-flex items-center gap-1.5 text-success">
-                        <ThumbsUp className="size-3.5" /> Sim
+                      <span className="inline-flex items-center gap-1.5 text-emerald-600">
+                        <ThumbsUp className="size-3.5" />
+                        Sim
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 text-destructive">
-                        <ThumbsDown className="size-3.5" /> Não
+                      <span className="inline-flex items-center gap-1.5 text-red-600">
+                        <ThumbsDown className="size-3.5" />
+                        Não
                       </span>
                     )}
                   </Row>
-                  <Row label="Motivo do consumo">
+
+                  <Row
+                    label="Motivo do consumo"
+                    icon={CircleHelp}
+                  >
                     {data.reason.friendlyName}
                   </Row>
-                  <Row label="Influência">
+
+                  <Row
+                    label="Influência"
+                    icon={Sparkles}
+                  >
                     {data.influence.friendlyName}
                   </Row>
-                  {data.address ? (
-                    <Row label="Endereço">
-                      <span className="inline-flex items-center gap-1.5">
-                        <MapPin className="size-3.5 text-muted-foreground" />
-                        {data.address}
-                      </span>
-                    </Row>
-                  ) : null}
-                </section>
 
-                {data.negativeAspects.length > 0 ? (
+                  {data.address && (
+                    <Row
+                      label="Endereço"
+                      icon={MapPin}
+                    >
+                      {data.address}
+                    </Row>
+                  )}
+                </section>
+                <div className="border-b border-blue-900" />
+
+                {/* NEGATIVE ASPECTS */}
+                {(
                   <section>
-                    <h4 className="mb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                      Aspectos negativos
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {data.negativeAspects.map((a) => (
+
+                    <PageHeader
+                      header="Aspectos Negativos"
+                      textClassName="text-base  text-white"
+                      lineAfter
+                      lineClassName="bg-white"
+                    />
+
+                    <div className="flex flex-wrap pt-3 gap-2">
+                      {data.negativeAspects.map((aspect) => (
                         <span
-                          key={a.id}
-                          className="rounded-full border border-destructive/25 bg-destructive/10 px-3 py-1 text-xs font-medium text-destructive"
+                          key={aspect.id}
+                          className="
+                      rounded-full
+                      border border-red-200
+                      bg-red-50
+                      px-3 py-1.5
+                      text-xs
+                      font-medium
+                      text-red-700
+                    "
                         >
-                          {a.friendlyName}
+                          {aspect.friendlyName}
                         </span>
                       ))}
                     </div>
                   </section>
-                ) : null}
-
-                {data.details ? (
+                )}
+                <div className="border-b border-blue-900" />
+                {/* OBSERVATIONS */}
+                {(
                   <section>
-                    <h4 className="mb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                      Observações
-                    </h4>
-                    <p className="rounded-xl bg-muted/60 p-4 text-sm text-foreground">
+                    <PageHeader
+                      header="Observações"
+                      textClassName="text-base  text-white"
+                      lineAfter
+                      lineClassName="bg-white"
+                    />
+
+
+                    <p
+                      className="
+                  rounded-2xl overflow-y-auto 
+                  border border-border
+                  bg-muted/40
+                  p-4
+                  mt-3
+                  text-sm
+                  leading-relaxed
+                  text-foreground
+                "
+                    >
                       {data.details}
                     </p>
                   </section>
-                ) : null}
+                )}
 
-                <div className="flex flex-col gap-2 sm:flex-row">
+                {/* ACTIONS */}
+                <div className="
+            flex
+            flex-col
+            gap-2
+            sm:flex-row  bg-gradient-to-br
+          from-blue-700
+          via-blue-600
+          to-blue-500
+          ">
                   <Button
                     className="h-11 flex-1"
                     onClick={() => onEdit(data)}
                   >
                     <Pencil className="size-4" />
-                    Editar consumo
+                    Editar experiência
                   </Button>
+
                   <Button
                     variant="outline"
-                    className="h-11 flex-1 border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    className="
+                h-11
+                flex-1
+                border border-blue-900
+                bg-blue-900 text-foreground
+                hover:bg-red-400
+                hover:text-red-900
+              "
                     onClick={() => setConfirming(true)}
                   >
                     <Trash2 className="size-4" />
-                    Excluir consumo
+                    Excluir experiência
                   </Button>
                 </div>
               </div>
-            </>
+            </div>
           ) : null}
         </SheetContent>
       </Sheet>
 
-      <AlertDialog open={confirming} onOpenChange={setConfirming}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Excluir este consumo?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Esta ação não pode ser desfeita. O registro será removido
-              permanentemente do seu histórico.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                if (data) onDelete(data);
-                setConfirming(false);
-              }}
-            >
-              Excluir
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <Modal buttonText="Excluir" dialogTitle="Excluir este consumo?" dialogDescription="Esta ação não pode ser desfeita. O registro será removido permanentemente do seu histórico."
+        open={confirming} onOpenChange={setConfirming} onConfirm={onDeleteConsumptionBtnClick} />
+
     </>
   );
 }

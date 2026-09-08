@@ -70,7 +70,7 @@ function SummaryBadge({
         border-b border-foreground-200
         bg-foreground h-11
         px-3 py-1.5 shadow-sm
-        text-sm text-blue-900
+        text-sm text-blue-800
       "
         >
             {children}

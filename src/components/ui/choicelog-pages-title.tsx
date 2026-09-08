@@ -1,36 +1,60 @@
 import { cn } from "@/lib/utils"
 
+export function PageHeaderLine({
+    className,
+}: {
+    className?: string;
+}) {
+    return (
+        <span
+            className={cn(
+                "h-px w-8 bg-blue-900",
+                className
+            )}
+        />
+    );
+}
+
 export function PageHeader({
     header,
     lineBefore,
     lineAfter,
     className,
+    textClassName,
+    lineClassName,
 }: {
-    header: string
-    lineBefore?: boolean
-    lineAfter?: boolean
-    className?: string
+    header: string;
+    lineBefore?: boolean;
+    lineAfter?: boolean;
+    className?: string;
+    textClassName?: string;
+    lineClassName?: string;
 }) {
     return (
         <div
             className={cn(
-                "flex items-center  gap-3",
+                "flex items-center gap-3",
                 className
             )}
         >
             {lineBefore && (
-                <span className="h-px w-8 bg-blue-900" />
+                <PageHeaderLine className={lineClassName} />
             )}
 
-            <span className="text-[10px] font-semibold tracking-[0.24em] text-blue-900 uppercase">
+            <span
+                className={cn(
+                    "text-[10px] font-semibold tracking-[0.24em] text-blue-900 uppercase",
+                    textClassName
+                )}
+            >
                 {header}
             </span>
 
             {lineAfter && (
-                <span className="h-px w-8 bg-blue-900" />
+                <PageHeaderLine className={lineClassName} />
             )}
         </div>
-    )
+    );
 }
 
 export function PageTitle({

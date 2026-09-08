@@ -1,5 +1,3 @@
-import { Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { PageHeader, PageSubtitle, PageTitle } from '@/components/ui/choicelog-pages-title';
 import { Card } from '@/components/ui/card';
 
@@ -13,8 +11,7 @@ export default function CatalogHeader() {
         <PageHeader
           header="Produtos e Serviços Registrados"
           className="justify-start"
-          lineBefore
-          lineAfter={false}
+          
         />
 
         <PageTitle

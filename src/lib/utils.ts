@@ -46,26 +46,21 @@ export function getAvatarColor(name: string): string {
   return colors[index];
 }
 
-export function formatDatetime(dateStr: string): string {
-  const date = new Date(dateStr);
+export function formatDate(date: Date | string): string {
+  return new Date(date).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}
 
-  return date.toLocaleString("pt-BR", {
+export function formatDateTime(date: Date | string): string {
+  return new Date(date).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-  });
-}
-export function formatDate(dateStr: string): string {
-  const [year, month, day] = dateStr.split("-").map(Number);
-
-  const date = new Date(year, month - 1, day);
-
-  return date.toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
   });
 }
 

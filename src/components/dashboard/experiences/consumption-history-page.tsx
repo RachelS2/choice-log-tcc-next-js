@@ -169,6 +169,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
 
             <ConsumptionDetails
                 consumptionReasons={consumptionReasons}
+                consumptionInfluences={consumptionInfluences}
                 data={selected}
                 onOpenChange={(open) => {
                     if (!open) setSelected(null);

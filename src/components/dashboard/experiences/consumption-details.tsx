@@ -3,7 +3,7 @@ import {
   CalendarDays,
   CircleHelp,
   Clock,
-  LucideIcon,
+  LucideIcon, Save,
   MapPin,
   Pencil,
   RefreshCw,
@@ -24,13 +24,13 @@ import {
 
 } from "@/components/ui/sheet";
 import { formatDate, formatDateTime } from "@/lib/utils";
-import { ConsumptionReasonModel, ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { ItemHero } from "@/components/ui/choicelog-item-hero";
 import { RatingStars } from "@/components/ui/rating-starts";
 import { PageHeader } from "@/components/ui/choicelog-pages-title";
 import Modal from "@/components/ui/choicelog-modal";
 import { Input } from "@/components/ui/input";
-import { ConsumptionReasonFilter } from "@/components/ui/choicelog-filter-options";
+import { ConsumptionInfluenceFilter, ConsumptionReasonFilter } from "@/components/ui/choicelog-filter-options";
 
 function Row({
   label,
@@ -97,40 +97,60 @@ interface EditConsumptionModel {
   address: string;
   details: string | null;
   negativeAspectIds: number[];
+  consumptionId: string;
 }
 
 export function ConsumptionDetails({
   data,
   onOpenChange,
   onDelete,
-  consumptionReasons
+  consumptionReasons,
+  consumptionInfluences
 }: {
   data: ReadConsumptionModel | null;
   onOpenChange: (open: boolean) => void;
   onDelete: (c: ReadConsumptionModel) => void;
   consumptionReasons: ConsumptionReasonModel[];
+  consumptionInfluences: ConsumptionInfluenceModel[];
 }) {
+
+  if (!data) return null;
+  
   const [confirming, setConfirming] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState<EditConsumptionModel | null>(null);
+  const [influenceId, setInfluenceId] = useState<number>(data.influence.id);
+  const [reasonId, setReasonId] = useState<number>(data.reason.id);
   function startEditing() {
+    console.log("clicou em editar!")
     if (!data) return;
-
+    console.log("tem dados");
+    console.log("reasonId: " + reasonId);
+    console.log("influenceId: " + influenceId);
     setDraft({
+      consumptionId: data.id,
       price: data.price,
       rating: data.rating,
       date: data.date,
       wouldBuyAgain: data.wouldBuyAgain,
-      reasonId: data.reason.id,
-      influenceId: data.influence.id,
+      reasonId: reasonId,
+      influenceId: influenceId,
       address: data.address ?? "",
       details: data.details ?? "",
       negativeAspectIds: data.negativeAspects.map(
         (aspect) => aspect.id
       ),
-    });
+    })
 
     setIsEditing(true);
+
+  }
+
+  function onSaveEditions() {
+    if (!data || !draft) return;
+    setIsEditing(false);
+    console.log("salvando consumo cujo ID é: " + draft.consumptionId);
+    setDraft(null)
   }
   async function onDeleteConsumptionBtnClick(): Promise<void> {
     if (data) onDelete(data);
@@ -278,14 +298,34 @@ export function ConsumptionDetails({
                     label="Motivo do consumo"
                     icon={CircleHelp}
                   >
-                    {isEditing && draft ? (<ConsumptionReasonFilter addLabel={false} onChange={console.log("oi")} consumptionReasons={consumptionReasons} value={data.reason.friendlyName} />) : (data.reason.friendlyName)}
+                    {isEditing && draft ? (
+                      <ConsumptionReasonFilter
+                        addLabel={false}
+                        onChange={(reasonId) => setReasonId(Number(reasonId))}
+                        consumptionReasons={consumptionReasons}
+                        value={data.reason.friendlyName} />) :
+                      (data.reason.friendlyName)}
                   </Row>
 
                   <Row
                     label="Influência"
                     icon={Sparkles}
                   >
-                    {data.influence.friendlyName}
+                    {isEditing && draft ? (
+                      <ConsumptionInfluenceFilter
+                        addLabel={false}
+                        onChange={(value) =>
+
+                          setInfluenceId(Number(value))
+                        }
+                        influences={consumptionInfluences}
+                        value={String(
+                          influenceId ?? data.influence.id
+                        )}
+                      />
+                    ) : (
+                      data.influence.friendlyName
+                    )}
                   </Row>
 
                   {data.address && (
@@ -369,11 +409,20 @@ export function ConsumptionDetails({
 
                   <Button
                     type="button"
-                    onClick={startEditing}
+                    onClick={isEditing ? onSaveEditions : startEditing}
                     className="h-11 flex-1 px-3"
                   >
-                    <Pencil className="size-4 " />
-                    {isEditing ? "Salvar alterações" : "Editar experiência"}
+                    {isEditing ? (
+                      <>
+                        <Save className="size-4" />
+                        Salvar alterações
+                      </>
+                    ) : (
+                      <>
+                        <Pencil className="size-4" />
+                        Editar experiência
+                      </>
+                    )}
                   </Button>
                   <Button
                     variant="outline"

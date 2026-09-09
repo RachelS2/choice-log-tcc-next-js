@@ -18,9 +18,10 @@ import { SortItemsOptions, SortConsumptionsOptions, ConsumptionReasonModel } fro
 export interface BaseFilterProps<T extends string | undefined = string> {
   value: T;
   onChange: (value: T) => void;
+  addLabel?: boolean;
 }
 
-export function SearchFilter({ value, onChange, placeholder }: BaseFilterProps<string> & { placeholder?: string }) {
+export function SearchFilter({ value, onChange, addLabel = true, placeholder }: BaseFilterProps<string> & { placeholder?: string }) {
   return (
     <div className="relative flex-1 min-w-0 lg:max-w-xs">
       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
@@ -35,11 +36,12 @@ export function SearchFilter({ value, onChange, placeholder }: BaseFilterProps<s
 }
 
 
-export function ItemTypeFilter({ value, onChange }: BaseFilterProps<string>) {
+export function ItemTypeFilter({ value, onChange, addLabel = true, }: BaseFilterProps<string>) {
   return (
     <FilterSelect
       label={"Tipo"}
       value={value}
+      addLabel={addLabel}
       placeholder="Selecione o tipo dos itens consumidos..."
       onChange={onChange}
       options={[
@@ -57,11 +59,12 @@ interface CategoryFilterProps<T extends string>
   options: CategoryModel[];
 }
 
-export function CategoryFilter({ value, onChange, options }: CategoryFilterProps<string>) {
+export function CategoryFilter({ value, onChange, addLabel = true, options }: CategoryFilterProps<string>) {
   return (
     <FilterSelect
       value={value}
       label={"Categoria"}
+      addLabel={addLabel}
       placeholder="Selecione uma categoria..."
       onChange={onChange}
       options={[
@@ -84,16 +87,17 @@ export function CategoryFilter({ value, onChange, options }: CategoryFilterProps
   )
 }
 
-export function RatingFilter({ value, onChange }: BaseFilterProps<string>) {
+export function RatingFilter({ value, onChange, addLabel = true, }: BaseFilterProps<string>) {
   return (
-    <FilterSelect label={"Avaliação"} value={value} placeholder="Selecione a avaliação..." onChange={onChange} options={[
-      { value: "all", label: "Todas as avaliações" },
-      { value: "5", label: "5 estrelas" },
-      { value: "4", label: "4 estrelas ou mais" },
-      { value: "3", label: "3 estrelas ou mais" },
-      { value: "2", label: "2 estrelas ou mais" },
-      { value: "1", label: "1 estrela ou mais" },
-    ]} />
+    <FilterSelect addLabel={addLabel}
+      label={"Avaliação"} value={value} placeholder="Selecione a avaliação..." onChange={onChange} options={[
+        { value: "all", label: "Todas as avaliações" },
+        { value: "5", label: "5 estrelas" },
+        { value: "4", label: "4 estrelas ou mais" },
+        { value: "3", label: "3 estrelas ou mais" },
+        { value: "2", label: "2 estrelas ou mais" },
+        { value: "1", label: "1 estrela ou mais" },
+      ]} />
 
   )
 }
@@ -123,10 +127,11 @@ interface OrderByFilterProps<T extends string>
 export function OrderByFilter<T extends string>({
   value,
   onChange,
-  options,
+  options, addLabel = true,
 }: OrderByFilterProps<T>) {
   return (
     <FilterSelect
+      addLabel={addLabel}
       label="Ordenar por"
       value={value}
       placeholder="Ordenar por"
@@ -145,10 +150,11 @@ interface ConsumptionInfluenceFilterProps
 export function ConsumptionInfluenceFilter({
   value,
   onChange,
-  influences,
+  influences, addLabel = true,
 }: ConsumptionInfluenceFilterProps) {
   return (
     <FilterSelect
+      addLabel={addLabel}
       label="Influência"
       value={value}
       placeholder="Selecione uma influência..."
@@ -169,10 +175,11 @@ interface ConsumptionReasonFilterProps
 export function ConsumptionReasonFilter({
   value,
   onChange,
-  consumptionReasons,
+  consumptionReasons, addLabel = true,
 }: ConsumptionReasonFilterProps) {
   return (
     <FilterSelect
+      addLabel={addLabel}
       label="Motivo do consumo"
       value={value}
       placeholder="Selecione um motivo..."
@@ -187,10 +194,11 @@ export function ConsumptionReasonFilter({
 
 export function WouldBuyAgainFilter({
   value,
-  onChange,
+  onChange, addLabel = true,
 }: BaseFilterProps) {
   return (
     <FilterSelect
+      addLabel={addLabel}
       label="Compraria novamente?"
       value={value}
       placeholder="Selecione uma opção..."
@@ -206,7 +214,7 @@ export function WouldBuyAgainFilter({
 
 export function ConsumptionPeriodFilter({
   value,
-  onChange,
+  onChange, addLabel = true,
 }: BaseFilterProps) {
   return (
     <FilterSelect
@@ -214,6 +222,7 @@ export function ConsumptionPeriodFilter({
       value={value}
       placeholder="Selecione o período..."
       onChange={onChange}
+      addLabel={addLabel}
       options={[
         { value: "all", label: "Todos" },
         { value: "7d", label: "Últimos 7 dias" },
@@ -234,11 +243,12 @@ interface BrandFilterProps
 
 export function BrandFilter({ value,
   onChange,
-  brands
+  brands, addLabel = true,
 }: BrandFilterProps) {
   return (<FilterSelect
     value={value}
     label={"Marca"}
+    addLabel={addLabel}
     placeholder="Selecione uma marca..."
     onChange={onChange}
     options={[
@@ -250,12 +260,13 @@ export function BrandFilter({ value,
 
 
 export function ConsumptionsOrderByFilter({ value,
-  onChange,
+  onChange, addLabel = true,
 }: BaseFilterProps) {
   return (
     <FilterSelect
       label={"Ordenar por"}
       value={value}
+      addLabel={addLabel}
       placeholder="Ordenar por"
       onChange={onChange}
       options={[
@@ -269,11 +280,12 @@ export function ConsumptionsOrderByFilter({ value,
   )
 }
 
-export function ItensOrderByFilter({ value, onChange }: BaseFilterProps) {
+export function ItensOrderByFilter({ value, onChange, addLabel = true, }: BaseFilterProps) {
   return (
     <FilterSelect
       label={"Ordenar por"}
       value={value}
+      addLabel={addLabel}
       placeholder="Ordenar por"
       onChange={onChange}
       options={[
@@ -299,6 +311,7 @@ interface FilterSelectProps<T extends string> {
   placeholder: string;
   onChange: (value: T) => void;
   options: FilterOption<T>[];
+  addLabel: boolean,
 }
 
 function FilterSelect<T extends string>({
@@ -307,14 +320,15 @@ function FilterSelect<T extends string>({
   placeholder,
   onChange,
   options,
+  addLabel = true,
 }: FilterSelectProps<T>) {
   let previousType: string | undefined;
 
   return (
     <div className="space-y-1.5">
-      <Label className="text-xs font-medium text-blue-900">
+      {addLabel && <Label className="text-xs font-medium text-blue-900">
         {label}
-      </Label>
+      </Label>}
       <div className="flex-1">
         <Select value={value} onValueChange={onChange}>
           <SelectTrigger

@@ -24,11 +24,13 @@ import {
 
 } from "@/components/ui/sheet";
 import { formatDate, formatDateTime } from "@/lib/utils";
-import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { ConsumptionReasonModel, ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { ItemHero } from "@/components/ui/choicelog-item-hero";
 import { RatingStars } from "@/components/ui/rating-starts";
 import { PageHeader } from "@/components/ui/choicelog-pages-title";
 import Modal from "@/components/ui/choicelog-modal";
+import { Input } from "@/components/ui/input";
+import { ConsumptionReasonFilter } from "@/components/ui/choicelog-filter-options";
 
 function Row({
   label,
@@ -84,19 +86,54 @@ function Row({
     </div>
   );
 }
+
+interface EditConsumptionModel {
+  price: number;
+  rating: number;
+  date: Date;
+  wouldBuyAgain: boolean;
+  reasonId: number;
+  influenceId: number;
+  address: string;
+  details: string | null;
+  negativeAspectIds: number[];
+}
+
 export function ConsumptionDetails({
   data,
   onOpenChange,
   onEdit,
   onDelete,
+  consumptionReasons
 }: {
   data: ReadConsumptionModel | null;
   onOpenChange: (open: boolean) => void;
   onEdit: (c: ReadConsumptionModel) => void;
   onDelete: (c: ReadConsumptionModel) => void;
+  consumptionReasons: ConsumptionReasonModel[];
 }) {
   const [confirming, setConfirming] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [draft, setDraft] = useState<EditConsumptionModel | null>(null);
+  function startEditing() {
+    if (!data) return;
 
+    setDraft({
+      price: data.price,
+      rating: data.rating,
+      date: data.date,
+      wouldBuyAgain: data.wouldBuyAgain,
+      reasonId: data.reason.id,
+      influenceId: data.influence.id,
+      address: data.address ?? "",
+      details: data.details ?? "",
+      negativeAspectIds: data.negativeAspects.map(
+        (aspect) => aspect.id
+      ),
+    });
+
+    setIsEditing(true);
+  }
   async function onDeleteConsumptionBtnClick(): Promise<void> {
     if (data) onDelete(data);
     setConfirming(false);
@@ -107,14 +144,21 @@ export function ConsumptionDetails({
         <SheetContent
           side="right"
           className="
-      w-full overflow-y-auto 
-      bg-background
-      p-0
-      sm:max-w-xl
-    "
+    w-full
+    p-0
+    sm:max-w-2xl
+    lg:max-w-3xl
+    flex
+    flex-col
+    overflow-hidden
+    bg-gradient-to-br
+    from-blue-700
+    via-blue-600
+    to-blue-500
+  "
         >
           {data ? (
-            <div className="min-h-full 
+            <div className="min-h-0 flex-1 overflow-y-auto
           bg-gradient-to-br
           from-blue-700
           via-blue-600
@@ -129,12 +173,7 @@ export function ConsumptionDetails({
                 </SheetDescription>
               </SheetHeader>
               {/* HERO */}
-              <div className="
-
-          px-6
-          pb-6
-          text-white
-        ">
+              <div className="text-white space-y-6 px-6 pb-8 pt-2">
 
                 <PageHeader
                   header="Experiência"
@@ -142,10 +181,11 @@ export function ConsumptionDetails({
                   lineAfter
                   lineClassName="bg-foreground"
                 />
-                <div className="mt-6 p-3 justify-center items-center bg-blue-50 shadow-md rounded-2xl ">
+
+                <div className=" p-3 justify-center items-center bg-blue-50 shadow-md rounded-2xl ">
                   <ItemHero item={data.item} />
                 </div>
-                <div className="p-3 border-b border-blue-900" />
+                <div className="p-1 border-b border-blue-900" />
               </div>
 
               {/* CONTENT */}
@@ -174,7 +214,20 @@ export function ConsumptionDetails({
                   >
                     <RatingStars
                       size="sm"
-                      value={data.rating}
+                      value={isEditing && draft
+                        ? draft.rating
+                        : data.rating
+                      }
+                      editable={isEditing}
+                      onChange={
+                        isEditing && draft
+                          ? (rating) =>
+                            setDraft({
+                              ...draft,
+                              rating,
+                            })
+                          : undefined
+                      }
                     />
                   </Row>
 
@@ -182,7 +235,21 @@ export function ConsumptionDetails({
                     label="Preço"
                     icon={Wallet}
                   >
-                    {"R$ " + data.price.toFixed(2)}
+                    {isEditing && draft ? (
+                      <Input
+                        type="number"
+                        value={draft.price}
+                        onChange={(e) =>
+                          setDraft({
+                            ...draft,
+                            price: Number(e.target.value),
+                          })
+                        }
+                        className="h-9 w-32 bg-white text-right"
+                      />
+                    ) : (
+                      `R$ ${data.price.toFixed(2)}`
+                    )}
                   </Row>
 
                   <Row
@@ -213,7 +280,7 @@ export function ConsumptionDetails({
                     label="Motivo do consumo"
                     icon={CircleHelp}
                   >
-                    {data.reason.friendlyName}
+                    {isEditing && draft ? (<ConsumptionReasonFilter addLabel={false} onChange={console.log("oi")} consumptionReasons={consumptionReasons} value={data.reason.friendlyName} />) : (data.reason.friendlyName)}
                   </Row>
 
                   <Row
@@ -298,20 +365,18 @@ export function ConsumptionDetails({
                 <div className="
             flex
             flex-col
-            gap-2
-            sm:flex-row  bg-gradient-to-br
-          from-blue-700
-          via-blue-600
-          to-blue-500
+            gap-2 pb-4 
+            sm:flex-row  
           ">
+
                   <Button
-                    className="h-11 flex-1"
-                    onClick={() => onEdit(data)}
+                    type="button"
+                    onClick={startEditing}
+                    className="h-11 flex-1 px-3"
                   >
-                    <Pencil className="size-4" />
+                    <Pencil className="size-4 " />
                     Editar experiência
                   </Button>
-
                   <Button
                     variant="outline"
                     className="

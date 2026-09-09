@@ -19,7 +19,7 @@ export default function ConsumptionHeader() {
                 />
 
                 <PageSubtitle
-                    subtitle="Analise e gerencie seu histórico de consumo."
+                    subtitle="Analise e gerencie suas experiências de consumo."
                     className="justify-start"
                 />
             </div>

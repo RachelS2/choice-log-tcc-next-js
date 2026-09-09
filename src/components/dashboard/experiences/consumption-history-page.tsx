@@ -169,6 +169,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
             </div>
 
             <ConsumptionDetails
+                consumptionReasons={consumptionReasons}
                 data={selected}
                 onOpenChange={(open) => {
                     if (!open) setSelected(null);

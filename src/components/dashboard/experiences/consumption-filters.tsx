@@ -30,7 +30,7 @@ export function ConsumptionFilters({
     redirect("/dashboard/experiences/new-experience")
   }
   return (
-    <FiltersSearchAndButton btnTxt={"Registrar consumo"} onButtonClick={onButtonClick} count={count} setExpanded={setExpanded} expanded={expanded} filters={filters} onChange={onChange} />
+    <FiltersSearchAndButton btnTxt={"Nova experiência"} onButtonClick={onButtonClick} count={count} setExpanded={setExpanded} expanded={expanded} filters={filters} onChange={onChange} />
   );
 }
 

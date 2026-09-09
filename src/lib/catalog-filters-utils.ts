@@ -4,7 +4,7 @@ import { ActiveFilterChip } from "@/components/ui/choicelog-chips";
 import { ConsumptionReasonModel, ConsumptionInfluenceModel } from "@/models/dashboard/consumption";
 import { CategoryModel, CreateUpdateItemModel } from "@/models/dashboard/items";
 import { getDateTime } from "./utils";
-import { createBrandChip, createCategoryChip, createSearchChip, createTypeChip } from "./chips";
+import { createBrandChip, createCategoryChip, createSearchChip, createTypeChip } from "./chips-utils";
 
 
 export interface CatalogFilterState {

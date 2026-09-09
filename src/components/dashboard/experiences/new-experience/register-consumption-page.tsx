@@ -100,9 +100,9 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
           )
         }
         className={cn(
-          "grid size-10 shrink-0 place-items-center rounded-xl bg-white text-blue-800 shadow-sm",
+          "grid size-10 shrink-0 place-items-center hover:text-white rounded-xl bg-white text-blue-800 shadow-sm",
           itemTypeFilter === type
-            ? "bg-blue-900 text-white hover:bg-blue-800"
+            ? "bg-blue-900 text-white  hover:bg-blue-800"
             : "bg-white text-blue-900 hover:bg-blue-900"
         )}
       >
@@ -220,7 +220,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
       style={{ background: "var(--gradient-subtle)" }}
     >
       <div className="mx-auto w-full max-w-3xl">
-        <header className="flex flex-col items-center text-center mb-5">
+        <header className="flex flex-col items-center gap-3 text-center mb-5">
           <PageHeader
             header="Diário de consumo"
             lineBefore

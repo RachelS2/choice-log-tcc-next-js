@@ -4,12 +4,8 @@ import { CategoryModel } from '@/models/dashboard/items';
 import { BrandFilter, CategoryFilter, ItemTypeFilter, ItensOrderByFilter, SearchFilter } from '@/components/ui/choicelog-filter-options';
 import { FiltersPanel } from '@/components/ui/choicelog-filter-painel';
 import { SortItemsOptions } from '@/models/dashboard/consumption';
-import { Button } from '@/components/ui/button';
-import { Plus, SlidersHorizontal } from 'lucide-react';
-import Link from 'next/link';
-import { activeFilterCount } from '@/lib/catalog-filters';
-import { CatalogFilterState } from '@/lib/catalog-filters';
-import { cn } from '@/lib/utils';
+import { activeFilterCount } from '@/lib/catalog-filters-utils';
+import { CatalogFilterState } from '@/lib/catalog-filters-utils';
 import { FiltersSearchAndButton } from '@/components/ui/choicelog-filters-and-btn';
 
 
@@ -63,16 +59,16 @@ export default function CatalogFiltersPanel({
   return (
     <FiltersPanel >
 
-        <ItemTypeFilter value={typeFilter} onChange={(v) => onTypeFilterChange(v as TypeFilter)} />
+      <ItemTypeFilter value={typeFilter} onChange={(v) => onTypeFilterChange(v as TypeFilter)} />
 
-        <CategoryFilter value={categoryFilter} onChange={onCategoryFilterChange} options={categories} />
+      <CategoryFilter value={categoryFilter} onChange={onCategoryFilterChange} options={categories} />
 
-        <BrandFilter value={brandFilter} onChange={onBrandFilterChange} brands={brands} />
+      <BrandFilter value={brandFilter} onChange={onBrandFilterChange} brands={brands} />
 
-        <ItensOrderByFilter
-          value={sort}
-          onChange={(value) => onSortChange(value as SortItemsOptions)}
-        />
+      <ItensOrderByFilter
+        value={sort}
+        onChange={(value) => onSortChange(value as SortItemsOptions)}
+      />
     </FiltersPanel >
 
   );

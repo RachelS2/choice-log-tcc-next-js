@@ -6,7 +6,7 @@ export type PeriodFilter = "all" | "7d" | "30d" | "6m" | "1y" | "custom";
 export type BuyAgainFilter = "all" | "yes" | "no";
 import { ActiveFilterChip } from "@/components/ui/choicelog-chips";
 import { ConsumptionReasonModel, ConsumptionInfluenceModel } from "@/models/dashboard/consumption";
-import { createCategoryChip, createConsumptionInfluenceChip, createConsumptionReasonChip, createCustomPeriodChip, createRatingsChip, createSearchChip, createTypeChip, createWouldBuyAgainChip } from "./chips";
+import { createCategoryChip, createConsumptionInfluenceChip, createConsumptionReasonChip, createCustomPeriodChip, createRatingsChip, createSearchChip, createTypeChip, createWouldBuyAgainChip } from "./chips-utils";
 import { CategoryModel } from "@/models/dashboard/items";
 
 export interface ConsumptionFilterState {

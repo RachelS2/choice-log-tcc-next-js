@@ -3,8 +3,8 @@ import { count } from "console";
 import { SlidersHorizontal, Plus } from "lucide-react";
 import { SearchFilter } from "./choicelog-filter-options";
 import { Button } from "./button";
-import { ConsumptionFilterState } from "@/lib/consumption-filters";
-import { activeFilterCount, CatalogFilterState } from "@/lib/catalog-filters";
+import { ConsumptionFilterState } from "@/lib/consumption-filters-utils";
+import { activeFilterCount, CatalogFilterState } from "@/lib/catalog-filters-utils";
 
 
 interface FiltersSearchAndButtonProps {
@@ -40,7 +40,7 @@ export function FiltersSearchAndButton({
             <div className="flex items-center justify-end gap-2">
                 <Button
                     variant="default"
-                    className={!expanded ? cn("h-11 bg-white text-blue-900 hover:bg-foreground hover:text-blue-900") : "h-11 bg-foreground text-blue-900 hover:bg-foreground-600"}
+                    className={!expanded ? cn("h-11 bg-white text-blue-900 hover:bg-offWhite hover:text-blue-900") : "h-11 bg-offWhite text-blue-900 hover:bg-offWhite-600"}
                     onClick={() => setExpanded(!expanded)}
                     aria-expanded={expanded}
                 >

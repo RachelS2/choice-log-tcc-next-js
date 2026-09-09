@@ -2,7 +2,7 @@
 import {
   activeFilterCount,
   type ConsumptionFilterState,
-} from "@/lib/consumption-filters";
+} from "@/lib/consumption-filters-utils";
 import { CategoryFilter, ConsumptionPeriodFilter, ConsumptionReasonFilter, ItemTypeFilter, ConsumptionsOrderByFilter, RatingFilter, WouldBuyAgainFilter, ConsumptionInfluenceFilter, SearchFilter, OrderByFilter, CONSUMPTION_SORT_OPTIONS } from "@/components/ui/choicelog-filter-options";
 import { CategoryModel } from "@/models/dashboard/items";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";

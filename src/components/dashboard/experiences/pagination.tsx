@@ -21,8 +21,8 @@ export function Pagination({
     return (
         <div className="flex flex-col items-center gap-4 pt-2 sm:flex-row sm:justify-between">
             <p className="text-sm text-muted-foreground">
-                Mostrando <strong className="font-medium text-foreground">{shown}</strong>{" "}
-                de <strong className="font-medium text-foreground">{total}</strong>{" "}
+                Mostrando <strong className="font-medium text-offWhite">{shown}</strong>{" "}
+                de <strong className="font-medium text-offWhite">{total}</strong>{" "}
                 {total === 1 ? "consumo" : "consumos"}
             </p>
 

@@ -13,8 +13,7 @@ import {
     sortConsumptions,
     summarize,
     type ConsumptionFilterState, buildConsumptionFilterChips
-} from "@/lib/consumption-filters";
-import { redirect } from "next/navigation";
+} from "@/lib/consumption-filters-utils";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { CategoryModel } from "@/models/dashboard/items";
 import ConsumptionHeader from "./consumption-header";
@@ -174,10 +173,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
                 onOpenChange={(open) => {
                     if (!open) setSelected(null);
                 }}
-                onEdit={() => {
-                    setSelected(null);
-                    redirect("/dashboard/experiences/new-experience");
-                }}
+
                 onDelete={(c) => {
                     setConsumptions((prev) => prev.filter((x) => x.id !== c.id));
                     setSelected(null);

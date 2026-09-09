@@ -10,7 +10,7 @@ export function FiltersPanel({
     footer,
 }: FilterPanelProps) {
     return (
-        <Card className="rounded-2xl bg-background p-4 shadow-sm sm:p-5">
+        <Card className="rounded-2xl bg-offWhite p-4 shadow-sm sm:p-5">
             <div className="grid grid-cols-1 gap-4 animate-in fade-in sm:grid-cols-2 lg:grid-cols-4">
                 {children}
             </div>

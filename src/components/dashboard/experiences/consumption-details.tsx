@@ -102,13 +102,11 @@ interface EditConsumptionModel {
 export function ConsumptionDetails({
   data,
   onOpenChange,
-  onEdit,
   onDelete,
   consumptionReasons
 }: {
   data: ReadConsumptionModel | null;
   onOpenChange: (open: boolean) => void;
-  onEdit: (c: ReadConsumptionModel) => void;
   onDelete: (c: ReadConsumptionModel) => void;
   consumptionReasons: ConsumptionReasonModel[];
 }) {
@@ -146,7 +144,7 @@ export function ConsumptionDetails({
           className="
     w-full
     p-0
-    sm:max-w-2xl
+    sm:max-w-4xl
     lg:max-w-3xl
     flex
     flex-col
@@ -177,9 +175,9 @@ export function ConsumptionDetails({
 
                 <PageHeader
                   header="Experiência"
-                  textClassName="text-base text-foreground"
+                  textClassName="text-base text-offWhite"
                   lineAfter
-                  lineClassName="bg-foreground"
+                  lineClassName="bg-offWhite"
                 />
 
                 <div className=" p-3 justify-center items-center bg-blue-50 shadow-md rounded-2xl ">
@@ -353,7 +351,7 @@ export function ConsumptionDetails({
                   mt-3
                   text-sm
                   leading-relaxed
-                  text-foreground
+                  text-offWhite
                 "
                     >
                       {data.details}
@@ -375,7 +373,7 @@ export function ConsumptionDetails({
                     className="h-11 flex-1 px-3"
                   >
                     <Pencil className="size-4 " />
-                    Editar experiência
+                    {isEditing ? "Salvar alterações" : "Editar experiência"}
                   </Button>
                   <Button
                     variant="outline"
@@ -383,7 +381,7 @@ export function ConsumptionDetails({
                 h-11
                 flex-1
                 border border-blue-900
-                bg-blue-900 text-foreground
+                bg-blue-900 text-offWhite
                 hover:bg-red-400
                 hover:text-red-900
               "

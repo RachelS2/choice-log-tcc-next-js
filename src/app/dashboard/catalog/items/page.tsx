@@ -13,7 +13,7 @@ import { SortItemsOptions } from '@/models/dashboard/consumption';
 import { PackageOpen } from 'lucide-react';
 import { NotificationContent } from '@/components/ui/choicelog-notification-card';
 import { ActiveFilterChip, ActiveFiltersChips } from '@/components/ui/choicelog-chips';
-import { buildCatalogFilterChips, CatalogFilterState, defaultFilters, filterItems, sortItems } from '@/lib/catalog-filters';
+import { buildCatalogFilterChips, CatalogFilterState, defaultFilters, filterItems, sortItems } from '@/lib/catalog-filters-utils';
 import { Button } from '@/components/ui/button';
 
 export type TypeFilter = 'ALL' | ItemTypeEnum;
@@ -38,7 +38,6 @@ export default function CatalogPage() {
   const patchFilters = (
     patch: Partial<CatalogFilterState>
   ) => {
-    
     setFilters((current) => ({
       ...current,
       ...patch,

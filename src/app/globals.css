@@ -20,7 +20,7 @@
   --darkBlue: #1F3A5F;
   --blue: #0e2394;
   --lightBlue: #EAF0F6;
-  
+
   /* Estados */
   --success: #4CAF50;
   --error: #E57373;
@@ -89,24 +89,24 @@
 
   --sidebar-ring: oklch(0.708 0 0);
 
-  --background: #ffffff ;
+  --background: #ffffff;
 
   --foreground: oklch(0.145 0 0);
 
   --font-sans: var(--font-inter);
   --font-serif: var(--font-cormorant);
 
-} 
+}
 
 @theme {
-   /* Base */
+  /* Base */
   --color-white: #FFFFFF;
-  --color-offWhite: #F2F2F2;
+  --color-offWhite: #EDEDED;
   --color-lightGray: #E5E7EB;
   --color-mediumGray: #9CA3AF;
   --color-darkGray: #69707c;
   --color-superDarkGray: #374151;
-
+  --color-foreground: #EDEDED;
   --color-blue: #0e2394;
   /* Azul principal */
   --color-darkBlue: #1F3A5F;
@@ -117,7 +117,7 @@
   --color-error: #E57373;
   --color-warning: #FBC02D;
 
-    /* Ação / destaque */
+  /* Ação / destaque */
   --color-accent: #3F51B5;
 
   --color-background: var(--background);
@@ -259,7 +259,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-offWhite;
   }
   html {
     @apply font-sans;

@@ -1,8 +1,6 @@
 import { ActiveFilterChip } from "@/components/ui/choicelog-chips";
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import { BuyAgainFilter, ConsumptionFilterState, PeriodFilter, RatingFilter } from "./consumption-filters";
-import { CatalogFilterState } from "./catalog-filters";
+import { BuyAgainFilter, ConsumptionFilterState, PeriodFilter, RatingFilter } from "./consumption-filters-utils";
+import { CatalogFilterState } from "./catalog-filters-utils";
 import { TypeFilter } from "@/app/dashboard/catalog/items/page";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel } from "@/models/dashboard/consumption";
 import { CategoryModel } from "@/models/dashboard/items";

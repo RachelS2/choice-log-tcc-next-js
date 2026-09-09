@@ -11,7 +11,7 @@ export default function CatalogHeader() {
         <PageHeader
           header="Produtos e Serviços Registrados"
           className="justify-start"
-          
+          lineAfter
         />
 
         <PageTitle

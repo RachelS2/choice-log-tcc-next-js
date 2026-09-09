@@ -8,6 +8,7 @@ import Modal from '@/components/ui/choicelog-modal';
 import CreateUpdateItemModal from '../items/create-item-modal';
 import {formatDate, formatDateTime, } from '@/lib/utils';
 import { ItemHero } from '@/components/ui/choicelog-item-hero';
+import DecorativeBackground from '@/components/ui/choicelog-decorative-background';
 
 export interface CatalogCardProps {
   item: CreateUpdateItemModel;
@@ -61,6 +62,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
     hover:shadow-lg hover:shadow-blue-100/0
   "
     >
+      <DecorativeBackground/>
 
       <div className="flex h-full flex-col p-5">
         {/* Header */}

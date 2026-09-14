@@ -35,7 +35,7 @@ import { DatePicker } from "@/components/ui/choicelog-date-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { SelectableChip } from "@/components/ui/choicelog-chips";
 import { toast } from "sonner";
-import { updateConsumptionController } from "@/lib/controller/consumption-controller";
+import { updateConsumptionController, deleteConsumptionController } from "@/lib/controller/consumption-controller";
 
 function Row({
   label,
@@ -110,7 +110,7 @@ export function ConsumptionDetails({
 }: {
   data: ReadConsumptionModel | null;
   onOpenChange: (open: boolean) => void;
-  onDelete: (c: ReadConsumptionModel) => void;
+  onDelete: (c: EditConsumptionModel) => void;
   consumptionReasons: ConsumptionReasonModel[];
   consumptionInfluences: ConsumptionInfluenceModel[];
   negativeAspects: NegativeAspectModel[]
@@ -120,7 +120,8 @@ export function ConsumptionDetails({
 
   if (!data) return null;
 
-  const [confirming, setConfirming] = useState(false);
+  const [onDeleteConsumptionModal, setDeleteConsumptionModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState<EditConsumptionModel>({
     consumptionId: data.id,
@@ -182,7 +183,7 @@ export function ConsumptionDetails({
 
   async function onSaveEditions() {
     if (!data || !draft) return;
-
+    setLoading(true);
     try {
       const u = await updateConsumptionController(draft);
       updateConsumption(u)
@@ -203,15 +204,24 @@ export function ConsumptionDetails({
       setIsEditing(false);
 
 
-      toast.success("Consumo atualizado com sucesso.");
+      // toast.success("Consumo atualizado com sucesso.");
     } catch (error) {
-      toast.error("Erro ao tentar atualizar o consumo.");
+      toast.error("Erro ao tentar atualizar a experiência.");
     }
+    setLoading(false);
   }
 
   async function onDeleteConsumptionBtnClick(): Promise<void> {
-    if (data) onDelete(data);
-    setConfirming(false);
+    try {
+      onDelete(draft);
+      deleteConsumptionController(draft)
+      toast.warning("Experiência excluída com sucesso.")
+    }
+    catch (error) {
+      toast.error("Erro ao tentar excluir experiência.")
+    }
+
+    setDeleteConsumptionModal(false);
   }
   return (
     <>
@@ -552,6 +562,7 @@ export function ConsumptionDetails({
 
                 <Button
                   type="button"
+                  disabled={loading}
                   onClick={isEditing ? onSaveEditions : () => setIsEditing(true)}
                   className="h-11 flex-1 px-3"
                 >
@@ -577,7 +588,7 @@ export function ConsumptionDetails({
                 hover:bg-red-400
                 hover:text-red-900
               "
-                  onClick={() => setConfirming(true)}
+                  onClick={() => setDeleteConsumptionModal(true)}
                 >
                   <Trash2 className="size-4" />
                   Excluir experiência
@@ -589,7 +600,7 @@ export function ConsumptionDetails({
       </Sheet>
 
       <Modal buttonText="Excluir" dialogTitle="Excluir este consumo?" dialogDescription="Esta ação não pode ser desfeita. O registro será removido permanentemente do seu histórico."
-        open={confirming} onOpenChange={setConfirming} onConfirm={onDeleteConsumptionBtnClick} />
+        open={onDeleteConsumptionModal} onOpenChange={setDeleteConsumptionModal} onConfirm={onDeleteConsumptionBtnClick} />
 
     </>
   );

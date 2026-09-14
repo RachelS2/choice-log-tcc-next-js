@@ -323,3 +323,7 @@ export async function updateConsumptionRepository(
   }
 }
 
+export async function deleteConsumptionRepository(userId: string,
+  consumption: EditConsumptionModel) {
+  await prisma.consumption.delete({ where: { id: consumption.consumptionId, userId: userId } })
+}

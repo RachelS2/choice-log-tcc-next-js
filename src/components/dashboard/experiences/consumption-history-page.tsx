@@ -200,7 +200,7 @@ export default function ConsumptionsHistoryPage({
                 }}
                 updateConsumption={updateConsumptionLocally}
                 onDelete={(c) => {
-                    setConsumptions((prev) => prev.filter((x) => x.id !== c.id));
+                    setConsumptions((prev) => prev.filter((x) => x.id !== c.consumptionId));
                     setSelected(null);
                 }}
             />

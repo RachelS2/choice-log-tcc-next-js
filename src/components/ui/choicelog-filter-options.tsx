@@ -229,7 +229,6 @@ export function ConsumptionPeriodFilter({
         { value: "30d", label: "Últimos 30 dias" },
         { value: "6m", label: "Últimos 6 meses" },
         { value: "1y", label: "Último ano" },
-        { value: "custom", label: "Personalizado" },
       ]}
     />
   );

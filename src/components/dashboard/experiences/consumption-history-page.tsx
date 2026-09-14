@@ -147,7 +147,7 @@ export default function ConsumptionsHistoryPage({
                         >
                             <Button
                                 variant="outline"
-                                className="bg-blue-900 text-white hover:bg-blue-950 justify-center  hover:font-semibold"
+                                className="bg-blue-900 text-white hover:bg-blue-950 justify-center hover:text-white  hover:font-semibold"
                                 onClick={clearFilters}
                             >
                                 Limpar filtros

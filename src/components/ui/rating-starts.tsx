@@ -21,9 +21,16 @@ export function RatingStars({
   value: number;
   onChange?: (v: number) => void;
   editable?: boolean;
-  size?: "sm" | "md" | "lg";
+  size?: "xsm" | "sm" | "md" | "lg";
 }) {
   const sizeClasses = {
+    xsm: {
+      container: "size-[clamp(1.05rem,5vw,1rem)]",
+      star: "size-[clamp(1rem,5vw,1rem)]",
+      button: "p-0",
+      gap: "gap-[clamp(0.125rem,0.8vw,0.25rem)]",
+    },
+
     sm: {
       container: "size-[clamp(1.25rem,6vw,1.5rem)]",
       star: "size-[clamp(1.25rem,6vw,1.5rem)]",
@@ -86,29 +93,54 @@ export function RatingStars({
       Math.min(1, active - (star - 1)),
     );
 
+    function StarMainParent({ children,
+    }: {
+      children: React.ReactNode;
+    }) {
+      const commomClassName: string = "relative shrink-0 rounded-md";
+      {
+        return editable ?
+          (
+            <button
+              type="button"
+              disabled={!editable}
+              aria-label={`${star} star${star > 1 ? "s" : ""}`}
+              onMouseMove={(e) =>
+                handleMouseMove(e, star)
+              }
+              onClick={(e) =>
+                handleClick(e, star)
+              }
+              className={cn(
+                commomClassName,
+                currentSize.button,
+                "cursor-pointer transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+              )}
+            >
+              {children}
+            </button>
+          )
+          :
+          (
+            <span
+              key={star}
+              className={cn(
+                commomClassName,
+                currentSize.button,
+                "cursor-default"
+              )}
+            >
+              {children}
+            </span>)
+      }
+    }
     return (
       <div
         key={star}
         className="group relative flex shrink-0 items-center"
       >
-        <button
-          type="button"
-          disabled={!editable}
-          aria-label={`${star} star${star > 1 ? "s" : ""}`}
-          onMouseMove={(e) =>
-            handleMouseMove(e, star)
-          }
-          onClick={(e) =>
-            handleClick(e, star)
-          }
-          className={cn(
-            "relative shrink-0 rounded-md",
-            currentSize.button,
-            editable &&
-            "cursor-pointer transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
-            !editable && "cursor-default",
-          )}
-        >
+        {editable ? (<button></button>) : null}
+        <StarMainParent>
           <div
             className={cn(
               "relative",
@@ -140,7 +172,7 @@ export function RatingStars({
               </div>
             )}
           </div>
-        </button>
+        </StarMainParent>
 
         {editable && (hover === star || hover === star + 0.5) ? (
           <div

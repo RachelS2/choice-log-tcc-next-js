@@ -14,7 +14,7 @@ import {
     summarize,
     type ConsumptionFilterState, buildConsumptionFilterChips
 } from "@/lib/consumption-filters-utils";
-import { ConsumptionInfluenceModel, ConsumptionReasonModel, NegativeAspectModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, EditConsumptionModel, NegativeAspectModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { CategoryModel } from "@/models/dashboard/items";
 import ConsumptionHeader from "./consumption-header";
 import { NotificationContent } from "@/components/ui/choicelog-notification-card";
@@ -28,7 +28,7 @@ interface ConsumptionsHistoryProps {
     categories: CategoryModel[];
     consumptionInfluences: ConsumptionInfluenceModel[];
     consumptionReasons: ConsumptionReasonModel[],
-    negativeAspects: NegativeAspectModel[]
+    negativeAspects: NegativeAspectModel[],
 }
 export default function ConsumptionsHistoryPage({
     consumptionsWithItems,
@@ -65,6 +65,17 @@ export default function ConsumptionsHistoryPage({
         setPage(1);
     }
 
+    function updateConsumptionLocally(
+        updatedConsumption: ReadConsumptionModel
+    ) {
+        setConsumptions((current) =>
+            current.map((consumption) =>
+                consumption.id === updatedConsumption.id
+                    ? updatedConsumption
+                    : consumption
+            )
+        );
+    }
     function clearFilters() {
         setFilters(defaultFilters);
         setPage(1);
@@ -187,7 +198,7 @@ export default function ConsumptionsHistoryPage({
                 onOpenChange={(open) => {
                     if (!open) setSelected(null);
                 }}
-
+                updateConsumption={updateConsumptionLocally}
                 onDelete={(c) => {
                     setConsumptions((prev) => prev.filter((x) => x.id !== c.id));
                     setSelected(null);

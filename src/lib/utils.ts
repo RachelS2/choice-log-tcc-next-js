@@ -1,3 +1,4 @@
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, NegativeAspectModel } from "@/models/dashboard/consumption";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -90,4 +91,37 @@ export function formatItemTypeLabel(type?: string | null): string {
     default:
       return normalized;
   }
+}
+
+export function getInfluenceName(influenceId: number, consumptionInfluences: ConsumptionInfluenceModel[]): string {
+  const influence = consumptionInfluences.find(
+    (influence) => influence.id === influenceId
+  );
+
+  if (!influence) {
+    throw new Error(
+      `Influência com ID ${influenceId} não encontrada.`
+    );
+  }
+
+  return influence.friendlyName;
+}
+
+export function getReasonName(reasonId: number, consumptionReasons: ConsumptionReasonModel[]): string {
+  const reason = consumptionReasons.find(c => c.id == reasonId)
+  if (!reason) {
+    throw new Error(
+      `Razao de consumo com ID ${reasonId} não encontrada.`
+    );
+  }
+  return reason.friendlyName;
+}
+
+
+export function getNegativeAspectsNames(negativeAspectsIds: number[], negativeAspects: NegativeAspectModel[]): NegativeAspectModel[] {
+  return negativeAspects
+    .filter((aspect) =>
+      negativeAspectsIds.includes(aspect.id)
+    )
+    .map((aspect) => aspect);
 }

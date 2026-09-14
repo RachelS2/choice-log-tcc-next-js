@@ -23,8 +23,8 @@ import {
   SheetTitle,
 
 } from "@/components/ui/sheet";
-import { cn, formatDate, formatDateTime } from "@/lib/utils";
-import { ConsumptionInfluenceModel, ConsumptionReasonModel, NegativeAspectModel, ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { cn, formatDate, formatDateTime, getInfluenceName, getNegativeAspectsNames, getReasonName } from "@/lib/utils";
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, EditConsumptionModel, NegativeAspectModel, ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { ItemHero } from "@/components/ui/choicelog-item-hero";
 import { RatingStars } from "@/components/ui/rating-starts";
 import { PageHeader } from "@/components/ui/choicelog-pages-title";
@@ -34,6 +34,8 @@ import { ConsumptionInfluenceFilter, ConsumptionReasonFilter } from "@/component
 import { DatePicker } from "@/components/ui/choicelog-date-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { SelectableChip } from "@/components/ui/choicelog-chips";
+import { toast } from "sonner";
+import { updateConsumptionController } from "@/lib/controller/consumption-controller";
 
 function Row({
   label,
@@ -96,18 +98,6 @@ function Row({
   );
 }
 
-interface EditConsumptionModel {
-  price: number;
-  rating: number;
-  date: Date;
-  wouldBuyAgain: boolean;
-  reasonId: number;
-  influenceId: number;
-  address: string | null;
-  details: string | null;
-  negativeAspectIds: number[];
-  consumptionId: string;
-}
 
 export function ConsumptionDetails({
   data,
@@ -115,7 +105,8 @@ export function ConsumptionDetails({
   onDelete,
   consumptionReasons,
   consumptionInfluences,
-  negativeAspects
+  negativeAspects,
+  updateConsumption
 }: {
   data: ReadConsumptionModel | null;
   onOpenChange: (open: boolean) => void;
@@ -123,6 +114,7 @@ export function ConsumptionDetails({
   consumptionReasons: ConsumptionReasonModel[];
   consumptionInfluences: ConsumptionInfluenceModel[];
   negativeAspects: NegativeAspectModel[]
+  updateConsumption: (updatedConsumption: ReadConsumptionModel) => void,
 
 }) {
 
@@ -130,19 +122,32 @@ export function ConsumptionDetails({
 
   const [confirming, setConfirming] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [draft, setDraft] = useState<EditConsumptionModel | null>(null);
+  const [draft, setDraft] = useState<EditConsumptionModel>({
+    consumptionId: data.id,
+    price: data.price,
+    rating: data.rating,
+    date: data.date,
+    wouldBuyAgain: data.wouldBuyAgain,
+    reasonId: data.reason.id,
+    influenceId: data.influence.id,
+    address: data.address,
+    details: data.details,
+    negativeAspectIds: data.negativeAspects.map(
+      (aspect) => aspect.id
+    ),
+  });
   const [dateErrors, setDateErrors] = useState<string | undefined>(undefined);
-  console.log("item type: " + data.item.typeId)
+
   const negativeAspectsToRender = isEditing
     ? negativeAspects.filter((aspect) => aspect.typeId == data.item.typeId)
-    : data.negativeAspects;
+    : getNegativeAspectsNames(draft.negativeAspectIds, negativeAspects);
+
   function WouldBuyAgainButton() {
-    if (!data) return null;
     let Icon: LucideIcon = ThumbsDown;
     let text = "Não";
     let textColor = "text-red-600";
     let hover = "hover:bg-red-200"
-    if (data.wouldBuyAgain) {
+    if (draft.wouldBuyAgain) {
       Icon = ThumbsUp;
       text = "Sim";
       textColor = "text-emerald-600";
@@ -158,6 +163,7 @@ export function ConsumptionDetails({
           });
         }
       }}
+      disabled={!isEditing}
       aria-disabled={!isEditing}
       className={cn(
         "inline-flex items-center h-11 w-32 gap-1.5",
@@ -173,34 +179,36 @@ export function ConsumptionDetails({
       {text}
     </Button>
   }
-  function startEditing() {
-    if (!data) return;
-    setIsEditing(true);
 
-    setDraft({
-      consumptionId: data.id,
-      price: data.price,
-      rating: data.rating,
-      date: data.date,
-      wouldBuyAgain: data.wouldBuyAgain,
-      reasonId: data.reason.id,
-      influenceId: data.influence.id,
-      address: data.address,
-      details: data.details,
-      negativeAspectIds: data.negativeAspects.map(
-        (aspect) => aspect.id
-      ),
-    })
-
-
-  }
-
-  function onSaveEditions() {
+  async function onSaveEditions() {
     if (!data || !draft) return;
-    setIsEditing(false);
-    console.log("salvando consumo cujo ID é: " + draft.consumptionId);
-    setDraft(null)
+
+    try {
+      const u = await updateConsumptionController(draft);
+      updateConsumption(u)
+      setDraft({
+        consumptionId: u.id,
+        price: u.price,
+        rating: u.rating,
+        date: u.date,
+        wouldBuyAgain: u.wouldBuyAgain,
+        reasonId: u.reason.id,
+        influenceId: u.influence.id,
+        address: u.address,
+        details: u.details,
+        negativeAspectIds: u.negativeAspects.map(
+          (aspect) => aspect.id
+        ),
+      });
+      setIsEditing(false);
+
+
+      toast.success("Consumo atualizado com sucesso.");
+    } catch (error) {
+      toast.error("Erro ao tentar atualizar o consumo.");
+    }
   }
+
   async function onDeleteConsumptionBtnClick(): Promise<void> {
     if (data) onDelete(data);
     setConfirming(false);
@@ -224,304 +232,299 @@ export function ConsumptionDetails({
     to-blue-500
   "
         >
-          {data ? (
-            <div className="min-h-0 flex-1 overflow-y-auto
+
+          <div className="min-h-0 flex-1 overflow-y-auto
           bg-gradient-to-br
           from-blue-700
           via-blue-600
           to-blue-500">
 
-              <SheetHeader>
-                <SheetTitle>
+            <SheetHeader>
+              <SheetTitle>
 
-                </SheetTitle>
-                <SheetDescription>
+              </SheetTitle>
+              <SheetDescription>
 
-                </SheetDescription>
-              </SheetHeader>
-              {/* HERO */}
-              <div className="text-white space-y-6 px-6 pb-8 pt-2">
+              </SheetDescription>
+            </SheetHeader>
+            {/* HERO */}
+            <div className="text-white space-y-6 px-6 pb-8 pt-2">
 
-                <PageHeader
-                  header="Experiência"
-                  textClassName="text-base text-offWhite"
-                  lineAfter
-                  lineClassName="bg-offWhite"
-                />
+              <PageHeader
+                header="Experiência"
+                textClassName="text-base text-offWhite"
+                lineAfter
+                lineClassName="bg-offWhite"
+              />
 
-                <div className=" p-3 justify-center items-center bg-blue-50 shadow-md rounded-2xl ">
-                  <ItemHero item={data.item} />
-                </div>
-                <div className="p-1 border-b border-blue-900" />
+              <div className=" p-3 justify-center items-center bg-blue-50 shadow-md rounded-2xl ">
+                <ItemHero item={data.item} />
               </div>
+              <div className="p-1 border-b border-blue-900" />
+            </div>
 
-              {/* CONTENT */}
-              <div className="space-y-6 px-6">
+            {/* CONTENT */}
+            <div className="space-y-6 px-6">
 
-                {/* MAIN INFO */}
-                <section
-                  className="
+              {/* MAIN INFO */}
+              <section
+                className="
               overflow-hidden
               rounded-2xl
               border border-border
               bg-blue-50
               shadow-md
             "
+              >
+                <Row
+                  label="Registrado em"
+                  icon={Clock}
                 >
-                  <Row
-                    label="Registrado em"
-                    icon={Clock}
-                  >
-                    {formatDateTime(data.createdAt)}
-                  </Row>
+                  {formatDateTime(data.createdAt)}
+                </Row>
 
-                  <Row
-                    label="Avaliação"
-                    icon={Star}
-                  >
-                    <div className="h-9 w-32 text-right grid justify-end">
-                      <RatingStars
-                        size="sm"
-                        value={isEditing && draft
-                          ? draft.rating
-                          : data.rating
-                        }
-                        editable={isEditing}
-                        onChange={
-                          isEditing && draft
-                            ? (rating) =>
-                              setDraft({
-                                ...draft,
-                                rating,
-                              })
-                            : undefined
-                        }
-                      />
-                    </div>
-                  </Row>
+                <Row
+                  label="Avaliação"
+                  icon={Star}
+                >
+                  <div className="h-9 w-32 text-right grid justify-end">
+                    <RatingStars
+                      size="sm"
+                      value={draft.rating}
+                      editable={isEditing}
+                      onChange={
+                        isEditing
+                          ? (rating) =>
+                            setDraft({
+                              ...draft,
+                              rating,
+                            })
+                          : undefined
+                      }
+                    />
+                  </div>
+                </Row>
 
-                  <Row
-                    label="Preço"
-                    icon={Wallet}
-                  >
-                    {isEditing && draft ? (
-                      <Input
-                        type="number"
-                        value={draft.price}
-                        onChange={(e) =>
-                          setDraft({
-                            ...draft,
-                            price: Number(e.target.value),
-                          })
-                        }
-                        className="h-11 w-32 bg-white text-right"
-                      />
-                    ) : (
-                      `R$ ${data.price.toFixed(2)}`
-                    )}
-                  </Row>
+                <Row
+                  label="Preço"
+                  icon={Wallet}
+                >
+                  {isEditing ? (
+                    <Input
+                      type="number"
+                      value={draft.price}
+                      onChange={(e) =>
+                        setDraft({
+                          ...draft,
+                          price: Number(e.target.value),
+                        })
+                      }
+                      className="h-11 w-32 bg-white text-right"
+                    />
+                  ) : (
+                    `R$ ${draft.price.toFixed(2)}`
+                  )}
+                </Row>
 
-                  <Row
-                    label="Data do consumo"
-                    icon={CalendarDays}
-                  >
-                    {isEditing && draft ?
-                      (
-                        <div className="h-9 w-32 text-right grid justify-end">
-                          <DatePicker
-                            value={data.date}
-                            onChange={(value) =>
-                              setDraft({
-                                ...draft,
-                                date: value,
-                              })}
-                            putCalendarIcon={false}
-                            error={dateErrors}
-                            setError={(error: string | undefined) =>
-                              setDateErrors(error)
-                            }
-                          />
-                        </div>
-                      ) :
-                      (
-                        formatDate(data.date)
-                      )}
-                  </Row>
-
-                  <Row
-                    label="Compraria novamente"
-                    icon={RefreshCw}
-                  >
-                    <div className="grid justify-end">
-                      <WouldBuyAgainButton />
-
-                    </div>
-                  </Row>
-
-                  <Row
-                    label="Motivo do consumo"
-                    icon={CircleHelp}
-                  >
-                    {isEditing && draft ? (
-                      <div className="h-9 shrink-0 w-32">
-                        <ConsumptionReasonFilter
-                          addLabel={false}
+                <Row
+                  label="Data do consumo"
+                  icon={CalendarDays}
+                >
+                  {isEditing ?
+                    (
+                      <div className="h-9 w-32 text-right grid justify-end">
+                        <DatePicker
+                          value={draft.date}
                           onChange={(value) =>
                             setDraft({
                               ...draft,
-                              reasonId: Number(value),
+                              date: value,
                             })}
-                          consumptionReasons={consumptionReasons}
-                          value={String(draft.reasonId)} />
-                      </div>) :
-                      (data.reason.friendlyName)}
-                  </Row>
-
-                  <Row
-                    label="Influência"
-                    icon={Sparkles}
-                  >
-                    {isEditing && draft ? (
-                      <div className="h-9 shrink-0 w-32">
-                        <ConsumptionInfluenceFilter
-                          addLabel={false}
-                          onChange={(value) => {
-                            setDraft({
-                              ...draft,
-                              influenceId: Number(value),
-                            })
-
+                          putCalendarIcon={false}
+                          error={dateErrors}
+                          setError={(error: string | undefined) =>
+                            setDateErrors(error)
                           }
-
-                          }
-                          influences={consumptionInfluences}
-                          value={String(draft.influenceId)}
                         />
                       </div>
-                    ) : (
-                      data.influence.friendlyName
+                    ) :
+                    (
+                      formatDate(draft.date)
                     )}
-                  </Row>
+                </Row>
 
-                  {data.address && (
-                    <Row
-                      label="Endereço"
-                      icon={MapPin}
-                    > {isEditing && draft ? (
-                      <Input
-                        id="address"
-                        maxLength={255}
-                        value={data.address}
-                        onChange={(e) =>
+                <Row
+                  label="Compraria novamente"
+                  icon={RefreshCw}
+                >
+                  <div className="grid justify-end">
+                    <WouldBuyAgainButton />
+
+                  </div>
+                </Row>
+
+                <Row
+                  label="Motivo do consumo"
+                  icon={CircleHelp}
+                >
+                  {isEditing ? (
+                    <div className="h-9 shrink-0 w-32">
+                      <ConsumptionReasonFilter
+                        addLabel={false}
+                        onChange={(value) =>
                           setDraft({
                             ...draft,
-                            address: e.target.value,
+                            reasonId: Number(value),
                           })}
-                        placeholder="Onde foi?"
-                        className="h-11 w-32 bg-white"
-                      />) : data.address}
-                    </Row>
+                        consumptionReasons={consumptionReasons}
+                        value={String(draft.reasonId)} />
+                    </div>) :
+                    (getReasonName(draft.reasonId, consumptionReasons))}
+                </Row>
+
+                <Row
+                  label="Influência"
+                  icon={Sparkles}
+                >
+                  {isEditing ? (
+                    <div className="h-9 shrink-0 w-32">
+                      <ConsumptionInfluenceFilter
+                        addLabel={false}
+                        onChange={(value) => {
+                          setDraft({
+                            ...draft,
+                            influenceId: Number(value),
+                          })
+
+                        }
+
+                        }
+                        influences={consumptionInfluences}
+                        value={String(draft.influenceId)}
+                      />
+                    </div>
+                  ) : (
+
+                    getInfluenceName(draft.influenceId, consumptionInfluences)
+
                   )}
-                </section>
-                <div className="border-b border-blue-900" />
+                </Row>
 
-                {/* NEGATIVE ASPECTS */}
-                {(
-                  <section>
+                {draft.address && (
+                  <Row
+                    label="Endereço"
+                    icon={MapPin}
+                  > {isEditing ? (
+                    <Input
+                      id="address"
+                      maxLength={255}
+                      value={draft.address ?? undefined}
+                      onChange={(e) =>
+                        setDraft({
+                          ...draft,
+                          address: e.target.value,
+                        })}
+                      placeholder="Onde foi?"
+                      className="h-11 w-32 bg-white"
+                    />) : draft.address}
+                  </Row>
+                )}
+              </section>
+              <div className="border-b border-blue-900" />
 
-                    <PageHeader
-                      header="Aspectos Negativos"
-                      textClassName="text-base  text-white"
-                      lineAfter
-                      lineClassName="bg-white"
-                    />
+              {/* NEGATIVE ASPECTS */}
+              {(
+                <section>
 
-                    <div className="flex flex-wrap gap-2 pt-3">
-                      {negativeAspectsToRender.map((aspect) => {
-                        const selected = isEditing
-                          ? draft?.negativeAspectIds.includes(aspect.id) ?? false
-                          : true;
+                  <PageHeader
+                    header="Aspectos Negativos"
+                    textClassName="text-base  text-white"
+                    lineAfter
+                    lineClassName="bg-white"
+                  />
 
-                        return (
-                          <SelectableChip
-                            key={aspect.id}
-                            selected={selected}
-                            onClick={() => {
-                              if (!isEditing || !draft) return;
+                  <div className="flex flex-wrap gap-2 pt-3">
+                    {negativeAspectsToRender.map((aspect) => {
+                      const selected = isEditing
+                        ? draft?.negativeAspectIds.includes(aspect.id) ?? false
+                        : true;
 
-                              setDraft({
-                                ...draft,
-                                negativeAspectIds: selected
-                                  ? draft.negativeAspectIds.filter(
-                                    (id) => id !== aspect.id
-                                  )
-                                  : [
-                                    ...draft.negativeAspectIds,
-                                    aspect.id,
-                                  ],
-                              });
-                            }}
-                            selectedClassName="
-          rounded-full
-          border border-red-300
-          bg-red-100
-          px-3 py-1.5
-          text-xs
-          font-medium
-          text-red-700
-          hover:bg-red-200
-        "
-                            unselectedClassName="
+                      return (
+                        <SelectableChip
+                          key={aspect.id}
+                          selected={selected}
+                          onClick={() => {
+                            if (!isEditing || !draft) return;
+
+                            setDraft({
+                              ...draft,
+                              negativeAspectIds: selected
+                                ? draft.negativeAspectIds.filter(
+                                  (id) => id !== aspect.id
+                                )
+                                : [
+                                  ...draft.negativeAspectIds,
+                                  aspect.id,
+                                ],
+                            });
+                          }}
+                          selectedClassName={cn(
+                            "rounded-full border border-red-300 bg-red-100 px-3 py-1.5 text-xs font-medium text-red-700",
+                            isEditing
+                              ? "cursor-pointer hover:bg-red-200"
+                              : "cursor-default"
+                          )}
+                          unselectedClassName="
           rounded-full
           border border-white/40
           bg-white/10
           px-3 py-1.5
           text-xs
           font-medium
-          text-white
+          text-white 
           hover:bg-white/20
           hover:text-white
         "
-                          >
-                            {aspect.friendlyName}
-                          </SelectableChip>
-                        );
-                      })}
-                    </div>
-                  </section>
-                )}
-                <div className="border-b border-blue-900" />
-                {/* OBSERVATIONS */}
-                {(
-                  <section>
-                    <PageHeader
-                      header="Observações"
-                      textClassName="text-base  text-white"
-                      lineAfter
-                      lineClassName="bg-white"
-                    />
-                    {isEditing && draft ?
-                      (<Textarea
-                        id="details"
-                        rows={6}
+                        >
+                          {aspect.friendlyName}
+                        </SelectableChip>
+                      );
+                    })}
+                  </div>
+                </section>
+              )}
+              <div className="border-b border-blue-900" />
+              {/* OBSERVATIONS */}
+              {(
+                <section>
+                  <PageHeader
+                    header="Observações"
+                    textClassName="text-base  text-white"
+                    lineAfter
+                    lineClassName="bg-white"
+                  />
+                  {isEditing ?
+                    (<Textarea
+                      id="details"
+                      rows={6}
 
-                        maxLength={300}
-                        value={draft.details ?? undefined}
-                        onChange={(e) =>
-                          setDraft({
-                            ...draft,
-                            details: e.target.value,
-                          })}
-                        placeholder="Conte mais sobre sua experiência."
-                        className="
+                      maxLength={300}
+                      value={draft.details ?? undefined}
+                      onChange={(e) =>
+                        setDraft({
+                          ...draft,
+                          details: e.target.value,
+                        })}
+                      placeholder="Conte mais sobre sua experiência."
+                      className="
         h-20
         resize-none
         overflow-y-auto
         bg-white
     "
-                      />) :
-                      <p
-                        className="
+                    />) :
+                    <p
+                      className="
                   rounded-2xl overflow-y-auto 
                   border border-border
                   bg-muted/40
@@ -531,42 +534,42 @@ export function ConsumptionDetails({
                   leading-relaxed
                   text-offWhite 
                 "
-                      >
-                        {data.details}
-                      </p>
-                    }
+                    >
+                      {draft.details}
+                    </p>
+                  }
 
-                  </section>
-                )}
+                </section>
+              )}
 
-                {/* ACTIONS */}
-                <div className="
+              {/* ACTIONS */}
+              <div className="
             flex
             flex-col
             gap-2 pb-4 
             sm:flex-row  
           ">
 
-                  <Button
-                    type="button"
-                    onClick={isEditing ? onSaveEditions : startEditing}
-                    className="h-11 flex-1 px-3"
-                  >
-                    {isEditing ? (
-                      <>
-                        <Save className="size-4" />
-                        Salvar alterações
-                      </>
-                    ) : (
-                      <>
-                        <Pencil className="size-4" />
-                        Editar experiência
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="
+                <Button
+                  type="button"
+                  onClick={isEditing ? onSaveEditions : () => setIsEditing(true)}
+                  className="h-11 flex-1 px-3"
+                >
+                  {isEditing ? (
+                    <>
+                      <Save className="size-4" />
+                      Salvar alterações
+                    </>
+                  ) : (
+                    <>
+                      <Pencil className="size-4" />
+                      Editar experiência
+                    </>
+                  )}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="
                 h-11
                 flex-1
                 border border-blue-900
@@ -574,15 +577,14 @@ export function ConsumptionDetails({
                 hover:bg-red-400
                 hover:text-red-900
               "
-                    onClick={() => setConfirming(true)}
-                  >
-                    <Trash2 className="size-4" />
-                    Excluir experiência
-                  </Button>
-                </div>
+                  onClick={() => setConfirming(true)}
+                >
+                  <Trash2 className="size-4" />
+                  Excluir experiência
+                </Button>
               </div>
             </div>
-          ) : null}
+          </div>
         </SheetContent>
       </Sheet>
 

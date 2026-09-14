@@ -57,3 +57,16 @@ export interface ConsumptionSummaryModel {
     totalSpent: number
     buyAgainPct: number | null
 };
+
+export interface EditConsumptionModel {
+    price: number;
+    rating: number;
+    date: Date;
+    wouldBuyAgain: boolean;
+    reasonId: number;
+    influenceId: number;
+    address: string | null;
+    details: string | null;
+    negativeAspectIds: number[];
+    consumptionId: string;
+}

@@ -1,7 +1,7 @@
 // src/lib/catalog.ts
 
 import { prisma } from "@/lib/prisma";
-import { ConsumptionInfluenceModel, ReadConsumptionModel, ConsumptionReasonModel, CreateConsumptionModel, NegativeAspectModel } from "@/models/dashboard/consumption";
+import { ConsumptionInfluenceModel, ReadConsumptionModel, ConsumptionReasonModel, CreateConsumptionModel, NegativeAspectModel, EditConsumptionModel } from "@/models/dashboard/consumption";
 
 
 export async function fetchNegativeAspectsRepository(typeId?: number, id?: number): Promise<NegativeAspectModel[]> {
@@ -73,11 +73,12 @@ export async function postConsumptionRepository(
 }
 
 export async function fetchConsumptionRepository(
-  userId: string
+  userId: string, consumptionId?: string,
 ): Promise<ReadConsumptionModel[]> {
   const consumptions = await prisma.consumption.findMany({
     where: {
-      userId,
+      userId: userId,
+      id: consumptionId,
     },
 
     select: {
@@ -176,3 +177,149 @@ export async function fetchConsumptionRepository(
     ),
   }));
 }
+
+export async function updateConsumptionRepository(
+  userId: string,
+  newConsumption: EditConsumptionModel
+): Promise<ReadConsumptionModel> {
+  const {
+    consumptionId,
+    negativeAspectIds,
+    price,
+    rating,
+    date,
+    wouldBuyAgain,
+    reasonId,
+    influenceId,
+    address,
+    details,
+  } = newConsumption;
+
+  const updatedConsumption =
+    await prisma.consumption.update({
+      where: {
+        id: consumptionId,
+        userId,
+      },
+
+      data: {
+        price,
+        rating,
+        date,
+        wouldBuyAgain,
+        reasonId,
+        influenceId,
+        address,
+        details,
+
+        negativeAspects: {
+          deleteMany: {},
+          createMany: {
+            data: negativeAspectIds.map(
+              (negativeAspectId) => ({
+                negativeAspectId,
+              })
+            ),
+          },
+        },
+      },
+
+      select: {
+        id: true,
+        date: true,
+        address: true,
+        rating: true,
+        details: true,
+        price: true,
+        wouldBuyAgain: true,
+        createdAt: true,
+        updatedAt: true,
+        wishListItemId: true,
+
+        item: {
+          select: {
+            id: true,
+            friendlyName: true,
+            brand: true,
+            imageUrl: true,
+            categoryId: true,
+
+            category: {
+              select: {
+                name: true,
+                type: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+
+        reason: {
+          select: {
+            id: true,
+            friendlyName: true,
+          },
+        },
+
+        influence: {
+          select: {
+            id: true,
+            friendlyName: true,
+          },
+        },
+
+        negativeAspects: {
+          select: {
+            negativeAspect: {
+              select: {
+                id: true,
+                friendlyName: true,
+                typeId: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+  if (updatedConsumption.wouldBuyAgain == null) {
+    throw Error("Would Buy Again should have been informed.")
+  }
+
+  return {
+    id: updatedConsumption.id,
+    date: updatedConsumption.date,
+    address: updatedConsumption.address,
+    rating: updatedConsumption.rating,
+    details: updatedConsumption.details,
+    price: updatedConsumption.price,
+    wouldBuyAgain: updatedConsumption.wouldBuyAgain ?? false,
+
+    createdAt: updatedConsumption.createdAt,
+    updatedAt: updatedConsumption.updatedAt,
+    wishListItemId: updatedConsumption.wishListItemId,
+
+    item: {
+      id: updatedConsumption.item.id,
+      friendlyName: updatedConsumption.item.friendlyName,
+      categoryName: updatedConsumption.item.category.name,
+      categoryId: updatedConsumption.item.categoryId,
+      brand: updatedConsumption.item.brand,
+      type: updatedConsumption.item.category.type.name,
+      typeId: updatedConsumption.item.category.type.id,
+      imageUrl: updatedConsumption.item.imageUrl,
+    },
+
+    reason: updatedConsumption.reason,
+    influence: updatedConsumption.influence,
+
+    negativeAspects: updatedConsumption.negativeAspects.map(
+      ({ negativeAspect }) => negativeAspect
+    ),
+  }
+}
+

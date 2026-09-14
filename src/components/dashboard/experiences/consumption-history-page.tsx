@@ -14,7 +14,7 @@ import {
     summarize,
     type ConsumptionFilterState, buildConsumptionFilterChips
 } from "@/lib/consumption-filters-utils";
-import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, NegativeAspectModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { CategoryModel } from "@/models/dashboard/items";
 import ConsumptionHeader from "./consumption-header";
 import { NotificationContent } from "@/components/ui/choicelog-notification-card";
@@ -23,8 +23,20 @@ import { ActiveFilterChip, ActiveFiltersChips } from "@/components/ui/choicelog-
 
 const PAGE_SIZE = 12;
 
-export default function ConsumptionsHistoryPage({ consumptionsWithItems, categories, consumptionInfluences, consumptionReasons }:
-    { consumptionsWithItems: ReadConsumptionModel[]; categories: CategoryModel[]; consumptionInfluences: ConsumptionInfluenceModel[]; consumptionReasons: ConsumptionReasonModel[] }) {
+interface ConsumptionsHistoryProps {
+    consumptionsWithItems: ReadConsumptionModel[];
+    categories: CategoryModel[];
+    consumptionInfluences: ConsumptionInfluenceModel[];
+    consumptionReasons: ConsumptionReasonModel[],
+    negativeAspects: NegativeAspectModel[]
+}
+export default function ConsumptionsHistoryPage({
+    consumptionsWithItems,
+    categories,
+    consumptionInfluences,
+    consumptionReasons,
+    negativeAspects,
+}: ConsumptionsHistoryProps) {
 
     // const onlyConsumptions = consumptionsWithItems.map((c) => c.consumption);
     const [consumptions, setConsumptions] = useState<ReadConsumptionModel[]>(consumptionsWithItems);
@@ -171,6 +183,7 @@ export default function ConsumptionsHistoryPage({ consumptionsWithItems, categor
                 consumptionReasons={consumptionReasons}
                 consumptionInfluences={consumptionInfluences}
                 data={selected}
+                negativeAspects={negativeAspects}
                 onOpenChange={(open) => {
                     if (!open) setSelected(null);
                 }}

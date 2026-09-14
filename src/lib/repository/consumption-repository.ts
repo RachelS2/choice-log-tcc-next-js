@@ -105,6 +105,7 @@ export async function fetchConsumptionRepository(
               type: {
                 select: {
                   name: true,
+                  id: true,
                 },
               },
             },
@@ -143,7 +144,6 @@ export async function fetchConsumptionRepository(
       date: "desc",
     },
   });
-
   return consumptions.map((consumption) => ({
     id: consumption.id,
     date: consumption.date,
@@ -151,7 +151,7 @@ export async function fetchConsumptionRepository(
     rating: consumption.rating,
     details: consumption.details,
     price: consumption.price,
-    wouldBuyAgain: consumption.wouldBuyAgain,
+    wouldBuyAgain: consumption.wouldBuyAgain ?? false,
 
     createdAt: consumption.createdAt,
     updatedAt: consumption.updatedAt,
@@ -164,6 +164,7 @@ export async function fetchConsumptionRepository(
       categoryId: consumption.item.categoryId,
       brand: consumption.item.brand,
       type: consumption.item.category.type.name,
+      typeId: consumption.item.category.type.id,
       imageUrl: consumption.item.imageUrl,
     },
 

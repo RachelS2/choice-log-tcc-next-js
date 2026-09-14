@@ -98,7 +98,7 @@ export function DatePicker({
                         placeholder="dd/mm/aaaa"
                         maxLength={10}
                         className={cn(
-                            "h-full w-full  bg-transparent px-3 text-sm text-black outline-none",
+                            "h-full w-full  bg-transparent px-1 text-sm text-black outline-none",
                             "placeholder:text-muted-foreground"
                         )}
                     />
@@ -107,7 +107,7 @@ export function DatePicker({
                         <Button
                             type="button"
                             variant="ghost"
-                            className="mr-1 size-9 shrink-0 p-0 hover:bg-blue-50 hover:font-semibold hover:text-neutral-900"
+                            className=" size-9 shrink-0 p-0 hover:bg-blue-50 hover:font-semibold hover:text-neutral-900"
                         >
                             <ChevronDown className="text-neutral-700 size-4" />
                         </Button>

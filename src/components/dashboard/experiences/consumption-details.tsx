@@ -23,14 +23,17 @@ import {
   SheetTitle,
 
 } from "@/components/ui/sheet";
-import { formatDate, formatDateTime } from "@/lib/utils";
-import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { cn, formatDate, formatDateTime } from "@/lib/utils";
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, NegativeAspectModel, ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { ItemHero } from "@/components/ui/choicelog-item-hero";
 import { RatingStars } from "@/components/ui/rating-starts";
 import { PageHeader } from "@/components/ui/choicelog-pages-title";
 import Modal from "@/components/ui/choicelog-modal";
 import { Input } from "@/components/ui/input";
 import { ConsumptionInfluenceFilter, ConsumptionReasonFilter } from "@/components/ui/choicelog-filter-options";
+import { DatePicker } from "@/components/ui/choicelog-date-picker";
+import { Textarea } from "@/components/ui/textarea";
+import { SelectableChip } from "@/components/ui/choicelog-chips";
 
 function Row({
   label,
@@ -44,9 +47,9 @@ function Row({
   return (
     <div
       className="
-        flex
+        grid
+        grid-cols-[minmax(0,1fr)_minmax(220px,280px)]
         items-center
-        justify-between
         gap-6
         border-b
         border-border
@@ -58,10 +61,9 @@ function Row({
       <span
         className="
           inline-flex
+          min-w-0
           items-center
           gap-2
-          bg-blue-50
-          px-3 py-1.5
           text-md
           text-blue-900
         "
@@ -70,11 +72,18 @@ function Row({
           <Icon className="size-4 shrink-0 text-blue-700" />
         )}
 
-        {label}
+        <span className="break-words">
+          {label}
+        </span>
       </span>
 
       <div
         className="
+          flex
+          min-w-0
+          w-full
+          items-center
+          justify-end
           text-right
           text-md
           font-medium
@@ -94,7 +103,7 @@ interface EditConsumptionModel {
   wouldBuyAgain: boolean;
   reasonId: number;
   influenceId: number;
-  address: string;
+  address: string | null;
   details: string | null;
   negativeAspectIds: number[];
   consumptionId: string;
@@ -105,44 +114,84 @@ export function ConsumptionDetails({
   onOpenChange,
   onDelete,
   consumptionReasons,
-  consumptionInfluences
+  consumptionInfluences,
+  negativeAspects
 }: {
   data: ReadConsumptionModel | null;
   onOpenChange: (open: boolean) => void;
   onDelete: (c: ReadConsumptionModel) => void;
   consumptionReasons: ConsumptionReasonModel[];
   consumptionInfluences: ConsumptionInfluenceModel[];
+  negativeAspects: NegativeAspectModel[]
+
 }) {
 
   if (!data) return null;
-  
+
   const [confirming, setConfirming] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState<EditConsumptionModel | null>(null);
-  const [influenceId, setInfluenceId] = useState<number>(data.influence.id);
-  const [reasonId, setReasonId] = useState<number>(data.reason.id);
+  const [dateErrors, setDateErrors] = useState<string | undefined>(undefined);
+  console.log("item type: " + data.item.typeId)
+  const negativeAspectsToRender = isEditing
+    ? negativeAspects.filter((aspect) => aspect.typeId == data.item.typeId)
+    : data.negativeAspects;
+  function WouldBuyAgainButton() {
+    if (!data) return null;
+    let Icon: LucideIcon = ThumbsDown;
+    let text = "Não";
+    let textColor = "text-red-600";
+    let hover = "hover:bg-red-200"
+    if (data.wouldBuyAgain) {
+      Icon = ThumbsUp;
+      text = "Sim";
+      textColor = "text-emerald-600";
+      hover = "hover:bg-emerald-200";
+    }
+    return <Button
+      type="button"
+      onClick={(e) => {
+        if (draft) {
+          setDraft({
+            ...draft,
+            wouldBuyAgain: !(draft.wouldBuyAgain),
+          });
+        }
+      }}
+      aria-disabled={!isEditing}
+      className={cn(
+        "inline-flex items-center h-11 w-32 gap-1.5",
+        textColor,
+        isEditing
+          ? "cursor-pointer shadow-sm bg-white justify-center"
+          : "cursor-default shadow-none bg-blue-50 justify-end hover:bg-blue-50",
+        isEditing && hover
+      )}
+    >
+
+      <Icon className="size-3.5" />
+      {text}
+    </Button>
+  }
   function startEditing() {
-    console.log("clicou em editar!")
     if (!data) return;
-    console.log("tem dados");
-    console.log("reasonId: " + reasonId);
-    console.log("influenceId: " + influenceId);
+    setIsEditing(true);
+
     setDraft({
       consumptionId: data.id,
       price: data.price,
       rating: data.rating,
       date: data.date,
       wouldBuyAgain: data.wouldBuyAgain,
-      reasonId: reasonId,
-      influenceId: influenceId,
-      address: data.address ?? "",
-      details: data.details ?? "",
+      reasonId: data.reason.id,
+      influenceId: data.influence.id,
+      address: data.address,
+      details: data.details,
       negativeAspectIds: data.negativeAspects.map(
         (aspect) => aspect.id
       ),
     })
 
-    setIsEditing(true);
 
   }
 
@@ -164,8 +213,8 @@ export function ConsumptionDetails({
           className="
     w-full
     p-0
-    sm:max-w-4xl
-    lg:max-w-3xl
+    sm:max-w-[680px]
+    lg:max-w-[760px]
     flex
     flex-col
     overflow-hidden
@@ -230,23 +279,25 @@ export function ConsumptionDetails({
                     label="Avaliação"
                     icon={Star}
                   >
-                    <RatingStars
-                      size="sm"
-                      value={isEditing && draft
-                        ? draft.rating
-                        : data.rating
-                      }
-                      editable={isEditing}
-                      onChange={
-                        isEditing && draft
-                          ? (rating) =>
-                            setDraft({
-                              ...draft,
-                              rating,
-                            })
-                          : undefined
-                      }
-                    />
+                    <div className="h-9 w-32 text-right grid justify-end">
+                      <RatingStars
+                        size="sm"
+                        value={isEditing && draft
+                          ? draft.rating
+                          : data.rating
+                        }
+                        editable={isEditing}
+                        onChange={
+                          isEditing && draft
+                            ? (rating) =>
+                              setDraft({
+                                ...draft,
+                                rating,
+                              })
+                            : undefined
+                        }
+                      />
+                    </div>
                   </Row>
 
                   <Row
@@ -263,7 +314,7 @@ export function ConsumptionDetails({
                             price: Number(e.target.value),
                           })
                         }
-                        className="h-9 w-32 bg-white text-right"
+                        className="h-11 w-32 bg-white text-right"
                       />
                     ) : (
                       `R$ ${data.price.toFixed(2)}`
@@ -274,24 +325,37 @@ export function ConsumptionDetails({
                     label="Data do consumo"
                     icon={CalendarDays}
                   >
-                    {formatDate(data.date)}
+                    {isEditing && draft ?
+                      (
+                        <div className="h-9 w-32 text-right grid justify-end">
+                          <DatePicker
+                            value={data.date}
+                            onChange={(value) =>
+                              setDraft({
+                                ...draft,
+                                date: value,
+                              })}
+                            putCalendarIcon={false}
+                            error={dateErrors}
+                            setError={(error: string | undefined) =>
+                              setDateErrors(error)
+                            }
+                          />
+                        </div>
+                      ) :
+                      (
+                        formatDate(data.date)
+                      )}
                   </Row>
 
                   <Row
                     label="Compraria novamente"
                     icon={RefreshCw}
                   >
-                    {data.wouldBuyAgain ? (
-                      <span className="inline-flex items-center gap-1.5 text-emerald-600">
-                        <ThumbsUp className="size-3.5" />
-                        Sim
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1.5 text-red-600">
-                        <ThumbsDown className="size-3.5" />
-                        Não
-                      </span>
-                    )}
+                    <div className="grid justify-end">
+                      <WouldBuyAgainButton />
+
+                    </div>
                   </Row>
 
                   <Row
@@ -299,11 +363,17 @@ export function ConsumptionDetails({
                     icon={CircleHelp}
                   >
                     {isEditing && draft ? (
-                      <ConsumptionReasonFilter
-                        addLabel={false}
-                        onChange={(reasonId) => setReasonId(Number(reasonId))}
-                        consumptionReasons={consumptionReasons}
-                        value={data.reason.friendlyName} />) :
+                      <div className="h-9 shrink-0 w-32">
+                        <ConsumptionReasonFilter
+                          addLabel={false}
+                          onChange={(value) =>
+                            setDraft({
+                              ...draft,
+                              reasonId: Number(value),
+                            })}
+                          consumptionReasons={consumptionReasons}
+                          value={String(draft.reasonId)} />
+                      </div>) :
                       (data.reason.friendlyName)}
                   </Row>
 
@@ -312,17 +382,22 @@ export function ConsumptionDetails({
                     icon={Sparkles}
                   >
                     {isEditing && draft ? (
-                      <ConsumptionInfluenceFilter
-                        addLabel={false}
-                        onChange={(value) =>
+                      <div className="h-9 shrink-0 w-32">
+                        <ConsumptionInfluenceFilter
+                          addLabel={false}
+                          onChange={(value) => {
+                            setDraft({
+                              ...draft,
+                              influenceId: Number(value),
+                            })
 
-                          setInfluenceId(Number(value))
-                        }
-                        influences={consumptionInfluences}
-                        value={String(
-                          influenceId ?? data.influence.id
-                        )}
-                      />
+                          }
+
+                          }
+                          influences={consumptionInfluences}
+                          value={String(draft.influenceId)}
+                        />
+                      </div>
                     ) : (
                       data.influence.friendlyName
                     )}
@@ -332,8 +407,19 @@ export function ConsumptionDetails({
                     <Row
                       label="Endereço"
                       icon={MapPin}
-                    >
-                      {data.address}
+                    > {isEditing && draft ? (
+                      <Input
+                        id="address"
+                        maxLength={255}
+                        value={data.address}
+                        onChange={(e) =>
+                          setDraft({
+                            ...draft,
+                            address: e.target.value,
+                          })}
+                        placeholder="Onde foi?"
+                        className="h-11 w-32 bg-white"
+                      />) : data.address}
                     </Row>
                   )}
                 </section>
@@ -350,23 +436,57 @@ export function ConsumptionDetails({
                       lineClassName="bg-white"
                     />
 
-                    <div className="flex flex-wrap pt-3 gap-2">
-                      {data.negativeAspects.map((aspect) => (
-                        <span
-                          key={aspect.id}
-                          className="
-                      rounded-full
-                      border border-red-200
-                      bg-red-50
-                      px-3 py-1.5
-                      text-xs
-                      font-medium
-                      text-red-700
-                    "
-                        >
-                          {aspect.friendlyName}
-                        </span>
-                      ))}
+                    <div className="flex flex-wrap gap-2 pt-3">
+                      {negativeAspectsToRender.map((aspect) => {
+                        const selected = isEditing
+                          ? draft?.negativeAspectIds.includes(aspect.id) ?? false
+                          : true;
+
+                        return (
+                          <SelectableChip
+                            key={aspect.id}
+                            selected={selected}
+                            onClick={() => {
+                              if (!isEditing || !draft) return;
+
+                              setDraft({
+                                ...draft,
+                                negativeAspectIds: selected
+                                  ? draft.negativeAspectIds.filter(
+                                    (id) => id !== aspect.id
+                                  )
+                                  : [
+                                    ...draft.negativeAspectIds,
+                                    aspect.id,
+                                  ],
+                              });
+                            }}
+                            selectedClassName="
+          rounded-full
+          border border-red-300
+          bg-red-100
+          px-3 py-1.5
+          text-xs
+          font-medium
+          text-red-700
+          hover:bg-red-200
+        "
+                            unselectedClassName="
+          rounded-full
+          border border-white/40
+          bg-white/10
+          px-3 py-1.5
+          text-xs
+          font-medium
+          text-white
+          hover:bg-white/20
+          hover:text-white
+        "
+                          >
+                            {aspect.friendlyName}
+                          </SelectableChip>
+                        );
+                      })}
                     </div>
                   </section>
                 )}
@@ -380,10 +500,28 @@ export function ConsumptionDetails({
                       lineAfter
                       lineClassName="bg-white"
                     />
+                    {isEditing && draft ?
+                      (<Textarea
+                        id="details"
+                        rows={6}
 
-
-                    <p
-                      className="
+                        maxLength={300}
+                        value={draft.details ?? undefined}
+                        onChange={(e) =>
+                          setDraft({
+                            ...draft,
+                            details: e.target.value,
+                          })}
+                        placeholder="Conte mais sobre sua experiência."
+                        className="
+        h-20
+        resize-none
+        overflow-y-auto
+        bg-white
+    "
+                      />) :
+                      <p
+                        className="
                   rounded-2xl overflow-y-auto 
                   border border-border
                   bg-muted/40
@@ -391,11 +529,13 @@ export function ConsumptionDetails({
                   mt-3
                   text-sm
                   leading-relaxed
-                  text-offWhite
+                  text-offWhite 
                 "
-                    >
-                      {data.details}
-                    </p>
+                      >
+                        {data.details}
+                      </p>
+                    }
+
                   </section>
                 )}
 

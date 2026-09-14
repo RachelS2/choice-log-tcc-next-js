@@ -35,6 +35,7 @@ export async function fetchItemBasicInfoRepository(userId?: string, categoryType
           type: true,
           name: true,
           id: true,
+          typeId: true,
         },
       },
     },
@@ -42,6 +43,7 @@ export async function fetchItemBasicInfoRepository(userId?: string, categoryType
 
   return items.map((item) => ({
     id: item.id,
+    typeId: item.category.typeId,
     friendlyName: item.friendlyName,
     categoryName: item.category.name,
     categoryId: item.category.id,
@@ -97,6 +99,7 @@ export async function fetchItemResumeRepository(userId?: string, categoryType?: 
     categoryId: item.category.id,
     brand: item.brand,
     type: item.category.type.name as ItemTypeEnum,
+    typeId: item.category.type.id,
     category: item.category.name,
     imageUrl: item.imageUrl,
 
@@ -174,9 +177,9 @@ export async function postItemRepository({
     imageUrl: createdItem.imageUrl,
 
     type: createdItem.category.type.name as ItemTypeEnum,
-
+    typeId: createdItem.category.type.id,
     experiences: 0,
-   // averageRating: 0,
+    // averageRating: 0,
     lastConsumed: null,
     updatedAt: createdItem.updatedAt,
     totalSpent: 0,

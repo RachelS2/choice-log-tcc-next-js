@@ -325,15 +325,18 @@ function FilterSelect<T extends string>({
   let previousType: string | undefined;
 
   return (
-    <div className="space-y-1.5">
-      {addLabel && <Label className="text-xs font-medium text-blue-900">
-        {label}
-      </Label>}
-      <div className="flex-1">
+    <div className="w-full min-w-0 space-y-1.5">
+      {addLabel && (
+        <Label className="text-xs font-medium text-blue-900">
+          {label}
+        </Label>
+      )}
+
+      <div className="w-full min-w-0">
         <Select value={value} onValueChange={onChange}>
           <SelectTrigger
             className={cn(
-              "h-11 bg-white w-full",
+              "h-11 w-full min-w-0 bg-white",
               value === "ALL" || value === "recent"
                 ? "text-muted-foreground"
                 : "text-gray-900"
@@ -342,11 +345,20 @@ function FilterSelect<T extends string>({
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
 
-          <SelectContent sideOffset={1} position="popper"
-            className="max-h-80 overflow-y-auto">
+          <SelectContent
+            sideOffset={1}
+            position="popper"
+            className="
+              max-h-80
+              w-[var(--radix-select-trigger-width)]
+              min-w-[var(--radix-select-trigger-width)]
+              overflow-y-auto
+            "
+          >
             {options.map((option) => {
               const showGroupHeader =
-                option.type && option.type !== previousType;
+                option.type &&
+                option.type !== previousType;
 
               previousType = option.type;
 
@@ -354,14 +366,13 @@ function FilterSelect<T extends string>({
                 <React.Fragment key={option.value}>
                   {showGroupHeader && (
                     <div className="px-2 py-1.5 text-[14px] font-semibold uppercase tracking-wider text-blue-900">
-                      {option.type === "PRODUCT" ? "Categorias de produtos" : "Categorias de serviços"}
+                      {option.type === "PRODUCT"
+                        ? "Categorias de produtos"
+                        : "Categorias de serviços"}
                     </div>
                   )}
 
-                  <SelectItem
-                    key={option.value}
-                    value={option.value}
-                  >
+                  <SelectItem value={option.value}>
                     {option.label}
                   </SelectItem>
                 </React.Fragment>

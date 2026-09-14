@@ -13,6 +13,7 @@ export interface BasicItemModel {
   categoryId: string;
   brand: string;
   type: ItemTypeEnum;
+  typeId: number;
   imageUrl: string | null;
 }
 
@@ -27,6 +28,7 @@ export interface PostItemModel {
 export interface CreateUpdateItemModel extends PostItemModel {
   id: string;
   type: ItemTypeEnum;
+  typeId: number;
   experiences: number;
   // averageRating: number;
   lastConsumed: string | null;

@@ -6,9 +6,10 @@ import { deleteItemController } from '@/lib/controller/item-controller';
 import { ReactNode, useState } from "react";
 import Modal from '@/components/ui/choicelog-modal';
 import CreateUpdateItemModal from '../items/create-item-modal';
-import {formatDate, formatDateTime, } from '@/lib/utils';
+import { formatDate, formatDateTime, } from '@/lib/utils';
 import { ItemHero } from '@/components/ui/choicelog-item-hero';
 import DecorativeBackground from '@/components/ui/choicelog-decorative-background';
+import { redirect } from 'next/navigation';
 
 export interface CatalogCardProps {
   item: CreateUpdateItemModel;
@@ -44,8 +45,8 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
   };
 
   const handleViewDetails = () => {
-    console.log("Marca" + item.brand);
-    toast.info(`Detalhes de "${item.friendlyName}" em breve!`);
+    console.log("oi")
+    redirect("/dashboard/experiences")
   };
 
   return (
@@ -62,7 +63,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
     hover:shadow-lg hover:shadow-blue-100/0
   "
     >
-      <DecorativeBackground/>
+      <DecorativeBackground />
 
       <div className="flex h-full flex-col p-5">
         {/* Header */}

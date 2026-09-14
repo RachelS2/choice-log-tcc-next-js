@@ -239,15 +239,12 @@ export function ConsumptionDetails({
     bg-gradient-to-br
     from-blue-700
     via-blue-600
-    to-blue-500
+    to-blue-500 
   "
         >
 
           <div className="min-h-0 flex-1 overflow-y-auto
-          bg-gradient-to-br
-          from-blue-700
-          via-blue-600
-          to-blue-500">
+          bg-gradient-to-br from-blue-900 via-blue-800 to-slate-700">
 
             <SheetHeader>
               <SheetTitle>
@@ -584,7 +581,7 @@ export function ConsumptionDetails({
                 h-11
                 flex-1
                 border border-blue-900
-                bg-blue-900 text-offWhite
+                bg-blue-100 text-foreground
                 hover:bg-red-400
                 hover:text-red-900
               "

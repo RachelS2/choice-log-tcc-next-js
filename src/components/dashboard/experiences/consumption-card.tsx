@@ -26,13 +26,14 @@ export function ConsumptionCard({
     const consumption = consumptionAndItem;
 
     return (
-        <article>
+        <article className="h-full">
             <button
                 type="button"
                 onClick={() => onOpen(consumptionAndItem)}
                 aria-label={`Ver detalhes de ${item.friendlyName}`}
                 className="
-      group w-full rounded-2xl border border-border bg-card
+      group flex min-h-[200px] w-full flex-col
+      rounded-2xl border border-border bg-card
       p-4 text-left shadow-md
       transition-all duration-200 cursor-pointer
       hover:-translate-y-0.5 hover:border-blue-900
@@ -67,7 +68,15 @@ export function ConsumptionCard({
                     }
                 />
 
-                <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border/60 pt-3 text-xs text-muted-foreground">
+                <div
+                    className="
+        mt-4 flex min-h-[20px] flex-wrap
+        content-start items-start
+        gap-x-4 gap-y-2
+        border-t border-border/60 pt-3
+        text-xs text-muted-foreground
+      "
+                >
                     <span
                         className={cn(
                             "inline-flex items-center gap-1.5 font-medium",

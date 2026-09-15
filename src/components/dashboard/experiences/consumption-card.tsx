@@ -1,6 +1,7 @@
 import {
     CalendarDays,
     CircleHelp,
+    LucideIcon,
     Sparkles,
     ThumbsDown,
     ThumbsUp, Wallet
@@ -25,6 +26,13 @@ export function ConsumptionCard({
     const item: BasicItemModel = consumptionAndItem.item;
     const consumption = consumptionAndItem;
 
+    let wouldBuyAgainIcon: LucideIcon = ThumbsUp;
+    let wouldBuyAgainStr: string = "Compraria novamente"
+    if (!consumption.wouldBuyAgain) {
+        wouldBuyAgainIcon = ThumbsDown;
+        wouldBuyAgainStr = "Não compraria novamente"
+    }
+
     return (
         <article className="h-full">
             <button
@@ -32,7 +40,7 @@ export function ConsumptionCard({
                 onClick={() => onOpen(consumptionAndItem)}
                 aria-label={`Ver detalhes de ${item.friendlyName}`}
                 className="
-      group flex min-h-[200px] w-full flex-col
+      group flex min-h-[190px] w-full flex-col
       rounded-2xl border border-border bg-card
       p-4 text-left shadow-md
       transition-all duration-200 cursor-pointer
@@ -48,77 +56,53 @@ export function ConsumptionCard({
                 <ItemHero
                     item={item}
                     avatarClassName="h-18 w-18"
-                    titleRight={
+                    titleContent={
                         <RatingStars
                             size="xsm"
                             value={consumption.rating}
                         />
                     }
-                    middleRight={
-                        <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                            <CalendarDays className="size-3 text-blue-900" />
-                            {formatDate(consumption.date.toString())}
-                        </span>
-                    }
-                    bottomRight={
-                        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
-                            <Wallet className="size-3 text-blue-900" />
-                            {"R$ " + consumption.price.toFixed(2)}
-                        </span>
-                    }
+                    topRight={CardDetails(wouldBuyAgainIcon, wouldBuyAgainStr)}
+                    middleRight={CardDetails(CalendarDays, formatDate(consumption.date.toString()))}
+
+                    bottomRight={CardDetails(Wallet, "R$ " + consumption.price.toFixed(2))}
                 />
 
                 <div
                     className="
-        mt-4 flex min-h-[20px] flex-wrap
-        content-start items-start
-        gap-x-4 gap-y-2
-        border-t border-border/60 pt-3
-        text-xs text-muted-foreground
-      "
+                    mt-4 grid
+                    grid-cols-[minmax(0,1fr)_12rem]
+                    gap-x-8
+                    border-t border-border/60 pt-3
+                    text-xs text-muted-foreground
+                    "
                 >
-                    <span
-                        className={cn(
-                            "inline-flex items-center gap-1.5 font-medium",
-                            consumption.wouldBuyAgain
-                                ? "text-success"
-                                : "text-destructive"
-                        )}
-                    >
-                        {consumption.wouldBuyAgain ? (
-                            <ThumbsUp className="size-3.5" />
-                        ) : (
-                            <ThumbsDown className="size-3.5" />
-                        )}
+                    {/* Linha 1 / Coluna 1 */}
+                    {CardDetails(
+                        CircleHelp,
+                        "Motivo: " + consumption.reason.friendlyName
+                    )}
 
-                        {consumption.wouldBuyAgain
-                            ? "Compraria novamente"
-                            : "Não compraria novamente"}
-                    </span>
-
-                    <span className="inline-flex items-center gap-1.5">
-                        <CircleHelp className="size-3.5 text-blue-900" />
-                        <span>
-                            Motivo:{" "}
-                            <span className="font-medium text-foreground">
-                                {consumption.reason.friendlyName}
-                            </span>
-                        </span>
-                    </span>
-
-                    <span className="inline-flex items-center gap-1.5">
-                        <Sparkles className="size-3.5 text-blue-900" />
-                        <span>
-                            Influência:{" "}
-                            <span className="font-medium text-foreground">
-                                {consumption.influence.friendlyName}
-                            </span>
-                        </span>
-                    </span>
+                    {/* Linha 2 / Coluna 1 */}
+                    {CardDetails(
+                        Sparkles,
+                        "Influência: " + consumption.influence.friendlyName
+                    )}
                 </div>
             </button>
         </article>
     );
+}
+
+function CardDetails(Icon: LucideIcon, spanContent: string, className?: string) {
+    return (
+        <span className={cn("inline-flex text-sm items-center gap-1.5", className)}>
+            <Icon className={cn("size-3.5 text-blue-900", className)} />
+            <span className={cn("text-muted-foreground", className)}>
+                {spanContent}
+            </span>
+        </span>
+    )
 }
 
 export function ConsumptionCardSkeleton() {

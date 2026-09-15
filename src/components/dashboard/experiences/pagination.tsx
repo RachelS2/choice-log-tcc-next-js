@@ -19,10 +19,10 @@ export function Pagination({
     const canLoadMore = !!onLoadMore && shown < total;
 
     return (
-        <div className="flex flex-col items-center gap-4 pt-2 sm:flex-row sm:justify-between">
-            <p className="text-sm text-muted-foreground">
-                Mostrando <strong className="font-medium text-offWhite">{shown}</strong>{" "}
-                de <strong className="font-medium text-offWhite">{total}</strong>{" "}
+        <div className="flex flex-col items-center gap-4 text-muted-foreground pt-2 sm:flex-row sm:justify-between">
+            <p className="text-sm">
+                Mostrando <strong className="font-medium">{shown}</strong>{" "}
+                de <strong className="font-medium">{total}</strong>{" "}
                 {total === 1 ? "consumo" : "consumos"}
             </p>
 

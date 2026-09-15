@@ -29,12 +29,12 @@ model Item {
 }
 
 model ItemType {
-  name               ItemTypeEnum        @unique
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @default(now()) @updatedAt
-  id                 Int                 @id @default(autoincrement())
-  categories         Category[]
-  negativeAspects    NegativeAspect[]
+  name            ItemTypeEnum     @unique
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt
+  id              Int              @id @default(autoincrement())
+  categories      Category[]
+  negativeAspects NegativeAspect[]
 }
 
 model Category {
@@ -80,21 +80,19 @@ model WishListItem {
 }
 
 model ConsumptionReason {
-  friendlyName String        @db.VarChar(30)
+  friendlyName String        @unique @db.VarChar(30)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now()) @updatedAt
   id           Int           @id @default(autoincrement())
   consumptions Consumption[]
-  @@unique([friendlyName])
 }
 
 model ConsumptionInfluence {
-  friendlyName String        @db.VarChar(30)
+  friendlyName String        @unique @db.VarChar(30)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now()) @updatedAt
   id           Int           @id @default(autoincrement())
   consumptions Consumption[]
-  @@unique([friendlyName])
 }
 
 model NegativeAspect {
@@ -129,7 +127,7 @@ model Consumption {
   item            Item                        @relation(fields: [itemId], references: [id], onDelete: Cascade)
   reason          ConsumptionReason           @relation(fields: [reasonId], references: [id])
   user            User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  wishListItem    WishListItem?               @relation(fields: [wishListItemId], references: [id],   onDelete: SetNull)
+  wishListItem    WishListItem?               @relation(fields: [wishListItemId], references: [id])
   negativeAspects ConsumptionNegativeAspect[]
 
   @@index([itemId])
@@ -156,7 +154,7 @@ model Goal {
   updatedAt        DateTime          @default(now()) @updatedAt
   finalDate        DateTime?
   initialDate      DateTime          @default(now())
-  category         Category?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  category         Category?         @relation(fields: [categoryId], references: [id])
   user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   impulsivityGoal  ImpulsivityGoal?
   satisfactionGoal SatisfactionGoal?
@@ -167,7 +165,7 @@ model SpendingGoal {
   goalId        String    @id
   spendingLimit Float
   categoryId    String?
-  category      Category? @relation(fields: [categoryId], references: [id],   onDelete: SetNull)
+  category      Category? @relation(fields: [categoryId], references: [id])
   goal          Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
 }
 
@@ -197,8 +195,8 @@ model Account {
   password              String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   issuer                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([issuer, accountId], map: "account_issuer_accountId_uidx")
   @@index([userId])
@@ -259,6 +257,6 @@ enum IncomeRange {
 }
 
 enum ItemTypeEnum {
-  PRODUCT 
+  PRODUCT
   SERVICE
 }

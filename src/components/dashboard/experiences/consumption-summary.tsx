@@ -1,8 +1,8 @@
-import { RatingStars } from "@/components/ui/rating-starts";
 import { ConsumptionSummaryModel } from "@/models/dashboard/consumption";
 
 import {
     ListChecks,
+    Star,
     ThumbsUp,
     Wallet,
 } from "lucide-react";
@@ -25,12 +25,9 @@ export function ConsumptionSummary({
             </SummaryBadge>
 
             <SummaryBadge>
-                <RatingStars
-                    value={summary.avg}
-                    size="sm"
-                    editable={false}
-                />
-                <span>média</span>
+                <Star className="size-4" />
+                <strong className="font-semibold">{summary.avg}</strong>
+                <span>estrelas</span>
             </SummaryBadge>
 
             <SummaryBadge>

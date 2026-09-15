@@ -416,6 +416,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
                   onChange={setDate}
                   putCalendarIcon={true}
                   error={errors.date}
+                  dateInputClassName="pl-3 text-start"
                   setError={(error: string | undefined) =>
                     setErrors((prev) => ({
                       ...prev,
@@ -517,7 +518,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
             </div>
 
             <div>
-              <FieldLabel required>O que te levou a escolher este item?</FieldLabel>
+              <FieldLabel required>O que (ou quem) te levou a escolher este item?</FieldLabel>
               <div className="flex flex-wrap gap-2 text-blue-600">
                 {consumptionInfluences.map((inf) => (
                   <SelectableChip

@@ -4,8 +4,15 @@ import BenefitsSection from "@/components/landing/benefits-section"
 import HowItWorksSection from "@/components/landing/how-it-works"
 import FinalCTASection from "@/components/landing/final-cta"
 import Footer from "@/components/landing/footer"
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation"
 
-export default function HomePage() {
+export default async function HomePage() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (session) {
+      redirect("/dashboard")
+  }
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
       {/* Ambient blur orb */}

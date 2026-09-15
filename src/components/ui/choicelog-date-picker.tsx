@@ -14,6 +14,8 @@ interface DatePickerProps {
     putCalendarIcon: boolean
     setError: (error: string | undefined) => void;
     error: string | undefined;
+    showCalendar? : boolean;
+    dateInputClassName? : string;
 }
 
 export function DatePicker({
@@ -22,8 +24,11 @@ export function DatePicker({
     putCalendarIcon,
     setError,
     error,
+    showCalendar,
+    dateInputClassName
 }: DatePickerProps) {
-    //const [error, setError] = useState("");
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
     useEffect(() => {
@@ -58,31 +63,30 @@ export function DatePicker({
                 new Date()
             );
 
-            const today = new Date();
-
             const validDate =
                 isValid(date) &&
                 input === format(date, "dd/MM/yyyy") &&
                 !isBefore(today, date);
 
-            setError("Data inválida.");
-
             if (validDate) {
                 onChange(date);
-                setError("");
+                setError(undefined);
                 setOpen(false);
             } else {
                 setError("Data inválida.");
             }
+            return;
         }
+
+        setError(undefined)
     };
 
     return (
-        <div className="space-y-1">
+        <div className="space-y-1 ">
             <Popover open={open} onOpenChange={setOpen}>
                 <div
                     className={cn(
-                        "flex h-11 w-full shadow-sm items-center rounded-md border bg-white",
+                        "flex h-11 w-full shadow-sm items-center rounded-md border  bg-white",
                         error && "border-red-500"
                     )}
                 >
@@ -94,16 +98,15 @@ export function DatePicker({
                         type="text"
                         value={inputValue}
                         onChange={handleInputChange}
-                        onFocus={() => setOpen(true)}
                         placeholder="dd/mm/aaaa"
                         maxLength={10}
                         className={cn(
-                            "h-full w-full  bg-transparent px-1 text-sm text-black outline-none",
-                            "placeholder:text-muted-foreground"
+                            "h-full w-full text-center bg-transparent px-1 text-sm text-black outline-none",
+                            "placeholder:text-muted-foreground", dateInputClassName
                         )}
                     />
 
-                    <PopoverTrigger asChild>
+                    {showCalendar && <PopoverTrigger asChild>
                         <Button
                             type="button"
                             variant="ghost"
@@ -111,16 +114,18 @@ export function DatePicker({
                         >
                             <ChevronDown className="text-neutral-700 size-4" />
                         </Button>
-                    </PopoverTrigger>
+                    </PopoverTrigger> }
                 </div>
 
                 <PopoverContent
-                    className="w-auto p-0"
+                    className="z-[100] w-auto border border-neutral-200 p-0"
                     align="start"
+                    onClick={(e) => e.stopPropagation()}
                 >
                     <Calendar
-                        className="rounded-2xl border border-neutral-200"
+                        className="rounded-2xl "
                         mode="single"
+                        autoFocus
                         selected={value}
                         onSelect={(d) => {
                             if (d) {
@@ -129,8 +134,7 @@ export function DatePicker({
                                 setOpen(false);
                             }
                         }}
-                        disabled={(d) => d > new Date()}
-                        autoFocus
+                        disabled={(d) => d > today}
                         classNames={{
                             day_button:
                                 "hover:!bg-blue-50 hover:!text-blue-600 focus:!bg-blue-50 focus:!text-blue-600",

@@ -25,7 +25,7 @@ export function RatingStars({
 }) {
   const sizeClasses = {
     xsm: {
-      container: "size-[clamp(1.05rem,5vw,1rem)]",
+      container: "size-[clamp(1rem,4vw,0.75rem)]",
       star: "size-[clamp(1rem,5vw,1rem)]",
       button: "p-0",
       gap: "gap-[clamp(0.125rem,0.8vw,0.25rem)]",

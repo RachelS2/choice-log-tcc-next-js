@@ -7,8 +7,8 @@ interface ItemHeroProps {
     item: BasicItemModel;
     friendlyNameClassName?: string;
     brandClassName?: string;
-
-    titleRight?: React.ReactNode;
+    titleContent?: React.ReactNode;
+    topRight?: React.ReactNode;
     middleRight?: React.ReactNode;
     bottomRight?: React.ReactNode;
     avatarClassName?: string;
@@ -18,7 +18,8 @@ export function ItemHero({
     item,
     friendlyNameClassName,
     brandClassName,
-    titleRight,
+    titleContent,
+    topRight,
     middleRight,
     bottomRight,
     avatarClassName,
@@ -49,31 +50,34 @@ export function ItemHero({
             </div>
 
             {/* Conteúdo */}
-            <div className="min-w-0 flex-1">
-                {/* Linha 1: nome + estrelas */}
-                <div className="flex min-w-0 items-center justify-between gap-4">
-                    <h3
-                        className={cn(
-                            "min-w-0 truncate text-base font-semibold leading-tight text-neutral-800",
-                            friendlyNameClassName
+            <div className="flex min-w-0 flex-1 gap-9">
+
+                {/* Lado esquerdo */}
+                <div className="min-w-0 flex-1">
+
+                    {/* Nome + estrelas */}
+                    <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+                        <h3
+                            className={cn(
+                                "text-base font-semibold leading-tight text-neutral-800",
+                                friendlyNameClassName
+                            )}
+                        >
+                            {item.friendlyName}
+                        </h3>
+
+                        {titleContent && (
+                            <div className="shrink-0">
+                                {titleContent}
+                            </div>
                         )}
-                    >
-                        {item.friendlyName}
-                    </h3>
+                    </div>
 
-                    {titleRight && (
-                        <div className="shrink-0">
-                            {titleRight}
-                        </div>
-                    )}
-                </div>
-
-                {/* Linha 2: marca + data */}
-                <div className="mt-1 flex min-w-0 items-center justify-between gap-4">
+                    {/* Marca */}
                     {item.brand && (
                         <p
                             className={cn(
-                                "min-w-0 truncate text-sm leading-tight text-neutral-500",
+                                "mt-1 text-sm leading-tight text-neutral-500",
                                 brandClassName
                             )}
                         >
@@ -81,16 +85,8 @@ export function ItemHero({
                         </p>
                     )}
 
-                    {middleRight && (
-                        <div className="shrink-0">
-                            {middleRight}
-                        </div>
-                    )}
-                </div>
-
-                {/* Linha 3: badges + preço */}
-                <div className="mt-1 flex min-w-0 items-center justify-between gap-4">
-                    <div className="flex min-w-0 items-center gap-2">
+                    {/* Badges */}
+                    <div className="mt-2 flex min-w-0 flex-1 items-center gap-2">
                         <Badge
                             variant="secondary"
                             className={cn(
@@ -121,12 +117,17 @@ export function ItemHero({
                             {item.categoryName}
                         </Badge>
                     </div>
+                </div>
 
-                    {bottomRight && (
-                        <div className="shrink-0">
-                            {bottomRight}
-                        </div>
-                    )}
+                {/* Lado direito */}
+                <div className="flex w-48 shrink-0 flex-col items-end gap-2">
+                    <div className="">
+                        {topRight && <div>{topRight}</div>}
+
+                        {middleRight && <div>{middleRight}</div>}
+                        {bottomRight && <div>{bottomRight}</div>}
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -339,7 +339,7 @@ export function ConsumptionDetails({
                 >
                   {isEditing ?
                     (
-                      <div className="h-9 w-32 text-right grid justify-end">
+                      <div className={cn("h-9 w-32  text-right grid justify-end", dateErrors && "mb-6")}>
                         <DatePicker
                           value={draft.date}
                           onChange={(value) =>
@@ -351,7 +351,9 @@ export function ConsumptionDetails({
                           error={dateErrors}
                           setError={(error: string | undefined) =>
                             setDateErrors(error)
+
                           }
+                          dateInputClassName="text-center"
                         />
                       </div>
                     ) :
@@ -581,8 +583,8 @@ export function ConsumptionDetails({
                 h-11
                 flex-1
                 border border-blue-900
-                bg-blue-100 text-foreground
-                hover:bg-red-400
+                bg-blue-100 text-blue-900
+                hover:bg-red-400c
                 hover:text-red-900
               "
                   onClick={() => setDeleteConsumptionModal(true)}

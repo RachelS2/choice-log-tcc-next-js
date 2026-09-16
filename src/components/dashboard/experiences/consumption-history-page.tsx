@@ -165,6 +165,8 @@ export default function ConsumptionsHistoryPage({
                                     onOpen={(c) => setSelected(c)}
                                 />
                             </div>
+                            <div className="mt-6 mb-3 border-b border-border" />
+
                             <Pagination
                                 shown={visible.length}
                                 total={filtered.length}

@@ -40,7 +40,7 @@ export function ConsumptionCard({
                 onClick={() => onOpen(consumptionAndItem)}
                 aria-label={`Ver detalhes de ${item.friendlyName}`}
                 className="
-      group flex min-h-[190px] w-full flex-col
+      group flex min-h-[200px] w-full flex-col
       rounded-2xl border border-border bg-card
       p-4 text-left shadow-md
       transition-all duration-200 cursor-pointer

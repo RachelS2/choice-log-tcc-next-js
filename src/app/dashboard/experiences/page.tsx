@@ -8,15 +8,15 @@ import { CategoryModel } from "@/models/dashboard/items";
 import { headers } from "next/headers";
 
 export default async function MyConsumptionsPage() {
-
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) {
-        throw Error("User is not authorized to access this page");
-    }
-
-    const userId: string = session.user.id;
-
     try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session) {
+            throw Error("Usuário não está autorizado a acessar esta página.");
+        }
+
+        const userId: string = session.user.id;
+
+
 
         const consumptions: ReadConsumptionModel[] = await fetchConsumptionRepository(userId);
 
@@ -24,7 +24,7 @@ export default async function MyConsumptionsPage() {
         const consumptionInfluences: ConsumptionInfluenceModel[] = await fetchConsumptionInfluenceRepository()
         const consumptionReasons: ConsumptionReasonModel[] = await fetchConsumptionReasonsRepository()
         const negativeAspects: NegativeAspectModel[] = await fetchNegativeAspectsRepository()
-        return <ConsumptionsHistoryPage 
+        return <ConsumptionsHistoryPage
             negativeAspects={negativeAspects}
             consumptionsWithItems={consumptions} categories={categories}
             consumptionInfluences={consumptionInfluences} consumptionReasons={consumptionReasons} />
@@ -32,7 +32,7 @@ export default async function MyConsumptionsPage() {
     }
 
     catch (error) {
-        console.error("Error fetching consumptions or categories:", error);
+        console.error("Erro ao tentar buscar categorias ou experiências:", error);
         return <ErrorConsumptionsState />
     }
 

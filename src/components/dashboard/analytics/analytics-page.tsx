@@ -39,6 +39,7 @@ import AnalyticsHeader from "@/components/dashboard/analytics/analytics-header";
 import { AnalyticsFiltersPanel } from "@/components/dashboard/analytics/analytics-filters";
 import { categorySpending, experiencesByCategory, satisfactionByCategory, buyAgainByCategory, influences, influenceSatisfaction, spendingSatisfaction } from "./analytics-mock";
 import { AvaliacaoMediaMetricCard, BuyAgainMetricCard, ChartCard, InsightCard, MetricCard, MostLikedCategoryMetricCard, MostSpentCategoryMetricCard } from "./analytics-small-components";
+import { AnalyticsData } from "@/models/dashboard/analytics";
 
 
 const COLORS = [
@@ -54,7 +55,10 @@ const COLORS = [
 /*                                    PAGE                                    */
 /* -------------------------------------------------------------------------- */
 
-export default function AnalyticsPageComponent() {
+interface AnalyticsProps {
+    data: AnalyticsData
+}
+export default function AnalyticsPageComponent({ data }: AnalyticsProps) {
 
     return (
         <div className="mx-auto w-full max-w-[1600px] space-y-5 p-5 lg:p-6">
@@ -71,10 +75,10 @@ export default function AnalyticsPageComponent() {
                 <PageHeader header="Visão geral" textClassName="text-md" lineBefore />
 
                 <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                    <AvaliacaoMediaMetricCard avg={4.1} />
-                    < BuyAgainMetricCard avg={4.1} />
-                    < MostLikedCategoryMetricCard category="Eletrônicos" value={4.7} />
-                    < MostSpentCategoryMetricCard category="Cuidados Pessoais" value={1508} />
+                    <AvaliacaoMediaMetricCard avg={data.avgRating} />
+                    < BuyAgainMetricCard avg={data.repurchaseRate} />
+                    < MostLikedCategoryMetricCard category={data.mostLikedCategory.name} value={data.mostLikedCategory.value} />
+                    < MostSpentCategoryMetricCard category={data.mostSpentCategory.name} value={data.mostSpentCategory.value} />
                 </div>
             </section>
 

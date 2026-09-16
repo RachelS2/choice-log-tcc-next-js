@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { ConsumptionInfluenceModel, ReadConsumptionModel, ConsumptionReasonModel, CreateConsumptionModel, NegativeAspectModel, EditConsumptionModel } from "@/models/dashboard/consumption";
 
 
+
 export async function fetchNegativeAspectsRepository(typeId?: number, id?: number): Promise<NegativeAspectModel[]> {
   return await prisma.negativeAspect.findMany({
     select: {

@@ -1,5 +1,5 @@
 import ConsumptionsHistoryPage from "@/components/dashboard/experiences/consumption-history-page";
-import { ErrorConsumptionsState } from "@/components/dashboard/experiences/empty-state";
+import { ErrorNotification } from "@/components/ui/choicelog-notification-card";
 import { auth } from "@/lib/auth";
 import { fetchCategoriesRepository } from "@/lib/repository/category-repository";
 import { fetchConsumptionInfluenceRepository, fetchConsumptionReasonsRepository, fetchConsumptionRepository, fetchNegativeAspectsRepository, updateConsumptionRepository } from "@/lib/repository/consumption-repository";
@@ -33,7 +33,9 @@ export default async function MyConsumptionsPage() {
 
     catch (error) {
         console.error("Erro ao tentar buscar categorias ou experiências:", error);
-        return <ErrorConsumptionsState />
+        return <ErrorNotification title="Não foi possível carregar seus consumos."
+        redirectTo="/dashboard/experiences"
+        description="Ocorreu um erro ao buscar o histórico. Tente novamente em instantes."/>
     }
 
 }

@@ -1,7 +1,9 @@
 import { Card } from "@/components/ui/card";
-import type { LucideIcon } from "lucide-react";
+import { AlertTriangle, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import DecorativeBackground from "./choicelog-decorative-background";
+import { Button } from "./button";
+import { redirect } from "next/navigation";
 
 interface AuthCardProps {
   icon: LucideIcon;
@@ -26,7 +28,6 @@ export function NotificationContent({
         className="
           w-full max-w-md
           rounded-2xl
-          border-b border-blue-900
           bg-card
           shadow-lg
           transition-all duration-300
@@ -61,4 +62,37 @@ export function NotificationContent({
       </Card>
     </div>
   );
+}
+
+
+interface ErrorState {
+
+  title: string;
+  description: string,
+  redirectTo?: string,
+}
+export function ErrorNotification({ title, description, redirectTo }: ErrorState) {
+  return (
+    <main
+      className="min-h-screen py-10 flex flex-col items-center justify-center"
+    >
+      <div className="max-w-xl shadow-md flex items-center justify-center w-full rounded-2xl bg-white max-w-5xl px-4 sm:px-6"
+      >
+
+        <NotificationContent
+          icon={AlertTriangle}
+          title={title}
+          description={description}
+          children={
+            redirectTo &&
+            <Button className="bg-blue-900 text-white hover:bg-blue-800" onClick={() => {
+              redirect(redirectTo)
+            }}>
+              Tentar novamente
+            </Button>
+          }
+        />
+      </div>
+    </main>
+  )
 }

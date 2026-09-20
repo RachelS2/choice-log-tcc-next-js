@@ -6,7 +6,6 @@ import {
     CartesianGrid,
     Cell,
     Legend,
-    Line,
     ResponsiveContainer,
     Scatter,
     ScatterChart,
@@ -16,30 +15,21 @@ import {
 } from "recharts";
 import {
     AlertTriangle,
-    ChartNoAxesColumnIncreasing,
     Lightbulb,
-    RefreshCcw,
-    Star,
-    Trophy,
     TrendingUp,
     Users,
 } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Select,
     SelectContent,
-    SelectItem,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { PageTitle, PageHeader, PageSubtitle } from "@/components/ui/choicelog-pages-title";
-import AnalyticsHeader from "@/components/dashboard/analytics/analytics-header";
-import { AnalyticsFiltersPanel } from "@/components/dashboard/analytics/analytics-filters";
+import { PageHeader } from "@/components/ui/choicelog-pages-title";
 import { categorySpending, experiencesByCategory, satisfactionByCategory, buyAgainByCategory, influences, influenceSatisfaction, spendingSatisfaction } from "./analytics-mock";
 import { AvaliacaoMediaMetricCard, BuyAgainMetricCard, ChartCard, InsightCard, MetricCard, MostLikedCategoryMetricCard, MostSpentCategoryMetricCard } from "./analytics-small-components";
-import { AnalyticsData } from "@/models/dashboard/analytics";
+import { AnalyticsDataModel } from "@/models/dashboard/analytics";
 
 
 const COLORS = [
@@ -56,29 +46,21 @@ const COLORS = [
 /* -------------------------------------------------------------------------- */
 
 interface AnalyticsProps {
-    data: AnalyticsData
+    data: AnalyticsDataModel
 }
 export default function AnalyticsPageComponent({ data }: AnalyticsProps) {
-
     return (
         <div className="mx-auto w-full max-w-[1600px] space-y-5 p-5 lg:p-6">
-            {/* HEADER */}
-
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                <AnalyticsHeader />
-            </div>
-
-            {/* OVERVIEW */}
 
             <section className="space-y-3">
 
                 <PageHeader header="Visão geral" textClassName="text-md" lineBefore />
 
                 <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                    <AvaliacaoMediaMetricCard avg={data.avgRating} />
-                    < BuyAgainMetricCard avg={data.repurchaseRate} />
-                    < MostLikedCategoryMetricCard category={data.mostLikedCategory.name} value={data.mostLikedCategory.value} />
-                    < MostSpentCategoryMetricCard category={data.mostSpentCategory.name} value={data.mostSpentCategory.value} />
+                    <AvaliacaoMediaMetricCard avg={data.overview.averageRating} />
+                    < BuyAgainMetricCard avg={data.overview.repurchaseRate} />
+                    < MostLikedCategoryMetricCard data={data.overview.bestRatedCategory} />
+                    < MostSpentCategoryMetricCard data={data.overview.mostConsumedCategory} />
                 </div>
             </section>
 
@@ -95,7 +77,7 @@ export default function AnalyticsPageComponent({ data }: AnalyticsProps) {
                     </div>
 
                     <span className="hidden text-xs text-muted-foreground sm:block">
-                        Baseado em 42 experiências
+                        Baseado em {data.overview.totalExperiences} experiências
                     </span>
                 </div>
 

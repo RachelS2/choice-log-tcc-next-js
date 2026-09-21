@@ -40,10 +40,7 @@ export default function SecuritySection() {
         }
     };
     return (
-        <Card className="bg-white backdrop-blur-md border shadow-lg
-border
-border-blue-100
-shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
+        <Card className="bg-white backdrop-blur-md shadow-lg">
             <CardHeader>
                 <CardTitle className="text-lg text-neutral-950">
                     Segurança

@@ -41,10 +41,7 @@ export default function ProfileSection({ isEditing, errors, register, userData, 
 
     return (
 
-        <Card className="bg-white backdrop-blur-md border shadow-lg
-border
-border-blue-100
-shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
+        <Card className="bg-white backdrop-blur-md border shadow-lg">
 
             {/* Header */}
             <CardHeader>
@@ -62,27 +59,27 @@ shadow-[0_2px_20px_rgba(59,130,246,0.05)]">
                 {/* Avatar */}
                 <div className="flex flex-col items-center gap-3">
                     <div
-                        className="relative group cursor-pointer"
-                        onClick={() => fileInputRef.current?.click()}
+                        className="relative group"
+                        // onClick={() => fileInputRef.current?.click()}
                     >
                         <UserIcon
                             name={userData.name}
                             image={previewImage}
                             className='h-28 w-28 text-2xl font-semibold'
                         />
-                        <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
+                        {/* <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
                             <Camera className="h-5 w-5 text-white" />
-                        </div>
+                        </div> */}
                     </div>
 
-                    <Button
+                    {/* <Button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         variant="ghost"
                         className="text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                     >
                         Alterar foto
-                    </Button>
+                    </Button> */}
 
                     <Input
                         ref={fileInputRef}

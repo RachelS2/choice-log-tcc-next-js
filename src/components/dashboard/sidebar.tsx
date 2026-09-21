@@ -36,7 +36,7 @@ export default async function Sidebar() {
             <p className="text-sm font-medium text-gray-900 truncate">{session.user.name}</p>
             <p className="text-xs text-gray-500 truncate">{session.user.email}</p>
           </div>
-          <div className="relative">
+          {/* <div className="relative">
             <Button
               variant="ghost"
               size="lg"
@@ -48,7 +48,7 @@ export default async function Sidebar() {
             <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] text-white">
               3
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
     </aside>

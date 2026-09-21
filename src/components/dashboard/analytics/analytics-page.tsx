@@ -1,19 +1,6 @@
 "use client";
 
 import {
-    Bar,
-    BarChart,
-    CartesianGrid,
-    Cell,
-    Legend,
-    ResponsiveContainer,
-    Scatter,
-    ScatterChart,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from "recharts";
-import {
     AlertTriangle,
     Lightbulb,
     TrendingUp,
@@ -27,18 +14,23 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { PageHeader } from "@/components/ui/choicelog-pages-title";
-import { categorySpending, experiencesByCategory, satisfactionByCategory, buyAgainByCategory, influences, influenceSatisfaction, spendingSatisfaction } from "./analytics-mock";
 import { AvaliacaoMediaMetricCard, BuyAgainMetricCard, ChartCard, InsightCard, MetricCard, MostLikedCategoryMetricCard, MostSpentCategoryMetricCard } from "./analytics-small-components";
 import { AnalyticsDataModel } from "@/models/dashboard/analytics";
+import ExperiencesByCategoryGraph from "./graphs/experiences-by-category-graph";
+import SpencesXSatisfactionGraph from "./graphs/spences-x-satisfaction-graph";
+import ExperiencesInfluencesGraph from "./graphs/experiences-influences-graph";
+import InfluencesXSatisfactionGraph from "./graphs/influences-x-satisfaction-graph";
+import WouldBuyAgainGraph from "./graphs/would-buy-again-graph";
+import BrandPerformanceGraph from "./graphs/brand-performance-graph";
 
 
 const COLORS = [
-    "#3b82f6",
-    "#fbbf24",
-    "#22c55e",
-    "#8b5cf6",
-    "#ec4899",
-    "#06b6d4",
+    "#7ba4e7",
+    "#fadc90",
+    "#79e4a0",
+    "#c1a6ff",
+    "#ec8dbd",
+    "#82dcec",
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -120,248 +112,30 @@ export default function AnalyticsPageComponent({ data }: AnalyticsProps) {
             {/* CHARTS ROW 1 */}
 
             <div className="grid gap-4 xl:grid-cols-2">
-                <ChartCard
-                    title="Gastos por categoria"
-                    description="Veja onde o valor das suas experiências está concentrado."
-                >
-                    <ResponsiveContainer width="100%" height={270}>
-                        <BarChart data={categorySpending}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="category" fontSize={12} />
-                            <YAxis
-                                fontSize={12}
-                                tickFormatter={(value) => `R$ ${value}`}
-                            />
-                            <Tooltip
-                                formatter={(value) => [
-                                    `R$ ${Number(value).toLocaleString("pt-BR")}`,
-                                    "Total",
-                                ]}
-                            />
+                <SpencesXSatisfactionGraph data={data.charts.spendingSatisfactionByCategory} />
 
-                            <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                                {categorySpending.map((_, index) => (
-                                    <Cell
-                                        key={index}
-                                        fill={COLORS[index % COLORS.length]}
-                                    />
-                                ))}
-                            </Bar>
-                        </BarChart>
-                    </ResponsiveContainer>
-                </ChartCard>
+                <ExperiencesByCategoryGraph data={data.charts.experiencesByCategory} colors={COLORS} />
+            </div>
 
-                <ChartCard
-                    title="Experiências por categoria"
-                    description="Categorias que aparecem com maior frequência no seu histórico."
-                >
-                    <ResponsiveContainer width="100%" height={270}>
-                        <BarChart data={experiencesByCategory}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="category" fontSize={12} />
-                            <YAxis allowDecimals={false} fontSize={12} />
-                            <Tooltip />
 
-                            <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                                {experiencesByCategory.map((_, index) => (
-                                    <Cell
-                                        key={index}
-                                        fill={COLORS[index % COLORS.length]}
-                                    />
-                                ))}
-                            </Bar>
-                        </BarChart>
-                    </ResponsiveContainer>
-                </ChartCard>
+
+            {/* INFLUENCES */}
+
+            <div className="grid gap-4 xl:grid-cols-2">
+                <ExperiencesInfluencesGraph colors={COLORS} data={data.charts.influences} />
+
+                <InfluencesXSatisfactionGraph data={data.charts.influenceSatisfaction} />
             </div>
 
             {/* CHARTS ROW 2 */}
 
             <div className="grid gap-4 xl:grid-cols-2">
-                <ChartCard
-                    title="Satisfação por categoria"
-                    description="Compare sua avaliação média entre diferentes categorias."
-                >
-                    <ResponsiveContainer width="100%" height={280}>
-                        <BarChart
-                            data={satisfactionByCategory}
-                            layout="vertical"
-                            margin={{ left: 30 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                            <XAxis type="number" domain={[0, 5]} />
-                            <YAxis
-                                dataKey="category"
-                                type="category"
-                                width={90}
-                                fontSize={12}
-                            />
-                            <Tooltip />
 
-                            <Bar dataKey="value" radius={[0, 6, 6, 0]}>
-                                {satisfactionByCategory.map((_, index) => (
-                                    <Cell
-                                        key={index}
-                                        fill={COLORS[index % COLORS.length]}
-                                    />
-                                ))}
-                            </Bar>
-                        </BarChart>
-                    </ResponsiveContainer>
-                </ChartCard>
 
-                <ChartCard
-                    title="Consumiria novamente?"
-                    description="Veja como sua intenção de repetir a experiência varia entre categorias."
-                >
-                    <ResponsiveContainer width="100%" height={280}>
-                        <BarChart
-                            data={buyAgainByCategory}
-                            layout="vertical"
-                            margin={{ left: 30 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                            <XAxis
-                                type="number"
-                                domain={[0, 100]}
-                                tickFormatter={(value) => `${value}%`}
-                            />
-                            <YAxis
-                                dataKey="category"
-                                type="category"
-                                width={90}
-                                fontSize={12}
-                            />
-
-                            <Tooltip formatter={(value) => `${value}%`} />
-                            <Legend />
-
-                            <Bar
-                                dataKey="yes"
-                                name="Sim"
-                                stackId="repurchase"
-                                fill="#3b82f6"
-                            />
-
-                            <Bar
-                                dataKey="no"
-                                name="Não"
-                                stackId="repurchase"
-                                fill="#fbbf24"
-                                radius={[0, 5, 5, 0]}
-                            />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </ChartCard>
+                <WouldBuyAgainGraph data={data.charts.buyAgainByCategory} />
+                <BrandPerformanceGraph data={data.charts.brandPerformance} colors={COLORS}  />
             </div>
 
-            {/* INFLUENCES */}
-
-            <div className="grid gap-4 xl:grid-cols-2">
-                <ChartCard
-                    title="O que influencia suas escolhas?"
-                    description="Principais influências registradas nas suas experiências."
-                >
-                    <ResponsiveContainer width="100%" height={290}>
-                        <BarChart data={influences}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis
-                                dataKey="name"
-                                fontSize={11}
-                                interval={0}
-                                height={50}
-                            />
-                            <YAxis tickFormatter={(value) => `${value}%`} />
-                            <Tooltip formatter={(value) => `${value}%`} />
-
-                            <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                                {influences.map((_, index) => (
-                                    <Cell
-                                        key={index}
-                                        fill={COLORS[index % COLORS.length]}
-                                    />
-                                ))}
-                            </Bar>
-                        </BarChart>
-                    </ResponsiveContainer>
-                </ChartCard>
-
-                <ChartCard
-                    title="Influência e satisfação"
-                    description="Como cada influência se relaciona com suas experiências."
-                >
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead>
-                                <tr className="border-b bg-muted/50 text-left">
-                                    <th className="px-3 py-3 font-medium">Influência</th>
-                                    <th className="px-3 py-3 font-medium">Avaliação média</th>
-                                    <th className="px-3 py-3 font-medium">Recompra</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {influenceSatisfaction.map((row) => (
-                                    <tr key={row.influence} className="border-b last:border-0">
-                                        <td className="px-3 py-3">{row.influence}</td>
-                                        <td className="px-3 py-3 font-medium">
-                                            {row.rating.toFixed(1).replace(".", ",")}
-                                        </td>
-                                        <td className="px-3 py-3 font-medium">
-                                            {row.repurchase}%
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </ChartCard>
-            </div>
-
-            {/* SCATTER */}
-
-            <ChartCard
-                title="Valor gasto × satisfação"
-                description="Explore a relação entre quanto você gastou e como avaliou suas experiências."
-            >
-                <ResponsiveContainer width="100%" height={340}>
-                    <ScatterChart margin={{ left: 10, right: 20, bottom: 10 }}>
-                        <CartesianGrid strokeDasharray="3 3" />
-
-                        <XAxis
-                            type="number"
-                            dataKey="price"
-                            name="Valor"
-                            unit=" R$"
-                        />
-
-                        <YAxis
-                            type="number"
-                            dataKey="rating"
-                            name="Avaliação"
-                            domain={[1, 5]}
-                            ticks={[1, 2, 3, 4, 5]}
-                        />
-
-                        <Tooltip
-                            cursor={{ strokeDasharray: "3 3" }}
-                            formatter={(value, name) => {
-                                if (name === "Valor") {
-                                    return [`R$ ${value}`, name];
-                                }
-
-                                return [value, name];
-                            }}
-                        />
-
-                        <Scatter
-                            name="Experiências"
-                            data={spendingSatisfaction}
-                            fill="#3b82f6"
-                        />
-                    </ScatterChart>
-                </ResponsiveContainer>
-            </ChartCard>
         </div>
     );
 }

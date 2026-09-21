@@ -25,14 +25,16 @@ export default async function AnalyticsPage() {
         const userId: string = session.user.id;
         const consumptions: AnalyticsConsumptionModel[] = await fetchAnalyticsConsumptionsRepository(userId);
 
+        if (consumptions.length < 1) {
+            return <ErrorNotification buttonText="Nova Experiência" redirectTo="/dashboard/experiences/new-experience"
+             title="Você ainda não possui experiências para analisar." description="Comece a refletir sobre seus hábitos de compra agora."/>
+        }
         const analytics: AnalyticsDataModel = buildAnalytics(consumptions);
 
 
         return <AnalyticsPageComponent data={analytics} />
     }
     catch (error) {
-        console.error("Error fetching consumptions or categories:", error);
-        "use client";
         return (
         <ErrorNotification
             title="Não foi possível elaborar suas análises."

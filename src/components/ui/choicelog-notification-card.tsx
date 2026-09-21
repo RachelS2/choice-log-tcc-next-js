@@ -1,3 +1,4 @@
+"use client";
 import { Card } from "@/components/ui/card";
 import { AlertTriangle, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
@@ -70,14 +71,15 @@ interface ErrorState {
   title: string;
   description: string,
   redirectTo?: string,
+  buttonText?: string,
 }
-export function ErrorNotification({ title, description, redirectTo }: ErrorState) {
+export function ErrorNotification({ title, description, redirectTo, buttonText }: ErrorState) {
+  let btnTxt: string = "Tentar novamente";
+  if (buttonText != undefined) btnTxt = buttonText;
   return (
     <main
       className="min-h-screen py-10 flex flex-col items-center justify-center"
     >
-      <div className="max-w-xl shadow-md flex items-center justify-center w-full rounded-2xl bg-white max-w-5xl px-4 sm:px-6"
-      >
 
         <NotificationContent
           icon={AlertTriangle}
@@ -88,11 +90,10 @@ export function ErrorNotification({ title, description, redirectTo }: ErrorState
             <Button className="bg-blue-900 text-white hover:bg-blue-800" onClick={() => {
               redirect(redirectTo)
             }}>
-              Tentar novamente
+              {btnTxt}
             </Button>
           }
         />
-      </div>
     </main>
   )
 }

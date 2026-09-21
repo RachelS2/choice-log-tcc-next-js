@@ -49,53 +49,52 @@ interface AvaliacaoMediaMetricCardProps {
 export function AvaliacaoMediaMetricCard({
     avg,
 }: AvaliacaoMediaMetricCardProps) {
+    if (avg == null) throw Error("Média de notas deveria possuir valor!");
     return (
-        avg ? (
-            <MetricCard
-                icon={<Star className="size-5 text-blue-600" />}
-                value={avg.toString()}
-                title="Avaliação média"
-                description="de 5 estrelas"
-                className="border-blue-200 bg-blue-50/60"
-            />
-        ) : <NotificationContent icon={PackageOpen} title="Nenhuma experiência encontrada" description="Comece a avaliar suas experiências para ter este insight." />
+        <MetricCard
+            icon={<Star className="size-5 text-blue-600" />}
+            value={avg.toString()}
+            title="Avaliação média"
+            description="de 5 estrelas"
+            className="border-blue-200 bg-blue-50/60"
+        />
 
     );
 }
 
 export function BuyAgainMetricCard({ avg }: AvaliacaoMediaMetricCardProps) {
+    if (avg == null) throw Error("Média de recompra deveria possuir valor!");
+
     return (
-        avg ? (
-            <MetricCard
-                icon={<RefreshCcw className="size-5 text-emerald-600" />}
-                value={avg.toFixed(1).replace(".", ",").toString()}
-                title="Taxa de recompra"
-                description="consumiria novamente"
-                className="border-emerald-200 bg-emerald-50/60"
-            />
-        ) : <NotificationContent icon={PackageOpen} title="Nenhuma experiência encontrada" description="Comece a avaliar suas experiências para ter este insight." />
+        <MetricCard
+            icon={<RefreshCcw className="size-5 text-emerald-600" />}
+            value={avg.toFixed(1).replace(".", ",").toString()}
+            title="Taxa de recompra"
+            description="consumiria novamente"
+            className="border-emerald-200 bg-emerald-50/60"
+        />
     )
 }
 
 
 
-export function MostLikedCategoryMetricCard({ data }: { data: CategoryValue | null }) {
+export function MostLikedCategoryMetricCard({ data }: { data: CategoryValue }) {
+
     return (
-        data ? (
-            <MetricCard
-                icon={<Trophy className="size-5 text-amber-600" />}
-                value={data.category}
-                title="Categoria mais satisfatória"
-                description={`avaliação média de ${data.value.toFixed(1).replace(".", ",")}`}
-                className="border-amber-200 bg-amber-50/60"
-            />
-        ) : <NotificationContent icon={PackageOpen} title="Nenhuma experiência encontrada" description="Comece a avaliar suas experiências para ter este insight." />
+        <MetricCard
+            icon={<Trophy className="size-5 text-amber-600" />}
+            value={data.category}
+            title="Categoria mais satisfatória"
+            description={`avaliação média de ${data.value.toFixed(1).replace(".", ",")}`}
+            className="border-amber-200 bg-amber-50/60"
+        />
     )
 }
 
-export function MostSpentCategoryMetricCard({ data }: { data: CategoryValue | null }) {
+export function MostSpentCategoryMetricCard({ data }: { data: CategoryValue }) {
+
     return (
-        data ? (<MetricCard
+        <MetricCard
             icon={
                 <ChartNoAxesColumnIncreasing className="size-5 text-violet-600" />
             }
@@ -104,7 +103,6 @@ export function MostSpentCategoryMetricCard({ data }: { data: CategoryValue | nu
             description={`R$ ${data.value} gastos`}
             className="border-violet-200 bg-violet-50/60"
         />
-        ) : <NotificationContent icon={PackageOpen} title="Nenhuma experiência encontrada" description="Comece a avaliar suas experiências para ter este insight." />
 
     )
 }

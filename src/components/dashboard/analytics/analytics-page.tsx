@@ -16,12 +16,11 @@ import {
 import { PageHeader } from "@/components/ui/choicelog-pages-title";
 import { AvaliacaoMediaMetricCard, BuyAgainMetricCard, ChartCard, InsightCard, MetricCard, MostLikedCategoryMetricCard, MostSpentCategoryMetricCard } from "./analytics-small-components";
 import { AnalyticsDataModel } from "@/models/dashboard/analytics";
-import ExperiencesByCategoryGraph from "./graphs/experiences-by-category-graph";
 import SpencesXSatisfactionGraph from "./graphs/spences-x-satisfaction-graph";
 import ExperiencesInfluencesGraph from "./graphs/experiences-influences-graph";
-import InfluencesXSatisfactionGraph from "./graphs/influences-x-satisfaction-graph";
-import WouldBuyAgainGraph from "./graphs/would-buy-again-graph";
 import BrandPerformanceGraph from "./graphs/brand-performance-graph";
+import ConsumptionReasonGraph from "./graphs/consumption-reason-graph";
+import SpendingSatisfactionOverTimeGraph from "./graphs/satisfaction-x-time-graph";
 
 
 const COLORS = [
@@ -112,28 +111,26 @@ export default function AnalyticsPageComponent({ data }: AnalyticsProps) {
             {/* CHARTS ROW 1 */}
 
             <div className="grid gap-4 xl:grid-cols-2">
-                <SpencesXSatisfactionGraph data={data.charts.spendingSatisfactionByCategory} />
+                <SpencesXSatisfactionGraph colors={COLORS} data={data.charts.spendingSatisfactionByCategory} />
 
-                <ExperiencesByCategoryGraph data={data.charts.experiencesByCategory} colors={COLORS} />
+                <ConsumptionReasonGraph colors={COLORS} data={data.charts.consumptionReason} />
             </div>
-
-
 
             {/* INFLUENCES */}
 
             <div className="grid gap-4 xl:grid-cols-2">
+
+                <BrandPerformanceGraph data={data.charts.brandPerformance} />
                 <ExperiencesInfluencesGraph colors={COLORS} data={data.charts.influences} />
 
-                <InfluencesXSatisfactionGraph data={data.charts.influenceSatisfaction} />
             </div>
 
             {/* CHARTS ROW 2 */}
 
-            <div className="grid gap-4 xl:grid-cols-2">
+            <div className="gap-4">
 
-
-                <WouldBuyAgainGraph data={data.charts.buyAgainByCategory} />
-                <BrandPerformanceGraph data={data.charts.brandPerformance} colors={COLORS}  />
+                <SpendingSatisfactionOverTimeGraph data={data.charts.satisfactionOverTime}/>
+                
             </div>
 
         </div>

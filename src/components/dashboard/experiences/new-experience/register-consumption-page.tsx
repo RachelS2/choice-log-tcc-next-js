@@ -14,6 +14,7 @@ import {
   Wrench,
   LucideIcon,
   PackageOpen,
+  Box,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -241,7 +242,7 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
             </div>
           ) : (
             <FormSection
-              icon={Compass}
+              icon={Box}
               title="O que você consumiu?"
               description="Escolha um de seus itens cadastrados para começar."
             >

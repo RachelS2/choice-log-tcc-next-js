@@ -28,7 +28,7 @@ export default function ExperiencesInfluencesGraph({
     return (
         <ChartCard
             title="O que influencia suas escolhas?"
-            description="Principais influências registradas nas suas experiências."
+            description="Principais fatores que te fazem consumir, de acordo com seus registros."
         >
             <ResponsiveContainer width="100%" height={290}>
                 <BarChart data={data}>

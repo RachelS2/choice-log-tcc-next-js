@@ -1,26 +1,5 @@
 import { ItemTypeEnum } from "../items";
 
-
-export interface AnalyticsConsumptionModel {
-    date: Date;
-    price: number;
-    rating: number;
-    wouldBuyAgain: boolean;
-
-    type: ItemTypeEnum;
-
-    category: {
-        id: string;
-        name: string;
-    };
-
-    influence: {
-        id: number;
-        friendlyName: string;
-    };
-}
-
-
 export interface AnalyticsFiltersModel {
     type: "ALL" | ItemTypeEnum;
     categoryId: string | null;
@@ -52,12 +31,29 @@ export interface InfluenceSatisfactionModel {
     influence: string;
     rating: number;
     repurchase: number;
+    experiences: number;
 }
 
 export interface SpendingSatisfactionModel {
     price: number;
     rating: number;
     category: string;
+    itemName: string;
+}
+
+export interface NegativeAspectSpendingModel {
+    aspect: string;
+    totalSpent: number;
+    averageSpent: number;
+    experiences: number;
+}
+
+export interface ConsumptionReasonModel {
+    reason: string;
+    experiences: number;
+    percentage: number;
+    averageRating: number;
+    repurchaseRate: number;
 }
 
 export interface AnalyticsDataModel {
@@ -71,12 +67,35 @@ export interface AnalyticsDataModel {
         totalExperiences: number;
     };
     charts: {
-        categorySpending: CategoryValue[];
-        experiencesByCategory: CategoryValue[];
-        satisfactionByCategory: CategoryValue[];
-        buyAgainByCategory: BuyAgainByCategoryModel[];
+        spendingSatisfactionByCategory: ExpensesByCategoryModel[];
         influences: InfluenceData[];
         influenceSatisfaction: InfluenceSatisfactionModel[];
-        spendingSatisfaction: SpendingSatisfactionModel[];
+        negativeAspectSpending: NegativeAspectSpendingModel[],
+        consumptionReason: ConsumptionReasonModel[],
+        satisfactionOverTime: SatisfactionOverTimeModel[]
     };
+}
+
+export interface ExpensesByCategoryModel {
+    category: string;
+    totalSpent: number;
+    averageRating: number;
+    experiences: number;
+    wouldBuyAgain: number;
+    wouldNotBuyAgain: number;
+}
+
+export interface SatisfactionOverTimeModel {
+    period: string;
+    totalSpent: number;
+    averageRating: number;
+    experiences: number;
+}
+
+export interface ReasonPerformanceModel {
+    reason: string;
+    experiences: number;
+    percentage: number;
+    averageRating: number;
+    repurchaseRate: number;
 }

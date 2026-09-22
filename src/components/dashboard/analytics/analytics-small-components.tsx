@@ -53,7 +53,7 @@ export function AvaliacaoMediaMetricCard({
     return (
         <MetricCard
             icon={<Star className="size-5 text-blue-600" />}
-            value={avg.toString()}
+            value={avg.toFixed(1).toString()}
             title="Avaliação média"
             description="de 5 estrelas"
             className="border-blue-200 bg-blue-50/60"

@@ -11,16 +11,16 @@ import {
     YAxis,
 } from "recharts";
 import { ChartCard } from "../analytics-small-components";
-import { SpendingSatisfactionByCategory } from "@/models/dashboard/analytics";
+import { ExpensesByCategoryModel } from "@/models/dashboard/analytics";
 import { useState } from "react";
 
 
 interface Props {
-    data: SpendingSatisfactionByCategory[];
+    data: ExpensesByCategoryModel[];
     colors: string[];
 }
 
-export default function SpencesXSatisfactionGraph({
+export default function ExpensesByCategoryGraph({
     data, colors
 }: Props) {
     if (!data?.length) return null;
@@ -94,7 +94,7 @@ export default function SpencesXSatisfactionGraph({
 interface CategoryTooltipProps {
     active?: boolean;
     payload?: {
-        payload: SpendingSatisfactionByCategory;
+        payload: ExpensesByCategoryModel;
     }[];
 }
 
@@ -154,7 +154,7 @@ interface CustomBarShapeProps {
     y?: number;
     width?: number;
     height?: number;
-    payload?: SpendingSatisfactionByCategory;
+    payload?: ExpensesByCategoryModel;
 
     activeCategory: string | null;
 

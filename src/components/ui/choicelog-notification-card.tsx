@@ -23,7 +23,7 @@ export function NotificationContent({
 }: AuthCardProps) {
   return (
     <div
-      className="flex w-full flex-col items-center justify-center px-4 py-10"
+      className="flex w-full flex-col items-center justify-center px-4"
     >
       <Card
         className="
@@ -78,7 +78,7 @@ export function ErrorNotification({ title, description, redirectTo, buttonText }
   if (buttonText != undefined) btnTxt = buttonText;
   return (
     <main
-      className="min-h-screen py-10 flex flex-col items-center justify-center"
+      className="min-h-screen flex flex-col items-center justify-center"
     >
 
         <NotificationContent

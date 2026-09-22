@@ -26,7 +26,7 @@ export function ConsumptionSummary({
 
             <SummaryBadge>
                 <Star className="size-4" />
-                <strong className="font-semibold">{summary.avg}</strong>
+                <strong className="font-semibold">{summary.avg.toFixed(1)}</strong>
                 <span>estrelas</span>
             </SummaryBadge>
 

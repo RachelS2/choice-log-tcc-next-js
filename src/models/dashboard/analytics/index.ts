@@ -57,23 +57,24 @@ export interface ConsumptionReasonModel {
 }
 
 export interface AnalyticsDataModel {
-    overview: {
-        averageRating: number;
-        totalSpent: number;
-        repurchaseRate: number;
-        highestSpendingCategory: CategoryValue;
-        mostConsumedCategory: CategoryValue;
-        bestRatedCategory: CategoryValue;
-        totalExperiences: number;
-    };
-    charts: {
-        spendingSatisfactionByCategory: ExpensesByCategoryModel[];
-        influences: InfluenceData[];
-        influenceSatisfaction: InfluenceSatisfactionModel[];
-        negativeAspectSpending: NegativeAspectSpendingModel[],
-        consumptionReason: ConsumptionReasonModel[],
-        satisfactionOverTime: SatisfactionOverTimeModel[]
-    };
+    // overview: {
+    //     averageRating: number;
+    //     totalSpent: number;
+    //     repurchaseRate: number;
+    //     highestSpendingCategory: CategoryValue;
+    //     mostConsumedCategory: CategoryValue;
+    //     bestRatedCategory: CategoryValue;
+    //     totalExperiences: number;
+    // };
+    // charts: {
+    totalExperiences: number;
+    spendingSatisfactionByCategory: ExpensesByCategoryModel[];
+    influences: InfluenceData[];
+    influenceSatisfaction: InfluenceSatisfactionModel[];
+    negativeAspectSpending: NegativeAspectSpendingModel[],
+    consumptionReason: ConsumptionReasonModel[],
+    satisfactionOverTime: SatisfactionOverTimeModel[]
+    // };
 }
 
 export interface ExpensesByCategoryModel {
@@ -98,4 +99,45 @@ export interface ReasonPerformanceModel {
     percentage: number;
     averageRating: number;
     repurchaseRate: number;
+}
+
+// INSIGHTS MODELS //
+
+export interface AnalyticsInsightsModel {
+    mostReliableInfluence: ReliableInfluenceInsightModel | null;
+    brandEvaluation: BrandEvaluationInsightModel | null;
+    mostConsumedItem: MostConsumedItemInsightModel | null;
+    minimumWagesSpent: MinimumWageSpendingInsightModel;
+}
+
+export interface ReliableInfluenceInsightModel {
+    influence: string;
+    averageRating: number;
+    repurchaseRate: number;
+    experiences: number;
+}
+
+export interface BrandEvaluationModel {
+    brand: string;
+    averageRating: number;
+    experiences: number;
+}
+
+export interface BrandEvaluationInsightModel {
+    best: BrandEvaluationModel;
+    worst: BrandEvaluationModel;
+}
+
+export interface MostConsumedItemInsightModel {
+    itemId: string;
+    itemName: string;
+    brand: string;
+    experiences: number;
+    totalSpent: number;
+}
+
+export interface MinimumWageSpendingInsightModel {
+    totalSpent: number;
+    minimumWage: number;
+    equivalentMinimumWages: number;
 }

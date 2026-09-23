@@ -1,29 +1,9 @@
 import { AnalyticsDataModel, AnalyticsFiltersModel, NegativeAspectSpendingModel, BuyAgainByCategoryModel, CategoryValue, InfluenceData, InfluenceSatisfactionModel, ReasonPerformanceModel, SatisfactionOverTimeModel, ExpensesByCategoryModel, SpendingSatisfactionModel } from "@/models/dashboard/analytics";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 
-export function calculateAverageRating(
-    consumptions: ReadConsumptionModel[]
-): number {
-    if (consumptions.length === 0) return 0;
 
-    const total = consumptions.reduce(
-        (sum, consumption) => sum + consumption.rating,
-        0
-    );
 
-    return total / consumptions.length;
-}
-
-export function calculateTotalSpent(
-    consumptions: ReadConsumptionModel[]
-): number {
-    return consumptions.reduce(
-        (sum, consumption) => sum + consumption.price,
-        0
-    );
-}
-
-export function calculateSpencesByCategory(
+function calculateSpencesByCategory(
     consumptions: ReadConsumptionModel[]
 ): CategoryValue[] {
     const categories = new Map<string, number>();
@@ -113,7 +93,7 @@ export function calculateSatisfactionByCategory(
 
 
 
-export function calculateBuyAgainByCategory(
+function calculateBuyAgainByCategory(
     consumptions: ReadConsumptionModel[]
 ): BuyAgainByCategoryModel[] {
     const categories = new Map<
@@ -152,21 +132,7 @@ export function calculateBuyAgainByCategory(
     });
 }
 
-export function calculateRepurchaseRate(
-    consumptions: ReadConsumptionModel[]
-): number {
-    if (consumptions.length === 0) return 0;
-
-    const repurchases = consumptions.filter(
-        (consumption) => consumption.wouldBuyAgain
-    ).length;
-
-    return (repurchases / consumptions.length) * 100;
-}
-
-
-
-export function calculateInfluences(
+function calculateInfluences(
     consumptions: ReadConsumptionModel[]
 ): InfluenceData[] {
     if (consumptions.length === 0) return [];
@@ -189,7 +155,7 @@ export function calculateInfluences(
 }
 
 
-export function calculateInfluenceSatisfaction(
+function calculateInfluenceSatisfaction(
     consumptions: ReadConsumptionModel[]
 ): InfluenceSatisfactionModel[] {
     const influences = new Map<
@@ -228,12 +194,18 @@ export function calculateInfluenceSatisfaction(
     })).sort((a, b) => b.rating - a.rating);
 }
 
-export function combineSpendingAndSatisfaction(
-    categorySpending: CategoryValue[],
-    satisfactionByCategory: CategoryValue[],
-    experiencesByCategory: CategoryValue[],
-    buyAgainRates: BuyAgainByCategoryModel[]
-): ExpensesByCategoryModel[] {
+function combineSpendingAndSatisfaction(consumptions: ReadConsumptionModel[]): ExpensesByCategoryModel[] {
+    const categorySpending: CategoryValue[] =
+        calculateSpencesByCategory(consumptions);
+
+    const experiencesByCategory: CategoryValue[] =
+        calculateExperiencesByCategory(consumptions);
+
+    const satisfactionByCategory: CategoryValue[] =
+        calculateSatisfactionByCategory(consumptions);
+
+    const buyAgainRates: BuyAgainByCategoryModel[] = calculateBuyAgainByCategory(consumptions);
+
     return categorySpending.map((spending) => {
         const satisfaction = satisfactionByCategory.find(
             (item) => item.category === spending.category
@@ -258,7 +230,7 @@ export function combineSpendingAndSatisfaction(
     });
 }
 
-export function calculateSpendingSatisfactionOverTime(
+function calculateSpendingSatisfactionOverTime(
     consumptions: ReadConsumptionModel[]
 ): SatisfactionOverTimeModel[] {
     const periods = new Map<
@@ -316,7 +288,7 @@ export function calculateSpendingSatisfactionOverTime(
         }));
 }
 
-export function calculateNegativeAspectsSpending(
+function calculateNegativeAspectsSpending(
     consumptions: ReadConsumptionModel[]
 ): NegativeAspectSpendingModel[] {
     const aspects = new Map<
@@ -352,7 +324,7 @@ export function calculateNegativeAspectsSpending(
     );
 }
 
-export function calculateReasonPerformance(
+function calculateReasonPerformance(
     consumptions: ReadConsumptionModel[]
 ): ReasonPerformanceModel[] {
 
@@ -402,63 +374,23 @@ export function calculateReasonPerformance(
 export function buildAnalytics(
     consumptions: ReadConsumptionModel[]
 ): AnalyticsDataModel {
-    const categorySpending: CategoryValue[] =
-        calculateSpencesByCategory(consumptions);
 
-    const experiencesByCategory: CategoryValue[] =
-        calculateExperiencesByCategory(consumptions);
-
-    const satisfactionByCategory: CategoryValue[] =
-        calculateSatisfactionByCategory(consumptions);
-
-    const buyAgainByCategory: BuyAgainByCategoryModel[] = calculateBuyAgainByCategory(consumptions);
-
-    const spendingSatisfactionByCategory: ExpensesByCategoryModel[] =
-        combineSpendingAndSatisfaction(
-            categorySpending,
-            satisfactionByCategory,
-            experiencesByCategory,
-            buyAgainByCategory
-        );
     return {
-        overview: {
-            averageRating:
-                calculateAverageRating(consumptions),
 
-            totalExperiences: consumptions.length,
+        totalExperiences: consumptions.length,
+        influences:
+            calculateInfluences(consumptions),
 
-            totalSpent:
-                calculateTotalSpent(consumptions),
+        negativeAspectSpending: calculateNegativeAspectsSpending(consumptions),
 
-            repurchaseRate:
-                calculateRepurchaseRate(consumptions),
+        spendingSatisfactionByCategory: combineSpendingAndSatisfaction(consumptions),
 
-            highestSpendingCategory:
-                categorySpending[0] ?? null,
+        consumptionReason:
+            calculateReasonPerformance(consumptions),
 
-            mostConsumedCategory:
-                experiencesByCategory[0] ?? null,
+        influenceSatisfaction:
+            calculateInfluenceSatisfaction(consumptions),
 
-            bestRatedCategory:
-                satisfactionByCategory[0] ?? null,
-        },
-
-        charts: {
-
-            influences:
-                calculateInfluences(consumptions),
-
-            negativeAspectSpending: calculateNegativeAspectsSpending(consumptions),
-
-            spendingSatisfactionByCategory: spendingSatisfactionByCategory,
-
-            consumptionReason:
-                calculateReasonPerformance(consumptions),
-
-            influenceSatisfaction:
-                calculateInfluenceSatisfaction(consumptions),
-
-            satisfactionOverTime: calculateSpendingSatisfactionOverTime(consumptions)
-        },
+        satisfactionOverTime: calculateSpendingSatisfactionOverTime(consumptions)
     };
 }

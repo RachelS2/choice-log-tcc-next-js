@@ -47,12 +47,7 @@ export default function AnalyticsPageComponent({ data }: AnalyticsProps) {
 
                 <PageHeader header="Visão geral" textClassName="text-md" lineBefore />
 
-                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                    <AvaliacaoMediaMetricCard avg={data.overview.averageRating} />
-                    < BuyAgainMetricCard avg={data.overview.repurchaseRate} />
-                    < MostLikedCategoryMetricCard data={data.overview.bestRatedCategory} />
-                    < MostSpentCategoryMetricCard data={data.overview.mostConsumedCategory} />
-                </div>
+
             </section>
 
             {/* INSIGHTS */}
@@ -68,7 +63,7 @@ export default function AnalyticsPageComponent({ data }: AnalyticsProps) {
                     </div>
 
                     <span className="hidden text-xs text-muted-foreground sm:block">
-                        Baseado em {data.overview.totalExperiences} experiências
+                        Baseado em {data.totalExperiences} experiências
                     </span>
                 </div>
 
@@ -111,23 +106,23 @@ export default function AnalyticsPageComponent({ data }: AnalyticsProps) {
             {/* CHARTS ROW 1 */}
 
             <div className="grid gap-4 xl:grid-cols-2">
-                <ExpensesByCategoryGraph colors={COLORS} data={data.charts.spendingSatisfactionByCategory} />
+                <ExpensesByCategoryGraph colors={COLORS} data={data.spendingSatisfactionByCategory} />
 
-                <ConsumptionReasonGraph colors={COLORS} data={data.charts.consumptionReason} />
+                <ConsumptionReasonGraph colors={COLORS} data={data.consumptionReason} />
             </div>
 
             {/* INFLUENCES */}
 
             <div className="gap-4">
 
-                <SpendingSatisfactionOverTimeGraph colors={COLORS} data={data.charts.satisfactionOverTime} />
+                <SpendingSatisfactionOverTimeGraph colors={COLORS} data={data.satisfactionOverTime} />
 
             </div>
 
             <div className="grid gap-4 xl:grid-cols-2">
 
-                <ExperiencesInfluencesGraph colors={COLORS} data={data.charts.influences} />
-                <NegativeAspectSpendingGraph colors={COLORS} data={data.charts.negativeAspectSpending} />
+                <ExperiencesInfluencesGraph colors={COLORS} data={data.influences} />
+                <NegativeAspectSpendingGraph colors={COLORS} data={data.negativeAspectSpending} />
 
             </div>
         </div>

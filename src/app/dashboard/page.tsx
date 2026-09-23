@@ -1,11 +1,14 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import SummaryCards from "@/components/dashboard/summary-cards";
-import ChartSection from "@/components/dashboard/chart-section";
 import RecentExperiences from "@/components/dashboard/recent-experiences";
 import Link from 'next/link'
-import { Card, CardAction, CardDescription } from "@/components/ui/card";
+import { Card, CardDescription } from "@/components/ui/card";
+import { calculateAverageRating, calculateRepurchaseRate, calculateTotalSpent } from "@/lib/dashboard-utils";
+import { fetchConsumptionRepository } from "@/lib/repository/consumption-repository";
+import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { calculateSatisfactionByCategory, calculateExperiencesByCategory } from "@/lib/analytics-utils";
+import { AvaliacaoMediaMetricCard, BuyAgainMetricCard, MostLikedCategoryMetricCard, MostSpentCategoryMetricCard } from "@/components/dashboard/summary-metric-cards";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -13,6 +16,13 @@ export default async function DashboardPage() {
     redirect("/sign-in");
   }
   const username: string = session.user.name || "user";
+  const userId: string = session.user.id;
+  const consumptions: ReadConsumptionModel[] = await fetchConsumptionRepository(userId);
+  const averageRating: number = calculateAverageRating(consumptions);
+  const repurchaseRate = calculateRepurchaseRate(consumptions);
+  const totalSpent = calculateTotalSpent(consumptions);
+  const mostConsumedCategory = calculateExperiencesByCategory(consumptions)[0];
+  const bestRatedCategory = calculateSatisfactionByCategory(consumptions)[0];
   return (
     <div className="p-11 space-y-6 rounded-ful">
 
@@ -37,8 +47,12 @@ export default async function DashboardPage() {
           </div>
         </Card>
 
-        <SummaryCards />
-        <ChartSection />
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <AvaliacaoMediaMetricCard avg={averageRating} />
+          < BuyAgainMetricCard avg={repurchaseRate} />
+          < MostLikedCategoryMetricCard data={bestRatedCategory} />
+          < MostSpentCategoryMetricCard data={mostConsumedCategory} />
+        </div>        
         <RecentExperiences />
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { AnalyticsDataModel, AnalyticsFiltersModel, NegativeAspectSpendingModel, BuyAgainByCategoryModel, CategoryValue, InfluenceData, InfluenceSatisfactionModel, ReasonPerformanceModel, SatisfactionOverTimeModel, ExpensesByCategoryModel, SpendingSatisfactionModel } from "@/models/dashboard/analytics";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { buildAnalyticsInsights } from "./analytics-insights-utils";
 
 
 
@@ -373,7 +374,9 @@ function calculateReasonPerformance(
 
 export function buildAnalytics(
     consumptions: ReadConsumptionModel[]
-): AnalyticsDataModel {
+): AnalyticsDataModel  {
+
+    if (consumptions.length == 0) throw Error("There are no consumptions to build user analytics!");
 
     return {
 
@@ -391,6 +394,8 @@ export function buildAnalytics(
         influenceSatisfaction:
             calculateInfluenceSatisfaction(consumptions),
 
-        satisfactionOverTime: calculateSpendingSatisfactionOverTime(consumptions)
+        satisfactionOverTime: calculateSpendingSatisfactionOverTime(consumptions),
+
+        insights: buildAnalyticsInsights(consumptions)
     };
 }

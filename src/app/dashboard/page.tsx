@@ -9,6 +9,7 @@ import { fetchConsumptionRepository } from "@/lib/repository/consumption-reposit
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { calculateSatisfactionByCategory, calculateExperiencesByCategory } from "@/lib/analytics-utils";
 import { AvaliacaoMediaMetricCard, BuyAgainMetricCard, MostLikedCategoryMetricCard, MostSpentCategoryMetricCard } from "@/components/dashboard/summary-metric-cards";
+import ChartSection from "@/components/dashboard/chart-section";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -52,7 +53,8 @@ export default async function DashboardPage() {
           < BuyAgainMetricCard avg={repurchaseRate} />
           < MostLikedCategoryMetricCard data={bestRatedCategory} />
           < MostSpentCategoryMetricCard data={mostConsumedCategory} />
-        </div>        
+        </div>
+        <ChartSection />
         <RecentExperiences />
       </div>
     </div>

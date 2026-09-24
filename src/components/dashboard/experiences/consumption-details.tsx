@@ -157,6 +157,7 @@ export function ConsumptionDetails({
     return <Button
       type="button"
       onClick={(e) => {
+        if (loading) return;
         if (draft) {
           setDraft({
             ...draft,
@@ -164,12 +165,12 @@ export function ConsumptionDetails({
           });
         }
       }}
-      disabled={!isEditing}
-      aria-disabled={!isEditing}
+      disabled={(!isEditing && loading)}
+      aria-disabled={(!isEditing && loading)}
       className={cn(
         "inline-flex items-center h-11 w-32 gap-1.5",
         textColor,
-        isEditing
+        (isEditing && !loading)
           ? "cursor-pointer shadow-sm bg-white justify-center"
           : "cursor-default shadow-none bg-blue-50 justify-end hover:bg-blue-50",
         isEditing && hover
@@ -203,8 +204,6 @@ export function ConsumptionDetails({
       });
       setIsEditing(false);
 
-
-      // toast.success("Consumo atualizado com sucesso.");
     } catch (error) {
       toast.error("Erro ao tentar atualizar a experiência.");
     }
@@ -298,7 +297,7 @@ export function ConsumptionDetails({
                     <RatingStars
                       size="sm"
                       value={draft.rating}
-                      editable={isEditing}
+                      editable={(isEditing && !loading)}
                       onChange={
                         isEditing
                           ? (rating) =>
@@ -316,7 +315,7 @@ export function ConsumptionDetails({
                   label="Preço"
                   icon={Wallet}
                 >
-                  {isEditing ? (
+                  {(isEditing && !loading) ? (
                     <Input
                       type="number"
                       value={draft.price}
@@ -337,7 +336,8 @@ export function ConsumptionDetails({
                   label="Data do consumo"
                   icon={CalendarDays}
                 >
-                  {isEditing ?
+                  {(isEditing && !loading) ?
+
                     (
                       <div className={cn("h-9 w-32  text-right grid justify-end", dateErrors && "mb-6")}>
                         <DatePicker
@@ -376,7 +376,7 @@ export function ConsumptionDetails({
                   label="Motivo do consumo"
                   icon={CircleHelp}
                 >
-                  {isEditing ? (
+                  {(isEditing && !loading) ? (
                     <div className="h-9 shrink-0 w-32">
                       <ConsumptionReasonFilter
                         addLabel={false}
@@ -395,7 +395,7 @@ export function ConsumptionDetails({
                   label="Influência"
                   icon={Sparkles}
                 >
-                  {isEditing ? (
+                  {(isEditing && !loading) ? (
                     <div className="h-9 shrink-0 w-32">
                       <ConsumptionInfluenceFilter
                         addLabel={false}
@@ -423,7 +423,7 @@ export function ConsumptionDetails({
                   <Row
                     label="Endereço"
                     icon={MapPin}
-                  > {isEditing ? (
+                  > {(isEditing && !loading) ? (
                     <Input
                       id="address"
                       maxLength={255}
@@ -463,7 +463,7 @@ export function ConsumptionDetails({
                           key={aspect.id}
                           selected={selected}
                           onClick={() => {
-                            if (!isEditing || !draft) return;
+                            if (!isEditing || !draft  || loading) return;
 
                             setDraft({
                               ...draft,
@@ -479,7 +479,7 @@ export function ConsumptionDetails({
                           }}
                           selectedClassName={cn(
                             "rounded-full border border-red-300 bg-red-100 px-3 py-1.5 text-xs font-medium text-red-700",
-                            isEditing
+                            (isEditing && !loading)
                               ? "cursor-pointer hover:bg-red-200"
                               : "cursor-default"
                           )}
@@ -512,7 +512,7 @@ export function ConsumptionDetails({
                     lineAfter
                     lineClassName="bg-white"
                   />
-                  {isEditing ?
+                  {(isEditing && !loading) ?
                     (<Textarea
                       id="details"
                       rows={6}
@@ -568,7 +568,7 @@ export function ConsumptionDetails({
                   {isEditing ? (
                     <>
                       <Save className="size-4" />
-                      Salvar alterações
+                      {loading ? "Salvando...": "Salvar alterações" }
                     </>
                   ) : (
                     <>
@@ -587,6 +587,7 @@ export function ConsumptionDetails({
                 hover:bg-red-400c
                 hover:text-red-900
               "
+                  disabled={loading}
                   onClick={() => setDeleteConsumptionModal(true)}
                 >
                   <Trash2 className="size-4" />

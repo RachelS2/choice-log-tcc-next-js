@@ -4,8 +4,7 @@ import { redirect } from 'next/navigation';
 import AppLogo from '../ui/choicelog-app-logo';
 
 import { SidebarNav } from './sidebarnav';
-import { Button } from '../ui/button';
-import { Bell } from 'lucide-react';
+
 import UserIcon from '../ui/choicelog-user-icon';
 export default async function Sidebar() {
   const session = await auth.api.getSession({

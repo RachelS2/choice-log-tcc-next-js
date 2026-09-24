@@ -7,22 +7,37 @@ interface InsightCardProps {
     title: string;
     children: React.ReactNode;
 }
-
-export function InsightCard({ icon, title, children }: InsightCardProps) {
+export function InsightCard({
+    icon,
+    title,
+    children,
+}: InsightCardProps) {
     return (
-        <Card>
+        <Card
+            className={cn(
+                " bg-blue-50/60",
+                "shadow-sm shadow-blue-700 border-none transition-shadow hover:shadow-md"
+            )}
+        >
             <CardContent className="p-4">
                 <div className="mb-3 flex items-start gap-3">
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted">
+                    <div
+                        className="
+              flex size-9 shrink-0 items-center justify-center
+              rounded-lg bg-white
+            "
+                    >
                         {icon}
                     </div>
 
-                    <h3 className="pt-1 text-base font-semibold leading-snug">{title}</h3>
+                    <h3 className="pt-1 text-base font-semibold leading-snug text-slate-900">
+                        {title}
+                    </h3>
                 </div>
 
-                <p className="text-md leading-relaxed text-muted-foreground">
+                <div className="text-sm leading-relaxed text-slate-700">
                     {children}
-                </p>
+                </div>
             </CardContent>
         </Card>
     );

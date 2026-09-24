@@ -22,17 +22,14 @@ export default async function AnalyticsPage() {
         if (!session) {
             redirect("/sign-in")
         }
-        const userId: string = session.user.id;
-        const consumptions: ReadConsumptionModel[] = await fetchConsumptionRepository(userId);
+        const consumptions: ReadConsumptionModel[] = await fetchConsumptionRepository(session.user.id);
 
         if (consumptions.length < 1) {
             return <ErrorNotification buttonText="Nova Experiência" redirectTo="/dashboard/experiences/new-experience"
                 title="Você ainda não possui experiências para analisar." description="Comece a refletir sobre seus hábitos de compra agora." />
         }
-        const analytics: AnalyticsDataModel = buildAnalytics(consumptions);
 
-
-        return <AnalyticsPageComponent data={analytics} />
+        return <AnalyticsPageComponent consumptions={consumptions} />
     }
     catch (error) {
         return (

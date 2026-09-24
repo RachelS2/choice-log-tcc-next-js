@@ -14,13 +14,18 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { PageHeader } from "@/components/ui/choicelog-pages-title";
-import { AvaliacaoMediaMetricCard, BuyAgainMetricCard, ChartCard, InsightCard, MetricCard, MostLikedCategoryMetricCard, MostSpentCategoryMetricCard } from "./analytics-small-components";
-import { AnalyticsDataModel } from "@/models/dashboard/analytics";
+import { InsightCard } from "./analytics-small-components";
 import ExpensesByCategoryGraph from "./graphs/spences-x-satisfaction-graph";
 import ExperiencesInfluencesGraph from "./graphs/experiences-influences-graph";
 import NegativeAspectSpendingGraph from "./graphs/negative-aspects-spending-graph";
 import ConsumptionReasonGraph from "./graphs/consumption-reason-graph";
 import SpendingSatisfactionOverTimeGraph from "./graphs/satisfaction-x-time-graph";
+import BrandInsight from "./analytics-brand-insight";
+import { MinimumWageSpendingInsight } from "./analytics-wage-insight";
+import { buildAnalytics } from "@/lib/analytics-utils";
+import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { useState, useMemo } from "react";
+import { ConsumptionFilterState, defaultFilters, filterConsumptions } from "@/lib/consumption-filters-utils";
 
 
 const COLORS = [
@@ -37,18 +42,25 @@ const COLORS = [
 /* -------------------------------------------------------------------------- */
 
 interface AnalyticsProps {
-    data: AnalyticsDataModel
+    consumptions: ReadConsumptionModel[]
 }
-export default function AnalyticsPageComponent({ data }: AnalyticsProps) {
+export default function AnalyticsPageComponent({ consumptions }: AnalyticsProps) {
+    const [filters, setFilters] =
+        useState<ConsumptionFilterState>(defaultFilters);
+
+    const filteredConsumptions = useMemo(() => {
+        return filterConsumptions(consumptions, filters);
+    }, [consumptions, filters]);
+
+    const data = useMemo(() => {
+        return buildAnalytics(filteredConsumptions);
+    }, [filteredConsumptions]);
+    const reliableInfluence = data.insights.mostReliableInfluence;
+    const favoriteItem = data.insights.mostConsumedItem;
+
     return (
+
         <div className="mx-auto w-full max-w-[1600px] space-y-5 p-5 lg:p-6">
-
-            <section className="space-y-3">
-
-                <PageHeader header="Visão geral" textClassName="text-md" lineBefore />
-
-
-            </section>
 
             {/* INSIGHTS */}
 
@@ -58,47 +70,41 @@ export default function AnalyticsPageComponent({ data }: AnalyticsProps) {
                     <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                         <PageHeader header="Insights sobre suas escolhas" textClassName="text-md" lineBefore />
                         <p className="text-md text-muted-foreground">
-                            Alguns padrões identificados a partir das suas experiências.
+                            Alguns padrões identificados a partir das suas {data.totalExperiences} experiências.
                         </p>
                     </div>
-
-                    <span className="hidden text-xs text-muted-foreground sm:block">
-                        Baseado em {data.totalExperiences} experiências
-                    </span>
                 </div>
 
                 <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
                     <InsightCard
                         icon={<Lightbulb className="size-5 text-amber-500" />}
-                        title="Pesquisa própria parece funcionar para você"
+                        title="Marcas em destaque"
                     >
-                        Experiências influenciadas por pesquisa própria tiveram avaliação
-                        média de <strong>4,6</strong>, enquanto experiências associadas à
-                        impulsividade tiveram média de <strong>3,1</strong>.
+                        <BrandInsight brandReview={data.insights.brandEvaluation} />
                     </InsightCard>
 
                     <InsightCard
                         icon={<AlertTriangle className="size-5 text-red-500" />}
                         title="Uma categoria merece atenção"
                     >
-                        Roupas é a categoria com maior proporção de experiências que você
-                        não consumiria novamente (<strong>40%</strong>).
+                        <MinimumWageSpendingInsight data={data.insights.minimumWagesSpent} />
                     </InsightCard>
 
                     <InsightCard
                         icon={<TrendingUp className="size-5 text-emerald-600" />}
-                        title="Suas melhores experiências"
+                        title="Seu item mais consumido"
                     >
-                        <strong>87%</strong> das experiências avaliadas com 4 ou 5 estrelas
-                        são escolhas que você faria novamente.
+                        Você consumiu o item <strong>{favoriteItem.itemName}</strong>, da marca {favoriteItem.brand}, {" "}
+                        {favoriteItem.experiences} vezes, e gastou R$ {favoriteItem.totalSpent} no total.
+
                     </InsightCard>
 
                     <InsightCard
                         icon={<Users className="size-5 text-blue-600" />}
-                        title="Suas influências mais confiáveis"
+                        title="Sua influência mais confiável"
                     >
-                        Experiências influenciadas por amigos e família têm avaliação média
-                        de <strong>4,2</strong> e <strong>78%</strong> de recompra.
+                        Experiências influenciadas por <strong>{reliableInfluence.influence.toLowerCase()}</strong> têm
+                        avaliação média de <strong>{reliableInfluence.averageRating}</strong> e <strong>{reliableInfluence.repurchaseRate}%</strong> de taxa recompra.
                     </InsightCard>
                 </div>
             </section>

@@ -1,10 +1,10 @@
-import { BrandEvaluationInsightModel, BrandEvaluationModel, MostConsumedItemInsightModel, ReliableInfluenceInsightModel } from "@/models/dashboard/analytics";
+import { AnalyticsInsightsModel, BrandEvaluationInsightModel, BrandEvaluationModel, MinimumWageSpendingInsightModel, MostConsumedItemInsightModel, ReliableInfluenceInsightModel } from "@/models/dashboard/analytics";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { MINIMUM_WAGE } from "./utils";
 
-export function calculateMostReliableInfluence(
+function calculateMostReliableInfluence(
     consumptions: ReadConsumptionModel[]
-): ReliableInfluenceInsightModel | null {
-    if (!consumptions.length) return null;
+): ReliableInfluenceInsightModel  {
 
     const influences = new Map<
         string,
@@ -64,6 +64,7 @@ export function calculateBrandEvaluationInsight(
         {
             totalRating: number;
             experiences: number;
+            repurchases: number;
         }
     >();
 
@@ -73,10 +74,15 @@ export function calculateBrandEvaluationInsight(
         const current = brands.get(brand) ?? {
             totalRating: 0,
             experiences: 0,
+            repurchases: 0,
         };
 
         current.totalRating += consumption.rating;
         current.experiences += 1;
+
+        if (consumption.wouldBuyAgain) {
+            current.repurchases += 1;
+        }
 
         brands.set(brand, current);
     });
@@ -85,32 +91,54 @@ export function calculateBrandEvaluationInsight(
         brands,
         ([brand, data]) => ({
             brand,
-            averageRating:
-                data.totalRating / data.experiences,
+            averageRating: data.totalRating / data.experiences,
+            repurchaseRate:
+                (data.repurchases / data.experiences) * 100,
             experiences: data.experiences,
         })
-    )
-        .filter((brand) => brand.experiences >= 2)
-        .sort(
-            (a, b) =>
-                b.averageRating - a.averageRating
-        );
+    );
 
     if (result.length < 2) {
         return null;
     }
 
+    const ranking = [...result].sort(
+        (a, b) =>
+            b.averageRating - a.averageRating ||
+            b.repurchaseRate - a.repurchaseRate
+    );
+
+    const bestCandidate = ranking[0];
+    const worstCandidate = ranking[ranking.length - 1];
+
+    const bestTies = ranking.filter(
+        (brand) =>
+            brand.averageRating === bestCandidate.averageRating &&
+            brand.repurchaseRate === bestCandidate.repurchaseRate
+    );
+
+    const worstTies = ranking.filter(
+        (brand) =>
+            brand.averageRating === worstCandidate.averageRating &&
+            brand.repurchaseRate === worstCandidate.repurchaseRate
+    );
+
     return {
-        best: result[0],
-        worst: result[result.length - 1],
+        best: {
+            status: bestTies.length > 1 ? "TIE" : "RESULT",
+            brands: bestTies,
+        },
+
+        worst: {
+            status: worstTies.length > 1 ? "TIE" : "RESULT",
+            brands: worstTies,
+        },
     };
 }
 
-export function calculateMostConsumedItem(
+function calculateMostConsumedItem(
     consumptions: ReadConsumptionModel[]
-): MostConsumedItemInsightModel | null {
-    if (!consumptions.length) return null;
-
+): MostConsumedItemInsightModel  {
     const items = new Map<
         string,
         {
@@ -152,3 +180,38 @@ export function calculateMostConsumedItem(
     return result[0] ?? null;
 }
 
+
+function calculateMinimumWageSpending(
+    consumptions: ReadConsumptionModel[]
+): MinimumWageSpendingInsightModel {
+
+    const totalSpent = consumptions.reduce(
+        (total, consumption) =>
+            total + consumption.price,
+        0
+    );
+
+    return {
+        totalSpent,
+        equivalentMinimumWages:
+            totalSpent / MINIMUM_WAGE.value,
+    };
+}
+
+export function buildAnalyticsInsights(
+    consumptions: ReadConsumptionModel[]
+): AnalyticsInsightsModel {
+    return {
+        mostReliableInfluence:
+            calculateMostReliableInfluence(consumptions),
+
+        brandEvaluation:
+            calculateBrandEvaluationInsight(consumptions),
+
+        mostConsumedItem:
+            calculateMostConsumedItem(consumptions),
+
+        minimumWagesSpent:
+            calculateMinimumWageSpending(consumptions),
+    };
+}

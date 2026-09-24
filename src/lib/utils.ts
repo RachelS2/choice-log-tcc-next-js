@@ -2,6 +2,12 @@ import { ConsumptionInfluenceModel, ConsumptionReasonModel, NegativeAspectModel 
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
+
+export const MINIMUM_WAGE = {
+  year: 2026,
+  value: 1621,
+};
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }

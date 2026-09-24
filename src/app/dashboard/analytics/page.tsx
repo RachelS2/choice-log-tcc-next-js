@@ -2,12 +2,12 @@
 
 import AnalyticsPageComponent from "@/components/dashboard/analytics/analytics-page";
 import { ErrorNotification } from "@/components/ui/choicelog-notification-card";
-import { buildAnalytics } from "@/lib/analytics-utils";
 import { auth } from "@/lib/auth";
-import { fetchConsumptionRepository } from "@/lib/repository/consumption-repository";
+import { fetchCategoriesRepository } from "@/lib/repository/category-repository";
+import { fetchConsumptionInfluenceRepository, fetchConsumptionReasonsRepository, fetchConsumptionRepository, fetchNegativeAspectsRepository } from "@/lib/repository/consumption-repository";
 
-import { AnalyticsDataModel } from "@/models/dashboard/analytics";
-import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, NegativeAspectModel, ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { CategoryModel } from "@/models/dashboard/items";
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -28,8 +28,13 @@ export default async function AnalyticsPage() {
             return <ErrorNotification buttonText="Nova Experiência" redirectTo="/dashboard/experiences/new-experience"
                 title="Você ainda não possui experiências para analisar." description="Comece a refletir sobre seus hábitos de compra agora." />
         }
-
-        return <AnalyticsPageComponent consumptions={consumptions} />
+        const categories: CategoryModel[] = await fetchCategoriesRepository(session.user.id);
+        const consumptionInfluences: ConsumptionInfluenceModel[] = await fetchConsumptionInfluenceRepository()
+        const consumptionReasons: ConsumptionReasonModel[] = await fetchConsumptionReasonsRepository()
+        const negativeAspects: NegativeAspectModel[] = await fetchNegativeAspectsRepository()
+        return <AnalyticsPageComponent consumptionReasons={consumptionReasons} categories={categories} 
+        consumptionInfluences={consumptionInfluences} 
+        consumptions={consumptions} />
     }
     catch (error) {
         return (

@@ -59,57 +59,144 @@ export function activeFilterCount(f: ConsumptionFilterState) {
 
 function periodStart(period: PeriodFilter, now: Date) {
     const d = new Date(now);
+
+    d.setHours(0, 0, 0, 0);
+
     switch (period) {
         case "7d":
             d.setDate(d.getDate() - 7);
             return d;
+
         case "30d":
             d.setDate(d.getDate() - 30);
             return d;
+
         case "6m":
             d.setMonth(d.getMonth() - 6);
             return d;
+
         case "1y":
             d.setFullYear(d.getFullYear() - 1);
             return d;
+
         default:
             return null;
     }
 }
 
+function startOfDay(date: Date) {
+    const result = new Date(date);
+    result.setHours(0, 0, 0, 0);
+    return result;
+}
+
+function endOfDay(date: Date) {
+    const result = new Date(date);
+    result.setHours(23, 59, 59, 999);
+    return result;
+}
+
 export function filterConsumptions(
     data: ReadConsumptionModel[],
     f: ConsumptionFilterState,
-    now = new Date(),
+    now = new Date()
 ) {
     const q = f.search.trim().toLowerCase();
+
     const start = periodStart(f.period, now);
-    const customFrom = f.period === "custom" && f.from ? new Date(f.from) : null;
-    const customTo = f.period === "custom" && f.to ? new Date(`${f.to}T23:59:59`) : null;
+
+    const customFrom =
+        f.period === "custom" && f.from
+            ? startOfDay(f.from)
+            : null;
+
+    const customTo =
+        f.period === "custom" && f.to
+            ? endOfDay(f.to)
+            : null;
 
     return data.filter((c) => {
+        // Search
         if (q) {
-            const hay = `${c.item.friendlyName} ${c.item.brand ?? ""}`.toLowerCase();
-            if (!hay.includes(q)) return false;
+            const haystack = `
+        ${c.item.friendlyName}
+        ${c.item.brand ?? ""}
+      `.toLowerCase();
+
+            if (!haystack.includes(q)) {
+                return false;
+            }
         }
-        if (f.type !== "ALL") {
-            if (c.item.type.toUpperCase() !== f.type) return false;
-        }
-        if (f.category !== "all" && c.item.categoryId !== f.category) return false;
-        if (f.rating !== "all" && c.rating < Number(f.rating)) return false;
 
-        const date = new Date(c.date);
-        if (start && date < start) return false;
-        if (customFrom && date < customFrom) return false;
-        if (customTo && date > customTo) return false;
-
-        if (f.buyAgain === "yes" && c.wouldBuyAgain !== true) return false;
-        if (f.buyAgain === "no" && c.wouldBuyAgain !== false) return false;
-        if (f.buyAgain === "all" && c.wouldBuyAgain === null) return false;
-
-        if (f.reasonId !== "all" && String(c.reason.id) !== f.reasonId) return false;
-        if (f.influenceId !== "all" && String(c.influence.id) !== f.influenceId)
+        // Type
+        if (
+            f.type !== "ALL" &&
+            c.item.type.toUpperCase() !== f.type
+        ) {
             return false;
+        }
+
+        // Category
+        if (
+            f.category !== "all" &&
+            String(c.item.categoryId) !== f.category
+        ) {
+            return false;
+        }
+
+        // Rating
+        if (
+            f.rating !== "all" &&
+            c.rating < Number(f.rating)
+        ) {
+            return false;
+        }
+
+        // Period
+        const date = new Date(c.date);
+
+        if (start && date < start) {
+            return false;
+        }
+
+        if (customFrom && date < customFrom) {
+            return false;
+        }
+
+        if (customTo && date > customTo) {
+            return false;
+        }
+
+        // Buy again
+        if (
+            f.buyAgain === "yes" &&
+            !c.wouldBuyAgain
+        ) {
+            return false;
+        }
+
+        if (
+            f.buyAgain === "no" &&
+            c.wouldBuyAgain
+        ) {
+            return false;
+        }
+
+        // Reason
+        if (
+            f.reasonId !== "all" &&
+            String(c.reason.id) !== f.reasonId
+        ) {
+            return false;
+        }
+
+        // Influence
+        if (
+            f.influenceId !== "all" &&
+            String(c.influence.id) !== f.influenceId
+        ) {
+            return false;
+        }
 
         return true;
     });
@@ -120,18 +207,23 @@ export function sortConsumptions(data: ReadConsumptionModel[], sort: SortConsump
     out.sort((c1, c2) => {
 
         switch (sort) {
-            case "oldest":
-                return +new Date(c1.date) - +new Date(c2.date);
             case "rating_desc":
-                return c1.rating - c2.rating;
+                return c2.rating - c1.rating;
+
             case "rating_asc":
                 return c1.rating - c2.rating;
+
             case "most_spent":
-                return c1.price - c2.price;
+                return c2.price - c1.price;
+
             case "least_spent":
                 return c1.price - c2.price;
-            default:
+
+            case "oldest":
                 return +new Date(c1.date) - +new Date(c2.date);
+
+            default: // recent
+                return +new Date(c2.date) - +new Date(c1.date);
         }
     });
     return out;

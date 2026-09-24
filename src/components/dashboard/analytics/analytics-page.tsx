@@ -1,31 +1,23 @@
 "use client";
-
-import {
-    AlertTriangle,
-    Lightbulb,
-    TrendingUp,
-    Users,
-} from "lucide-react";
-
 import {
     Select,
     SelectContent,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { PageHeader } from "@/components/ui/choicelog-pages-title";
-import { InsightCard } from "./analytics-small-components";
 import ExpensesByCategoryGraph from "./graphs/spences-x-satisfaction-graph";
 import ExperiencesInfluencesGraph from "./graphs/experiences-influences-graph";
 import NegativeAspectSpendingGraph from "./graphs/negative-aspects-spending-graph";
 import ConsumptionReasonGraph from "./graphs/consumption-reason-graph";
 import SpendingSatisfactionOverTimeGraph from "./graphs/satisfaction-x-time-graph";
-import BrandInsight from "./analytics-brand-insight";
-import { MinimumWageSpendingInsight } from "./analytics-wage-insight";
 import { buildAnalytics } from "@/lib/analytics-utils";
-import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { useState, useMemo } from "react";
 import { ConsumptionFilterState, defaultFilters, filterConsumptions } from "@/lib/consumption-filters-utils";
+import AnalyticsInsightsSection from "./insights/analytics-insights-section";
+import { ConsumptionFilters, ConsumptionFiltersPanel } from "../experiences/consumption-filters";
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, EditConsumptionModel, NegativeAspectModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
+import { CategoryModel } from "@/models/dashboard/items";
+import { ActiveFiltersChips } from "@/components/ui/choicelog-chips";
 
 
 const COLORS = [
@@ -42,11 +34,19 @@ const COLORS = [
 /* -------------------------------------------------------------------------- */
 
 interface AnalyticsProps {
-    consumptions: ReadConsumptionModel[]
+    consumptions: ReadConsumptionModel[],
+    categories: CategoryModel[];
+    consumptionInfluences: ConsumptionInfluenceModel[];
+    consumptionReasons: ConsumptionReasonModel[],
 }
-export default function AnalyticsPageComponent({ consumptions }: AnalyticsProps) {
+export default function AnalyticsPageComponent({ consumptions, categories, consumptionInfluences,
+    consumptionReasons }: AnalyticsProps) {
     const [filters, setFilters] =
         useState<ConsumptionFilterState>(defaultFilters);
+
+    function patchFilters(patch: Partial<ConsumptionFilterState>) {
+        setFilters((prev) => ({ ...prev, ...patch }));
+    }
 
     const filteredConsumptions = useMemo(() => {
         return filterConsumptions(consumptions, filters);
@@ -55,8 +55,7 @@ export default function AnalyticsPageComponent({ consumptions }: AnalyticsProps)
     const data = useMemo(() => {
         return buildAnalytics(filteredConsumptions);
     }, [filteredConsumptions]);
-    const reliableInfluence = data.insights.mostReliableInfluence;
-    const favoriteItem = data.insights.mostConsumedItem;
+    const [filtersExpanded, setFiltersExpanded] = useState(false);
 
     return (
 
@@ -65,52 +64,34 @@ export default function AnalyticsPageComponent({ consumptions }: AnalyticsProps)
             {/* INSIGHTS */}
 
             <section className="space-y-3 pt-8">
-                <div className="flex items-end justify-between">
-
-                    <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                        <PageHeader header="Insights sobre suas escolhas" textClassName="text-md" lineBefore />
-                        <p className="text-md text-muted-foreground">
-                            Alguns padrões identificados a partir das suas {data.totalExperiences} experiências.
-                        </p>
-                    </div>
-                </div>
-
-                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-                    <InsightCard
-                        icon={<Lightbulb className="size-5 text-amber-500" />}
-                        title="Marcas em destaque"
-                    >
-                        <BrandInsight brandReview={data.insights.brandEvaluation} />
-                    </InsightCard>
-
-                    <InsightCard
-                        icon={<AlertTriangle className="size-5 text-red-500" />}
-                        title="Uma categoria merece atenção"
-                    >
-                        <MinimumWageSpendingInsight data={data.insights.minimumWagesSpent} />
-                    </InsightCard>
-
-                    <InsightCard
-                        icon={<TrendingUp className="size-5 text-emerald-600" />}
-                        title="Seu item mais consumido"
-                    >
-                        Você consumiu o item <strong>{favoriteItem.itemName}</strong>, da marca {favoriteItem.brand}, {" "}
-                        {favoriteItem.experiences} vezes, e gastou R$ {favoriteItem.totalSpent} no total.
-
-                    </InsightCard>
-
-                    <InsightCard
-                        icon={<Users className="size-5 text-blue-600" />}
-                        title="Sua influência mais confiável"
-                    >
-                        Experiências influenciadas por <strong>{reliableInfluence.influence.toLowerCase()}</strong> têm
-                        avaliação média de <strong>{reliableInfluence.averageRating}</strong> e <strong>{reliableInfluence.repurchaseRate}%</strong> de taxa recompra.
-                    </InsightCard>
-                </div>
+                <AnalyticsInsightsSection insights={data.insights} totalExperiences={data.totalExperiences} />
             </section>
 
             {/* CHARTS ROW 1 */}
+            <div className="mt-6 border-b border-border" />
 
+            {/* Filtros expandidos */}
+            <ConsumptionFilters
+                filters={filters}
+                onChange={patchFilters}
+                expanded={filtersExpanded}
+                setExpanded={setFiltersExpanded}
+            />
+
+            {filtersExpanded && (
+                <div className="pt-6">
+                    <ConsumptionFiltersPanel
+                        consumptionInfluences={consumptionInfluences}
+                        consumptionReasons={consumptionReasons}
+                        filters={filters}
+                        onChange={patchFilters}
+                        categories={categories}
+                    />
+                </div>
+            )}
+            <div className="mt-5">
+                <ActiveFiltersChips chips={chips} />
+            </div>
             <div className="grid gap-4 xl:grid-cols-2">
                 <ExpensesByCategoryGraph colors={COLORS} data={data.spendingSatisfactionByCategory} />
 

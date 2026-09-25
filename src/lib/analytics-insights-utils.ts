@@ -4,7 +4,7 @@ import { MINIMUM_WAGE } from "./utils";
 
 function calculateMostReliableInfluence(
     consumptions: ReadConsumptionModel[]
-): ReliableInfluenceInsightModel  {
+): ReliableInfluenceInsightModel | null  {
 
     const influences = new Map<
         string,

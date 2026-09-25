@@ -1,10 +1,4 @@
 "use client";
-import {
-    Select,
-    SelectContent,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import ExpensesByCategoryGraph from "./graphs/spences-x-satisfaction-graph";
 import ExperiencesInfluencesGraph from "./graphs/experiences-influences-graph";
 import NegativeAspectSpendingGraph from "./graphs/negative-aspects-spending-graph";
@@ -12,12 +6,19 @@ import ConsumptionReasonGraph from "./graphs/consumption-reason-graph";
 import SpendingSatisfactionOverTimeGraph from "./graphs/satisfaction-x-time-graph";
 import { buildAnalytics } from "@/lib/analytics-utils";
 import { useState, useMemo } from "react";
-import { ConsumptionFilterState, defaultFilters, filterConsumptions } from "@/lib/consumption-filters-utils";
+import { ConsumptionFilterState, filterConsumptions } from "@/lib/consumption-filters-utils";
 import AnalyticsInsightsSection from "./insights/analytics-insights-section";
 import { ConsumptionFilters, ConsumptionFiltersPanel } from "../experiences/consumption-filters";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, EditConsumptionModel, NegativeAspectModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { CategoryModel } from "@/models/dashboard/items";
 import { ActiveFiltersChips } from "@/components/ui/choicelog-chips";
+import { AnalyticsFiltersPanel } from "./analytics-filters";
+import { activeFilterCount, AnalyticsFilterState, defaultFilters, filterAnalyticalConsumptions } from "@/lib/analytics-filters-utils";
+import { ExpandFiltersButton } from "@/components/ui/choicelog-filters-and-btn";
+import { AnalyticsDataModel } from "@/models/dashboard/analytics";
+import { NotificationContent } from "@/components/ui/choicelog-notification-card";
+import { Box } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 
 const COLORS = [
@@ -42,21 +43,44 @@ interface AnalyticsProps {
 export default function AnalyticsPageComponent({ consumptions, categories, consumptionInfluences,
     consumptionReasons }: AnalyticsProps) {
     const [filters, setFilters] =
-        useState<ConsumptionFilterState>(defaultFilters);
+        useState<AnalyticsFilterState>(defaultFilters);
 
     function patchFilters(patch: Partial<ConsumptionFilterState>) {
         setFilters((prev) => ({ ...prev, ...patch }));
     }
 
     const filteredConsumptions = useMemo(() => {
-        return filterConsumptions(consumptions, filters);
+        return filterAnalyticalConsumptions(consumptions, filters);
     }, [consumptions, filters]);
 
-    const data = useMemo(() => {
+    const data: AnalyticsDataModel | null = useMemo(() => {
         return buildAnalytics(filteredConsumptions);
     }, [filteredConsumptions]);
     const [filtersExpanded, setFiltersExpanded] = useState(false);
+    const count = activeFilterCount(filters);
 
+    if (data == null) {
+        return (
+            <div className="mx-auto w-full max-w-[1600px] space-y-5 p-5 lg:p-6">
+                <AnalyticFilters consumptionInfluences={consumptionInfluences}
+                    consumptionReasons={consumptionReasons}
+                    filters={filters} activeFiltersCount={count}
+                    onChange={patchFilters} setFiltersExpanded={setFiltersExpanded} filtersExpanded={filtersExpanded}
+                    categories={categories} />
+
+                <NotificationContent icon={Box} title="Nada por aqui!"
+                    children={
+
+                        <Button className="bg-blue-900 text-white hover:bg-blue-800" onClick={() => {
+                            patchFilters(defaultFilters)
+                        }}>
+                            Limpar Filtros
+                        </Button>
+                    }
+                    description="Você não possui experiências de consumo que atendam aos filtros selecionados." />
+            </div>
+        )
+    }
     return (
 
         <div className="mx-auto w-full max-w-[1600px] space-y-5 p-5 lg:p-6">
@@ -67,31 +91,15 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
                 <AnalyticsInsightsSection insights={data.insights} totalExperiences={data.totalExperiences} />
             </section>
 
-            {/* CHARTS ROW 1 */}
+            {/* Divider */}
             <div className="mt-6 border-b border-border" />
 
-            {/* Filtros expandidos */}
-            <ConsumptionFilters
-                filters={filters}
-                onChange={patchFilters}
-                expanded={filtersExpanded}
-                setExpanded={setFiltersExpanded}
-            />
+            <AnalyticFilters consumptionInfluences={consumptionInfluences}
+                consumptionReasons={consumptionReasons}
+                filters={filters} activeFiltersCount={count}
+                onChange={patchFilters} setFiltersExpanded={setFiltersExpanded} filtersExpanded={filtersExpanded}
+                categories={categories} />
 
-            {filtersExpanded && (
-                <div className="pt-6">
-                    <ConsumptionFiltersPanel
-                        consumptionInfluences={consumptionInfluences}
-                        consumptionReasons={consumptionReasons}
-                        filters={filters}
-                        onChange={patchFilters}
-                        categories={categories}
-                    />
-                </div>
-            )}
-            <div className="mt-5">
-                <ActiveFiltersChips chips={chips} />
-            </div>
             <div className="grid gap-4 xl:grid-cols-2">
                 <ExpensesByCategoryGraph colors={COLORS} data={data.spendingSatisfactionByCategory} />
 
@@ -121,25 +129,36 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
 /* -------------------------------------------------------------------------- */
 
 interface FilterProps {
-    label: string;
-    defaultValue: string;
-    children: React.ReactNode;
+    filtersExpanded: boolean;
+    setFiltersExpanded: (expanded: boolean) => void;
+    activeFiltersCount: number,
+    categories: CategoryModel[];
+    consumptionInfluences: ConsumptionInfluenceModel[];
+    consumptionReasons: ConsumptionReasonModel[],
+    filters: AnalyticsFilterState;
+    onChange: (patch: Partial<AnalyticsFilterState>) => void;
 }
 
-function Filter({ label, defaultValue, children }: FilterProps) {
+function AnalyticFilters({ activeFiltersCount, filters, onChange, consumptionReasons, categories, consumptionInfluences, setFiltersExpanded, filtersExpanded }: FilterProps) {
     return (
-        <div className="w-full lg:w-56">
-            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                {label}
-            </label>
+        <div className="flex flex-col items-start gap-4 lg:flex-row">
+            <ExpandFiltersButton
+                count={activeFiltersCount}
+                setExpanded={setFiltersExpanded}
+                expanded={filtersExpanded}
+            />
 
-            <Select defaultValue={defaultValue}>
-                <SelectTrigger className="w-full">
-                    <SelectValue />
-                </SelectTrigger>
-
-                <SelectContent>{children}</SelectContent>
-            </Select>
+            {filtersExpanded && (
+                <div className="w-full flex-1">
+                    <AnalyticsFiltersPanel
+                        consumptionInfluences={consumptionInfluences}
+                        consumptionReasons={consumptionReasons}
+                        filters={filters}
+                        onChange={onChange}
+                        categories={categories}
+                    />
+                </div>
+            )}
         </div>
     );
 }

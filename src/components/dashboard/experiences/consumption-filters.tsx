@@ -37,8 +37,8 @@ export function ConsumptionFilters({
 interface ConsumptionFiltersPanelProps {
   filters: ConsumptionFilterState;
   onChange: (patch: Partial<ConsumptionFilterState>) => void;
-  sort?: SortConsumptionsOptions;
-  onSortChange?: (sort: SortConsumptionsOptions) => void;
+  sort: SortConsumptionsOptions;
+  onSortChange: (sort: SortConsumptionsOptions) => void;
   categories: CategoryModel[];
   consumptionReasons: ConsumptionReasonModel[];
   consumptionInfluences: ConsumptionInfluenceModel[];
@@ -75,13 +75,11 @@ export function ConsumptionFiltersPanel({ filters, onChange, sort, onSortChange,
         }
       />
 
-      {sort && onSortChange &&
         <OrderByFilter
           value={sort}
           onChange={onSortChange}
           options={CONSUMPTION_SORT_OPTIONS}
         />
-      }
 
       <WouldBuyAgainFilter
         value={filters.buyAgain}

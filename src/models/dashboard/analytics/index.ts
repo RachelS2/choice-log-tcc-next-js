@@ -94,7 +94,7 @@ export interface ReasonPerformanceModel {
 // INSIGHTS MODELS //
 
 export interface AnalyticsInsightsModel {
-    mostReliableInfluence: ReliableInfluenceInsightModel;
+    mostReliableInfluence: ReliableInfluenceInsightModel | null;
     brandEvaluation: BrandEvaluationInsightModel | null ;
     mostConsumedItem: MostConsumedItemInsightModel;
     minimumWagesSpent: MinimumWageSpendingInsightModel;

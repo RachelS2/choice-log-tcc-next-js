@@ -31,7 +31,6 @@ export default async function AnalyticsPage() {
         const categories: CategoryModel[] = await fetchCategoriesRepository(session.user.id);
         const consumptionInfluences: ConsumptionInfluenceModel[] = await fetchConsumptionInfluenceRepository()
         const consumptionReasons: ConsumptionReasonModel[] = await fetchConsumptionReasonsRepository()
-        const negativeAspects: NegativeAspectModel[] = await fetchNegativeAspectsRepository()
         return <AnalyticsPageComponent consumptionReasons={consumptionReasons} categories={categories} 
         consumptionInfluences={consumptionInfluences} 
         consumptions={consumptions} />

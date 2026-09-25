@@ -1,9 +1,7 @@
 import { TypeFilter } from "@/app/dashboard/catalog/items/page";
-import { SortItemsOptions } from "@/models/dashboard/consumption";
+import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { ActiveFilterChip } from "@/components/ui/choicelog-chips";
-import { ConsumptionReasonModel, ConsumptionInfluenceModel } from "@/models/dashboard/consumption";
-import { CategoryModel, CreateUpdateItemModel } from "@/models/dashboard/items";
-import { getDateTime } from "./utils";
+import { CategoryModel } from "@/models/dashboard/items";
 import { createBrandChip, createCategoryChip, createSearchChip, createTypeChip } from "./chips-utils";
 import { PeriodFilter } from "./consumption-filters-utils";
 
@@ -12,12 +10,16 @@ export interface AnalyticsFilterState {
     period: PeriodFilter;
     type: TypeFilter;
     category: string;
+    reasonId: string; // "all" | id
+    influenceId: string; // "all" | id
 }
 
 export const defaultFilters: AnalyticsFilterState = {
     type: "ALL",
     category: "all",
     period: "all",
+    reasonId: "all",
+    influenceId: "all"
 };
 
 
@@ -26,39 +28,51 @@ export function activeFilterCount(filters: AnalyticsFilterState) {
 
     if (filters.type !== "ALL") count++;
     if (filters.category !== "all") count++;
-    if (filters.period != "all") count++;
+    if (filters.period !== "all") count++;
+    if (filters.influenceId !== "all") count++;
+    if (filters.reasonId !== "all") count++;
 
     return count;
 }
 
-export function filterItems(
-    data: CreateUpdateItemModel[],
+export function filterAnalyticalConsumptions(
+    consumptions: ReadConsumptionModel[],
     filters: AnalyticsFilterState
-) {
+): ReadConsumptionModel[] {
 
-    return data.filter((item) => {
+    return consumptions.filter((consumption) => {
 
 
         if (
             filters.type !== "ALL" &&
-            item.type !== filters.type
+            consumption.item.type !== filters.type
         ) {
             return false;
         }
 
+        // Category
         if (
             filters.category !== "all" &&
-            item.categoryId !== filters.category
+            String(consumption.item.categoryId) !== filters.category
         ) {
             return false;
         }
 
-        // if (
-        //     filters.period !== "all" &&
-        //     item.c !== filters.brand
-        // ) {
-        //     return false;
-        // }
+        // Reason
+        if (
+            filters.reasonId !== "all" &&
+            String(consumption.reason.id) !== filters.reasonId
+        ) {
+            return false;
+        }
+
+        // Influence
+        if (
+            filters.influenceId !== "all" &&
+            String(consumption.influence.id) !== filters.influenceId
+        ) {
+            return false;
+        }
 
         return true;
     });

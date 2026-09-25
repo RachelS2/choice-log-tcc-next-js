@@ -14,7 +14,7 @@ import {
     summarize,
     type ConsumptionFilterState, buildConsumptionFilterChips
 } from "@/lib/consumption-filters-utils";
-import { ConsumptionInfluenceModel, ConsumptionReasonModel, EditConsumptionModel, NegativeAspectModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, NegativeAspectModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { CategoryModel } from "@/models/dashboard/items";
 import ConsumptionHeader from "./consumption-header";
 import { NotificationContent } from "@/components/ui/choicelog-notification-card";

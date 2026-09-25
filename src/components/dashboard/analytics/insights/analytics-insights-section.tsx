@@ -3,11 +3,12 @@ import { Lightbulb, AlertTriangle, TrendingUp, Users } from "lucide-react";
 import { InsightCard } from "../analytics-small-components";
 import BrandInsight from "./analytics-brand-insight";
 import { MinimumWageSpendingInsight } from "./analytics-wage-insight";
-import { AnalyticsInsightsModel } from "@/models/dashboard/analytics";
+import { AnalyticsInsightsModel, MostConsumedItemInsightModel, ReliableInfluenceInsightModel } from "@/models/dashboard/analytics";
+import { InfluenceInsight } from "./analytics-influence-insight";
 
 export default function AnalyticsInsightsSection({ insights, totalExperiences }: { insights: AnalyticsInsightsModel, totalExperiences: number }) {
-    const favoriteItem = insights.mostConsumedItem;
-    const reliableInfluence = insights.mostReliableInfluence;
+    const favoriteItem: MostConsumedItemInsightModel = insights.mostConsumedItem;
+    const reliableInfluence: ReliableInfluenceInsightModel | null = insights.mostReliableInfluence;
 
     return (
         <div>
@@ -21,7 +22,7 @@ export default function AnalyticsInsightsSection({ insights, totalExperiences }:
                 </div>
             </div>
 
-            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-3 md:grid-cols-2 mt-4 xl:grid-cols-4">
                 <InsightCard
                     icon={<Lightbulb className="size-5 text-amber-500" />}
                     title="Marcas em destaque"
@@ -49,8 +50,7 @@ export default function AnalyticsInsightsSection({ insights, totalExperiences }:
                     icon={<Users className="size-5 text-blue-600" />}
                     title="Sua influência mais confiável"
                 >
-                    Experiências influenciadas por <strong>{reliableInfluence.influence.toLowerCase()}</strong> têm
-                    avaliação média de <strong>{reliableInfluence.averageRating}</strong> e <strong>{reliableInfluence.repurchaseRate}%</strong> de taxa recompra.
+                    <InfluenceInsight reliableInfluence={reliableInfluence} />
                 </InsightCard>
             </div></div >
     )

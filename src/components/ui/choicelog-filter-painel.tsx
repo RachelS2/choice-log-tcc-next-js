@@ -1,17 +1,19 @@
+import { cn } from "@/lib/utils";
 import { Card } from "./card";
 
 interface FilterPanelProps {
     children: React.ReactNode;
     footer?: React.ReactNode;
+    mainDivClassName?: string;
 }
 
 export function FiltersPanel({
     children,
-    footer,
+    footer, mainDivClassName
 }: FilterPanelProps) {
     return (
         <Card className="rounded-2xl bg-offWhite p-4 shadow-sm sm:p-5">
-            <div className="grid grid-cols-1 gap-4 animate-in fade-in sm:grid-cols-2 lg:grid-cols-4">
+            <div className={cn("grid grid-cols-1 gap-4 animate-in fade-in sm:grid-cols-2 lg:grid-cols-4", mainDivClassName)}>
                 {children}
             </div>
 

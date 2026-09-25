@@ -374,9 +374,9 @@ function calculateReasonPerformance(
 
 export function buildAnalytics(
     consumptions: ReadConsumptionModel[]
-): AnalyticsDataModel  {
+): AnalyticsDataModel | null {
 
-    if (consumptions.length == 0) throw Error("There are no consumptions to build user analytics!");
+    if (consumptions.length == 0) return null;
 
     return {
 

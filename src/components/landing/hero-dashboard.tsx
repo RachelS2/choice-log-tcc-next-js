@@ -132,7 +132,7 @@ export default function HeroDashboardSection() {
               <div className="mt-4 grid grid-cols-3 gap-3 text-center">
                 {GraphSubtitle({ subtitle: "Experiências Registradas", value: "248" })}
                 {GraphSubtitle({ subtitle: "Satisfação Média", value: "4.3" })}
-                {GraphSubtitle({ subtitle: "Economia", value: "+18%" })}
+                {GraphSubtitle({ subtitle: "Total Gasto", value: "R$ 100,00" })}
               </div>
             </div>
           </div>

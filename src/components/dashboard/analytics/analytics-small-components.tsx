@@ -16,7 +16,7 @@ export function InsightCard({
         <Card
             className={cn(
                 " bg-blue-50/60",
-                "shadow-sm shadow-blue-700 border-none transition-shadow hover:shadow-md"
+                "shadow-md hover:-translate-y-1 hover:bg-blue-300 shadow-blue-700 border-none transition-shadow hover:shadow-lg"
             )}
         >
             <CardContent className="p-4">

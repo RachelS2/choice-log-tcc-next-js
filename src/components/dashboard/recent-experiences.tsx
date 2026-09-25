@@ -49,7 +49,7 @@ export default function RecentExperiences() {
 
       <div className="text-right mt-4">
         <Link
-          href="/dashboard/products"
+          href="/dashboard/experiences"
           className="inline-flex text-sm items-center rounded-xl bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
         >
           Ver histórico completo →

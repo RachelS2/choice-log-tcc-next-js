@@ -6,9 +6,10 @@ import {
 
     Cell,
 
+    LabelList,
+
     ResponsiveContainer,
 
-    Tooltip,
     XAxis,
     YAxis,
 } from "recharts";
@@ -18,10 +19,11 @@ import { InfluenceData } from "@/models/dashboard/analytics";
 interface Props {
     data: InfluenceData[];
     colors: string[];
+    dataValueColor: string;
 }
 
 export default function ExperiencesInfluencesGraph({
-    data, colors
+    data, colors, dataValueColor
 }: Props) {
     if (!data?.length) return null;
 
@@ -42,10 +44,9 @@ export default function ExperiencesInfluencesGraph({
                         tick={{
                             fontSize: 11,
                         }}
+
                     />
                     <YAxis tickFormatter={(value) => `${value.toFixed(0)}%`} />
-                    <Tooltip content={<ToolTip/>}/>
-
                     <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {data.map((_, index) => (
                             <Cell
@@ -53,6 +54,18 @@ export default function ExperiencesInfluencesGraph({
                                 fill={colors[index % colors.length]}
                             />
                         ))}
+                        <LabelList
+                            dataKey="value"
+                            position="top"
+                            formatter={(value) => {
+                                if (typeof value !== "number") throw Error("Value should be a number!");
+
+                                return `${value.toFixed(1)}%`;
+                            }}
+                            fill={dataValueColor}
+                            fontSize={11}
+                            fontWeight={500}
+                        />
                     </Bar>
                 </BarChart>
             </ResponsiveContainer>
@@ -61,38 +74,38 @@ export default function ExperiencesInfluencesGraph({
 }
 
 
-interface TooltipProps {
-    active?: boolean;
-    payload?: {
-        payload: InfluenceData;
-    }[];
-}
+// interface TooltipProps {
+//     active?: boolean;
+//     payload?: {
+//         payload: InfluenceData;
+//     }[];
+// }
 
-function ToolTip({
-    active,
-    payload,
-}: TooltipProps) {
-    if (!active || !payload?.length) {
-        return null;
-    }
+// function ToolTip({
+//     active,
+//     payload,
+// }: TooltipProps) {
+//     if (!active || !payload?.length) {
+//         return null;
+//     }
 
-    const data = payload[0].payload;
+//     const data = payload[0].payload;
 
-    return (
-        <div className="rounded-lg border bg-background p-3 shadow-sm">
-            <p className="font-medium">
-                {data.name}
-            </p>
+//     return (
+//         <div className="rounded-lg border bg-background p-3 shadow-sm">
+//             <p className="font-medium">
+//                 {data.name}
+//             </p>
 
-            <div className="mt-2 space-y-1 text-sm">
-                <p>
-                    Participação:{" "}
-                    <span className="font-medium">
-                        {data.value.toFixed(1)}%
-                    </span>
-                </p>
+//             <div className="mt-2 space-y-1 text-sm">
+//                 <p>
+//                     Participação:{" "}
+//                     <span className="font-medium">
+//                         {data.value.toFixed(1)}%
+//                     </span>
+//                 </p>
 
-            </div>
-        </div>
-    );
-}
+//             </div>
+//         </div>
+//     );
+// }

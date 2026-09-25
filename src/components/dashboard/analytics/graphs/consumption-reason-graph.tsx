@@ -2,8 +2,8 @@
 import { ChartCard } from "../analytics-small-components";
 import { ReasonPerformanceModel } from "@/models/dashboard/analytics";
 import {
-
     Cell,
+    LabelList,
     Legend,
     Pie,
     PieChart,
@@ -19,11 +19,12 @@ interface Props {
 interface Props {
     data: ReasonPerformanceModel[];
     colors: string[];
+    dataValueColor: string;
 }
 
 export default function ConsumptionReasonGraph({
     data,
-    colors,
+    colors, dataValueColor
 }: Props) {
     if (!data?.length) return null;
 
@@ -50,6 +51,18 @@ export default function ConsumptionReasonGraph({
                                 fill={colors[index % colors.length]}
                             />
                         ))}
+                        <LabelList
+                            dataKey="percentage"
+                            position="inside"
+                            formatter={(value) => {
+                                if (typeof value !== "number") throw Error("Value should be a number!");
+
+                                return `${value.toFixed(1)}%`;
+                            }}
+                            fill={dataValueColor}
+                            fontSize={11}
+                            fontWeight={500}
+                        />
                     </Pie>
 
                     <Tooltip

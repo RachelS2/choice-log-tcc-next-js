@@ -16,10 +16,11 @@ import { CircleCheckBig } from "lucide-react";
 interface Props {
     data: NegativeAspectSpendingModel[];
     colors: string[];
+    dataValueColor: string;
 }
 
 export default function NegativeAspectSpendingGraph({
-    data, colors
+    data, colors, dataValueColor
 }: Props) {
     if (!data?.length) {
         return (
@@ -100,25 +101,7 @@ export default function NegativeAspectSpendingGraph({
                                 fill={colors[index % colors.length]}
                             />
                         ))}
-                        <LabelList
-                            dataKey="totalSpent"
-                            position="insideRight"
-                            formatter={(value) => {
-                                if (value == null) return "";
 
-                                return Number(value).toLocaleString(
-                                    "pt-BR",
-                                    {
-                                        style: "currency",
-                                        currency: "BRL",
-                                        maximumFractionDigits: 0,
-                                    }
-                                );
-                            }}
-                            fill="white"
-                            fontSize={11}
-                            fontWeight={500}
-                        />
                     </Bar>
                 </BarChart>
             </ResponsiveContainer>

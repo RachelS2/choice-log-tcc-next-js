@@ -6,14 +6,12 @@ import ConsumptionReasonGraph from "./graphs/consumption-reason-graph";
 import SpendingSatisfactionOverTimeGraph from "./graphs/satisfaction-x-time-graph";
 import { buildAnalytics } from "@/lib/analytics-utils";
 import { useState, useMemo } from "react";
-import { ConsumptionFilterState, filterConsumptions } from "@/lib/consumption-filters-utils";
 import AnalyticsInsightsSection from "./insights/analytics-insights-section";
-import { ConsumptionFilters, ConsumptionFiltersPanel } from "../experiences/consumption-filters";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, EditConsumptionModel, NegativeAspectModel, ReadConsumptionModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { CategoryModel } from "@/models/dashboard/items";
 import { ActiveFiltersChips } from "@/components/ui/choicelog-chips";
 import { AnalyticsFiltersPanel } from "./analytics-filters";
-import { activeFilterCount, AnalyticsFilterState, defaultFilters, filterAnalyticalConsumptions } from "@/lib/analytics-filters-utils";
+import { activeFilterCount, AnalyticsFilterState, buildAnalyticsFilterChips, defaultFilters, filterAnalyticalConsumptions } from "@/lib/analytics-filters-utils";
 import { ExpandFiltersButton } from "@/components/ui/choicelog-filters-and-btn";
 import { AnalyticsDataModel } from "@/models/dashboard/analytics";
 import { NotificationContent } from "@/components/ui/choicelog-notification-card";
@@ -45,7 +43,7 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
     const [filters, setFilters] =
         useState<AnalyticsFilterState>(defaultFilters);
 
-    function patchFilters(patch: Partial<ConsumptionFilterState>) {
+    function patchFilters(patch: Partial<AnalyticsFilterState>) {
         setFilters((prev) => ({ ...prev, ...patch }));
     }
 
@@ -58,7 +56,7 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
     }, [filteredConsumptions]);
     const [filtersExpanded, setFiltersExpanded] = useState(false);
     const count = activeFilterCount(filters);
-
+    const dataValueColor: string = COLORS[0]
     if (data == null) {
         return (
             <div className="mx-auto w-full max-w-[1600px] space-y-5 p-5 lg:p-6">
@@ -67,6 +65,7 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
                     filters={filters} activeFiltersCount={count}
                     onChange={patchFilters} setFiltersExpanded={setFiltersExpanded} filtersExpanded={filtersExpanded}
                     categories={categories} />
+                <ActiveFiltersChips chips={buildAnalyticsFilterChips({ filters, patchFilters, categories, consumptionInfluences, consumptionReasons })} />
 
                 <NotificationContent icon={Box} title="Nada por aqui!"
                     children={
@@ -100,10 +99,12 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
                 onChange={patchFilters} setFiltersExpanded={setFiltersExpanded} filtersExpanded={filtersExpanded}
                 categories={categories} />
 
-            <div className="grid gap-4 xl:grid-cols-2">
-                <ExpensesByCategoryGraph colors={COLORS} data={data.spendingSatisfactionByCategory} />
+            <ActiveFiltersChips chips={buildAnalyticsFilterChips({ filters, patchFilters, categories, consumptionInfluences, consumptionReasons })} />
 
-                <ConsumptionReasonGraph colors={COLORS} data={data.consumptionReason} />
+            <div className="grid gap-4 xl:grid-cols-2">
+                <ExpensesByCategoryGraph dataValueColor={dataValueColor} colors={COLORS} data={data.spendingSatisfactionByCategory} />
+
+                <ConsumptionReasonGraph dataValueColor={"white"} colors={COLORS} data={data.consumptionReason} />
             </div>
 
             {/* INFLUENCES */}
@@ -116,8 +117,8 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
 
             <div className="grid gap-4 xl:grid-cols-2">
 
-                <ExperiencesInfluencesGraph colors={COLORS} data={data.influences} />
-                <NegativeAspectSpendingGraph colors={COLORS} data={data.negativeAspectSpending} />
+                <ExperiencesInfluencesGraph colors={COLORS} data={data.influences} dataValueColor={COLORS[0]} />
+                <NegativeAspectSpendingGraph dataValueColor={dataValueColor} colors={COLORS} data={data.negativeAspectSpending} />
 
             </div>
         </div>

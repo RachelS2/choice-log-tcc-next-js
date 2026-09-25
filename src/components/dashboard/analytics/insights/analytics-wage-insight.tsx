@@ -25,13 +25,13 @@ export function MinimumWageSpendingInsight({
             aproximadamente{" "}
             <strong>
                 {isLessThanOneMinimumWage
-                    ? `${(data.equivalentMinimumWages * 100).toFixed(0)}% de um salário mínimo`
-                    : `${data.equivalentMinimumWages.toFixed(1)} salários mínimos`}
+                    ? `${(data.equivalentMinimumWages * 100).toFixed(0)}% de um salário mínimo*`
+                    : `${data.equivalentMinimumWages.toFixed(1)} salários mínimos*`}
             </strong>.
 
             <>
                 <div className="mt-1 text-xs text-muted-foreground">
-                    Considerando {minimumWage} como valor de referência.
+                    *Considerando {minimumWage} como valor de referência.
                 </div>
             </>
         </>

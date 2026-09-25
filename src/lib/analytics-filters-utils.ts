@@ -1,8 +1,8 @@
 import { TypeFilter } from "@/app/dashboard/catalog/items/page";
-import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { ActiveFilterChip } from "@/components/ui/choicelog-chips";
 import { CategoryModel } from "@/models/dashboard/items";
-import { createBrandChip, createCategoryChip, createSearchChip, createTypeChip } from "./chips-utils";
+import {  createCategoryChip, createConsumptionInfluenceChip, createConsumptionReasonChip, createCustomPeriodChip, createSearchChip, createTypeChip } from "./chips-utils";
 import { PeriodFilter } from "./consumption-filters-utils";
 
 
@@ -86,12 +86,16 @@ interface BuildAnalyticsFilterChipsParams {
         patch: Partial<AnalyticsFilterState>
     ) => void;
     categories: CategoryModel[],
+    consumptionInfluences: ConsumptionInfluenceModel[],
+    consumptionReasons: ConsumptionReasonModel[]
 }
 
 export function buildAnalyticsFilterChips({
     filters,
     patchFilters,
     categories,
+    consumptionInfluences,
+    consumptionReasons
 }: BuildAnalyticsFilterChipsParams): ActiveFilterChip[] {
     return [
 
@@ -99,7 +103,11 @@ export function buildAnalyticsFilterChips({
 
         createCategoryChip(filters.category, patchFilters, categories),
 
-        createBrandChip(filters.period, patchFilters)
+        createCustomPeriodChip(filters.period, patchFilters),
+
+        createConsumptionInfluenceChip(filters.influenceId, patchFilters, consumptionInfluences),
+
+        createConsumptionReasonChip(filters.reasonId, patchFilters, consumptionReasons)
 
     ].filter(
         (chip): chip is ActiveFilterChip =>

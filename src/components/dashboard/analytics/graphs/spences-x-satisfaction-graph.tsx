@@ -18,10 +18,11 @@ import { useState } from "react";
 interface Props {
     data: ExpensesByCategoryModel[];
     colors: string[];
+    dataValueColor: string;
 }
 
 export default function ExpensesByCategoryGraph({
-    data, colors
+    data, colors, dataValueColor
 }: Props) {
     if (!data?.length) return null;
     const [activeCategory, setActiveCategory] = useState<string | null>(null);

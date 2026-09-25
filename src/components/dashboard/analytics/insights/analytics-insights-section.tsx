@@ -24,25 +24,25 @@ export default function AnalyticsInsightsSection({ insights, totalExperiences }:
 
             <div className="grid gap-3 md:grid-cols-2 mt-4 xl:grid-cols-4">
                 <InsightCard
-                    icon={<Lightbulb className="size-5 text-amber-500" />}
+                    icon={<Lightbulb className="size-5 text-blue-600" />}
                     title="Marcas em destaque"
                 >
                     <BrandInsight brandReview={insights.brandEvaluation} />
                 </InsightCard>
 
                 <InsightCard
-                    icon={<AlertTriangle className="size-5 text-red-500" />}
-                    title="Uma categoria merece atenção"
+                    icon={<AlertTriangle className="size-5 text-blue-600" />}
+                    title="Gastos por salário mínimo"
                 >
                     <MinimumWageSpendingInsight data={insights.minimumWagesSpent} />
                 </InsightCard>
 
                 <InsightCard
-                    icon={<TrendingUp className="size-5 text-emerald-600" />}
+                    icon={<TrendingUp className="size-5 text-blue-600" />}
                     title="Seu item mais consumido"
                 >
-                    Você consumiu o item <strong>{favoriteItem.itemName}</strong>, da marca {favoriteItem.brand}, {" "}
-                    {favoriteItem.experiences} vezes, e gastou R$ {favoriteItem.totalSpent} no total.
+                    Você consumiu o item <strong>{favoriteItem.itemName}</strong>, da marca <strong>{favoriteItem.brand}</strong>, {" "}
+                    {favoriteItem.experiences} vez(e)s, e gastou <strong>R$ {favoriteItem.totalSpent}</strong> no total.
 
                 </InsightCard>
 

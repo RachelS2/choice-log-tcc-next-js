@@ -13,7 +13,7 @@ import { SatisfactionOverTimeModel } from "@/models/dashboard/analytics";
 
 interface Props {
     data: SatisfactionOverTimeModel[];
-    colors: string[]
+    colors: string[],
 }
 
 export default function SpendingSatisfactionOverTimeGraph({
@@ -59,6 +59,7 @@ export default function SpendingSatisfactionOverTimeGraph({
                         orientation="right"
                         domain={[1, 5]}
                         ticks={[1, 2, 3, 4, 5]}
+
                         label={{
                             value: "Avaliação média",
                             angle: 90,
@@ -81,7 +82,7 @@ export default function SpendingSatisfactionOverTimeGraph({
                         type="monotone"
                         dataKey="totalSpent"
                         name="Total gasto"
-                        stroke= {colors[0]}
+                        stroke={colors[0]}
                         strokeWidth={2}
                         dot={{ r: 4 }}
                         activeDot={{ r: 6 }}

@@ -14,7 +14,7 @@ export default function ChartSection() {
             href="/dashboard/analytics"
             className="inline-flex text-sm items-center rounded-xl bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
           >
-            Check Complete Analyses →
+            Ver análise completa →
           </Link>
       </div>
     </div>

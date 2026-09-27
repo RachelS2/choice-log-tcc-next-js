@@ -1,8 +1,6 @@
-import { AnalyticsDataModel, AnalyticsFiltersModel, NegativeAspectSpendingModel, BuyAgainByCategoryModel, CategoryValue, InfluenceData, InfluenceSatisfactionModel, ReasonPerformanceModel, SatisfactionOverTimeModel, ExpensesByCategoryModel, SpendingSatisfactionModel } from "@/models/dashboard/analytics";
+import { AnalyticsDataModel, AnalyticsFiltersModel, NegativeAspectSpendingModel, BuyAgainByCategoryModel, CategoryValue, InfluenceData, InfluenceSatisfactionModel, ReasonPerformanceModel, SatisfactionOverTimeModel, ExpensesByCategoryModel, SpendingSatisfactionModel, AnalyticsTimeGranularity } from "@/models/dashboard/analytics";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { buildAnalyticsInsights } from "./analytics-insights-utils";
-
-
 
 function calculateSpencesByCategory(
     consumptions: ReadConsumptionModel[]
@@ -232,13 +230,18 @@ function combineSpendingAndSatisfaction(consumptions: ReadConsumptionModel[]): E
 }
 
 function calculateSpendingSatisfactionOverTime(
-    consumptions: ReadConsumptionModel[]
+    consumptions: ReadConsumptionModel[],
+    timeGranularity: AnalyticsTimeGranularity
 ): SatisfactionOverTimeModel[] {
+    console.log("GRANULARITY:", timeGranularity);
+    console.log(
+        "DATES:",
+        consumptions.map((c) => c.date)
+    );
     const periods = new Map<
         string,
         {
-            year: number;
-            month: number;
+            date: Date;
             totalSpent: number;
             totalRating: number;
             experiences: number;
@@ -248,14 +251,23 @@ function calculateSpendingSatisfactionOverTime(
     consumptions.forEach((consumption) => {
         const date = new Date(consumption.date);
 
-        const year = date.getFullYear();
-        const month = date.getMonth();
+        const periodDate =
+            timeGranularity === "day"
+                ? new Date(
+                    date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate()
+                )
+                : new Date(
+                    date.getFullYear(),
+                    date.getMonth(),
+                    1
+                );
 
-        const key = `${year}-${month}`;
+        const key = periodDate.toISOString();
 
         const current = periods.get(key) ?? {
-            year,
-            month,
+            date: periodDate,
             totalSpent: 0,
             totalRating: 0,
             experiences: 0,
@@ -271,22 +283,35 @@ function calculateSpendingSatisfactionOverTime(
     return Array.from(periods.values())
         .sort(
             (a, b) =>
-                a.year - b.year ||
-                a.month - b.month
+                a.date.getTime() - b.date.getTime()
         )
         .map((data) => ({
-            period: new Date(
-                data.year,
-                data.month
-            ).toLocaleDateString("pt-BR", {
-                month: "short",
-                year: "2-digit",
-            }),
+            period: formatPeriod(
+                data.date,
+                timeGranularity
+            ),
             totalSpent: data.totalSpent,
             averageRating:
                 data.totalRating / data.experiences,
             experiences: data.experiences,
         }));
+}
+
+function formatPeriod(
+    date: Date,
+    granularity: AnalyticsTimeGranularity
+): string {
+    if (granularity === "day") {
+        return date.toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+        });
+    }
+
+    return date.toLocaleDateString("pt-BR", {
+        month: "short",
+        year: "2-digit",
+    });
 }
 
 function calculateNegativeAspectsSpending(
@@ -373,11 +398,11 @@ function calculateReasonPerformance(
 }
 
 export function buildAnalytics(
-    consumptions: ReadConsumptionModel[]
+    consumptions: ReadConsumptionModel[],
+    timeGranularity: AnalyticsTimeGranularity,
 ): AnalyticsDataModel | null {
 
     if (consumptions.length == 0) return null;
-
     return {
 
         totalExperiences: consumptions.length,
@@ -394,7 +419,7 @@ export function buildAnalytics(
         influenceSatisfaction:
             calculateInfluenceSatisfaction(consumptions),
 
-        satisfactionOverTime: calculateSpendingSatisfactionOverTime(consumptions),
+        satisfactionOverTime: calculateSpendingSatisfactionOverTime(consumptions, timeGranularity),
 
         insights: buildAnalyticsInsights(consumptions)
     };

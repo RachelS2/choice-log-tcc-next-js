@@ -13,10 +13,11 @@ import { ActiveFiltersChips } from "@/components/ui/choicelog-chips";
 import { AnalyticsFiltersPanel } from "./analytics-filters";
 import { activeFilterCount, AnalyticsFilterState, buildAnalyticsFilterChips, defaultFilters, filterAnalyticalConsumptions } from "@/lib/analytics-filters-utils";
 import { ExpandFiltersButton } from "@/components/ui/choicelog-filters-and-btn";
-import { AnalyticsDataModel } from "@/models/dashboard/analytics";
+import { AnalyticsDataModel, AnalyticsTimeGranularity } from "@/models/dashboard/analytics";
 import { NotificationContent } from "@/components/ui/choicelog-notification-card";
 import { Box } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PeriodFilter } from "@/lib/consumption-filters-utils";
 
 
 const COLORS = [
@@ -31,6 +32,20 @@ const COLORS = [
 /* -------------------------------------------------------------------------- */
 /*                                    PAGE                                    */
 /* -------------------------------------------------------------------------- */
+
+
+function getTimeGranularity(
+    period: PeriodFilter
+): AnalyticsTimeGranularity {
+    switch (period) {
+        case "7d":
+        case "30d":
+            return "day";
+
+        default:
+            return "month";
+    }
+}
 
 interface AnalyticsProps {
     consumptions: ReadConsumptionModel[],
@@ -52,7 +67,7 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
     }, [consumptions, filters]);
 
     const data: AnalyticsDataModel | null = useMemo(() => {
-        return buildAnalytics(filteredConsumptions);
+        return buildAnalytics(filteredConsumptions, getTimeGranularity(filters.period));
     }, [filteredConsumptions]);
     const [filtersExpanded, setFiltersExpanded] = useState(false);
     const count = activeFilterCount(filters);

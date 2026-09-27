@@ -57,7 +57,8 @@ export function activeFilterCount(f: ConsumptionFilterState) {
     return n;
 }
 
-function periodStart(period: PeriodFilter, now: Date) {
+export function periodStart(period: PeriodFilter): Date | null {
+    const now = new Date();
     const d = new Date(now);
 
     d.setHours(0, 0, 0, 0);
@@ -99,11 +100,10 @@ function endOfDay(date: Date) {
 export function filterConsumptions(
     data: ReadConsumptionModel[],
     f: ConsumptionFilterState,
-    now = new Date()
 ) {
     const q = f.search.trim().toLowerCase();
 
-    const start = periodStart(f.period, now);
+    const start = periodStart(f.period);
 
     const customFrom =
         f.period === "custom" && f.from

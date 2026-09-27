@@ -1,5 +1,8 @@
 import { ItemTypeEnum } from "../items";
 
+export type AnalyticsTimeGranularity = "day" | "month";
+
+
 export interface AnalyticsFiltersModel {
     type: "ALL" | ItemTypeEnum;
     categoryId: string | null;
@@ -95,7 +98,7 @@ export interface ReasonPerformanceModel {
 
 export interface AnalyticsInsightsModel {
     mostReliableInfluence: ReliableInfluenceInsightModel | null;
-    brandEvaluation: BrandEvaluationInsightModel | null ;
+    brandEvaluation: BrandEvaluationInsightModel | null;
     mostConsumedItem: MostConsumedItemInsightModel;
     minimumWagesSpent: MinimumWageSpendingInsightModel;
 }

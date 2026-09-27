@@ -2,12 +2,14 @@ import { TypeFilter } from "@/app/dashboard/catalog/items/page";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { ActiveFilterChip } from "@/components/ui/choicelog-chips";
 import { CategoryModel } from "@/models/dashboard/items";
-import {  createCategoryChip, createConsumptionInfluenceChip, createConsumptionReasonChip, createCustomPeriodChip, createSearchChip, createTypeChip } from "./chips-utils";
-import { PeriodFilter } from "./consumption-filters-utils";
+import { createCategoryChip, createConsumptionInfluenceChip, createConsumptionReasonChip, createCustomPeriodChip, createSearchChip, createTypeChip } from "./chips-utils";
+import { PeriodFilter, periodStart } from "./consumption-filters-utils";
 
 
 export interface AnalyticsFilterState {
     period: PeriodFilter;
+    from?: Date;
+    to?: Date;
     type: TypeFilter;
     category: string;
     reasonId: string; // "all" | id
@@ -39,10 +41,16 @@ export function filterAnalyticalConsumptions(
     consumptions: ReadConsumptionModel[],
     filters: AnalyticsFilterState
 ): ReadConsumptionModel[] {
-
+    const start = periodStart(filters.period);
     return consumptions.filter((consumption) => {
 
+        // Period
+        const date = new Date(consumption.date);
 
+        if (start && date < start) {
+            return false;
+        }
+        
         if (
             filters.type !== "ALL" &&
             consumption.item.type !== filters.type

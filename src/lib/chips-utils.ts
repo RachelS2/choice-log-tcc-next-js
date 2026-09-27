@@ -63,6 +63,7 @@ export function createCustomPeriodChip(period: PeriodFilter, patchFilters: Patch
         "30d": "Últimos 30 dias",
         "6m": "Últimos 6 meses",
         "1y": "Último ano",
+        "custom": "Personalizado",
     } as const;
     return createChip(
         period !== "all",

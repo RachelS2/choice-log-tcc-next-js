@@ -1,31 +1,31 @@
 'use client'
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import CatalogFiltersPanel, { CatalogFilters } from '@/components/dashboard/catalog/catalog-filter';
-import CatalogGrid from '@/components/dashboard/catalog/catalog-grid';
-import CatalogHeader from '@/components/dashboard/catalog/catalog-header';
+import ItemsFiltersPanel, { ItemsFilters } from '@/components/dashboard/items/items-filter';
+import ItemsGrid from '@/components/dashboard/items/items-grid';
+import ItemsHeader from '@/components/dashboard/items/items-header';
 import CreateUpdateItemModal from '@/components/dashboard/items/create-item-modal';
 import { CategoryModel, CreateUpdateItemModel, ItemTypeEnum } from '@/models/dashboard/items';
 import { getItemsController } from '@/lib/controller/item-controller';
 import { toast } from 'sonner';
 import { fetchCategoriesController } from '@/lib/controller/category-controller';
-import CatalogLoadingState from '@/components/dashboard/catalog/catalog-loading-state';
+import ItemsLoadingState from '@/components/dashboard/items/items-loading-state';
 import { SortItemsOptions } from '@/models/dashboard/consumption';
 import { PackageOpen } from 'lucide-react';
 import { NotificationContent } from '@/components/ui/choicelog-notification-card';
 import { ActiveFilterChip, ActiveFiltersChips } from '@/components/ui/choicelog-chips';
-import { buildCatalogFilterChips, CatalogFilterState, defaultFilters, filterItems, sortItems } from '@/lib/catalog-filters-utils';
+import { buildItemsFilterChips, ItemsFilterState, defaultFilters, filterItems, sortItems } from '@/lib/items-filters-utils';
 import { Button } from '@/components/ui/button';
 
 export type TypeFilter = 'ALL' | ItemTypeEnum;
 
-export default function CatalogPage() {
+export default function ItemsPage() {
   const [filters, setFilters] =
-    useState<CatalogFilterState>(defaultFilters);
+    useState<ItemsFilterState>(defaultFilters);
 
   const [sort, setSort] =
     useState<SortItemsOptions>("recent");
 
-  const [catalogItems, setCatalogItems] =
+  const [catalogItems, setItemsItems] =
     useState<CreateUpdateItemModel[]>([]);
 
   const [categories, setCategories] =
@@ -36,7 +36,7 @@ export default function CatalogPage() {
   const [loading, setIsLoading] = useState(false);
 
   const patchFilters = (
-    patch: Partial<CatalogFilterState>
+    patch: Partial<ItemsFilterState>
   ) => {
     setFilters((current) => ({
       ...current,
@@ -47,12 +47,12 @@ export default function CatalogPage() {
   function clearFilters() {
     setFilters(defaultFilters);
   }
-  const fetchCatalogItems = async () => {
+  const fetchItemsItems = async () => {
     setIsLoading(true);
 
     try {
       const items = await getItemsController();
-      setCatalogItems(items);
+      setItemsItems(items);
     } catch {
       toast.error("Erro ao buscar itens.");
     } finally {
@@ -61,7 +61,7 @@ export default function CatalogPage() {
   };
 
   useEffect(() => {
-    fetchCatalogItems();
+    fetchItemsItems();
   }, []);
 
   useEffect(() => {
@@ -104,7 +104,7 @@ export default function CatalogPage() {
     return sortItems(filtered, sort);
   }, [catalogItems, filters, sort]);
 
-  const chips = buildCatalogFilterChips({
+  const chips = buildItemsFilterChips({
     filters,
     patchFilters, categories
   });
@@ -114,7 +114,7 @@ export default function CatalogPage() {
   const handleEditItem = (
     updatedItem: CreateUpdateItemModel
   ) => {
-    setCatalogItems((currentItems) =>
+    setItemsItems((currentItems) =>
       currentItems.map((item) =>
         item.id === updatedItem.id
           ? updatedItem
@@ -124,7 +124,7 @@ export default function CatalogPage() {
   };
 
   const handleItemDelete = (itemId: string) => {
-    setCatalogItems((currentItems) =>
+    setItemsItems((currentItems) =>
       currentItems.filter(
         (item) => item.id !== itemId
       )
@@ -136,9 +136,9 @@ export default function CatalogPage() {
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
 
-          <CatalogHeader />
+          <ItemsHeader />
 
-          <CatalogFilters
+          <ItemsFilters
             filters={filters}
             onChange={patchFilters}
             expanded={filtersExpanded}
@@ -153,7 +153,7 @@ export default function CatalogPage() {
         {/* Filtros expandidos */}
         {filtersExpanded && (
           <div className="pt-6">
-            <CatalogFiltersPanel
+            <ItemsFiltersPanel
               typeFilter={filters.type}
               onTypeFilterChange={(type) =>
                 patchFilters({
@@ -183,12 +183,12 @@ export default function CatalogPage() {
 
         <div className="mt-8">
           {loading ? (
-            <CatalogLoadingState
+            <ItemsLoadingState
               title="Carregando itens..."
               description="Estamos preparando seu catálogo. Isso deve levar apenas alguns instantes."
             />
           ) : filteredItems.length > 0 ? (
-            <CatalogGrid
+            <ItemsGrid
               items={filteredItems}
               onDelete={handleItemDelete}
               onEdit={handleEditItem}
@@ -216,7 +216,7 @@ export default function CatalogPage() {
           onOpenChange={setModalOpen}
           categories={categories}
           onSuccess={async () => {
-            await fetchCatalogItems();
+            await fetchItemsItems();
             setModalOpen(false);
           }}
         />

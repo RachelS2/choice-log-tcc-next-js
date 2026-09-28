@@ -5,20 +5,20 @@ import { CategoryModel, CreateUpdateItemModel } from '@/models/dashboard/items';
 import { deleteItemController } from '@/lib/controller/item-controller';
 import { ReactNode, useState } from "react";
 import Modal from '@/components/ui/choicelog-modal';
-import CreateUpdateItemModal from '../items/create-item-modal';
+import CreateUpdateItemModal from './create-item-modal';
 import { formatDate, formatDateTime, } from '@/lib/utils';
 import { ItemHero } from '@/components/ui/choicelog-item-hero';
 import DecorativeBackground from '@/components/ui/choicelog-decorative-background';
 import { redirect } from 'next/navigation';
 
-export interface CatalogCardProps {
+export interface ItemsCardProps {
   item: CreateUpdateItemModel;
   onDelete: (itemId: string) => void;
   onEdit: (item: CreateUpdateItemModel) => void;
   categories: CategoryModel[];
 }
 
-export default function CatalogCard({ item, onDelete, onEdit, categories }: CatalogCardProps) {
+export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsCardProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] =
     useState(false);

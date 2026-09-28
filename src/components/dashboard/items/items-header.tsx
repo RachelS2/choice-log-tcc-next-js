@@ -2,7 +2,7 @@ import { PageHeader, PageSubtitle, PageTitle } from '@/components/ui/choicelog-p
 import { Card } from '@/components/ui/card';
 
 
-export default function CatalogHeader() {
+export default function ItemsHeader() {
   return (
 
     <Card className="flex flex-col p-4 sm:p-4 items-start text-left">

@@ -3,7 +3,7 @@ import { SlidersHorizontal, Plus } from "lucide-react";
 import { SearchFilter } from "./choicelog-filter-options";
 import { Button } from "./button";
 import { ConsumptionFilterState } from "@/lib/consumption-filters-utils";
-import {  CatalogFilterState } from "@/lib/catalog-filters-utils";
+import { ItemsFilterState } from "@/lib/items-filters-utils";
 
 interface ExpandFiltersButtonProps {
     expanded: boolean;
@@ -34,8 +34,8 @@ export function ExpandFiltersButton({ expanded, setExpanded, count }: ExpandFilt
 }
 
 interface FiltersSearchAndButtonProps extends ExpandFiltersButtonProps {
-    filters: ConsumptionFilterState | CatalogFilterState;
-    onChange: (patch: Partial<ConsumptionFilterState | CatalogFilterState>) => void;
+    filters: ConsumptionFilterState | ItemsFilterState;
+    onChange: (patch: Partial<ConsumptionFilterState | ItemsFilterState>) => void;
     onButtonClick: () => void;
     btnTxt: string,
 }

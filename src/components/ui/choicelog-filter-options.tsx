@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn, formatItemTypeLabel } from "@/lib/utils";
-import { TypeFilter } from '@/app/dashboard/catalog/items/page';
+import { TypeFilter } from '@/app/dashboard/items/page';
 import { CategoryModel } from '@/models/dashboard/items';
 import React from 'react';
 import { Label } from './label';

@@ -39,19 +39,18 @@ model ItemType {
 
 model Category {
   id            String         @id @default(cuid())
-  userId        String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @default(now()) @updatedAt
   typeId        Int
   name          String         @db.VarChar(30)
   description   String?        @db.VarChar(200)
+
   type          ItemType       @relation(fields: [typeId], references: [id])
-  user          User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
   goals         Goal[]
   items         Item[]
   spendingGoals SpendingGoal[]
 
-  @@unique([name, userId])
+  @@unique([name, typeId])
   @@index([typeId])
 }
 
@@ -224,7 +223,6 @@ model User {
   emailVerified Boolean       @default(false)
   incomeRange   IncomeRange   @default(PREFER_NOT_TO_SAY)
   Account       Account[]
-  categories    Category[]
   consumptions  Consumption[]
   goals         Goal[]
   items         Item[]

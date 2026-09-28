@@ -1,29 +1,29 @@
 
-import { TypeFilter } from '@/app/dashboard/catalog/items/page';
+import { TypeFilter } from '@/app/dashboard/items/page';
 import { CategoryModel } from '@/models/dashboard/items';
 import { BrandFilter, CategoryFilter, ItemTypeFilter, ItensOrderByFilter, SearchFilter } from '@/components/ui/choicelog-filter-options';
 import { FiltersPanel } from '@/components/ui/choicelog-filter-painel';
 import { SortItemsOptions } from '@/models/dashboard/consumption';
-import { activeFilterCount } from '@/lib/catalog-filters-utils';
-import { CatalogFilterState } from '@/lib/catalog-filters-utils';
+import { activeFilterCount } from '@/lib/items-filters-utils';
+import { ItemsFilterState } from '@/lib/items-filters-utils';
 import { FiltersSearchAndButton } from '@/components/ui/choicelog-filters-and-btn';
 
 
 
-interface CatalogFiltersProps {
-  filters: CatalogFilterState;
-  onChange: (patch: Partial<CatalogFilterState>) => void;
+interface ItemsFiltersProps {
+  filters: ItemsFilterState;
+  onChange: (patch: Partial<ItemsFilterState>) => void;
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
   onNewItem: () => void;
 }
 
-export function CatalogFilters({
+export function ItemsFilters({
   filters,
   onChange,
   expanded,
   setExpanded, onNewItem
-}: CatalogFiltersProps) {
+}: ItemsFiltersProps) {
   const count = activeFilterCount(filters);
   return (
     <FiltersSearchAndButton btnTxt={"Novo item"} onButtonClick={onNewItem} count={count} setExpanded={setExpanded} expanded={expanded} filters={filters} onChange={onChange} />
@@ -31,7 +31,7 @@ export function CatalogFilters({
 }
 
 
-interface CatalogFiltersPanelProps {
+interface ItemsFiltersPanelProps {
   typeFilter: TypeFilter;
   onTypeFilterChange: (value: TypeFilter) => void;
   categoryFilter: string;
@@ -44,7 +44,7 @@ interface CatalogFiltersPanelProps {
   brands: string[];
 }
 
-export default function CatalogFiltersPanel({
+export default function ItemsFiltersPanel({
   typeFilter,
   onTypeFilterChange,
   categoryFilter,
@@ -55,7 +55,7 @@ export default function CatalogFiltersPanel({
   onSortChange,
   categories,
   brands,
-}: CatalogFiltersPanelProps) {
+}: ItemsFiltersPanelProps) {
   return (
     <FiltersPanel >
 

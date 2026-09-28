@@ -1,4 +1,4 @@
-import { TypeFilter } from "@/app/dashboard/catalog/items/page";
+import { TypeFilter } from "@/app/dashboard/items/page";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { ActiveFilterChip } from "@/components/ui/choicelog-chips";
 import { CategoryModel } from "@/models/dashboard/items";
@@ -50,7 +50,7 @@ export function filterAnalyticalConsumptions(
         if (start && date < start) {
             return false;
         }
-        
+
         if (
             filters.type !== "ALL" &&
             consumption.item.type !== filters.type

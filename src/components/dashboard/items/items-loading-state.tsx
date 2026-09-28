@@ -1,11 +1,11 @@
 import { LoaderCircle } from "lucide-react";
 
-interface CatalogLoadingStateProps {
+interface ItemsLoadingStateProps {
   title: string;
   description: string;
 }
 
-export default function CatalogLoadingState({ title, description }: CatalogLoadingStateProps) {
+export default function ItemsLoadingState({ title, description }: ItemsLoadingStateProps) {
   return (
     <div className="flex min-h-[360px] flex-col items-center justify-center rounded-3xl px-6 py-16 text-center">
       <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50">

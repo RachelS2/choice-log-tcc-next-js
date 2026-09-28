@@ -1,23 +1,23 @@
 import { CategoryModel, CreateUpdateItemModel } from '@/models/dashboard/items';
-import CatalogCard from './catalog-card';
+import ItemsCard from './item-card';
 
-interface CatalogGridProps {
+interface ItemsGridProps {
   items: CreateUpdateItemModel[];
   onDelete: (itemId: string) => void;
   onEdit: (item: CreateUpdateItemModel) => void;
   categories: CategoryModel[];
 }
 
-export default function CatalogGrid({
+export default function ItemsGrid({
   items,
   onDelete,
   onEdit,
   categories,
-}: CatalogGridProps) {
+}: ItemsGridProps) {
   return (
     <div className="mx-auto grid w-full max-w-8xl grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3">
       {items.map((item) => (
-        <CatalogCard
+        <ItemsCard
           key={item.id}
           item={item}
           onDelete={onDelete}

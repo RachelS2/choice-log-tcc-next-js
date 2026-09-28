@@ -15,10 +15,8 @@ import {
 } from '@/components/ui/select';
 import { cn, formatItemTypeLabel, toSystemName } from '@/lib/utils';
 import type { CategoryModel, CreateUpdateItemModel, ItemTypeEnum } from '../../../models/dashboard/items';
-import { fetchCategoriesController } from '@/lib/controller/category-controller';
 import { postItemController, updateItemController } from '@/lib/controller/item-controller';
 import { itemFormSchema, ItemFormSchema } from '@/zod-schemas/item-form-schema';
-import { stringify } from 'querystring';
 
 interface CreateUpdateItemFormProps {
   mode: "create" | "edit";

@@ -136,7 +136,7 @@ export default function ConsumptionsHistoryPage({
                     {!hasAny ? (
                         <NotificationContent
                             icon={PackageOpen}
-                            title="Você ainda não registrou nenhum consumo."
+                            title="Você ainda não tem registros."
                             description="Registre sua primeira experiência para começar a acompanhar seus padrões de consumo."
                         />
                     ) : filtered.length === 0 ? (

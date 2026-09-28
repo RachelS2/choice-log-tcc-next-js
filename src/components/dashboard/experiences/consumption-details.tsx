@@ -328,7 +328,11 @@ export function ConsumptionDetails({
                       className="h-11 w-32 bg-white text-right"
                     />
                   ) : (
-                    `R$ ${draft.price.toFixed(2)}`
+                    // `R$ ${draft.price.toFixed(2)}`
+                    draft.price.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })
                   )}
                 </Row>
 
@@ -463,7 +467,7 @@ export function ConsumptionDetails({
                           key={aspect.id}
                           selected={selected}
                           onClick={() => {
-                            if (!isEditing || !draft  || loading) return;
+                            if (!isEditing || !draft || loading) return;
 
                             setDraft({
                               ...draft,
@@ -568,7 +572,7 @@ export function ConsumptionDetails({
                   {isEditing ? (
                     <>
                       <Save className="size-4" />
-                      {loading ? "Salvando...": "Salvar alterações" }
+                      {loading ? "Salvando..." : "Salvar alterações"}
                     </>
                   ) : (
                     <>

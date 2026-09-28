@@ -1,60 +1,155 @@
-import {RatingStars} from "../ui/rating-starts";
-import Link from 'next/link'
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+
+import { RatingStars } from "../ui/rating-starts";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const data = [
   {
+    id: 1,
     title: "Marketing Course",
-    category: "Education",
+    category: "Educação",
     rating: 4,
+    price: 120,
+    wouldBuyAgain: true,
     date: "20/04/2026",
   },
   {
+    id: 2,
     title: "Netflix Annual Subscription",
-    category: "Leisure",
+    category: "Streaming",
     rating: 5,
+    price: 239.9,
+    wouldBuyAgain: true,
     date: "18/05/2026",
+  },
+  {
+    id: 3,
+    title: "Tênis esportivo",
+    category: "Vestuário",
+    rating: 2,
+    price: 349.9,
+    wouldBuyAgain: false,
+    date: "10/06/2026",
   },
 ];
 
 export default function RecentExperiences() {
   return (
-    <div className="bg-white p-6 rounded-2xl shadow">
-      <h2 className="font-semibold mb-4 text-black">Experiências recentes</h2>
+    <Card className="rounded-2xl border border-slate-200/70 bg-blue-50 py-0 shadow-sm">
+      {/* Header */}
+      <CardHeader className="flex flex-row items-center justify-between px-6 pt-6 pb-4">
+        <div>
+          <CardTitle className="text-base font-semibold text-slate-900">
+            Experiências recentes
+          </CardTitle>
 
-      <div className="space-y-4">
-        {data.map((item, i) => (
-          <div
-            key={i}
-            className="grid grid-cols-[1fr_1fr_auto] items-center justify-center gap-4 border-b pb-2"          >
-            {/* coluna 1 */}
-            <div className="flex items-center gap-2">
-              <p className="font-medium text-blue-600">
-                {item.title}
-              </p>
-              <RatingStars value={item.rating} size="sm" />
-            </div>
+          <p className="mt-1 text-sm font-normal text-muted-foreground">
+            Seus últimos registros de consumo.
+          </p>
+        </div>
 
-            {/* coluna 2 */}
-            <p className="text-sm text-center text-gray-500 whitespace-nowrap">
-              {item.category}
-            </p>
-
-            {/* coluna 3 */}
-            <p className="text-sm text-gray-500">
-              • {item.date}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      <div className="text-right mt-4">
         <Link
           href="/dashboard/experiences"
-          className="inline-flex text-sm items-center rounded-xl bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
+          className="flex items-center gap-1 text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
         >
-          Ver histórico completo →
+          Ver histórico
+          <ChevronRight className="size-4" />
         </Link>
-      </div>
-    </div>
+      </CardHeader>
+
+      <CardContent className="px-6 pb-6">
+        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white/60">
+          {/* Table header */}
+          <div className="grid grid-cols-[minmax(220px,2fr)_1fr_110px_120px_140px_110px] items-center gap-4 border-b border-slate-200 bg-white/50 px-4 py-3">
+            <span className="text-xs font-medium text-muted-foreground">
+              Item
+            </span>
+
+            <span className="text-xs font-medium text-muted-foreground">
+              Categoria
+            </span>
+
+            <span className="text-xs font-medium text-muted-foreground">
+              Data
+            </span>
+
+            <span className="text-xs font-medium text-muted-foreground">
+              Valor
+            </span>
+
+            <span className="text-xs font-medium text-muted-foreground">
+              Avaliação
+            </span>
+
+            <span className="text-xs font-medium text-muted-foreground">
+              Recompraria
+            </span>
+          </div>
+
+          {/* Rows */}
+          {data.map((item) => (
+            <Link
+              key={item.id}
+              href={`/dashboard/experiences/${item.id}`}
+              className="
+                grid
+                grid-cols-[minmax(220px,2fr)_1fr_110px_120px_140px_110px]
+                items-center gap-4
+                border-b border-slate-200
+                px-4 py-3
+                transition-colors
+                last:border-b-0
+                hover:bg-blue-50
+              "
+            >
+              {/* Item */}
+              <p className="truncate text-sm font-medium text-slate-900">
+                {item.title}
+              </p>
+
+              {/* Category */}
+              <p className="truncate text-sm text-slate-600">
+                {item.category}
+              </p>
+
+              {/* Date */}
+              <p className="text-sm text-slate-600">
+                {item.date}
+              </p>
+
+              {/* Price */}
+              <p className="text-sm font-medium text-slate-700">
+                {item.price.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </p>
+
+              {/* Rating */}
+              <RatingStars value={item.rating} size="sm" />
+
+              {/* Would buy again */}
+              <div>
+                {item.wouldBuyAgain ? (
+                  <span className="inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                    Sim
+                  </span>
+                ) : (
+                  <span className="inline-flex rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700">
+                    Não
+                  </span>
+                )}
+              </div>
+            </Link>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

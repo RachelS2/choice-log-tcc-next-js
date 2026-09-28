@@ -3,13 +3,16 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import RecentExperiences from "@/components/dashboard/recent-experiences";
 import Link from 'next/link'
-import { Card, CardDescription } from "@/components/ui/card";
 import { calculateAverageRating, calculateRepurchaseRate, calculateTotalSpent } from "@/lib/dashboard-utils";
 import { fetchConsumptionRepository } from "@/lib/repository/consumption-repository";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
-import { calculateSatisfactionByCategory, calculateExperiencesByCategory } from "@/lib/analytics-utils";
-import { AvaliacaoMediaMetricCard, BuyAgainMetricCard, MostLikedCategoryMetricCard, MostSpentCategoryMetricCard } from "@/components/dashboard/summary-metric-cards";
+import { calculateSatisfactionByCategory, calculateExperiencesByCategory, calculateSpendingSatisfactionOverTime } from "@/lib/analytics-utils";
+import { AvaliacaoMediaMetricCard, BuyAgainMetricCard, MostLikedCategoryMetricCard, MostConsumedCategoryMetricCard } from "@/components/dashboard/summary-metric-cards";
 import ChartSection from "@/components/dashboard/chart-section";
+import { Button } from "@/components/ui/button";
+import { CategoryValue, SatisfactionOverTimeModel } from "@/models/dashboard/analytics";
+import { Plus, Sparkles } from "lucide-react";
+import EmptyDashboardSection from "@/components/dashboard/empty-dashboard-section";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -19,43 +22,100 @@ export default async function DashboardPage() {
   const username: string = session.user.name || "user";
   const userId: string = session.user.id;
   const consumptions: ReadConsumptionModel[] = await fetchConsumptionRepository(userId);
-  const averageRating: number = calculateAverageRating(consumptions);
-  const repurchaseRate = calculateRepurchaseRate(consumptions);
-  const totalSpent = calculateTotalSpent(consumptions);
-  const mostConsumedCategory = calculateExperiencesByCategory(consumptions)[0];
-  const bestRatedCategory = calculateSatisfactionByCategory(consumptions)[0];
+
+  const hasConsumptions = consumptions.length > 0;
+
+  const productCount: number | null = hasConsumptions
+    ? consumptions.filter(
+      (consumption) => consumption.item.type === "PRODUCT"
+    ).length
+    : null;
+
+  const serviceCount: number | null = hasConsumptions
+    ? consumptions.filter(
+      (consumption) => consumption.item.type === "SERVICE"
+    ).length
+    : null;
+
+  const averageRating: number | null = hasConsumptions
+    ? calculateAverageRating(consumptions)
+    : null;
+
+  const repurchaseRate: number | null = hasConsumptions
+    ? calculateRepurchaseRate(consumptions)
+    : null;
+
+  const mostConsumedCategory: CategoryValue | null = hasConsumptions
+    ? calculateExperiencesByCategory(consumptions)[0] ?? null
+    : null;
+
+  const bestRatedCategory: CategoryValue | null = hasConsumptions
+    ? calculateSatisfactionByCategory(consumptions)[0] ?? null
+    : null;
+
+  const satisfactionOverTime: SatisfactionOverTimeModel[] | null = hasConsumptions
+    ? calculateSpendingSatisfactionOverTime(consumptions, "month")
+    : null;
+
   return (
-    <div className="p-11 space-y-6 rounded-ful">
-
-      {/* Content */}
+    <div className="p-11">
       <div className="relative z-10 space-y-6">
-        <h1 className="text-2xl font-bold text-blue-600">
-          Olá, {username} 👋
-        </h1>
 
-        <Card className="rounded-2xl bg-white p-6 shadow">
-          <div className="flex flex-col items-center gap-4 text-center">
-            <CardDescription className="text-base text-black">
-              Registre e reflita sobre sua última decisão de consumo.
-            </CardDescription>
+        {/* Header */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-blue-700">
+              Olá, {username} 👋
+            </h1>
 
-            <Link
-              href="/dashboard/experiences/new-experience"
-              className="inline-flex items-center rounded-xl bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
-            >
-              + Nova experiência
-            </Link>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {hasConsumptions
+                ? "Aqui está um resumo das suas experiências de consumo."
+                : "Comece registrando sua primeira experiência de consumo."}
+            </p>
           </div>
-        </Card>
 
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <AvaliacaoMediaMetricCard avg={averageRating} />
-          < BuyAgainMetricCard avg={repurchaseRate} />
-          < MostLikedCategoryMetricCard data={bestRatedCategory} />
-          < MostSpentCategoryMetricCard data={mostConsumedCategory} />
+          <Button
+            asChild
+            className="h-11 gap-2 bg-blue-600 shadow-md hover:bg-blue-700"
+          >
+            <Link href="/dashboard/experiences/new-experience">
+              <Plus className="size-4" />
+              Nova experiência
+            </Link>
+          </Button>
         </div>
-        <ChartSection />
-        <RecentExperiences />
+
+        {!hasConsumptions ? (
+          <div className="flex justify-center items-center"> 
+          <EmptyDashboardSection />
+          </div>
+        ) : (
+          <>
+            {/* Metrics */}
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <AvaliacaoMediaMetricCard avg={averageRating} />
+              <BuyAgainMetricCard avg={repurchaseRate} />
+
+              {bestRatedCategory && (
+                <MostLikedCategoryMetricCard data={bestRatedCategory} />
+              )}
+
+              {mostConsumedCategory && (
+                <MostConsumedCategoryMetricCard data={mostConsumedCategory} />
+              )}
+            </div>
+
+            {satisfactionOverTime && productCount && serviceCount &&
+              (<ChartSection
+                satisfactionData={satisfactionOverTime}
+                productCount={productCount}
+                serviceCount={serviceCount}
+              />)}
+
+            <RecentExperiences />
+          </>
+        )}
       </div>
     </div>
   );

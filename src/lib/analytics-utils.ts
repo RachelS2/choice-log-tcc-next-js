@@ -229,7 +229,7 @@ function combineSpendingAndSatisfaction(consumptions: ReadConsumptionModel[]): E
     });
 }
 
-function calculateSpendingSatisfactionOverTime(
+export function calculateSpendingSatisfactionOverTime(
     consumptions: ReadConsumptionModel[],
     timeGranularity: AnalyticsTimeGranularity
 ): SatisfactionOverTimeModel[] {

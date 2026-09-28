@@ -16,6 +16,15 @@ export function getDateTime(date: string | null) {
   return date ? new Date(date).getTime() : 0;
 }
 
+export const GRAPHS_COLORS = [
+  "#7ba4e7",
+  "#1b0277",
+  "#2d4cfd",
+  "#481eaa",
+  "#9c35fc",
+  "#5fd4e9",
+];
+
 export function toSystemName(friendlyName: string): string {
   return friendlyName
     .trim()

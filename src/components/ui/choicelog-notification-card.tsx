@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import DecorativeBackground from "./choicelog-decorative-background";
 import { Button } from "./button";
 import { redirect } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface AuthCardProps {
   icon: LucideIcon;
@@ -12,6 +13,7 @@ interface AuthCardProps {
   description: ReactNode;
   children?: ReactNode;
   footer?: ReactNode;
+  iconClassName?: string;
 }
 
 export function NotificationContent({
@@ -20,6 +22,7 @@ export function NotificationContent({
   description,
   children,
   footer,
+  iconClassName
 }: AuthCardProps) {
   return (
     <div
@@ -29,7 +32,7 @@ export function NotificationContent({
         className="
           w-full max-w-md
           rounded-2xl
-          bg-card
+          bg-blue-100
           shadow-lg
           transition-all duration-300
           hover:-translate-y-0.5
@@ -42,7 +45,7 @@ export function NotificationContent({
         <DecorativeBackground />
 
         <div className="mb-6 flex flex-col items-center text-center">
-          <div className="mb-5 grid size-14 place-items-center rounded-full bg-blue-900">
+          <div className={cn("mb-5 grid size-14 place-items-center rounded-full bg-blue-900", iconClassName)}>
             <Icon className="size-7 text-white" strokeWidth={2} />
           </div>
           <h1 className="text-2xl font-semibold tracking-tight text-black">
@@ -81,19 +84,19 @@ export function ErrorNotification({ title, description, redirectTo, buttonText }
       className="min-h-screen flex flex-col items-center justify-center"
     >
 
-        <NotificationContent
-          icon={AlertTriangle}
-          title={title}
-          description={description}
-          children={
-            redirectTo &&
-            <Button className="bg-blue-900 text-white hover:bg-blue-800" onClick={() => {
-              redirect(redirectTo)
-            }}>
-              {btnTxt}
-            </Button>
-          }
-        />
+      <NotificationContent
+        icon={AlertTriangle}
+        title={title}
+        description={description}
+        children={
+          redirectTo &&
+          <Button className="bg-blue-900 text-white hover:bg-blue-800" onClick={() => {
+            redirect(redirectTo)
+          }}>
+            {btnTxt}
+          </Button>
+        }
+      />
     </main>
   )
 }

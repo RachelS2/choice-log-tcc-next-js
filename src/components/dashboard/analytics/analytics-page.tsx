@@ -18,16 +18,7 @@ import { NotificationContent } from "@/components/ui/choicelog-notification-card
 import { Box } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PeriodFilter } from "@/lib/consumption-filters-utils";
-
-
-const COLORS = [
-    "#7ba4e7",
-    "#1b0277",
-    "#2d4cfd",
-    "#481eaa",
-    "#9c35fc",
-    "#5fd4e9",
-];
+import { GRAPHS_COLORS } from "@/lib/utils";
 
 /* -------------------------------------------------------------------------- */
 /*                                    PAGE                                    */
@@ -71,7 +62,7 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
     }, [filteredConsumptions]);
     const [filtersExpanded, setFiltersExpanded] = useState(false);
     const count = activeFilterCount(filters);
-    const dataValueColor: string = COLORS[0]
+    const dataValueColor: string = GRAPHS_COLORS[0]
     if (data == null) {
         return (
             <div className="mx-auto w-full max-w-[1600px] space-y-5 p-5 lg:p-6">
@@ -117,23 +108,23 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
             <ActiveFiltersChips chips={buildAnalyticsFilterChips({ filters, patchFilters, categories, consumptionInfluences, consumptionReasons })} />
 
             <div className="grid gap-4 xl:grid-cols-2">
-                <ExpensesByCategoryGraph dataValueColor={dataValueColor} colors={COLORS} data={data.spendingSatisfactionByCategory} />
+                <ExpensesByCategoryGraph dataValueColor={dataValueColor} colors={GRAPHS_COLORS} data={data.spendingSatisfactionByCategory} />
 
-                <ConsumptionReasonGraph dataValueColor={"white"} colors={COLORS} data={data.consumptionReason} />
+                <ConsumptionReasonGraph dataValueColor={"white"} colors={GRAPHS_COLORS} data={data.consumptionReason} />
             </div>
 
             {/* INFLUENCES */}
 
             <div className="gap-4">
 
-                <SpendingSatisfactionOverTimeGraph colors={COLORS} data={data.satisfactionOverTime} />
+                <SpendingSatisfactionOverTimeGraph colors={GRAPHS_COLORS} data={data.satisfactionOverTime} />
 
             </div>
 
             <div className="grid gap-4 xl:grid-cols-2">
 
-                <ExperiencesInfluencesGraph colors={COLORS} data={data.influences} dataValueColor={COLORS[0]} />
-                <NegativeAspectSpendingGraph dataValueColor={dataValueColor} colors={COLORS} data={data.negativeAspectSpending} />
+                <ExperiencesInfluencesGraph colors={GRAPHS_COLORS} data={data.influences} dataValueColor={GRAPHS_COLORS[0]} />
+                <NegativeAspectSpendingGraph dataValueColor={dataValueColor} colors={GRAPHS_COLORS} data={data.negativeAspectSpending} />
 
             </div>
         </div>

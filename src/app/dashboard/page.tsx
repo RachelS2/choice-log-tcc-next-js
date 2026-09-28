@@ -58,8 +58,8 @@ export default async function DashboardPage() {
     : null;
 
   return (
-    <div className="p-11">
-      <div className="relative z-10 space-y-6">
+    <div className="flex min-h-screen flex-col p-11">
+      <div className="flex flex-1 flex-col">
 
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
             </p>
           </div>
 
-          <Button
+          {hasConsumptions && <Button
             asChild
             className="h-11 gap-2 bg-blue-600 shadow-md hover:bg-blue-700"
           >
@@ -83,12 +83,12 @@ export default async function DashboardPage() {
               <Plus className="size-4" />
               Nova experiência
             </Link>
-          </Button>
+          </Button>}
         </div>
 
         {!hasConsumptions ? (
-          <div className="flex justify-center items-center"> 
-          <EmptyDashboardSection />
+          <div className="flex flex-1 items-center justify-center">
+            <EmptyDashboardSection />
           </div>
         ) : (
           <>

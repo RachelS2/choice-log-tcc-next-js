@@ -36,7 +36,7 @@ export function NotificationContent({
           shadow-lg
           transition-all duration-300
           hover:-translate-y-0.5
-          hover:shadow-blue-100/50
+          hover:shadow-blue-500
           animate-in fade-in slide-in-from-bottom-2
           sm:p-10
         "
@@ -56,7 +56,7 @@ export function NotificationContent({
           </p>
         </div>
         {children && (
-          <div className="space-y-3 flex flex-col items-center justify-center">{children}</div>
+          <div className="space-y-1 flex flex-col items-center justify-center">{children}</div>
         )}
         {footer ? (
           <div className="mt-6 text-center text-xs text-muted-foreground">

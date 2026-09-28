@@ -35,7 +35,6 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
       onDelete(item.id);
       toast.success("Item excluído com sucesso.");
     } catch (error) {
-      console.error("Falha ao excluir item:", error);
       toast.error("Falha ao excluir item.");
     }
   }
@@ -45,26 +44,23 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
   };
 
   const handleViewDetails = () => {
-    console.log("oi")
     redirect("/dashboard/experiences")
   };
 
   return (
     <div
       className="
-    group relative flex h-full cursor-pointer flex-col
+    group relative flex h-full flex-col
     overflow-hidden rounded-2xl
     border border-neutral-200
     bg-white
-    shadow-sm
+    shadow-md
     transition-all duration-300 ease-out
     hover:-translate-y-1
-    hover:border-blue-900
+    hover:shadow-blue-900
     hover:shadow-lg hover:shadow-blue-100/0
   "
     >
-      <DecorativeBackground />
-
       <div className="flex h-full flex-col p-5">
         {/* Header */}
         <div className="mb-5 flex items-start justify-between">
@@ -135,16 +131,15 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
         </div>
 
         {/* Footer */}
-        <div className="mt-3">
+        <div className="mt-4">
           <Button
             variant="outline"
             size="sm"
             className="
           w-full
           rounded-lg
-          font-medium
+          font-semibold
           text-blue-900/90
-
           transition-all duration-200
           hover:-translate-y-0.5
           hover:border-blue-900
@@ -152,6 +147,8 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
           cursor-pointer
           hover:text-white
           bg-white
+          border-none
+          shadow-none
           hover:shadow-md
           active:translate-y-0
         "
@@ -160,7 +157,7 @@ export default function CatalogCard({ item, onDelete, onEdit, categories }: Cata
               handleViewDetails();
             }}
           >
-            Ver Detalhes
+            Ver Experiências
           </Button>
         </div>
       </div>

@@ -1,19 +1,19 @@
 // src/lib/catalog.ts
 
 import { prisma } from "@/lib/prisma";
-import { CreateUpdateItemModel, CategoryModel, ItemTypeEnum, BasicItemModel, ItemTypeModel } from "@/models/dashboard/items";
+import { ItemResumeModel, CategoryModel, ItemTypeEnum, BasicItemModel, ItemTypeModel, UpdatedItemModel } from "@/models/dashboard/items";
 import { PostItemModel } from "@/models/dashboard/items";
 import { toSystemName } from "../utils";
 import { Prisma } from "../../../generated/prisma";
 
 
 
-export async function fetchItemBasicInfoRepository(userId?: string, categoryType?: ItemTypeEnum, itemId?: string): Promise<BasicItemModel[]> {
+export async function fetchItemBasicInfoRepository(userId: string, categoryType?: ItemTypeEnum, itemId?: string): Promise<BasicItemModel[]> {
   const where: Prisma.ItemWhereInput = {};
 
-  if (userId) {
-    where.userId = userId;
-  }
+
+  where.userId = userId;
+
 
   if (itemId) {
     where.id = itemId;
@@ -53,12 +53,10 @@ export async function fetchItemBasicInfoRepository(userId?: string, categoryType
     imageUrl: item.imageUrl,
   }));
 }
-export async function fetchItemResumeRepository(userId?: string, categoryType?: ItemTypeEnum, itemId?: string): Promise<CreateUpdateItemModel[]> {
+export async function fetchItemResumeRepository(userId: string, categoryType?: ItemTypeEnum, itemId?: string): Promise<ItemResumeModel[]> {
   const where: Prisma.ItemWhereInput = {};
 
-  if (userId) {
-    where.userId = userId;
-  }
+  where.userId = userId;
 
   if (itemId) {
     where.id = itemId;
@@ -132,17 +130,11 @@ export async function fetchItemResumeRepository(userId?: string, categoryType?: 
 }
 
 
-export async function postItemRepository({
-  item,
-  userId,
-}: {
-  item: PostItemModel;
-  userId: string;
-}): Promise<CreateUpdateItemModel> {
+export async function postItemRepository(item: PostItemModel, userId: string): Promise<ItemResumeModel> {
   const createdItem = await prisma.item.create({
     data: {
       friendlyName: item.friendlyName,
-      systemName: item.systemName,
+      systemName: toSystemName(item.friendlyName),
       brand: item.brand,
       category: {
         connect: {
@@ -188,33 +180,27 @@ export async function postItemRepository({
   };
 }
 
-export async function deleteItemRepository({
-  itemId,
-}: {
-  itemId: string;
-}) {
+export async function deleteItemRepository(itemId: string, userId: string) {
   return await prisma.item.delete({
     where: {
       id: itemId,
+      userId: userId,
     },
   });
 }
 
-export async function updateItemRepository({
-  item
-}: {
-  item: CreateUpdateItemModel;
-}) {
+export async function updateItemRepository(item: UpdatedItemModel, userId: string): Promise<ItemResumeModel> {
   await prisma.item.update({
     where: {
       id: item.id,
+      userId: userId,
     },
 
     data: {
       friendlyName: item.friendlyName,
       systemName: toSystemName(item.friendlyName),
       brand: item.brand,
-
+      imageUrl: item.imageUrl,
       category: {
         connect: {
           id: item.categoryId,
@@ -223,7 +209,7 @@ export async function updateItemRepository({
     },
   });
 
-  const items: CreateUpdateItemModel[] = await fetchItemResumeRepository(undefined, undefined, item.id);
+  const items: ItemResumeModel[] = await fetchItemResumeRepository(userId, undefined, item.id);
   return items[0];
 }
 

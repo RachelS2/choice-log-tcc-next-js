@@ -5,19 +5,10 @@ import { CategoryModel, ItemTypeEnum } from "@/models/dashboard/items";
 
 
 export async function fetchCategoriesRepository(
-  userId?: string,
   type?: ItemTypeEnum
 ): Promise<CategoryModel[]> {
   const categories = await prisma.category.findMany({
     where: {
-      OR: userId
-        ? [
-          { userId: null },
-          { userId },
-        ]
-        : [
-          { userId: null },
-        ],
 
       ...(type && {
         type: {

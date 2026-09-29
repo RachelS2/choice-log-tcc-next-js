@@ -6,27 +6,27 @@ export interface CategoryModel {
   type: ItemTypeEnum;
 }
 
-export interface BasicItemModel {
-  id: string;
-  friendlyName: string;
-  categoryName: string;
-  categoryId: string;
-  brand: string;
-  type: ItemTypeEnum;
-  typeId: number;
-  imageUrl: string | null;
-}
-
 export interface PostItemModel {
   categoryId: string;
   friendlyName: string;
-  systemName: string;
   brand: string;
   imageUrl: string | null;
 }
 
-export interface CreateUpdateItemModel extends PostItemModel {
+export interface UpdatedItemModel extends PostItemModel {
   id: string;
+}
+
+export interface BasicItemModel extends UpdatedItemModel {
+  categoryName: string;
+  typeId: number;
+  type: ItemTypeEnum;
+
+}
+
+export interface ItemResumeModel extends PostItemModel {
+  id: string;
+  systemName: string;
   type: ItemTypeEnum;
   typeId: number;
   experiences: number;

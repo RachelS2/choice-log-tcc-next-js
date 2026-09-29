@@ -1,4 +1,4 @@
-import { TypeFilter } from "@/app/dashboard/catalog/items/page";
+import { TypeFilter } from "@/app/dashboard/items/page";
 import { ConsumptionSummaryModel, ReadConsumptionModel, SortConsumptionsOptions, SortItemsOptions } from "@/models/dashboard/consumption";
 
 export type RatingFilter = "all" | "5" | "4" | "3" | "2" | "1";

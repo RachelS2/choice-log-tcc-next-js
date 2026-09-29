@@ -31,7 +31,7 @@ import { cn, getInitials } from "@/lib/utils";
 import { RatingStars } from "@/components/ui/rating-starts";
 import { DatePicker } from "@/components/ui/choicelog-date-picker";
 import ConsumptionCreatedPage from "./consumption-created-page";
-import { BasicItemModel, CategoryModel, CreateUpdateItemModel, ItemTypeEnum, ItemTypeModel } from "@/models/dashboard/items";
+import { BasicItemModel, CategoryModel, ItemResumeModel, ItemTypeEnum, ItemTypeModel, PostItemModel } from "@/models/dashboard/items";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, CreateConsumptionModel, NegativeAspectModel } from "@/models/dashboard/consumption";
 import CreateUpdateItemModal from "../../items/create-item-modal";
 import { toast } from "sonner";
@@ -60,6 +60,7 @@ interface RegisterConsumptionProps {
   postConsumption: (
     consumption: CreateConsumptionModel
   ) => void;
+  postItem: (newItem: PostItemModel) => Promise<ItemResumeModel>;
 }
 function getItemTypeId(typeName: ItemTypeEnum, itemTypes: ItemTypeModel[]): number {
   const itemTypeId: ItemTypeModel | undefined = itemTypes.find(x => x.name == typeName);
@@ -68,7 +69,7 @@ function getItemTypeId(typeName: ItemTypeEnum, itemTypes: ItemTypeModel[]): numb
   return itemTypeId.id;
 }
 
-export default function RegisterConsumptionPageClient({ initialItems, reasons, aspects, categories, itemTypes, postConsumption, consumptionInfluences }: RegisterConsumptionProps) {
+export default function RegisterConsumptionPageClient({ postItem, initialItems, reasons, aspects, categories, itemTypes, postConsumption, consumptionInfluences }: RegisterConsumptionProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [address, setAddress] = useState("");
   const [rating, setRating] = useState(0);
@@ -188,7 +189,6 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
       wouldBuyAgain,
       negativeAspects: aspectIds,
     };
-    console.log(payload);
     try {
       postConsumption(payload)
       setSaved(true);
@@ -666,14 +666,28 @@ export default function RegisterConsumptionPageClient({ initialItems, reasons, a
         mode="create"
         onOpenChange={setNewItemModalOpen}
         categories={categories}
-        onSuccess={async (newItem: CreateUpdateItemModel) => {
+        onEditItemServer={null}
+        onCreateItemServer={async (newItem: PostItemModel) => {
+
+          const postedItem: ItemResumeModel = await postItem(newItem);
           setNewItemModalOpen(false);
+          const basicItemModel: BasicItemModel = {
+            categoryId: newItem.categoryId,
+            brand: newItem.brand,
+            categoryName: postedItem.categoryName,
+            type: postedItem.type,
+            typeId: postedItem.typeId,
+            id: postedItem.id,
+            friendlyName: newItem.friendlyName,
+            imageUrl: newItem.imageUrl,
+
+          }
           setItems((currentItems) => [
             ...currentItems,
-            newItem,
+            basicItemModel,
           ]);
-          selectItem(newItem.id);
-
+          selectItem(basicItemModel.id);
+          return postedItem
         }}
       />
     </div>

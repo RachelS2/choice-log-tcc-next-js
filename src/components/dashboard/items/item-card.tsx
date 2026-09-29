@@ -1,47 +1,70 @@
 import { Pencil, Trash2, Star, Wrench, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { CategoryModel, CreateUpdateItemModel } from '@/models/dashboard/items';
-import { deleteItemController } from '@/lib/controller/item-controller';
+import { CategoryModel, ItemResumeModel, UpdatedItemModel } from '@/models/dashboard/items';
 import { ReactNode, useState } from "react";
 import Modal from '@/components/ui/choicelog-modal';
 import CreateUpdateItemModal from './create-item-modal';
 import { formatDate, formatDateTime, } from '@/lib/utils';
 import { ItemHero } from '@/components/ui/choicelog-item-hero';
-import DecorativeBackground from '@/components/ui/choicelog-decorative-background';
 import { redirect } from 'next/navigation';
 
 export interface ItemsCardProps {
-  item: CreateUpdateItemModel;
+  item?: ItemResumeModel;
   onDelete: (itemId: string) => void;
-  onEdit: (item: CreateUpdateItemModel) => void;
+  onEdit: (
+    item: UpdatedItemModel
+  ) => Promise<ItemResumeModel>;
   categories: CategoryModel[];
 }
 
 export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsCardProps) {
+  if (item == undefined) {
+    return
+  }
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] =
     useState(false);
-  const handleEdit = (e: React.MouseEvent) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleEditButtonClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setEditModalOpen(true);
   };
-  async function handleDeleteModal() {
+  const handleDeleteButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDeleteModalOpen(true);
+  };
+
+  async function onEditItem(itemToEdit: UpdatedItemModel): Promise<ItemResumeModel | null> {
+    if (itemToEdit == undefined) throw Error("Item shouldnt be undefined at the edition moment!");
+
     try {
-      await deleteItemController(item.id);
+      const itemResume = await onEdit(itemToEdit);
+      toast.success("Item editado com sucesso.");
+      setLoading(false);
 
-      setDeleteModalOpen(false);
+      return itemResume;
+    } catch (error) {
+      toast.error("Falha ao editar item.");
+      return null;
+    }
+  }
 
+  async function onDeleteItem() {
+    if (item == undefined) throw Error("Item shouldnt be undefined at the delete moment!");
+
+    setLoading(true);
+
+    try {
       onDelete(item.id);
       toast.success("Item excluído com sucesso.");
     } catch (error) {
       toast.error("Falha ao excluir item.");
     }
+    setLoading(false);
   }
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setDeleteModalOpen(true);
-  };
+
 
   const handleViewDetails = () => {
     redirect("/dashboard/experiences")
@@ -75,8 +98,8 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
       "
           >
             <button
-              disabled={categories.length === 0}
-              onClick={handleEdit}
+              disabled={loading}
+              onClick={handleEditButtonClick}
               className="
           flex h-8 w-8 cursor-pointer items-center justify-center
           rounded-lg
@@ -94,7 +117,8 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
             </button>
 
             <button
-              onClick={handleDelete}
+              disabled={loading}
+              onClick={handleDeleteButtonClick}
               className="
           flex h-8 w-8 cursor-pointer items-center justify-center
           rounded-lg
@@ -139,14 +163,14 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
           w-full
           rounded-lg
           font-semibold
-          text-blue-900/90
+          text-white
           transition-all duration-200
           hover:-translate-y-0.5
           hover:border-blue-900
           hover:bg-blue-900/90
           cursor-pointer
           hover:text-white
-          bg-white
+          bg-blue-900
           border-none
           shadow-none
           hover:shadow-md
@@ -166,7 +190,7 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
       <Modal
         open={deleteModalOpen}
         onOpenChange={setDeleteModalOpen}
-        onConfirm={handleDeleteModal}
+        onConfirm={onDeleteItem}
         dialogTitle="Confirmar Exclusão"
         dialogDescription="Tem certeza que deseja excluir este item permanentemente?"
         buttonText="Excluir"
@@ -177,7 +201,8 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
         categories={categories}
         open={editModalOpen}
         onOpenChange={setEditModalOpen}
-        onSuccess={onEdit}
+        onEditItemServer={onEditItem}
+        onCreateItemServer={null}
         mode="edit"
       />
 

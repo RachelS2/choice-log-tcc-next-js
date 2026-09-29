@@ -1,7 +1,7 @@
 import { ActiveFilterChip } from "@/components/ui/choicelog-chips";
 import { BuyAgainFilter, ConsumptionFilterState, PeriodFilter, RatingFilter } from "./consumption-filters-utils";
-import { CatalogFilterState } from "./catalog-filters-utils";
-import { TypeFilter } from "@/app/dashboard/catalog/items/page";
+import { ItemsFilterState } from "./items-filters-utils";
+import { TypeFilter } from "@/app/dashboard/items/page";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel } from "@/models/dashboard/consumption";
 import { CategoryModel } from "@/models/dashboard/items";
 
@@ -19,7 +19,7 @@ function createChip(
 }
 
 type PatchFilters = (
-    patch: Partial<ConsumptionFilterState | CatalogFilterState>
+    patch: Partial<ConsumptionFilterState | ItemsFilterState>
 ) => void;
 
 export function createSearchChip(

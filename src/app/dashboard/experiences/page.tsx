@@ -16,11 +16,9 @@ export default async function MyConsumptionsPage() {
 
         const userId: string = session.user.id;
 
-
-
         const consumptions: ReadConsumptionModel[] = await fetchConsumptionRepository(userId);
 
-        const categories: CategoryModel[] = await fetchCategoriesRepository(userId);
+        const categories: CategoryModel[] = await fetchCategoriesRepository();
         const consumptionInfluences: ConsumptionInfluenceModel[] = await fetchConsumptionInfluenceRepository()
         const consumptionReasons: ConsumptionReasonModel[] = await fetchConsumptionReasonsRepository()
         const negativeAspects: NegativeAspectModel[] = await fetchNegativeAspectsRepository()

@@ -3,16 +3,22 @@ import RegisterConsumptionPageClient from "@/components/dashboard/experiences/ne
 import { postConsumptionController } from "@/lib/controller/consumption-controller";
 import { fetchCategoriesRepository } from "@/lib/repository/category-repository";
 import { fetchNegativeAspectsRepository, fetchConsumptionReasonsRepository, fetchConsumptionInfluenceRepository } from "@/lib/repository/consumption-repository";
-import { fetchItemBasicInfoRepository, fetchItemTypesRepository } from "@/lib/repository/item-repository";
+import { fetchItemBasicInfoRepository, fetchItemTypesRepository, postItemRepository } from "@/lib/repository/item-repository";
 import { NegativeAspectModel, ConsumptionReasonModel, ConsumptionInfluenceModel } from "@/models/dashboard/consumption";
-import { BasicItemModel, CategoryModel, ItemTypeModel } from "@/models/dashboard/items";
-
+import { BasicItemModel, CategoryModel, ItemResumeModel, ItemTypeModel, PostItemModel } from "@/models/dashboard/items";
+import { headers } from 'next/headers';
+import { auth } from '@/lib/auth';
 
 export default async function RegisterConsumptionPage() {
 
   try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session) {
+      throw Error("Usuário não está autorizado a acessar esta página.");
+    }
 
-    const items: BasicItemModel[] = await fetchItemBasicInfoRepository();
+    const userId = session.user.id;
+    const items: BasicItemModel[] = await fetchItemBasicInfoRepository(userId);
     const negativeAspects: NegativeAspectModel[] =
       await fetchNegativeAspectsRepository();
     const consumptionReasons: ConsumptionReasonModel[] =
@@ -22,6 +28,11 @@ export default async function RegisterConsumptionPage() {
     const itemTypes: ItemTypeModel[] = await fetchItemTypesRepository()
 
     const consumptionInfluence: ConsumptionInfluenceModel[] = await fetchConsumptionInfluenceRepository()
+    async function onPostItem(itemToPost: PostItemModel): Promise<ItemResumeModel> {
+      "use server";
+
+      return await postItemRepository(itemToPost, userId);
+    }
     return (
       <RegisterConsumptionPageClient
         initialItems={items}
@@ -31,6 +42,7 @@ export default async function RegisterConsumptionPage() {
         itemTypes={itemTypes}
         consumptionInfluences={consumptionInfluence}
         postConsumption={postConsumptionController}
+        postItem={ onPostItem}
       />);
   }
 

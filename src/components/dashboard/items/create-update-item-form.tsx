@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Package, Wrench, Loader2, ImageIcon } from 'lucide-react';
+import { Package, Wrench, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,24 +13,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn, formatItemTypeLabel, toSystemName } from '@/lib/utils';
-import type { CategoryModel, CreateUpdateItemModel, ItemTypeEnum } from '../../../models/dashboard/items';
-import { postItemController, updateItemController } from '@/lib/controller/item-controller';
+import { cn, formatItemTypeLabel } from '@/lib/utils';
+import type { CategoryModel, ItemResumeModel, ItemTypeEnum, PostItemModel, UpdatedItemModel } from '../../../models/dashboard/items';
 import { itemFormSchema, ItemFormSchema } from '@/zod-schemas/item-form-schema';
 
-interface CreateUpdateItemFormProps {
+export interface CreateUpdateItemFormProps {
   mode: "create" | "edit";
 
-  item?: CreateUpdateItemModel;
+  item?: ItemResumeModel;
 
-  onSuccess: (item: CreateUpdateItemModel) => void;
+  onCreateItemServer: ((item: PostItemModel) => Promise<ItemResumeModel>) | null;
 
-  onCancel: () => void;
+  onEditItemServer: ((item: UpdatedItemModel) => Promise<ItemResumeModel | null> ) | null;
+
+  onOpenChange: (open: boolean) => void;
+
   categories: CategoryModel[];
 
 }
 
-export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, categories }: CreateUpdateItemFormProps) {
+export default function CreateUpdateItemForm({ onOpenChange, onCreateItemServer, onEditItemServer, item, mode, categories }: CreateUpdateItemFormProps) {
+
 
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -60,7 +63,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
 
   const categoryValue = watch("categoryId");
 
-  const filteredCategories = categories.filter(
+  const filteredCategories: CategoryModel[] = categories.filter(
     (category) => category.type === selectedType
   );
 
@@ -74,43 +77,56 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
         imageUrl: item.imageUrl ?? "",
       });
     }
+
+
   }, [item, reset]);
 
   const onSubmit = async (data: ItemFormSchema) => {
 
-    console.log(data)
     setSubmitting(true);
     setServerError(null);
 
     try {
-      let createdUpdatedItem: CreateUpdateItemModel;
 
-      if (mode === "create") {
-        createdUpdatedItem = await postItemController({
-          categoryId: data.categoryId,
-          friendlyName: data.friendlyName,
-          systemName: toSystemName(data.friendlyName),
-          brand: data.brand,
-          imageUrl: data.imageUrl || null,
-        });
-      } else {
-        if (!item) {
-          throw new Error("Dados do item ausentes para edição.");
+      if (mode === "edit") {
+        if (onEditItemServer === null) {
+          throw new Error("Edit item action was not implemented!");
         }
-        createdUpdatedItem = await updateItemController({
+
+        if (item === undefined) {
+          throw new Error("Item should exist to be updated!")
+        }
+
+        const updatedItem: UpdatedItemModel = {
           id: item.id,
           categoryId: data.categoryId,
           friendlyName: data.friendlyName,
           brand: data.brand,
-        });
-      }
+          imageUrl: data.imageUrl || null,
+        };
 
-      onSuccess(createdUpdatedItem);
+        await onEditItemServer(updatedItem);
+      }
+      else {
+
+        if (onCreateItemServer == null) throw Error("Create item action was not implemented!")
+        const createItem: PostItemModel = {
+          categoryId: data.categoryId,
+          friendlyName: data.friendlyName,
+          brand: data.brand,
+          imageUrl: data.imageUrl || null,
+        };
+        onCreateItemServer(createItem);
+      }
+      onOpenChange(false)
+
+
     } catch (err) {
       if (
         err instanceof Error &&
         err.message === "UNIQUE_CONSTRAINT_VIOLATION"
       ) {
+
         setServerError(
           "Você já possui um item com este nome e marca."
         );
@@ -124,7 +140,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
         });
       } else {
         setServerError(
-          "Você já possui um item com este nome e marca."
+          "Houve um erro inesperado. Tente novamente mais tarde."
         );
       }
     } finally {
@@ -281,7 +297,7 @@ export default function CreateUpdateItemForm({ onSuccess, onCancel, item, mode, 
       <div className="flex items-center justify-end gap-3 pt-3 pb-3 border-t border-neutral-100">
         <Button
           type="button"
-          onClick={onCancel}
+          onClick={() => { onOpenChange(false) }}
           variant="outline"
           disabled={submitting}
           className="w-24 h-10 text-red-500 bg-white/80 shadow-md hover:text-red-600"

@@ -28,7 +28,7 @@ export default async function AnalyticsPage() {
             return <ErrorNotification buttonText="Nova Experiência" redirectTo="/dashboard/experiences/new-experience"
                 title="Você ainda não possui experiências para analisar." description="Comece a refletir sobre seus hábitos de compra agora." />
         }
-        const categories: CategoryModel[] = await fetchCategoriesRepository(session.user.id);
+        const categories: CategoryModel[] = await fetchCategoriesRepository();
         const consumptionInfluences: ConsumptionInfluenceModel[] = await fetchConsumptionInfluenceRepository()
         const consumptionReasons: ConsumptionReasonModel[] = await fetchConsumptionReasonsRepository()
         return <AnalyticsPageComponent consumptionReasons={consumptionReasons} categories={categories} 

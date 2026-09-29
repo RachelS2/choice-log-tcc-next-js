@@ -20,13 +20,11 @@ export function ForgotPasswordPage() {
             email: email,
             redirectTo: "/sign-in/reset-password",
         });
-        console.log("error: " + error)
         if (error) {
             let errorMessage: string | undefined = error.message;
             if (!errorMessage) {
                 errorMessage = "Falha ao enviar o e-mail. Tente novamente mais tarde."
             }
-            console.log("Failed to send reset password e-mail. Received status code: " + error.status);
             toast.error(errorMessage);
         } else {
             toast.success("Se houver uma conta com este e-mail, um link de redefinição de senha será enviado.");

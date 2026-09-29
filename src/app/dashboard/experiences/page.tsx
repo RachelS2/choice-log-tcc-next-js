@@ -30,7 +30,6 @@ export default async function MyConsumptionsPage() {
     }
 
     catch (error) {
-        console.error("Erro ao tentar buscar categorias ou experiências:", error);
         return <ErrorNotification title="Não foi possível carregar seus consumos."
         redirectTo="/dashboard/experiences"
         description="Ocorreu um erro ao buscar o histórico. Tente novamente em instantes."/>

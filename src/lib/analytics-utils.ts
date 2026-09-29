@@ -233,11 +233,6 @@ export function calculateSpendingSatisfactionOverTime(
     consumptions: ReadConsumptionModel[],
     timeGranularity: AnalyticsTimeGranularity
 ): SatisfactionOverTimeModel[] {
-    console.log("GRANULARITY:", timeGranularity);
-    console.log(
-        "DATES:",
-        consumptions.map((c) => c.date)
-    );
     const periods = new Map<
         string,
         {

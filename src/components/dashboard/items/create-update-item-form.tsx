@@ -116,7 +116,7 @@ export default function CreateUpdateItemForm({ onOpenChange, onCreateItemServer,
           brand: data.brand,
           imageUrl: data.imageUrl || null,
         };
-        onCreateItemServer(createItem);
+        await onCreateItemServer(createItem);
       }
       onOpenChange(false)
 

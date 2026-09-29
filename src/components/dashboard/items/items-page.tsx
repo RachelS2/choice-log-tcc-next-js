@@ -88,7 +88,6 @@ export default function ItemsPageClient({ categories, items, onDeleteItemServer,
                     : currentItem
             )
         );
-        console.log(pageItems)
 
         return updatedItem;
 
@@ -163,7 +162,7 @@ export default function ItemsPageClient({ categories, items, onDeleteItemServer,
                         />
                     ) : filteredItems.length > 0 ? (
                         <div className="mx-auto grid w-full max-w-8xl grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3">
-                            {items.map((item) => (
+                            {filteredItems.map((item) => (
                                 <ItemsCard
                                     key={item.id}
                                     item={item}

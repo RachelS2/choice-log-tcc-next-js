@@ -16,7 +16,6 @@ interface VerifyEmailProps {
 }
 
 const VerifyEmail = (props: VerifyEmailProps) => {
-  console.log("Verify Url: " + props.verifyUrl);
   const { username, verifyUrl } = props;
   return (
     <Html dir="ltr" lang="en">

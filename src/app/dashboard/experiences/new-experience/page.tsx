@@ -47,7 +47,6 @@ export default async function RegisterConsumptionPage() {
   }
 
   catch (error) {
-    console.error("Error fetching data for RegisterConsumptionPage:", error);
     throw new Error("Failed to fetch data for register consumption page ");
   }
 }

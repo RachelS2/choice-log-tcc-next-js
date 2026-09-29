@@ -67,7 +67,6 @@ export function ResetPasswordForm() {
     const handleChangePassword = async (data: ResetPasswordSchemaType) => {
         const loadingToast = toast.loading("Redefinindo senha...");
         const result = await resetPassword(data, token);
-        console.log("Resetting password with data:", data);
         toast.dismiss(loadingToast);
 
         if (result.success == true) {

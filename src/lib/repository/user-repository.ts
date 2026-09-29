@@ -83,8 +83,6 @@ export async function updateUserProfile(
             message: "Profile updated successfully",
         };
     } catch (error) {
-        console.error("Update profile error:", error);
-
         return {
             success: false,
             message: "Unable to update profile",
@@ -121,7 +119,6 @@ export async function deleteUserAccount(): Promise<{
     }
 
     catch (error) {
-        console.error(error);
         return {
             success: false,
             message: "Unable to delete account",

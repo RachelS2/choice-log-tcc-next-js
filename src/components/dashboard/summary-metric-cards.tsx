@@ -40,7 +40,7 @@ export function MetricCard({
                 </div>
 
                 <div className="min-w-0 flex-1">
-                    <p className="truncate text-lg font-semibold text-slate-900">
+                    <p className="text-lg font-semibold text-slate-900">
                         {value}
                     </p>
 
@@ -123,7 +123,6 @@ export function MostConsumedCategoryMetricCard({
 }: {
     data: CategoryValue;
 }) {
-    console.log(data.value)
     return (
         <MetricCard
             icon={

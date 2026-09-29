@@ -68,7 +68,7 @@ export default async function DashboardPage() {
               Olá, {username} 👋
             </h1>
 
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 mb-3 text-sm text-muted-foreground">
               {hasConsumptions
                 ? "Aqui está um resumo das suas experiências de consumo."
                 : "Comece registrando sua primeira experiência de consumo."}

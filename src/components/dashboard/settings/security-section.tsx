@@ -25,7 +25,6 @@ export default function SecuritySection() {
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const handleDeleteAccount = async () => {
         const loadingToast = toast.loading("Deleting account...");
-        console.log("Deleting account...")
         const result: {
             success: boolean;
             message: string;

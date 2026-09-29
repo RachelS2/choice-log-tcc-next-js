@@ -145,7 +145,6 @@ export default function RegisterConsumptionPageClient({ postItem, initialItems, 
     setReasonId(null);
     setSelectedItem(newItem)
     setAspectIds([]);
-    console.log(id)
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -165,7 +164,6 @@ export default function RegisterConsumptionPageClient({ postItem, initialItems, 
     if (address.length > 255) errors.address = "O endereço informado é muito longo.";
 
     setErrors(errors);
-    console.log(errors.wouldBuyAgain);
     if (Object.keys(errors).length > 0) return;
 
     const itemId = selectedItem?.id;
@@ -362,7 +360,7 @@ export default function RegisterConsumptionPageClient({ postItem, initialItems, 
                   {/* Empty state */}
                   {filteredItems.length === 0 && (
 
-                    <NotificationContent icon={PackageOpen} title="Nenhuma experiência encontrada" description="Tente outro filtro." />
+                    <NotificationContent icon={PackageOpen} title="Nenhum item encontrado" description="Altere os filtros ou adicione seu primeiro item." />
                   )}
                 </div>
 

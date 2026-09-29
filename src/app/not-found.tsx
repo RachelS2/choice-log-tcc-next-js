@@ -11,7 +11,6 @@ import { authClient } from "@/lib/auth-client";
 export default async function NotFound() {
   const router = useRouter();
   const userIsLoggedIn = await authClient.getSession() != undefined;
-  console.log("User is logged in NOT FOUND:", userIsLoggedIn);
   return (
     <div className="flex min-h-screen flex-col">
       {/* Grid */}

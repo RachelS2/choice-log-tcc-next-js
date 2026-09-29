@@ -89,7 +89,6 @@ export default function SignUpForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     async function handleOnSubmit(signUpData: SignUpSchemaType) {
-        console.log(signUpData)
         setIsSubmitting(true);
         // await fetch("/api/dev/delete-all-users", { method: "DELETE" }); // TODO: Remove this row later
         await authClient.signUp.email({
@@ -104,8 +103,6 @@ export default function SignUpForm() {
                 setEmailSent(true);
             },
             onError: (ctx) => {
-                console.log(ctx.error.message);
-                console.log(ctx.error.code);
                 let message: string = "";
                 let description: string = "";
                 if (ctx.error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {

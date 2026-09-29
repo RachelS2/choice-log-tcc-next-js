@@ -25,7 +25,6 @@ export const auth = betterAuth({
         revokeSessionsOnPasswordReset: true,
         requireEmailVerification: true,
         sendResetPassword: async ({ user, url }) => {
-            console.log("Sending reset password email to: " + user.email);
             const { error } = await resend.emails.send({
                 from: "onboarding@resend.dev",
                 to: user.email,
@@ -37,9 +36,7 @@ export const auth = betterAuth({
                 }),
             });
             if (error) {
-                console.error("Resend error:", error);
                 throw new Error(error.message);
-
             }
 
         },
@@ -49,7 +46,6 @@ export const auth = betterAuth({
         sendOnSignUp: true,
         expirationTime: 60 * 30, // 30 minutes
         sendVerificationEmail: async ({ user, url }) => {
-            console.log("Sending verification email to:", user.email);
             const { error } = await resend.emails.send({
                 from: "onboarding@resend.dev",
                 to: user.email,
@@ -58,13 +54,11 @@ export const auth = betterAuth({
             });
 
             if (error) {
-                console.error("Resend error:", error);
                 throw new Error(`Email send failed: ${error.message}`);
             }
 
         },
         async afterEmailVerification(user) {
-            console.log(`Sending verification e-mail succeeded to ${user.email}`);
             if (user.emailVerified) {
                 await resend.emails.send({
                     from: "onboarding@resend.dev",

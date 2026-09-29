@@ -140,7 +140,6 @@ export function createCategoryChip(categoryId: string,
         (influence) => String(influence.id) === categoryId
     );
 
-    console.log(category)
     return createChip(
         categoryId !== "all",
         `Categoria: ${category?.name ?? ""}`,

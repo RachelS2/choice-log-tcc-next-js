@@ -18,11 +18,6 @@ export async function fetchCategoriesController(filterByUser: boolean, type?: It
   );
 
   if (!response.ok) {
-    console.error(
-      "Failed to fetch categories:",
-      response.status,
-      response.statusText
-    );
 
     throw new Error("FAILED_TO_FETCH_CATEGORIES");
   }

@@ -8,7 +8,6 @@ export async function DELETE() {
     return new Response("Forbidden", { status: 403 });
   }
 
-  console.log("Deleting all users, sessions, accounts and verifications from DEV database...");
   await prisma.session.deleteMany();
   await prisma.account.deleteMany();
   await prisma.verification.deleteMany();

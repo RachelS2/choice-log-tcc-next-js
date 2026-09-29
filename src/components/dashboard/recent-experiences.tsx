@@ -41,7 +41,7 @@ const data = [
 
 export default function RecentExperiences() {
   return (
-    <Card className="rounded-2xl border border-slate-200/70 bg-blue-50 py-0 shadow-sm">
+    <Card className="rounded-2xl py-0">
       {/* Header */}
       <CardHeader className="flex flex-row items-center justify-between px-6 pt-6 pb-4">
         <div>

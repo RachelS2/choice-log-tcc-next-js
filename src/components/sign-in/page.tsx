@@ -34,7 +34,6 @@ export default function LoginForm() {
     });
 
     async function handleResendVerificationEmail() {
-        console.log("Resending verification email to: " + userEmail);
         setIsResendingEmail(true);
         await authClient.sendVerificationEmail({
             email: userEmail,
@@ -69,7 +68,6 @@ export default function LoginForm() {
                         toast.warning("Credenciais inválidas.", { description: "Verifique seu e-mail e senha e tente novamente." })
                     }
                     else {
-                        console.log("Error during login: " + ctx.error.status);
                         if (ctx.error.message == 'Email not verified') {
                             setUserEmail(loginData.email);
                             toast.error("E-mail não verificado.", { description: "Verifique seu e-mail antes de entrar." });

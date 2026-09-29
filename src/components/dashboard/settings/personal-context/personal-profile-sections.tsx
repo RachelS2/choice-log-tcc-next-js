@@ -81,8 +81,6 @@ export default function PersonalProfileSection() {
         return <div><p className="text-red-500">Perfil não encontrado</p></div>;
     }
     const onSubmit = async (data: UserSettingsSchemaType) => {
-        console.log("SUBMIT FIRED");
-        console.log(data)
         if (!userProfileData.data) {
             toast.error("Os dados do usuário não estão disponíveis. Tente novamente mais tarde.");
             return;
@@ -95,7 +93,6 @@ export default function PersonalProfileSection() {
             image: data.image,
         }
         const result = await updateUserProfile(completeData);
-        console.log("Profile updated...")
         toast.dismiss(updatingToast);
         if (result.success) {
             toast.success(result.message);
@@ -193,7 +190,6 @@ cursor-pointer
 shadow-xl
 "
                             onClick={() => {
-                                console.log("NATIVE BUTTON CLICK");
                                 setIsEditing(true);
                             }}
                         >

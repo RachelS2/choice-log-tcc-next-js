@@ -8,15 +8,15 @@ import {
 } from "lucide-react";
 
 export function ConsumptionSummary({
-    summary
+    summary,
 }: {
-    summary: ConsumptionSummaryModel
+    summary: ConsumptionSummaryModel;
 }) {
     return (
-        <div className="flex flex-wrap items-center justify-center gap-2.5">
+        <div className="flex flex-wrap items-center justify-center gap-2">
             <SummaryBadge>
-                <ListChecks className="size-4" />
-                <strong className="font-semibold">
+                <ListChecks className="size-4 text-blue-600" />
+                <strong className="font-semibold text-slate-900">
                     {summary.total}
                 </strong>
                 <span>
@@ -25,14 +25,16 @@ export function ConsumptionSummary({
             </SummaryBadge>
 
             <SummaryBadge>
-                <Star className="size-4" />
-                <strong className="font-semibold">{summary.avg.toFixed(1)}</strong>
+                <Star className="size-4 text-amber-500" />
+                <strong className="font-semibold text-slate-900">
+                    {summary.avg.toFixed(1)}
+                </strong>
                 <span>estrelas</span>
             </SummaryBadge>
 
             <SummaryBadge>
-                <Wallet className="size-4" />
-                <strong className="font-semibold">
+                <Wallet className="size-4 text-blue-600" />
+                <strong className="font-semibold text-slate-900">
                     {summary.totalSpent.toLocaleString("pt-BR", {
                         style: "currency",
                         currency: "BRL",
@@ -43,8 +45,8 @@ export function ConsumptionSummary({
 
             {summary.buyAgainPct !== null && (
                 <SummaryBadge>
-                    <ThumbsUp className="size-4" />
-                    <strong className="font-semibold">
+                    <ThumbsUp className="size-4 text-emerald-600" />
+                    <strong className="font-semibold text-slate-900">
                         {summary.buyAgainPct}%
                     </strong>
                     <span>compraria novamente</span>
@@ -62,12 +64,16 @@ function SummaryBadge({
     return (
         <div
             className="
-        inline-flex items-center gap-1.5
-        rounded-full
-        border-b border-foreground-200
-        bg-offWhite h-11
-        px-3 py-1.5 shadow-sm
-        text-sm text-blue-800
+        inline-flex h-10 items-center gap-2
+        rounded-xl
+        border border-blue-100
+        bg-white/75
+        px-3.5
+        text-sm text-slate-600
+        shadow-sm
+        transition-colors
+        hover:border-blue-200
+        hover:bg-white
       "
         >
             {children}

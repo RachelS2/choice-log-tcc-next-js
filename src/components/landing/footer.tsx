@@ -3,34 +3,31 @@ import Link from 'next/link';
 
 const columns = [
   {
-    title: 'Produto',
+    title: "Produto",
     links: [
-      { label: 'Funcionalidades', href: '/experiences' },
-      { label: 'Preços', href: '#' },
-      { label: 'Demonstração', href: '/experiences' },
+      { label: "Funcionalidades", href: "/#funcionalidades" },
+      { label: "Como funciona", href: "/#como-funciona" },
     ],
   },
   {
-    title: 'Empresa',
+    title: "ChoiceLog",
     links: [
-      { label: 'Sobre', href: '#' },
-      { label: 'Blog', href: '#' },
-      { label: 'Contato', href: '#' },
+      { label: "Sobre", href: "/about" },
+      { label: "Contato", href: "/contact" },
     ],
   },
   {
-    title: 'Recursos',
+    title: "Recursos",
     links: [
-      { label: 'Ajuda', href: '#' },
-      { label: 'Guia de uso', href: '#' },
-      { label: 'Privacidade', href: '#' },
+      { label: "Ajuda", href: "/help" },
+      { label: "Privacidade", href: "/privacy" },
     ],
   },
 ];
 
 export default function Footer() {
   return (
-    <footer className="border-t border-neutral-200 ">
+    <footer className="bg-offWhite border-t border-neutral-200 ">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-4">
           <div>

@@ -4,9 +4,9 @@ const steps = [
   {
     number: '01',
     icon: ShoppingBag,
-    title: 'Registre uma compra',
+    title: 'Registre um item',
     description:
-      'Adicione um produto ou serviço, sua marca, o valor pago e o contexto que levou à decisão de compra.',
+      'Adicione o nome e marca do produto ou serviço.',
   },
   {
     number: '02',
@@ -26,7 +26,7 @@ const steps = [
 
 export default function HowItWorksSection() {
   return (
-    <section className="border-t border-neutral-200  py-20 sm:py-24">
+    <section id="como-funciona" className="border-t border-neutral-200  py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-blue-500 bg-clip-text text-transparent sm:text-4xl">
@@ -41,7 +41,7 @@ export default function HowItWorksSection() {
           {steps.map(({ number, icon: Icon, title, description }) => (
             <div
               key={number}
-              className="relative rounded-xl border border-neutral-200 bg-white p-6 transition-all hover:shadow-md"
+              className="relative rounded-xl border border-neutral-200 bg-white p-6 transition-all shadow-blue-600 hover:shadow-lg hover:shadow-blue-700"
             >
               <div className="flex items-start justify-between">
                 <span className="text-3xl font-semibold tracking-tight text-blue-600">

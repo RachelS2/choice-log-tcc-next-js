@@ -58,8 +58,8 @@ export default async function DashboardPage() {
     : null;
 
   return (
-    <div className="flex min-h-screen flex-col p-11">
-      <div className="flex flex-1 flex-col">
+    <div className="p-11">
+      <div className="relative z-10 space-y-6">
 
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -105,13 +105,18 @@ export default async function DashboardPage() {
                 <MostConsumedCategoryMetricCard data={mostConsumedCategory} />
               )}
             </div>
+            <div className="mt-6 border-b border-border" />
 
-            {satisfactionOverTime && productCount && serviceCount &&
-              (<ChartSection
-                satisfactionData={satisfactionOverTime}
-                productCount={productCount}
-                serviceCount={serviceCount}
-              />)}
+            {satisfactionOverTime &&
+              productCount !== null &&
+              serviceCount !== null && (
+                <ChartSection
+                  satisfactionData={satisfactionOverTime}
+                  productCount={productCount}
+                  serviceCount={serviceCount}
+                />
+              )}
+            <div className="mt-6 border-b border-border" />
 
             <RecentExperiences />
           </>

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { ResponsiveContainer, CartesianGrid, XAxis, YAxis, Line, Tooltip, LineChart, Pie, PieChart, Cell } from 'recharts';
 import { Card, CardContent } from '../ui/card';
 import { GRAPHS_COLORS } from '@/lib/utils';
-import DecorativeBackground from '../ui/choicelog-decorative-background';
+import { ChevronRight } from 'lucide-react';
 
 interface ChartSectionProps {
   satisfactionData: SatisfactionOverTimeModel[];
@@ -31,9 +31,11 @@ export default function ChartSection({
       <div className="flex justify-end">
         <Link
           href="/dashboard/analytics"
-          className="text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
+          className="flex items-center text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
         >
-          Ver análise completa →
+          Ver análise completa
+          <ChevronRight className="size-4" />
+
         </Link>
       </div>
     </section>
@@ -48,7 +50,7 @@ export function SatisfactionEvolutionGraph({
   data,
 }: SatisfactionEvolutionGraphProps) {
   return (
-    <Card className="rounded-2xl border border-slate-200/70 bg-blue-50 py-0 shadow-sm">
+    <Card className="rounded-2xl  bg-blue-100 py-0 shadow-md">
       <CardContent className="p-6">
         <div className="mb-5">
           <h2 className="text-base font-semibold text-slate-900">
@@ -175,7 +177,7 @@ export function ExperienceDistributionGraph({
   ];
 
   return (
-    <Card className="rounded-2xl border border-slate-200/70 bg-blue-50 py-0 shadow-sm">
+    <Card className="rounded-2xl bg-blue-100 py-0 shadow-md">
       <CardContent className="p-6">
         <div className="mb-3">
           <h2 className="text-base font-semibold text-slate-900">

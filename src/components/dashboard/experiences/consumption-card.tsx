@@ -41,12 +41,14 @@ export function ConsumptionCard({
                 aria-label={`Ver detalhes de ${item.friendlyName}`}
                 className="
       group flex min-h-[200px] w-full flex-col
-      rounded-2xl border border-border bg-card
+      overflow-hidden
+      rounded-2xl border border-neutral-200 bg-white
       p-4 text-left shadow-md
-      transition-all duration-200 cursor-pointer
-      hover:-translate-y-0.5 hover:border-blue-900
+      transition-all duration-200 ease-out
+      cursor-pointer
+      hover:-translate-y-1 hover:shadow-blue-900
+      hover:shadow-lg  hover:shadow-blue-100/0
       focus-visible:ring-2 focus-visible:ring-ring/50
-      focus-visible:outline-none
       sm:p-5
     "
                 style={{ boxShadow: "var(--shadow-card)" }}

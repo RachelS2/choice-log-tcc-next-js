@@ -86,7 +86,7 @@ export default function HeroDashboardSection() {
                   <p className="text-sm text-neutral-500">SoundCo · R$ 499,90</p>
                 </div>
                 <span className="rounded-full bg-blue-50 px-2.5 py-1 text-sm font-medium text-blue-700">
-                  Excellent
+                  Excelente!
                 </span>
               </div>
 

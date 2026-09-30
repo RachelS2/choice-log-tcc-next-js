@@ -41,9 +41,9 @@ const data = [
 
 export default function RecentExperiences() {
   return (
-    <Card className="rounded-2xl py-0">
+    <Card className="w-full rounded-2xl">
       {/* Header */}
-      <CardHeader className="flex flex-row items-center justify-between px-6 pt-6 pb-4">
+      <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <CardTitle className="text-base font-semibold text-slate-900">
             Experiências recentes
@@ -54,16 +54,10 @@ export default function RecentExperiences() {
           </p>
         </div>
 
-        <Link
-          href="/dashboard/experiences"
-          className="flex items-center gap-1 text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
-        >
-          Ver histórico
-          <ChevronRight className="size-4" />
-        </Link>
+
       </CardHeader>
 
-      <CardContent className="px-6 pb-6">
+      <CardContent className="w-full">
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white/60">
           {/* Table header */}
           <div className="grid grid-cols-[minmax(220px,2fr)_1fr_110px_120px_140px_110px] items-center gap-4 border-b border-slate-200 bg-white/50 px-4 py-3">
@@ -132,7 +126,7 @@ export default function RecentExperiences() {
               </p>
 
               {/* Rating */}
-              <RatingStars value={item.rating} size="sm" />
+              <RatingStars value={item.rating} size="xsm" />
 
               {/* Would buy again */}
               <div>
@@ -150,6 +144,15 @@ export default function RecentExperiences() {
           ))}
         </div>
       </CardContent>
+      <div className="flex justify-end">
+        <Link
+          href="/dashboard/experiences"
+          className="flex items-center text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
+        >
+          Ver histórico
+          <ChevronRight className="size-4" />
+        </Link>
+      </div>
     </Card>
   );
 }

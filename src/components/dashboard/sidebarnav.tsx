@@ -30,7 +30,7 @@ export function SidebarNav() {
       {buildMenuOption(pathname, "/dashboard/analytics", "Análises", BarChart3)}
 
       {/* Wish List */}
-      {buildMenuOption(pathname, "/dashboard/wishlist", "Lista de Desejos", ShoppingCart)}
+      {/* {buildMenuOption(pathname, "/dashboard/wishlist", "Lista de Desejos", ShoppingCart)} */}
 
       {/* Settings */}
       {buildMenuOption(pathname, "/dashboard/settings", "Configurações", Settings)}

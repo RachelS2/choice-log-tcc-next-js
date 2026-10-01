@@ -1,3 +1,4 @@
+
 generator client {
   provider        = "prisma-client-js"
   output          = "../generated/prisma"
@@ -38,12 +39,12 @@ model ItemType {
 }
 
 model Category {
-  id            String         @id @default(cuid())
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @default(now()) @updatedAt
-  typeId        Int
-  name          String         @db.VarChar(30)
-  description   String?        @db.VarChar(200)
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  typeId      Int
+  name        String   @db.VarChar(30)
+  description String?  @db.VarChar(200)
 
   type          ItemType       @relation(fields: [typeId], references: [id])
   goals         Goal[]
@@ -194,11 +195,12 @@ model Account {
   password              String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
-  issuer                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([issuer, accountId], map: "account_issuer_accountId_uidx")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
   @@index([userId])
+  @@map("account")
 }
 
 model Session {
@@ -211,23 +213,30 @@ model Session {
   userAgent String?
   userId    String
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
 }
 
 model User {
-  id            String        @id
+  id            String      @id
   name          String?
-  email         String        @unique
+  email         String      @unique
   image         String?
-  createdAt     DateTime      @default(now())
+  createdAt     DateTime    @default(now())
   updatedAt     DateTime
-  emailVerified Boolean       @default(false)
-  incomeRange   IncomeRange   @default(PREFER_NOT_TO_SAY)
-  Account       Account[]
+  emailVerified Boolean     @default(false)
+  incomeRange   IncomeRange @default(PREFER_NOT_TO_SAY)
+
+  accounts      Account[]
+  sessions      Session[]
+
   consumptions  Consumption[]
   goals         Goal[]
   items         Item[]
-  Session       Session[]
   wishList      WishList?
+
+  @@map("user")
 }
 
 model Verification {
@@ -237,6 +246,9 @@ model Verification {
   expiresAt  DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime
+
+  @@index([identifier])
+  @@map("verification")
 }
 
 enum WishListItemPriority {

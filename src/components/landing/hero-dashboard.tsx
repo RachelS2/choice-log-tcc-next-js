@@ -74,7 +74,7 @@ export default function HeroDashboardSection() {
               aria-hidden="true"
               className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-blue-500/20 via-blue-400/10 to-transparent blur-3xl"
             />
-            <div className="relative rounded-2xl border border-neutral-200 bg-white p-6 shadow-xl shadow-neutral-200/60">
+            <div className="relative rounded-2xl border border-neutral-200 bg-white p-6  shadow-lg transition-all hover:-translate-y-0.5 shadow-blue-600 hover:shadow-blue-700">
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">

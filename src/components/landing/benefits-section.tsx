@@ -39,7 +39,7 @@ export default function BenefitsSection() {
           {benefits.map(({ icon: Icon, title, description }) => (
             <Card
               key={title}
-              className="rounded-xl border-neutral-200 bg-white shadow-md transition-all hover:-translate-y-0.5 shadow-blue-600 hover:shadow-lg hover:shadow-blue-700"
+              className="rounded-xl border-neutral-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 shadow-blue-600 hover:shadow-lg hover:shadow-blue-700"
             >
               <CardContent className="p-6">
                 <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">

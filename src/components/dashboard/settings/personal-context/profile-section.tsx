@@ -41,7 +41,7 @@ export default function ProfileSection({ isEditing, errors, register, userData, 
 
     return (
 
-        <Card className="bg-white backdrop-blur-md border shadow-lg">
+        <Card className="bg-white py-4 backdrop-blur-md border shadow-lg">
 
             {/* Header */}
             <CardHeader>
@@ -49,12 +49,12 @@ export default function ProfileSection({ isEditing, errors, register, userData, 
                     Informações Pessoais
                 </CardTitle>
                 <CardDescription className="text-sm text-neutral-500">
-                    Atualize sua foto de perfil e seus dados pessoais.
+                    Atualize seus dados pessoais.
                 </CardDescription>
             </CardHeader>
 
             {/* Content */}
-            <CardContent className="flex flex-col gap-6 sm:flex-row sm:items-start">
+            <CardContent className="flex flex-col px-4  gap-6 sm:flex-row sm:items-start">
 
                 {/* Avatar */}
                 <div className="flex flex-col items-center gap-3">

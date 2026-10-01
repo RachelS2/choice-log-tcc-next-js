@@ -67,7 +67,7 @@ function SummaryBadge({
         inline-flex h-10 items-center gap-2
         rounded-xl
         border border-blue-100
-        bg-white/75
+        bg-blue-100
         px-3.5
         text-sm text-slate-600
         shadow-sm

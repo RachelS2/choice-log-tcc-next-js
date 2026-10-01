@@ -39,7 +39,7 @@ export default function SecuritySection() {
         }
     };
     return (
-        <Card className="bg-white backdrop-blur-md shadow-lg">
+        <Card className="bg-white backdrop-blur-md py-4 shadow-lg">
             <CardHeader>
                 <CardTitle className="text-lg text-neutral-950">
                     Segurança
@@ -50,7 +50,7 @@ export default function SecuritySection() {
                 </CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-5">
+            <CardContent className="px-4 space-y-5">
 
                 {/* Password section */}
                 <div className="space-y-4">

@@ -14,6 +14,7 @@ interface AuthCardProps {
   children?: ReactNode;
   footer?: ReactNode;
   iconClassName?: string;
+  mainDivClassName?: string;
 }
 
 export function NotificationContent({
@@ -22,24 +23,17 @@ export function NotificationContent({
   description,
   children,
   footer,
-  iconClassName
+  iconClassName,
+  mainDivClassName
 }: AuthCardProps) {
   return (
     <div
       className="flex w-full flex-col items-center justify-center px-4"
     >
       <Card
-        className="
-          w-full max-w-md
-          rounded-2xl
-          bg-blue-100
-          shadow-lg
-          transition-all duration-300
-          hover:-translate-y-0.5
-          hover:shadow-blue-500
-          animate-in fade-in slide-in-from-bottom-2
-          sm:p-10
-        "
+        className={cn("w-full max-w-md rounded-2xl bg-blue-100 shadow-lg transition-all",
+           "duration-300 hover:-translate-y-0.5 hover:shadow-blue-500 animate-in fade-in",
+           "slide-in-from-bottom-2 sm:p-10", mainDivClassName)}
         style={{ boxShadow: "var(--shadow-card)" }}
       >
         <DecorativeBackground />

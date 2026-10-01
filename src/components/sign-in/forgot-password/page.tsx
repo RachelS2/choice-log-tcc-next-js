@@ -34,55 +34,74 @@ export function ForgotPasswordPage() {
     };
 
     return (
-        sent ? (
-            <NotificationContent
-                icon={MailCheck}
-                title="Verifique sua caixa de entrada"
-                description={
-                    <>
-                        Enviamos um link de redefinição de senha para
-                        <span className="font-medium"> {email || "seu e-mail"}</span>
-                        . O link expira em 30 minutos.
-                    </>
-                }
-                footer="Não recebeu? Verifique sua pasta de spam."
-            >
-                <Button
-
-                    className="h-11 w-full"
-                    onClick={() => setSent(false)}
+        <div className="flex min-h-screen items-center justify-center px-4 py-8">
+            {sent ? (
+                <NotificationContent
+                    icon={MailCheck}
+                    title="Verifique sua caixa de entrada"
+                    mainDivClassName="bg-card"
+                    iconClassName="bg-blue-700"
+                    description={
+                        <>
+                            Enviamos um link de redefinição de senha para
+                            <span className="font-medium">
+                                {" "}{email || "seu e-mail"}
+                            </span>
+                            . O link expira em 30 minutos.
+                        </>
+                    }
+                    footer="Não recebeu? Verifique sua pasta de spam."
                 >
-                    Reenviar e-mail
-                </Button>
-                {backToLoginButton()}
-            </NotificationContent>
-        ) : (
-            <NotificationContent
-                icon={Mail}
-                title="Esqueceu sua senha?"
-                description="Digite seu e-mail e enviaremos um link seguro para redefinir sua senha."
-            >
-                <form onSubmit={handleSubmit} className="space-y-5">
-                    <div className="space-y-2">
-                        <Label htmlFor="email" className="text-lg">E-mail</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            required
-                            autoComplete="email"
-                            placeholder="voce@gmail.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="text-xl"
-                        />
-                    </div>
-                    <Button type="submit" className="h-11 w-full" disabled={loading}>
-                        {loading ? "Enviando..." : "Enviar link de redefinição"}
+                    <Button
+                        className="h-11 w-full"
+                        onClick={() => setSent(false)}
+                    >
+                        Reenviar e-mail
                     </Button>
-                </form>
-                {backToLoginButton()}
-            </NotificationContent>
-        )
+
+                    {backToLoginButton()}
+                </NotificationContent>
+            ) : (
+                <NotificationContent
+                    icon={Mail}
+                    title="Esqueceu sua senha?"
+                    mainDivClassName="bg-card"
+                    iconClassName="bg-blue-700"
+                    description="Digite seu e-mail e enviaremos um link seguro para redefinir sua senha."
+                >
+                    <form onSubmit={handleSubmit} className="w-full space-y-5">
+                        <div className="w-full space-y-2">
+                            <Label htmlFor="email" className="text-lg">
+                                E-mail
+                            </Label>
+
+                            <Input
+                                id="email"
+                                type="email"
+                                required
+                                autoComplete="email"
+                                placeholder="voce@gmail.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="text-xl"
+                            />
+                        </div>
+
+                        <Button
+                            type="submit"
+                            className="h-11 w-full"
+                            disabled={loading}
+                        >
+                            {loading
+                                ? "Enviando..."
+                                : "Enviar link de redefinição"}
+                        </Button>
+                    </form>
+
+                    {backToLoginButton()}
+                </NotificationContent>
+            )}
+        </div>
     );
 }
 

@@ -64,18 +64,23 @@ export default function LoginForm() {
                 },
                 onError: (ctx) => {
 
-                    if (ctx.error.status === 401) {
-                        toast.warning("Credenciais inválidas.", { description: "Verifique seu e-mail e senha e tente novamente." })
+                    if (ctx.error.status === 403) {
+                        setUserEmail(loginData.email);
+                        setEmailVerified(false);
+
+                        toast.warning("E-mail não verificado.", {
+                            description: "Verifique seu e-mail antes de entrar.",
+                        });
+
+                        return;
                     }
-                    else {
-                        if (ctx.error.message == 'Email not verified') {
-                            setUserEmail(loginData.email);
-                            toast.error("E-mail não verificado.", { description: "Verifique seu e-mail antes de entrar." });
-                            setEmailVerified(false);
-                        }
-                        else {
-                            toast.error("Ocorreu um erro durante o login.", { description: ctx.error.message })
-                        }
+
+                    if (ctx.error.status === 401) {
+                        toast.warning("Credenciais inválidas.", {
+                            description: "Verifique seu e-mail e senha e tente novamente.",
+                        });
+
+                        return;
                     }
                 }
             });
@@ -89,12 +94,12 @@ export default function LoginForm() {
     // rememberMe falso = sessão acaba ao fechar navegador, true = sessão persiste por 7 dias ou até o usuário deslogar manualmente
     return (
         <form onSubmit={handleSubmit(handleOnSubmit)} className="flex flex-col items-start w-full max-w-md min-h-[calc(100vh-96px)] justify-center p-10">
-            <Card className='w-full max-w-md rounded-3xl bg-card shadow-xl border-neutral-200'>
+            <Card className='w-full py-4 max-w-md rounded-3xl bg-card shadow-xl border-neutral-200'>
                 <CardHeader className=' text-center'>
                     <CardTitle className='text-3xl'>Entrar</CardTitle>
                     <CardDescription className='text-xl'>Acesse sua conta</CardDescription>
                 </CardHeader>
-                <CardContent className='space-y-2'>
+                <CardContent className=' px-4 space-y-2'>
 
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">

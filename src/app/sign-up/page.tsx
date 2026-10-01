@@ -1,14 +1,20 @@
 'use client'
 
-import MotivationPage from "@/components/sign-up/motivation_unused";
 import SignUpForm from "@/components/sign-up/page";
-import Footer from "@/components/landing/footer";
-import LandingHeaderClient from "@/components/landing/landing-header-client";
 export default function SignUpPage() {
   return (
     <>
-      <main className="min-h-screen to-slate-900">
-        <div className="mx-auto flex min-h-screen  max-w-5xl items-center justify-center px-6">
+      <main className="min-h-[calc(100vh-4rem)]">
+        <div className="
+        mx-auto
+        flex
+        min-h-[calc(100vh-4rem)]
+        max-w-5xl
+        items-center
+        justify-center
+        px-6
+        py-8
+      ">
           <SignUpForm />
         </div>
       </main>

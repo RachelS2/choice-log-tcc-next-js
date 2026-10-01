@@ -33,7 +33,7 @@ export default function PersonalContextSection({
     isEditing, setValue, watch
 }: PersonalContextSectionProps) {
     return (
-        <Card className="bg-white backdrop-blur-md border shadow-lg">
+        <Card className="bg-white backdrop-blur-md border py-4 shadow-lg">
 
             {/* Header */}
             <CardHeader>
@@ -46,7 +46,7 @@ export default function PersonalContextSection({
             </CardHeader>
 
             {/* Content */}
-            <CardContent className="space-y-5">
+            <CardContent className="px-4 space-y-5">
 
                 {/* Income */}
                 <div className="space-y-2 w-full">

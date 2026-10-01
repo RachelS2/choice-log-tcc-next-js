@@ -121,8 +121,8 @@ export default function SignUpForm() {
     }
     return (
         !emailSent ? (
-            <form onSubmit={handleSubmit(handleOnSubmit)} className="w-full max-w-2xl">
-                <Card className="w-full min-w-[30rem] rounded-3xl border border-white/10 bg-white shadow-2xl">
+            <form onSubmit={handleSubmit(handleOnSubmit)} className="w-full pt-8 min-w-[28rem]  flex items-center justify-center max-w-2xl">
+                <Card className="py-4 w-full rounded-3xl border border-white/10 bg-white shadow-2xl">
                     <CardHeader className="space-y-1 text-center">
                         <CardTitle className="text-3xl">
                             Cadastre-se
@@ -133,7 +133,7 @@ export default function SignUpForm() {
                         </CardDescription>
                     </CardHeader>
 
-                    <CardContent className="space-y-5 w-full">
+                    <CardContent className="px-4 space-y-5 w-full">
                         {/* <div className="grid gap-5"> */}
 
                         {createLabelsAndInputs("username", "Seu nome de usuário", User, errors.username, register)}

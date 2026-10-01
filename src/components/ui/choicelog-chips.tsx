@@ -29,12 +29,12 @@ export function SelectableChip({
             onClick={onClick}
             className={cn(
                 "rounded-full border cursor-pointer px-4 py-2 text-sm transition-all duration-100 shadow-sm",
-                "hover:-translate-y-0.5",
+                "hover:-translate-y-0.5 hover:bg-blue-900 hover:text-white",
                 "focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none",
 
                 selected
                     ? cn(
-                        "bg-blue-900 border-blue-800 text-white font-semibold shadow-sm",
+                        "bg-blue-900 hover:bg-blue-800 text-white font-semibold shadow-sm",
                         selectedClassName
                     )
                     : cn(

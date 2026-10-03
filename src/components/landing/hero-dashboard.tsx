@@ -51,7 +51,7 @@ export default function HeroDashboardSection() {
                 asChild
                 variant="ghost"
                 size="lg"
-                className="bg-blue-600 text-white text-base hover:bg-blue-700 hover:text-white"
+                className="bg-blue-600 text-white text-base shadow-md hover:bg-blue-700 hover:text-white"
               >
                 <Link href="/sign-up">
                   Começar agora
@@ -63,7 +63,7 @@ export default function HeroDashboardSection() {
                 variant="outline"
                 size="lg"
                 className="border-neutral-300 text-base bg-white text-neutral-950 hover:bg-neutral-100 hover:text-neutral-700 transition-colors">
-                <Link href="/experiences">Saiba mais</Link>
+                <Link href="/about">Saiba mais</Link>
               </Button>
             </div>
           </div>

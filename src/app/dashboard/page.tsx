@@ -118,7 +118,7 @@ export default async function DashboardPage() {
               )}
             <div className="mt-6 border-b border-border" />
 
-            <RecentExperiences />
+            <RecentExperiences consumptions={consumptions.slice(0,3)} />
           </>
         )}
       </div>

@@ -179,11 +179,10 @@ export function RatingStars({
             className="
             pointer-events-none
             absolute left-1/2 top-full z-50
-            -translate-x-1/2
             whitespace-nowrap
             rounded-md
             bg-black
-            px-2.5 py-1.5
+            py-1.5
             text-xs font-medium text-white
         "
           >

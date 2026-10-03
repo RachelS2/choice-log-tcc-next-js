@@ -8,129 +8,104 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ReadConsumptionModel } from "@/models/dashboard/consumption";
+import { PageHeader } from "../ui/choicelog-pages-title";
 
-const data = [
-  {
-    id: 1,
-    title: "Marketing Course",
-    category: "Educação",
-    rating: 4,
-    price: 120,
-    wouldBuyAgain: true,
-    date: "20/04/2026",
-  },
-  {
-    id: 2,
-    title: "Netflix Annual Subscription",
-    category: "Streaming",
-    rating: 5,
-    price: 239.9,
-    wouldBuyAgain: true,
-    date: "18/05/2026",
-  },
-  {
-    id: 3,
-    title: "Tênis esportivo",
-    category: "Vestuário",
-    rating: 2,
-    price: 349.9,
-    wouldBuyAgain: false,
-    date: "10/06/2026",
-  },
-];
-
-export default function RecentExperiences() {
+export default function RecentExperiences({ consumptions }: { consumptions: ReadConsumptionModel[] }) {
   return (
     <Card className="w-full rounded-2xl">
       {/* Header */}
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <CardTitle className="text-base font-semibold text-slate-900">
-            Experiências recentes
+            <PageHeader lineBefore header="Experiências recentes" textClassName="text-sm" />
           </CardTitle>
 
-          <p className="mt-1 text-sm font-normal text-muted-foreground">
+          {/* <p className="mt-1 text-sm font-normal text-muted-foreground">
             Seus últimos registros de consumo.
-          </p>
+          </p> */}
         </div>
 
 
       </CardHeader>
 
       <CardContent className="w-full">
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white/60">
+        <div className="overflow-hidden rounded-xl border border-slate-200 bg-blue-600">
           {/* Table header */}
-          <div className="grid grid-cols-[minmax(220px,2fr)_1fr_110px_120px_140px_110px] items-center gap-4 border-b border-slate-200 bg-white/50 px-4 py-3">
-            <span className="text-xs font-medium text-muted-foreground">
+          <div className="grid grid-cols-[minmax(220px,2fr)_1fr_110px_120px_140px_110px] items-center gap-4 border-b border-slate-200 px-4 py-3">
+            <span className="text-sm font-medium text-white/90">
               Item
             </span>
 
-            <span className="text-xs font-medium text-muted-foreground">
+            <span className="text-sm font-medium text-white/90">
               Categoria
             </span>
 
-            <span className="text-xs font-medium text-muted-foreground">
+            <span className="text-sm font-medium text-white/90">
               Data
             </span>
 
-            <span className="text-xs font-medium text-muted-foreground">
+            <span className="text-sm font-medium text-white/90">
               Valor
             </span>
 
-            <span className="text-xs font-medium text-muted-foreground">
+            <span className="text-sm font-medium text-white/90">
               Avaliação
             </span>
 
-            <span className="text-xs font-medium text-muted-foreground">
+            <span className="text-sm font-medium text-white/90">
               Recompraria
             </span>
           </div>
 
           {/* Rows */}
-          {data.map((item) => (
-            <Link
-              key={item.id}
-              href={`/dashboard/experiences/${item.id}`}
+          {consumptions.map((consumption) => (
+            <div
+              key={consumption.id}
+              // href={`/dashboard/experiences/${consumption.id}`}
               className="
                 grid
                 grid-cols-[minmax(220px,2fr)_1fr_110px_120px_140px_110px]
                 items-center gap-4
                 border-b border-slate-200
                 px-4 py-3
+                bg-blue-500
                 transition-colors
                 last:border-b-0
-                hover:bg-blue-50
               "
             >
               {/* Item */}
-              <p className="truncate text-sm font-medium text-slate-900">
-                {item.title}
+              <p className="truncate text-sm font-medium text-white">
+                {consumption.item.friendlyName}
               </p>
 
               {/* Category */}
-              <p className="truncate text-sm text-slate-600">
-                {item.category}
+              <p className="truncate text-sm text-white/90">
+                {consumption.item.categoryName}
               </p>
 
               {/* Date */}
-              <p className="text-sm text-slate-600">
-                {item.date}
+              <p className="text-sm text-white/90">
+                {consumption.date.toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                })}
               </p>
 
               {/* Price */}
-              <p className="text-sm font-medium text-slate-700">
-                {item.price.toLocaleString("pt-BR", {
+              <p className="text-sm font-medium text-white/90">
+                {consumption.price.toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 })}
               </p>
 
               {/* Rating */}
-              <RatingStars value={item.rating} size="xsm" />
+              <RatingStars value={consumption.rating} size="xsm" />
 
               {/* Would buy again */}
               <div>
-                {item.wouldBuyAgain ? (
+                {consumption.wouldBuyAgain ? (
                   <span className="inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">
                     Sim
                   </span>
@@ -140,7 +115,7 @@ export default function RecentExperiences() {
                   </span>
                 )}
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </CardContent>

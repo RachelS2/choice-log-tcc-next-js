@@ -7,7 +7,7 @@ export const userNameSchema: z.ZodString = z
   .max(15, "Nome de usuário deve ter no máximo 15 caracteres.")
   .regex(
     /^[a-zA-Z0-9_ ]+$/,
-    "Nome de usuário must contain only letters, white spaces, numbers and underscores."
+    "Nome de usuário deve conter apenas letras, espaços, números e underscores."
   );
 
 export const passwordSchema: z.ZodString = z

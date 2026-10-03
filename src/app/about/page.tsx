@@ -13,23 +13,23 @@ export default function AboutPage() {
         <main className="min-h-screen">
             <section className="mx-auto max-w-5xl px-6 py-20">
                 <div className="mx-auto max-w-3xl pt-10 text-center">
-                    <span className="text-sm font-medium text-blue-700">
+                    <span className="text-sm font-medium font-semibold tracking-tight  text-slate-500">
                         SOBRE O CHOICELOG
                     </span>
 
-                    <h1 className="mt-3 text-4xl font-bold tracking-tight text-slate-950">
+                    <h1 className="mt-3 text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-800 to-blue-500 text-transparent bg-clip-text">
                         Um projeto acadêmico sobre decisões de consumo
                     </h1>
 
                     <p className="mt-5 text-lg leading-relaxed text-slate-600">
                         O ChoiceLog foi desenvolvido em 2026 como Trabalho de Conclusão
-                        de Curso de Rachel Barino Silva, sob orientação da professora
-                        Rebeca Motta.
+                        de Curso de <strong>Rachel Barino Silva</strong>, sob orientação da professora
+                        <strong> Rebeca Motta</strong>.
                     </p>
 
-                    <p className="mt-3 text-base leading-relaxed text-slate-500">
-                        A plataforma foi criada para apoiar o registro e a análise de
-                        experiências pessoais de consumo, incentivando a reflexão sobre
+                    <p className="mt-3 text-lg leading-relaxed text-slate-600">
+                        A plataforma foi criada para apoiar o <strong>registro e a análise</strong> de
+                        experiências <strong>pessoais</strong> de consumo, incentivando a reflexão sobre
                         escolhas e a identificação de padrões ao longo do tempo.
                     </p>
                 </div>

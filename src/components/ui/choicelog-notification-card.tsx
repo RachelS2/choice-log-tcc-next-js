@@ -50,7 +50,7 @@ export function NotificationContent({
           </p>
         </div>
         {children && (
-          <div className="space-y-1 flex flex-col items-center justify-center">{children}</div>
+          <div className="flex flex-col items-center justify-center">{children}</div>
         )}
         {footer ? (
           <div className="mt-6 text-center text-xs text-muted-foreground">

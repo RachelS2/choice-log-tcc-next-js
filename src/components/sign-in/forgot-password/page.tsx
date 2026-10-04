@@ -107,7 +107,7 @@ export function ForgotPasswordPage() {
 
 function backToLoginButton() {
     return (
-        <Button asChild variant="ghost" className="h-11 w-full hover:text-blue-500">
+        <Button asChild variant="ghost" className="h-11 w-full  mt-4 hover:text-blue-500">
             <Link href="/sign-in">
                 <ArrowLeft className="size-4" />
                 Voltar ao login

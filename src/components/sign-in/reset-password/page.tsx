@@ -77,7 +77,7 @@ export function ResetPasswordForm() {
         }
     };
     return (
-        <Card className="bg-white p-8 shadow-sm rounded-xl">
+        <Card className="bg-white p-8 min-w-0 lg:min-w-[420px] shadow-sm rounded-xl">
             <CardHeader className=' text-center'>
                 <CardTitle className='text-2xl'>Redefinir senha</CardTitle>
                 <CardDescription className='text-sm'>Defina uma nova senha para sua conta do ChoiceLog</CardDescription>

@@ -10,8 +10,11 @@ import {
 } from "@/components/ui/card";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { PageHeader } from "../ui/choicelog-pages-title";
+import { cn } from "@/lib/utils";
 
 export default function RecentExperiences({ consumptions }: { consumptions: ReadConsumptionModel[] }) {
+  const gridColumns: string =
+    "grid-cols-[2fr_1.1fr_0.7fr_0.9fr_1fr_0.8fr]";
   return (
     <Card className="w-full rounded-2xl">
       {/* Header */}
@@ -32,7 +35,12 @@ export default function RecentExperiences({ consumptions }: { consumptions: Read
       <CardContent className="w-full">
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-blue-600">
           {/* Table header */}
-          <div className="grid grid-cols-[minmax(220px,2fr)_1fr_110px_120px_140px_110px] items-center gap-4 border-b border-slate-200 px-4 py-3">
+          <div
+            className={cn(
+              "grid items-center gap-4 border-b border-blue-400/50 px-4 py-3",
+              gridColumns
+            )}
+          >
             <span className="text-sm font-medium text-white/90">
               Item
             </span>
@@ -49,9 +57,11 @@ export default function RecentExperiences({ consumptions }: { consumptions: Read
               Valor
             </span>
 
-            <span className="text-sm font-medium text-white/90">
-              Avaliação
-            </span>
+            <div className="flex justify-start">
+              <span className="text-sm font-medium text-white/90">
+                Avaliação
+              </span>
+            </div>
 
             <span className="text-sm font-medium text-white/90">
               Recompraria
@@ -62,29 +72,21 @@ export default function RecentExperiences({ consumptions }: { consumptions: Read
           {consumptions.map((consumption) => (
             <div
               key={consumption.id}
-              // href={`/dashboard/experiences/${consumption.id}`}
-              className="
-                grid
-                grid-cols-[minmax(220px,2fr)_1fr_110px_120px_140px_110px]
-                items-center gap-4
-                border-b border-slate-200
-                px-4 py-3
-                bg-blue-500
-                transition-colors
-                last:border-b-0
-              "
+              className={cn(
+                "grid items-center gap-4 border-b border-blue-400/50",
+                "bg-blue-500 px-4 py-3",
+                "transition-colors last:border-b-0",
+                gridColumns
+              )}
             >
-              {/* Item */}
               <p className="truncate text-sm font-medium text-white">
                 {consumption.item.friendlyName}
               </p>
 
-              {/* Category */}
               <p className="truncate text-sm text-white/90">
                 {consumption.item.categoryName}
               </p>
 
-              {/* Date */}
               <p className="text-sm text-white/90">
                 {consumption.date.toLocaleDateString("pt-BR", {
                   day: "2-digit",
@@ -92,7 +94,6 @@ export default function RecentExperiences({ consumptions }: { consumptions: Read
                 })}
               </p>
 
-              {/* Price */}
               <p className="text-sm font-medium text-white/90">
                 {consumption.price.toLocaleString("pt-BR", {
                   style: "currency",
@@ -100,10 +101,13 @@ export default function RecentExperiences({ consumptions }: { consumptions: Read
                 })}
               </p>
 
-              {/* Rating */}
-              <RatingStars value={consumption.rating} size="xsm" />
+              <div className="flex justify-start">
+                <RatingStars
+                  value={consumption.rating}
+                  size="xsm"
+                />
+              </div>
 
-              {/* Would buy again */}
               <div>
                 {consumption.wouldBuyAgain ? (
                   <span className="inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">

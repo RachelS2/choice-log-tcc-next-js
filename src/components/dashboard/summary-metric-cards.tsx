@@ -1,61 +1,7 @@
 import { CategoryValue } from "@/models/dashboard/analytics";
 import { ChartNoAxesColumnIncreasing, PackageOpen, RefreshCcw, Star, Trophy } from "lucide-react";
-import { Card, CardContent } from "../ui/card";
-import { cn } from "@/lib/utils";
-
-interface MetricCardProps {
-    icon: React.ReactNode;
-    title: string;
-    value: string | null;
-    description: string;
-    className?: string;
-    iconClassName?: string;
-}
-
-export function MetricCard({
-    icon,
-    title,
-    value,
-    description,
-    className,
-    iconClassName,
-}: MetricCardProps) {
-    return (
-        <Card
-            className={cn(
-                "group py-0 rounded-xl border bg-white shadow-sm",
-                "transition-all duration-200",
-                "hover:-translate-y-0.5 hover:shadow-md",
-                className
-            )}
-        >
-            <CardContent className="flex items-start gap-4 p-5">
-                <div
-                    className={cn(
-                        "mt-1 flex size-11 shrink-0 items-center justify-center rounded-xl",
-                        iconClassName
-                    )}
-                >
-                    {icon}
-                </div>
-
-                <div className="min-w-0 flex-1">
-                    <p className="text-lg font-semibold text-slate-900">
-                        {value}
-                    </p>
-
-                    <p className="mt-0.5 text-sm font-medium text-slate-700">
-                        {title}
-                    </p>
-
-                    <p className="mt-0.5 text-xs text-muted-foreground">
-                        {description}
-                    </p>
-                </div>
-            </CardContent>
-        </Card>
-    );
-}
+import { InsightCard } from "./analytics/analytics-small-components";
+import { RatingStars } from "../ui/rating-starts";
 
 interface AvaliacaoMediaMetricCardProps {
     avg: number | null;
@@ -69,13 +15,29 @@ export function AvaliacaoMediaMetricCard({
     }
 
     return (
-        <MetricCard
+        <InsightCard
             icon={<Star className="size-5 text-blue-600" />}
-            value={avg.toFixed(1).replace(".", ",")}
             title="Avaliação média"
-            description="de 5 estrelas"
-            className="border-blue-200 bg-blue-50/40"
-            iconClassName="bg-blue-100"
+            children={
+
+                <div className="mt-3 flex flex-col items-center">
+                    <div className="flex items-center gap-2 whitespace-nowrap">
+                        <span className="text-3xl font-bold tracking-tight text-slate-900">
+                            {avg.toFixed(1).replace(".", ",")}
+                        </span>
+
+                        <span className="text-sm font-medium text-slate-500">
+                            / 5
+                        </span>
+
+                        <RatingStars value={avg} size="xsm" />
+                    </div>
+
+                    <p className="mt-1 text-xs text-slate-500">
+                        média das experiências
+                    </p>
+                </div>
+            }
         />
     );
 }
@@ -88,13 +50,55 @@ export function BuyAgainMetricCard({
     }
 
     return (
-        <MetricCard
+        <InsightCard
             icon={<RefreshCcw className="size-5 text-emerald-600" />}
-            value={`${avg.toFixed(1).replace(".", ",")}%`}
             title="Taxa de recompra"
-            description="consumiria novamente"
-            className="border-emerald-200 bg-emerald-50/40"
-            iconClassName="bg-emerald-100"
+            children={
+                <div className="mt-3 flex items-center justify-center gap-2">
+                    <div className="w-[120px]">
+                        <p className="text-sm font-medium leading-5 text-slate-700">
+                            Consumiria novamente
+                        </p>
+
+                        <p className="mt-1 text-xs text-slate-500">
+                            das experiências
+                        </p>
+                    </div>
+
+                    <div className="relative size-14 shrink-0">
+                        <svg
+                            viewBox="0 0 36 36"
+                            className="size-full -rotate-90"
+                        >
+                            <circle
+                                cx="18"
+                                cy="18"
+                                r="15"
+                                fill="none"
+                                strokeWidth="3"
+                                className="stroke-emerald-100"
+                            />
+
+                            <circle
+                                cx="18"
+                                cy="18"
+                                r="15"
+                                fill="none"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                                pathLength="100"
+                                strokeDasharray="100"
+                                strokeDashoffset={100 - avg}
+                                className="stroke-emerald-500"
+                            />
+                        </svg>
+
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-slate-900">
+                            {avg.toFixed(0)}%
+                        </span>
+                    </div>
+                </div>
+            }
         />
     );
 }
@@ -105,15 +109,11 @@ export function MostLikedCategoryMetricCard({
     data: CategoryValue;
 }) {
     return (
-        <MetricCard
+        <InsightCard
             icon={<Trophy className="size-5 text-amber-600" />}
-            value={data.category}
             title="Categoria mais satisfatória"
-            description={`avaliação média de ${data.value
-                .toFixed(1)
-                .replace(".", ",")}`}
-            className="border-amber-200 bg-amber-50/40"
-            iconClassName="bg-amber-100"
+            children={<p><strong>{data.category}</strong> é a sua categoria mais satisfatória, com avaliação média de
+                {" "} {data.value.toFixed(1).replace(".", ",")} estrelas.</p>}
         />
     );
 }
@@ -124,15 +124,13 @@ export function MostConsumedCategoryMetricCard({
     data: CategoryValue;
 }) {
     return (
-        <MetricCard
+        <InsightCard
             icon={
                 <ChartNoAxesColumnIncreasing className="size-5 text-violet-600" />
             }
-            value={data.category}
             title="Categoria mais consumida"
-            description={`${data.value} experiências`}
-            className="border-violet-200 bg-violet-50/40"
-            iconClassName="bg-violet-100"
+            children={<p><strong>{data.category}</strong> é sua categoria mais consumida, com {data.value} experiência(s).</p>}
+
         />
     );
 }

@@ -50,7 +50,7 @@ export function SatisfactionEvolutionGraph({
   data,
 }: SatisfactionEvolutionGraphProps) {
   return (
-    <Card className="rounded-2xl  bg-blue-100 py-0 shadow-md">
+    <Card className="rounded-2xl  bg-blue-100 py-0 shadow-md hover:-translate-y-1 hover:bg-blue-300 shadow-blue-700 border-none transition-shadow hover:shadow-lg">
       <CardContent className="p-6">
         <div className="mb-5">
           <h2 className="text-base font-semibold text-slate-900">
@@ -177,7 +177,7 @@ export function ExperienceDistributionGraph({
   ];
 
   return (
-    <Card className="rounded-2xl bg-blue-100 py-0 shadow-md">
+    <Card className="rounded-2xl  bg-blue-100 py-0 shadow-md hover:-translate-y-1 hover:bg-blue-300 shadow-blue-700 border-none transition-shadow hover:shadow-lg">
       <CardContent className="p-6">
         <div className="mb-3">
           <h2 className="text-base font-semibold text-slate-900">

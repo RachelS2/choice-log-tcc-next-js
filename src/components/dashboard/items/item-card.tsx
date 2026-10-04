@@ -192,7 +192,7 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
         onOpenChange={setDeleteModalOpen}
         onConfirm={onDeleteItem}
         dialogTitle="Confirmar Exclusão"
-        dialogDescription="Tem certeza que deseja excluir este item permanentemente?"
+        dialogDescription="Tem certeza que deseja excluir este item e todas as experiências associadas permanentemente?"
         buttonText="Excluir"
       />
 

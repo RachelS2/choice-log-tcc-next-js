@@ -172,28 +172,29 @@ export default function CreateUpdateItemForm({ onOpenChange, onCreateItemServer,
       )}
 
       {/* Item Type Selection */}
-      <div className="space-y-2">
-        <Label className="text-md text-neutral-700">
-          Tipo do item<span className="text-red-500">*</span>
-        </Label>
-        <div className="grid grid-cols-2 gap-3">
-          <ItemTypeButton
-            type="PRODUCT"
-            selectedType={selectedType}
-            onSelect={handleTypeChange}
-          />
+      {mode === "create" ? (
+        <div className="space-y-2">
+          <Label className="text-md text-neutral-700">
+            Tipo do item<span className="text-red-500">*</span>
+          </Label>
+          <div className="grid grid-cols-2 gap-3">
+            <ItemTypeButton
+              type="PRODUCT"
+              selectedType={selectedType}
+              onSelect={handleTypeChange}
+            />
 
-          <ItemTypeButton
-            type="SERVICE"
-            selectedType={selectedType}
-            onSelect={handleTypeChange}
-          />
+            <ItemTypeButton
+              type="SERVICE"
+              selectedType={selectedType}
+              onSelect={handleTypeChange}
+            />
+          </div>
+          {errors.type && (
+            <p className="text-xs text-red-600 mt-1">{errors.type.message}</p>
+          )}
         </div>
-        {errors.type && (
-          <p className="text-xs text-red-600 mt-1">{errors.type.message}</p>
-        )}
-      </div>
-
+      ) : null}
       {/* Category */}
       <div className="space-y-2">
         <Label htmlFor="categoryId" className="text-md text-neutral-700">

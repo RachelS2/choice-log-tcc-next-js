@@ -24,7 +24,7 @@ export default function SecuritySection() {
     const router = useRouter();
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const handleDeleteAccount = async () => {
-        const loadingToast = toast.loading("Deleting account...");
+        const loadingToast = toast.loading("Excluindo conta...");
         const result: {
             success: boolean;
             message: string;
@@ -32,7 +32,7 @@ export default function SecuritySection() {
         toast.dismiss(loadingToast);
 
         if (result.success) {
-            toast.success("Account deleted.");
+            toast.success("Conta excluída com sucesso.");
             router.replace("/");
         } else {
             toast.error(result.message);

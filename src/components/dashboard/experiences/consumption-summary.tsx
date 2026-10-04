@@ -72,8 +72,6 @@ function SummaryBadge({
         text-sm text-slate-600
         shadow-sm
         transition-colors
-        hover:border-blue-200
-        hover:bg-white
       "
         >
             {children}

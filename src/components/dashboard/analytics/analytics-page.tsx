@@ -3,7 +3,7 @@ import ExpensesByCategoryGraph from "./graphs/spences-x-satisfaction-graph";
 import ExperiencesInfluencesGraph from "./graphs/experiences-influences-graph";
 import NegativeAspectSpendingGraph from "./graphs/negative-aspects-spending-graph";
 import ConsumptionReasonGraph from "./graphs/consumption-reason-graph";
-import SpendingSatisfactionOverTimeGraph from "./graphs/satisfaction-x-time-graph";
+import SpendingOverTimeGraph from "./graphs/spending-x-time-graph";
 import { buildAnalytics } from "@/lib/analytics-utils";
 import { useState, useMemo } from "react";
 import AnalyticsInsightsSection from "./insights/analytics-insights-section";
@@ -19,6 +19,7 @@ import { Box } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PeriodFilter } from "@/lib/consumption-filters-utils";
 import { GRAPHS_COLORS } from "@/lib/utils";
+import SatisfactionOverTimeGraph from "./graphs/satisfaction-x-time-graph";
 
 /* -------------------------------------------------------------------------- */
 /*                                    PAGE                                    */
@@ -113,11 +114,10 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
                 <ConsumptionReasonGraph dataValueColor={"white"} colors={GRAPHS_COLORS} data={data.consumptionReason} />
             </div>
 
-            {/* INFLUENCES */}
+            <div className="grid gap-4 xl:grid-cols-2">
 
-            <div className="gap-4">
-
-                <SpendingSatisfactionOverTimeGraph colors={GRAPHS_COLORS} data={data.satisfactionOverTime} />
+                <SpendingOverTimeGraph colors={GRAPHS_COLORS} data={data.satisfactionOverTime} />
+                <SatisfactionOverTimeGraph   colors={GRAPHS_COLORS} data={data.satisfactionOverTime}/>
 
             </div>
 

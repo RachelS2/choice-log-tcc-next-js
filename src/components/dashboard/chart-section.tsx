@@ -5,6 +5,7 @@ import { ResponsiveContainer, CartesianGrid, XAxis, YAxis, Line, Tooltip, LineCh
 import { Card, CardContent } from '../ui/card';
 import { GRAPHS_COLORS } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
+import { SatisfactionOverTimeResponsiveContainer } from './analytics/graphs/satisfaction-x-time-graph';
 
 interface ChartSectionProps {
   satisfactionData: SatisfactionOverTimeModel[];
@@ -67,53 +68,7 @@ export function SatisfactionEvolutionGraph({
             Ainda não há dados suficientes para exibir este gráfico.
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart
-              data={data}
-              margin={{
-                top: 10,
-                right: 15,
-                left: -10,
-                bottom: 0,
-              }}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                vertical={false}
-              />
-
-              <XAxis
-                dataKey="period"
-                tickLine={false}
-                axisLine={false}
-                tick={{ fontSize: 12 }}
-              />
-
-              <YAxis
-                domain={[1, 5]}
-                ticks={[1, 2, 3, 4, 5]}
-                tickLine={false}
-                axisLine={false}
-                tick={{ fontSize: 12 }}
-              />
-
-              <Tooltip content={<SatisfactionTooltip />} />
-
-              <Line
-                type="monotone"
-                dataKey="averageRating"
-                name="Avaliação média"
-                stroke="#2563eb"
-                strokeWidth={2.5}
-                dot={{
-                  r: 4,
-                  fill: "#ffffff",
-                  strokeWidth: 2,
-                }}
-                activeDot={{ r: 6 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          <SatisfactionOverTimeResponsiveContainer data={data} />
         )}
       </CardContent>
     </Card>

@@ -101,12 +101,11 @@ export default function RecentExperiences({ consumptions }: { consumptions: Read
                 })}
               </p>
 
-              <div className="flex justify-start">
                 <RatingStars
                   value={consumption.rating}
                   size="xsm"
+                  align="start"
                 />
-              </div>
 
               <div>
                 {consumption.wouldBuyAgain ? (

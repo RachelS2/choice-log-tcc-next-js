@@ -17,12 +17,17 @@ export function RatingStars({
   onChange,
   editable = false,
   size = "md",
+  align = "center",
 }: {
   value: number;
   onChange?: (v: number) => void;
   editable?: boolean;
   size?: "xsm" | "sm" | "md" | "lg";
+  align? : "center" | "start" | "end";
 }) {
+  const itemsAlignment: string = "items-" + align;
+  const justifyAlignment: string = "justify-" + align;
+
   const sizeClasses = {
     xsm: {
       container: "size-[clamp(1rem,4vw,0.75rem)]",
@@ -137,7 +142,11 @@ export function RatingStars({
     return (
       <div
         key={star}
-        className="group relative flex shrink-0 items-center"
+        className={cn(
+          "group relative flex shrink-0",
+          itemsAlignment,
+          justifyAlignment
+        )}
       >
         {editable ? (<button></button>) : null}
         <StarMainParent>
@@ -181,8 +190,8 @@ export function RatingStars({
             absolute left-1/2 top-full z-50
             whitespace-nowrap
             rounded-md
-            bg-black
-            py-1.5
+            bg-blue-900
+            py-1.5 px-2
             text-xs font-medium text-white
         "
           >
@@ -195,14 +204,14 @@ export function RatingStars({
 
   return (
     <div
-      className="flex w-full items-center justify-center"
+      className={cn("flex w-full", itemsAlignment, justifyAlignment)}
       onMouseLeave={() =>
         editable && setHover(null)
       }
     >
       <div
         className={cn(
-          "flex max-w-full items-center",
+          "flex max-w-full", itemsAlignment,
           currentSize.gap,
         )}
       >

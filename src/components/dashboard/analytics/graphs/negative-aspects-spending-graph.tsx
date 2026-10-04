@@ -25,7 +25,7 @@ export default function NegativeAspectSpendingGraph({
     if (!data?.length) {
         return (
             <ChartCard
-                title="GASTOS ASSOCIADOS A ASPECTOS NEGATIVOS"
+                title="GASTOS E ASPECTOS NEGATIVOS"
                 description="Veja quanto dos seus gastos está associado a experiências em que aspectos negativos foram identificados."
             >
                 <div className="flex h-[200px] flex-col items-center justify-center text-center">

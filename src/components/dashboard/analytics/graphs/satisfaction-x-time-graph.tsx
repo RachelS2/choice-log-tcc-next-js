@@ -16,90 +16,67 @@ interface Props {
     colors: string[],
 }
 
-export default function SpendingSatisfactionOverTimeGraph({
+export function SatisfactionOverTimeResponsiveContainer({data, height = 250} : {data: SatisfactionOverTimeModel[], height?: number}) {
+    return (< ResponsiveContainer width="100%" height={height} >
+        <LineChart
+            data={data}
+            margin={{
+                top: 10,
+                right: 15,
+                left: -10,
+                bottom: 0,
+            }}
+        >
+            <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+            />
+
+            <XAxis
+                dataKey="period"
+                tickLine={false}
+                axisLine={false}
+                tick={{ fontSize: 12 }}
+            />
+
+            <YAxis
+                domain={[1, 5]}
+                ticks={[1, 2, 3, 4, 5]}
+                tickLine={false}
+                axisLine={false}
+                tick={{ fontSize: 12 }}
+            />
+
+            <Tooltip content={<SatisfactionOverTimeToolTip />} />
+
+            <Line
+                type="monotone"
+                dataKey="averageRating"
+                name="Avaliação média"
+                stroke="#2563eb"
+                strokeWidth={2.5}
+                dot={{
+                    r: 4,
+                    fill: "#ffffff",
+                    strokeWidth: 2,
+                }}
+                activeDot={{ r: 6 }}
+            />
+        </LineChart>
+    </ResponsiveContainer >
+    )
+}
+export default function SatisfactionOverTimeGraph({
     data, colors
 }: Props) {
     if (!data?.length) return null;
 
     return (
         <ChartCard
-            title="Gastos e satisfação ao longo do tempo"
-            description="Acompanhe a evolução dos seus gastos e da avaliação média das experiências."
+            title="Satisfação ao longo do tempo"
+            description="Acompanhe a evolução da sua satisfação ao longo do tempo."
         >
-            <ResponsiveContainer width="100%" height={340}>
-                <LineChart
-                    data={data}
-                    margin={{
-                        top: 10,
-                        right: 35,
-                        left: 35,
-                        bottom: 10,
-                    }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-
-                    <XAxis
-                        dataKey="period"
-                    />
-
-                    <YAxis
-                        yAxisId="spending"
-                        tickFormatter={(value) =>
-                            Number(value).toLocaleString("pt-BR", {
-                                style: "currency",
-                                currency: "BRL",
-                                maximumFractionDigits: 0,
-                            })
-                        }
-
-                    />
-
-                    <YAxis
-                        yAxisId="rating"
-                        orientation="right"
-                        domain={[1, 5]}
-                        ticks={[1, 2, 3, 4, 5]}
-
-                        label={{
-                            value: "Avaliação média",
-                            angle: 90,
-                            position: "insideRight",
-                            style: {
-                                textAnchor: "middle",
-                                fontSize: 12,
-                            },
-                        }}
-                    />
-
-                    <Tooltip
-                        content={<SpendingSatisfactionTimeTooltip />}
-                    />
-
-                    <Legend />
-
-                    <Line
-                        yAxisId="spending"
-                        type="monotone"
-                        dataKey="totalSpent"
-                        name="Total gasto"
-                        stroke={colors[0]}
-                        strokeWidth={2}
-                        dot={{ r: 4 }}
-                        activeDot={{ r: 6 }}
-                    />
-
-                    <Line
-                        yAxisId="rating"
-                        type="monotone"
-                        dataKey="averageRating"
-                        name="Avaliação média"
-                        stroke={colors[1]}
-                        strokeWidth={2}
-                        dot={{ r: 4 }}
-                        activeDot={{ r: 6 }}
-                    />
-                </LineChart>
-            </ResponsiveContainer>
+            <SatisfactionOverTimeResponsiveContainer data={data} height={310} />
         </ChartCard>
     );
 }
@@ -111,7 +88,7 @@ interface TimeTooltipProps {
     }[];
 }
 
-function SpendingSatisfactionTimeTooltip({
+function SatisfactionOverTimeToolTip({
     active,
     payload,
 }: TimeTooltipProps) {
@@ -141,7 +118,6 @@ function SpendingSatisfactionTimeTooltip({
                         })}
                     </span>
                 </p>
-
                 <p>
                     Avaliação média:{" "}
                     <span className="font-medium">
@@ -150,7 +126,6 @@ function SpendingSatisfactionTimeTooltip({
                             .replace(".", ",")} ★
                     </span>
                 </p>
-
                 <p>
                     Experiências:{" "}
                     <span className="font-medium">

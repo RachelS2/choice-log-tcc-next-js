@@ -37,11 +37,13 @@ export interface InfluenceSatisfactionModel {
     experiences: number;
 }
 
-export interface SpendingSatisfactionModel {
+export interface SpendingSatisfactionPointModel {
+    id: string;
+    itemName: string;
+    category: string;
     price: number;
     rating: number;
-    category: string;
-    itemName: string;
+    date: Date;
 }
 
 export interface NegativeAspectSpendingModel {
@@ -68,6 +70,7 @@ export interface AnalyticsDataModel {
     consumptionReason: ConsumptionReasonModel[],
     satisfactionOverTime: SatisfactionOverTimeModel[]
     insights: AnalyticsInsightsModel;
+    spendingSatisfaction: SpendingSatisfactionPointModel[];
 }
 
 export interface ExpensesByCategoryModel {
@@ -85,6 +88,7 @@ export interface SatisfactionOverTimeModel {
     averageRating: number;
     experiences: number;
 }
+
 
 export interface ReasonPerformanceModel {
     reason: string;

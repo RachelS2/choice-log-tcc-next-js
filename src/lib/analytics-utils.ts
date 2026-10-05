@@ -1,4 +1,4 @@
-import { AnalyticsDataModel, AnalyticsFiltersModel, NegativeAspectSpendingModel, BuyAgainByCategoryModel, CategoryValue, InfluenceData, InfluenceSatisfactionModel, ReasonPerformanceModel, SatisfactionOverTimeModel, ExpensesByCategoryModel, SpendingSatisfactionModel, AnalyticsTimeGranularity } from "@/models/dashboard/analytics";
+import { AnalyticsDataModel, AnalyticsFiltersModel, NegativeAspectSpendingModel, BuyAgainByCategoryModel, CategoryValue, InfluenceData, InfluenceSatisfactionModel, ReasonPerformanceModel, SatisfactionOverTimeModel, ExpensesByCategoryModel, SpendingSatisfactionPointModel, AnalyticsTimeGranularity, SpendingSatisfactionPointModel } from "@/models/dashboard/analytics";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { buildAnalyticsInsights } from "./analytics-insights-utils";
 
@@ -392,6 +392,19 @@ function calculateReasonPerformance(
     })).sort((a, b) => b.experiences - a.experiences);
 }
 
+function calculateSpendingSatisfactionRelationship(
+    consumptions: ReadConsumptionModel[]
+): SpendingSatisfactionPointModel[] {
+    return consumptions.map((consumption) => ({
+        id: consumption.id,
+        itemName: consumption.item.friendlyName,
+        category: consumption.item.categoryName,
+        price: Number(consumption.price),
+        rating: consumption.rating,
+        date: consumption.date,
+    }));
+}
+
 export function buildAnalytics(
     consumptions: ReadConsumptionModel[],
     timeGranularity: AnalyticsTimeGranularity,
@@ -416,6 +429,8 @@ export function buildAnalytics(
 
         satisfactionOverTime: calculateSpendingSatisfactionOverTime(consumptions, timeGranularity),
 
-        insights: buildAnalyticsInsights(consumptions)
+        insights: buildAnalyticsInsights(consumptions),
+
+        spendingSatisfaction: calculateSpendingSatisfactionRelationship(consumptions),
     };
 }

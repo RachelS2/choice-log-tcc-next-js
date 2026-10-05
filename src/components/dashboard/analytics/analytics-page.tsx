@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { PeriodFilter } from "@/lib/consumption-filters-utils";
 import { GRAPHS_COLORS } from "@/lib/utils";
 import SatisfactionOverTimeGraph from "./graphs/satisfaction-x-time-graph";
+import { SpendingSatisfactionScatterGraph } from "./graphs/spending-x-satisfaction-graph";
 
 /* -------------------------------------------------------------------------- */
 /*                                    PAGE                                    */
@@ -117,7 +118,7 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
             <div className="grid gap-4 xl:grid-cols-2">
 
                 <SpendingOverTimeGraph colors={GRAPHS_COLORS} data={data.satisfactionOverTime} />
-                <SatisfactionOverTimeGraph   colors={GRAPHS_COLORS} data={data.satisfactionOverTime}/>
+                <SatisfactionOverTimeGraph colors={GRAPHS_COLORS} data={data.satisfactionOverTime} />
 
             </div>
 
@@ -126,6 +127,11 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
                 <ExperiencesInfluencesGraph colors={GRAPHS_COLORS} data={data.influences} dataValueColor={GRAPHS_COLORS[0]} />
                 <NegativeAspectSpendingGraph dataValueColor={dataValueColor} colors={GRAPHS_COLORS} data={data.negativeAspectSpending} />
 
+            </div>
+
+            <div className="h-[350px] w-full">
+
+                <SpendingSatisfactionScatterGraph data={data.spendingSatisfaction} />
             </div>
         </div>
     );

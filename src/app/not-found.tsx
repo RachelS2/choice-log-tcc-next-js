@@ -1,16 +1,18 @@
-'use client'
 
-import { useRouter } from "next/navigation";
+// import { redirect, useRouter } from "next/navigation";
 import { FaceFrownIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 import LandingHeaderClient from "@/components/landing/landing-header-client";
 
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 export default async function NotFound() {
-  const router = useRouter();
-  const userIsLoggedIn = await authClient.getSession() != undefined;
+  const session = await auth.api.getSession({ headers: await headers() });
+  const userIsLoggedIn = !!session;
+
   return (
     <div className="flex min-h-screen flex-col">
       {/* Grid */}
@@ -58,7 +60,7 @@ export default async function NotFound() {
             Erro 404
           </p>
 
-          <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          <h1 className="text-xl font-semibold tracking-tight text-white sm:text-5xl">
             Página não encontrada
           </h1>
 
@@ -69,9 +71,8 @@ export default async function NotFound() {
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
 
             <Button
-              onClick={() => router.back()}
               size="lg"
-              className="bg-white text-blue-700 hover:bg-blue-50"
+              className="bg-white text-blue-700 h-11 hover:bg-blue-50"
             >
               <ArrowLeftIcon className="mr-2 h-4 w-4" />
               <a href="/dashboard">Voltar</a>
@@ -82,7 +83,7 @@ export default async function NotFound() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                className="border-white/30 bg-transparent text-white h-11 hover:bg-white/10 hover:text-white"
               >
                 <a href="/">Voltar para o início</a>
               </Button>

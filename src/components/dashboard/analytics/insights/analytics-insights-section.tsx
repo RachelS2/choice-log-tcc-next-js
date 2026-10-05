@@ -42,7 +42,7 @@ export default function AnalyticsInsightsSection({ insights, totalExperiences }:
                     title="Seu item mais consumido"
                 >
                     Você consumiu o item <strong>{favoriteItem.itemName}</strong>, da marca <strong>{favoriteItem.brand}</strong>, {" "}
-                    {favoriteItem.experiences} vez(e)s, e gastou <strong>R$ {favoriteItem.totalSpent}</strong> no total.
+                    {favoriteItem.experiences} vez(es), e gastou <strong>R$ {favoriteItem.totalSpent}</strong> no total.
 
                 </InsightCard>
 

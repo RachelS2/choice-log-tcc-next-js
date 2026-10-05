@@ -538,7 +538,7 @@ export default function RegisterConsumptionPageClient({ postItem, initialItems, 
           <FormSection
             icon={ThumbsDown}
             title="Aspectos negativos"
-            description="Algo que lhe incomodou? Selecione quantos pontos negativos quiser, incluse, nenhum."
+            description="Algo te incomodou? Selecione quantos pontos negativos quiser, incluse, nenhum."
           >
             <div className="flex flex-wrap gap-2">
               {!selectedItem ? (

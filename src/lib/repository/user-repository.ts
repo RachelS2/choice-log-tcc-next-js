@@ -80,12 +80,12 @@ export async function updateUserProfile(
 
         return {
             success: true,
-            message: "Profile updated successfully",
+            message: "Perfil atualizado com sucesso.",
         };
     } catch (error) {
         return {
             success: false,
-            message: "Unable to update profile",
+            message: "Não foi possível atualizar o perfil.",
         };
     }
 }
@@ -114,14 +114,14 @@ export async function deleteUserAccount(): Promise<{
         });
         return {
             success: true,
-            message: "Account deleted successfully",
+            message: "Conta excluída com sucesso.",
         };
     }
 
     catch (error) {
         return {
             success: false,
-            message: "Unable to delete account",
+            message: "Não foi possível excluir a conta.",
         };
     }
 
@@ -138,7 +138,7 @@ export async function updatePassword(
     if (!session) {
         return {
             success: false,
-            message: "Unauthorized",
+            message: "Não autorizado",
         };
     }
     try {
@@ -153,12 +153,12 @@ export async function updatePassword(
 
         return {
             success: true,
-            message: "Password updated successfully.",
+            message: "Senha atualizada com sucesso.",
         };
     } catch {
         return {
             success: false,
-            message: "Current password is incorrect.",
+            message: "Senha atual incorreta.",
         };
     }
 }

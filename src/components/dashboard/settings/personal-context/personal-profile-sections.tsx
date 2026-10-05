@@ -156,7 +156,7 @@ export default function PersonalProfileSection() {
                                     Alterações não salvas
                                 </div>
                             )}
-                            <Button type="submit" className="h-11 bg-blue-600  shadow-xl hover:bg-blue-700 text-white">
+                            <Button type="submit" className="h-11 bg-blue-600  shadow-sm hover:bg-blue-700 text-white">
                                 <span className="flex items-center gap-2 text-md ">
                                     <Save className="h-4 w-4" />
                                     Salvar alterações

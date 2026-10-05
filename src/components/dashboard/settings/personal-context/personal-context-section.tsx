@@ -1,4 +1,4 @@
-import { Info } from 'lucide-react';
+import { Info, CircleQuestionMark } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { UserSettingsSchemaType } from '@/zod-schemas/user-settings';
 import { IncomeRange } from '../../../../../generated/prisma';
+import { InsightCard } from '../../analytics/analytics-small-components';
 
 export interface PersonalContextSectionProps {
     isEditing: boolean;
@@ -33,84 +34,85 @@ export default function PersonalContextSection({
     isEditing, setValue, watch
 }: PersonalContextSectionProps) {
     return (
-        <Card className="bg-white backdrop-blur-md border py-4 shadow-lg">
+        <InsightCard icon={<Info className="size-5 text-blue-600" />} title="Contexto pessoal"
 
-            {/* Header */}
-            <CardHeader>
-                <CardTitle className="text-lg text-neutral-950">
-                    Contexto pessoal
-                </CardTitle>
-                <CardDescription className="text-sm text-neutral-500">
-                    Informações opcionais que ajudam a personalizar suas análises.
-                </CardDescription>
-            </CardHeader>
+            children={
+                <>
+                    < CardHeader >
 
-            {/* Content */}
-            <CardContent className="px-4 space-y-5">
+                        <CardDescription className="text-sm text-neutral-500">
+                            Informações opcionais que ajudam a personalizar suas análises.
+                        </CardDescription>
+                    </ CardHeader>
 
-                {/* Income */}
-                <div className="space-y-2 w-full">
-                    <Label
-                        htmlFor="income-range"
-                        className="text-sm font-medium text-neutral-700"
-                    >
-                        Faixa de renda
-                    </Label>
-                    <Select
-                        value={watch("incomeRange") ?? "PREFER_NOT_TO_SAY"}
-                        disabled={!isEditing}
-                        onValueChange={(value) =>
-                            setValue(
-                                "incomeRange",
-                                value as IncomeRange,
-                                {
-                                    shouldDirty: true,
-                                    shouldValidate: true,
+                    {/* Content */}
+                    <CardContent className="px-4 space-y-5">
+
+                        {/* Income */}
+                        <div className="space-y-2 mt-4 w-full">
+                            <Label
+                                htmlFor="income-range"
+                                className="text-sm font-medium text-neutral-700"
+                            >
+                                Faixa de renda
+                            </Label>
+                            <Select
+                                value={watch("incomeRange") ?? "PREFER_NOT_TO_SAY"}
+                                disabled={!isEditing}
+                                onValueChange={(value) =>
+                                    setValue(
+                                        "incomeRange",
+                                        value as IncomeRange,
+                                        {
+                                            shouldDirty: true,
+                                            shouldValidate: true,
+                                        }
+                                    )
                                 }
-                            )
-                        }
-                    >
-                        <SelectTrigger id="income-range" size="lg" className={cn(
-                            "w-full h-10 text-neutral-600 shadow-sm transition-all",
-                            !isEditing
-                                ? "bg-neutral-50 cursor-not-allowed"
-                                : "bg-white"
+                            >
+                                <SelectTrigger id="income-range" size="lg" className={cn(
+                                    "w-full h-10 text-neutral-600 shadow-sm transition-all",
+                                    !isEditing
+                                        ? "bg-neutral-50"
+                                        : "bg-white"
 
-                        )}>
-                            <SelectValue placeholder="Selecione sua faixa de renda" />
-                        </SelectTrigger>
+                                )}>
+                                    <SelectValue placeholder="Selecione sua faixa de renda" />
+                                </SelectTrigger>
 
-                        <SelectContent position="popper"
+                                <SelectContent position="popper"
 
-                            side="bottom"
-                            align="start">
-                            {incomeOptions.map((option) => (
-                                <SelectItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
+                                    side="bottom"
+                                    align="start">
+                                    {incomeOptions.map((option) => (
+                                        <SelectItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
 
-                {/* Info box */}
-                <div className="flex items-start gap-3 rounded-xl bg-blue-50/70 border border-blue-100 p-4">
-                    <Info className="h-4 w-4 mt-0.5 text-blue-600 shrink-0" />
+                        {/* Info box */}
+                        <div className="flex items-start gap-3 rounded-xl bg-blue-100 border border-blue-100 p-4">
+                            <CircleQuestionMark className="h-4 w-4 mt-0.5 text-blue-600 shrink-0" />
 
-                    <div className="space-y-1">
-                        <p className="text-xs font-medium text-blue-800">
-                            Por que perguntamos isso?
-                        </p>
+                            <div className="space-y-1">
+                                <p className="text-xs font-medium text-blue-800">
+                                    Por que perguntamos isso?
+                                </p>
 
-                        <p className="text-xs leading-relaxed text-blue-700/80">
-                            Sua faixa de renda nos ajuda a contextualizar suas análises de consumo. 
-                            Essas informação é privada e é usada apenas para gerar
-                            insights mais relevantes sobre seus hábitos de compra.
-                        </p>
-                    </div>
-                </div>
+                                <p className="text-xs leading-relaxed text-blue-700/80">
+                                    Sua faixa de renda nos ajuda a contextualizar suas análises de consumo.
+                                    Essa informação é privada e é usada apenas para gerar
+                                    insights mais relevantes sobre seus hábitos de compra.
+                                </p>
+                            </div>
+                        </div>
 
-            </CardContent>
-        </Card>
+                    </CardContent>
+                </>
+            }
+        />
     );
 }

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const itemFormSchema = z.object({
   type: z.enum(['PRODUCT', 'SERVICE'], {
-    required_error: 'Please select the item type.',
+    error: 'Selecione o tipo do item.',
   }),
   categoryId: z.string().min(1, 'Informe a categoria do item.'),
   friendlyName: z

@@ -1,15 +1,15 @@
 import { useRef, useState } from 'react';
-import { Camera, CheckCircle2, XCircle, Mail, User, TriangleAlert } from 'lucide-react';
+import { Mail, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardContent, CardDescription, CardHeader } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { UserSettingsSchemaType } from '@/zod-schemas/user-settings';
 import { UserAuthDTO } from '@/models/user';
 import UserIcon from '@/components/ui/choicelog-user-icon';
+import { InsightCard } from '../../analytics/analytics-small-components';
 
 
 interface ProfileSectionProps {
@@ -41,96 +41,87 @@ export default function ProfileSection({ isEditing, errors, register, userData, 
 
     return (
 
-        <Card className="bg-white py-4 backdrop-blur-md border shadow-lg">
+        <InsightCard
+            title="Informações Pessoais"
+            icon={< User className="size-5 text-blue-600" />}
+            children={
+                <>
+                    <CardHeader>
+                        {/* <CardTitle className="text-lg text-neutral-950">
+                            <PageHeader header={"Atualize seus dados pessoais."} lineAfter />
+                        </CardTitle> */}
+                        <CardDescription className="text-sm text-neutral-500">
+                            Atualize seus dados pessoais.
+                        </CardDescription>
+                    </CardHeader>
 
-            {/* Header */}
-            <CardHeader>
-                <CardTitle className="text-lg text-neutral-950">
-                    Informações Pessoais
-                </CardTitle>
-                <CardDescription className="text-sm text-neutral-500">
-                    Atualize seus dados pessoais.
-                </CardDescription>
-            </CardHeader>
+                    {/* Content */}
+                    <CardContent className="flex flex-col px-4 mt-4 gap-6 sm:flex-row sm:items-start">
 
-            {/* Content */}
-            <CardContent className="flex flex-col px-4  gap-6 sm:flex-row sm:items-start">
-
-                {/* Avatar */}
-                <div className="flex flex-col items-center gap-3">
-                    <div
-                        className="relative group"
-                        // onClick={() => fileInputRef.current?.click()}
-                    >
-                        <UserIcon
-                            name={userData.name}
-                            image={previewImage}
-                            className='h-28 w-28 text-2xl font-semibold'
-                        />
-                        {/* <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
-                            <Camera className="h-5 w-5 text-white" />
-                        </div> */}
-                    </div>
-
-                    {/* <Button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        variant="ghost"
-                        className="text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                    >
-                        Alterar foto
-                    </Button> */}
-
-                    <Input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleImageUpload}
-                    />
-                </div>
-
-                {/* Form */}
-                <div className="flex-1 space-y-5">
-
-                    {/* Name */}
-                    <div className="space-y-2">
-                        <Label className="text-sm font-medium text-neutral-700">
-                            Nome
-                        </Label>
-
-                        <InputSection
-                            id="username"
-                            icon={User}
-                            isEditing={isEditing}
-                            register={register}
-                            errors={errors}
-                        />
-                    </div>
-
-                    {/* Email */}
-                    <div className="space-y-2">
-
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <Label>E-mail</Label>
-
+                        {/* Avatar */}
+                        <div className="flex flex-col items-center gap-3">
+                            <div
+                                className="relative group"
+                            >
+                                <UserIcon
+                                    name={userData.name}
+                                    image={previewImage}
+                                    className='h-20 w-20 text-2xl font-semibold'
+                                />
                             </div>
+
+                            <Input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={handleImageUpload}
+                            />
                         </div>
 
-                        <InputSection
-                            id="email"
-                            type="email"
-                            icon={Mail}
-                            isEditing={isEditing}
-                            register={register}
-                            errors={errors}
-                        />
-                    </div>
+                        {/* Form */}
+                        <div className="flex-1 space-y-5">
 
-                </div>
-            </CardContent>
-        </Card>
+                            {/* Name */}
+                            <div className="space-y-2">
+                                <Label className="text-sm font-medium text-neutral-700">
+                                    Nome
+                                </Label>
+
+                                <InputSection
+                                    id="username"
+                                    icon={User}
+                                    isEditing={isEditing}
+                                    register={register}
+                                    errors={errors}
+                                />
+                            </div>
+
+                            {/* Email */}
+                            <div className="space-y-2">
+
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Label>E-mail</Label>
+
+                                    </div>
+                                </div>
+
+                                <InputSection
+                                    id="email"
+                                    type="email"
+                                    icon={Mail}
+                                    isEditing={isEditing}
+                                    register={register}
+                                    errors={errors}
+                                />
+                            </div>
+
+                        </div>
+                    </CardContent>
+                </>
+            }
+        />
     );
 }
 
@@ -167,7 +158,7 @@ function InputSection({
                     className={cn(
                         "pl-9 h-10 text-neutral-600 shadow-sm transition-all",
                         !isEditing
-                            ? "bg-neutral-50 cursor-not-allowed"
+                            ? "bg-neutral-50"
                             : "bg-white",
                     )}
                 />

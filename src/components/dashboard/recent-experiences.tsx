@@ -128,7 +128,7 @@ export default function RecentExperiences({ consumptions }: { consumptions: Read
           href="/dashboard/experiences"
           className="flex items-center text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
         >
-          Ver histórico
+          Ver histórico completo
           <ChevronRight className="size-4" />
         </Link>
       </div>

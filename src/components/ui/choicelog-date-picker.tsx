@@ -14,8 +14,9 @@ interface DatePickerProps {
     putCalendarIcon: boolean
     setError: (error: string | undefined) => void;
     error: string | undefined;
-    showCalendar? : boolean;
-    dateInputClassName? : string;
+    showCalendar?: boolean;
+    dateInputClassName?: string;
+    mandatoryDate?: boolean;
 }
 
 export function DatePicker({
@@ -25,7 +26,8 @@ export function DatePicker({
     setError,
     error,
     showCalendar,
-    dateInputClassName
+    dateInputClassName,
+    mandatoryDate = true,
 }: DatePickerProps) {
     const today = new Date();
     today.setHours(23, 59, 59, 999);
@@ -54,7 +56,19 @@ export function DatePicker({
             input = `${input.slice(0, 2)}/${input.slice(2)}`;
         }
 
+        // Sempre atualiza o valor visual primeiro
         setInputValue(input);
+
+        if (input.length === 0) {
+            if (mandatoryDate) {
+                setError("Insira uma data.");
+            } else {
+                setError(undefined);
+                onChange(today);
+            }
+
+            return;
+        }
 
         if (input.length === 10) {
             const date = parse(
@@ -75,10 +89,12 @@ export function DatePicker({
             } else {
                 setError("Data inválida.");
             }
+
             return;
         }
 
-        setError(undefined)
+        // Usuário ainda está digitando
+        setError(undefined);
     };
 
     return (
@@ -114,7 +130,7 @@ export function DatePicker({
                         >
                             <ChevronDown className="text-neutral-700 size-4" />
                         </Button>
-                    </PopoverTrigger> }
+                    </PopoverTrigger>}
                 </div>
 
                 <PopoverContent

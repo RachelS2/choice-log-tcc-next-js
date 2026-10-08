@@ -18,8 +18,23 @@ if (!resendFromEmail) {
 
 const resend: Resend = new Resend(resendApiKey);
 
+const baseURL =
+    process.env.BETTER_AUTH_URL ||
+    (process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000");
+
+const trustedOrigins = [
+    "http://localhost:3000",
+    "https://choicelog.app.br",
+    ...(process.env.VERCEL_URL
+        ? [`https://${process.env.VERCEL_URL}`]
+        : []),
+];
+
 export const auth = betterAuth({
-    baseURL: process.env.BETTER_AUTH_URL,
+    baseURL: baseURL,
+    trustedOrigins: trustedOrigins,
     database: prismaAdapter(prisma, {
         provider: "postgresql", // or "mysql", "postgresql", ...etc
     }),
@@ -33,7 +48,6 @@ export const auth = betterAuth({
         revokeSessionsOnPasswordReset: true,
         requireEmailVerification: true,
         sendResetPassword: async ({ user, url }) => {
-            console.log("url " + process.env.BETTER_AUTH_URL);
             const { error } = await resend.emails.send({
                 from: resendFromEmail,
                 to: user.email,
@@ -55,7 +69,6 @@ export const auth = betterAuth({
         sendOnSignUp: true,
         expirationTime: 60 * 30, // 30 minutes
         sendVerificationEmail: async ({ user, url }) => {
-            console.log("url " + process.env.BETTER_AUTH_URL);
             const { error } = await resend.emails.send({
                 from: resendFromEmail,
                 to: user.email,
@@ -69,18 +82,15 @@ export const auth = betterAuth({
 
         },
         async afterEmailVerification(user) {
-            console.log("url " + process.env.BETTER_AUTH_URL);
-            if (user.emailVerified) {
-                const { error } = await resend.emails.send({
-                    from: resendFromEmail,
-                    to: user.email,
-                    subject: "ChoiceLog - Your account has been successfully verified!",
-                    react: EmailVerifiedEmail(user.name),
-                });
+            const { error } = await resend.emails.send({
+                from: resendFromEmail,
+                to: user.email,
+                subject: "ChoiceLog - Your account has been successfully verified!",
+                react: EmailVerifiedEmail(user.name),
+            });
 
-                if (error) {
-                    throw new Error(`Email verification notification send failed: ${error.message}`);
-                }
+            if (error) {
+                console.error("Failed to send confirmation email:", error);
             }
 
         },

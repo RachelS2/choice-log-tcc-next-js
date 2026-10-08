@@ -19,6 +19,7 @@ if (!resendFromEmail) {
 const resend: Resend = new Resend(resendApiKey);
 
 export const auth = betterAuth({
+    baseURL: process.env.BETTER_AUTH_URL,
     database: prismaAdapter(prisma, {
         provider: "postgresql", // or "mysql", "postgresql", ...etc
     }),
@@ -61,18 +62,24 @@ export const auth = betterAuth({
             });
 
             if (error) {
-                throw new Error(`Email send failed: ${error.message}`);
+                throw new Error(`Email verification send failed: ${error.message}`);
             }
 
         },
         async afterEmailVerification(user) {
             if (user.emailVerified) {
-                await resend.emails.send({
+                const { error } = await resend.emails.send({
                     from: resendFromEmail,
                     to: user.email,
                     subject: "ChoiceLog - Your account has been successfully verified!",
                     react: EmailVerifiedEmail(user.name),
                 });
+
+                if (error) {
+                    throw new Error(`Email verification notification send failed: ${error.message}`);
+                }
             }
+
         },
-    }});
+    }
+});

@@ -1,12 +1,11 @@
 import z from "zod";
 import { userNameSchema, passwordSchema } from "./sign-up-schema";
-import { IncomeRange } from "../../generated/prisma";
 
 // Schema para validação do formulário de cadastro de usuário:
 export const userSettingsSchema = z.object({
   email: z.email("Formato de e-mail inválido.."),
   username: userNameSchema,
-  incomeRange: z.enum(IncomeRange),
+  incomeRange: z.enum(["UP_TO_1_MINIMUM_WAGE", "FROM_1_TO_3", "FROM_3_TO_5", "FROM_5_TO_10", "ABOVE_10", "PREFER_NOT_TO_SAY"]),
   image: z.string().url("Invalid URL format for profile image.").optional(),
 });
 

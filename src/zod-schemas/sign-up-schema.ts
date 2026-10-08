@@ -13,7 +13,7 @@ export const userNameSchema: z.ZodString = z
 export const passwordSchema: z.ZodString = z
   .string()
   .nonempty("Senha é obrigatório.")
-  .min(6, "Senha deve ter no mínimo 6 caracteres.")
+  .min(8, "Senha deve ter no mínimo 8 caracteres.")
   .max(30, "Senha deve ter no máximo 30 caracteres.")
   .regex(
     /[a-z]/,

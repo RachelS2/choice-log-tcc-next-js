@@ -33,6 +33,7 @@ export const auth = betterAuth({
         revokeSessionsOnPasswordReset: true,
         requireEmailVerification: true,
         sendResetPassword: async ({ user, url }) => {
+            console.log("url " + process.env.BETTER_AUTH_URL);
             const { error } = await resend.emails.send({
                 from: resendFromEmail,
                 to: user.email,
@@ -54,6 +55,7 @@ export const auth = betterAuth({
         sendOnSignUp: true,
         expirationTime: 60 * 30, // 30 minutes
         sendVerificationEmail: async ({ user, url }) => {
+            console.log("url " + process.env.BETTER_AUTH_URL);
             const { error } = await resend.emails.send({
                 from: resendFromEmail,
                 to: user.email,
@@ -67,6 +69,7 @@ export const auth = betterAuth({
 
         },
         async afterEmailVerification(user) {
+            console.log("url " + process.env.BETTER_AUTH_URL);
             if (user.emailVerified) {
                 const { error } = await resend.emails.send({
                     from: resendFromEmail,

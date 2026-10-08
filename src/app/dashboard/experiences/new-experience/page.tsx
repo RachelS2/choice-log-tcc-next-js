@@ -29,7 +29,7 @@ export default async function RegisterConsumptionPage() {
 
     const consumptionInfluence: ConsumptionInfluenceModel[] = await fetchConsumptionInfluenceRepository()
     async function onPostItem(itemToPost: PostItemModel): Promise<ItemResumeModel> {
-      "use server";
+
 
       return await postItemRepository(itemToPost, userId);
     }
@@ -42,7 +42,7 @@ export default async function RegisterConsumptionPage() {
         itemTypes={itemTypes}
         consumptionInfluences={consumptionInfluence}
         postConsumption={postConsumptionController}
-        postItem={ onPostItem}
+        postItem={onPostItem}
       />);
   }
 

@@ -28,7 +28,7 @@ export default function AboutLayout({
                 {/* Bottom right */}
                 <div className="absolute bottom-[-40px] right-10 h-[220px] w-[220px] rounded-full bg-blue-400/20 blur-3xl" />
             </div>
-            
+
             <LandingHeaderClient userIsLoggedIn={false} />
 
 

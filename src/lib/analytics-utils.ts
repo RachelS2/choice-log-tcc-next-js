@@ -1,4 +1,8 @@
-import { AnalyticsDataModel, AnalyticsFiltersModel, NegativeAspectSpendingModel, BuyAgainByCategoryModel, CategoryValue, InfluenceData, InfluenceSatisfactionModel, ReasonPerformanceModel, SatisfactionOverTimeModel, ExpensesByCategoryModel, SpendingSatisfactionPointModel, AnalyticsTimeGranularity, SpendingSatisfactionPointModel } from "@/models/dashboard/analytics";
+import {
+    AnalyticsDataModel, AnalyticsFiltersModel, NegativeAspectSpendingModel, BuyAgainByCategoryModel,
+    CategoryValue, InfluenceData, InfluenceSatisfactionModel, ReasonPerformanceModel, SatisfactionOverTimeModel,
+    ExpensesByCategoryModel, SpendingSatisfactionPointModel, AnalyticsTimeGranularity
+} from "@/models/dashboard/analytics";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { buildAnalyticsInsights } from "./analytics-insights-utils";
 

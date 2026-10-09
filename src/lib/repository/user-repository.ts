@@ -163,10 +163,9 @@ export async function updatePassword(
     }
 }
 
-
-
 export async function resetPassword(
-    data: ResetPasswordSchemaType, token: string
+    data: ResetPasswordSchemaType,
+    token: string
 ): Promise<{
     success: boolean;
     message: string;
@@ -180,20 +179,23 @@ export async function resetPassword(
         if (error) {
             return {
                 success: false,
-                message: error.message || "Failed to reset password.",
+                message: error.message || "Falha ao redefinir a senha.",
             };
         }
 
         return {
             success: true,
-            message: "Password reset successfully.",
+            message: "Senha redefinida com sucesso.",
         };
-    }
+    } catch (error: unknown) {
+        console.error("Erro original ao redefinir senha:", error);
 
-    catch (error: any) {
         return {
             success: false,
-            message: error || "An unexpected error occurred.",
+            message:
+                error instanceof Error
+                    ? error.message
+                    : "Ocorreu um erro inesperado.",
         };
     }
 }

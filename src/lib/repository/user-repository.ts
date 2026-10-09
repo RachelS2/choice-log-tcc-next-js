@@ -4,7 +4,6 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { UpdateUserProfileDTO, UserCompleteDTO } from "@/models/user";
 import { IncomeRange } from "../../../generated/prisma";
-import { authClient } from "@/lib/auth-client";
 import { ChangePasswordSchemaType, ResetPasswordSchemaType } from "@/zod-schemas/user-settings";
 
 export async function fetchUserProfile(): Promise<UserCompleteDTO | null> {
@@ -133,7 +132,9 @@ export async function updatePassword(
     success: boolean;
     message: string;
 }> {
-    const session = await authClient.getSession();
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
 
     if (!session) {
         return {
@@ -171,31 +172,26 @@ export async function resetPassword(
     message: string;
 }> {
     try {
-        const { error } = await authClient.resetPassword({
-            token,
-            newPassword: data.newPassword,
+        await auth.api.resetPassword({
+            body: {
+                token,
+                newPassword: data.newPassword,
+            },
         });
-
-        if (error) {
-            return {
-                success: false,
-                message: error.message || "Falha ao redefinir a senha.",
-            };
-        }
 
         return {
             success: true,
             message: "Senha redefinida com sucesso.",
         };
     } catch (error: unknown) {
-        console.error("Erro original ao redefinir senha:", error);
+        console.error("Erro ao redefinir senha:", error);
 
         return {
             success: false,
             message:
                 error instanceof Error
                     ? error.message
-                    : "Ocorreu um erro inesperado.",
+                    : "Não foi possível redefinir sua senha.",
         };
     }
 }

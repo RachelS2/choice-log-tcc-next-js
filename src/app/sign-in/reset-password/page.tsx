@@ -9,7 +9,7 @@ export default function ResetPasswordRequestPage() {
         <main className="min-h-screen">
 
             <LandingHeaderClient userIsLoggedIn={false} />
-            <div className="mx-auto grid min-h-[calc(100vh-64px)] max-w-8xl">
+            <div className="flex min-h-[calc(100dvh-64px)] items-center justify-center px-4">
 
                 <Suspense fallback={<ResetPasswordFormFallback />}>
                     <ResetPasswordForm />

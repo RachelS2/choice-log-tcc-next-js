@@ -77,17 +77,22 @@ export function ResetPasswordForm() {
         }
     };
     return (
-        <Card className="bg-white p-8 min-w-0 lg:min-w-[420px] shadow-sm rounded-xl">
-            <CardHeader className=' text-center'>
-                <CardTitle className='text-2xl'>Redefinir senha</CardTitle>
-                <CardDescription className='text-sm'>Defina uma nova senha para sua conta do ChoiceLog</CardDescription>
+        <Card className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-md sm:p-8">
+            <CardHeader className="px-0 pb-6 text-center">
+                <CardTitle className="text-2xl font-semibold">
+                    Redefinir senha
+                </CardTitle>
+
+                <CardDescription className="text-sm">
+                    Defina uma nova senha para sua conta do ChoiceLog
+                </CardDescription>
             </CardHeader>
 
-            <form onSubmit={handleSubmit(handleChangePassword)} className="w-full max-w-md">
-                <div
-                    className="space-y-6"
-                >
-
+            <form
+                onSubmit={handleSubmit(handleChangePassword)}
+                className="w-full space-y-6"
+            >
+                <div className="space-y-5">
                     <CreatePasswordInput
                         error={errors.newPassword?.message}
                         name="newPassword"
@@ -103,19 +108,17 @@ export function ResetPasswordForm() {
                     />
                 </div>
 
-                <div className="flex justify-center pt-6 gap-2">
-                    <Button
-                        type="submit"
-                        disabled={
-                            !isDirty ||
-                            isSubmitting ||
-                            Object.keys(errors).length > 0
-                        }
-                        className="bg-blue-600 w-full h-9 hover:bg-blue-500 shadow-lg"
-                    >
-                        {isSubmitting ? "Redefinindo..." : "Redefinir senha"}
-                    </Button>
-                </div>
+                <Button
+                    type="submit"
+                    disabled={
+                        !isDirty ||
+                        isSubmitting ||
+                        Object.keys(errors).length > 0
+                    }
+                    className="h-10 w-full bg-blue-600 shadow-sm hover:bg-blue-500"
+                >
+                    {isSubmitting ? "Redefinindo..." : "Redefinir senha"}
+                </Button>
             </form>
         </Card>
     );

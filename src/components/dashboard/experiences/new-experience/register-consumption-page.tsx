@@ -163,7 +163,6 @@ export default function RegisterConsumptionPageClient({ postItem, initialItems, 
     if (details.length > 300) errors.details = "Mantenha em até 300 caracteres.";
     if (address.length > 255) errors.address = "O endereço informado é muito longo.";
 
-    console.log("date" + date)
     setErrors(errors);
     if (Object.keys(errors).length > 0) return;
 

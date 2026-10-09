@@ -68,11 +68,17 @@ export function ResetPasswordForm() {
         const loadingToast = toast.loading("Redefinindo senha...");
         const result = await resetPassword(data, token);
         toast.dismiss(loadingToast);
-
+        console.log("Reset password result:", {
+            success: result.success,
+            message: result.message,
+            messageType: typeof result.message,
+        });
         if (result.success == true) {
+            console.log("sucesso")
             toast.success("Senha atualizada com sucesso.\nFaça login para acessar sua conta.");
             router.push("/sign-in");
         } else {
+            console.log("erro")
             toast.error(result.message);
         }
     };

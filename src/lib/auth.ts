@@ -77,6 +77,7 @@ export const auth = betterAuth({
         sendOnSignUp: true,
         expirationTime: 60 * 30, // 30 minutes
         sendVerificationEmail: async ({ user, url }) => {
+            console.log("url sendVerificationEmail " + url)
             const { error } = await resend.emails.send({
                 from: resendFromEmail,
                 to: user.email,

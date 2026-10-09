@@ -19,10 +19,11 @@ if (!resendFromEmail) {
 const resend: Resend = new Resend(resendApiKey);
 
 const baseURL =
-    process.env.BETTER_AUTH_URL ||
-    (process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : "http://localhost:3000");
+    process.env.VERCEL_ENV === "production"
+        ? "https://choicelog.app.br"
+        : process.env.VERCEL_ENV === "preview" && process.env.VERCEL_URL
+            ? `https://${process.env.VERCEL_URL}`
+            : process.env.BETTER_AUTH_URL || "http://localhost:3000";
 
 const trustedOrigins = [
     "http://localhost:3000",

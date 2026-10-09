@@ -33,6 +33,12 @@ const trustedOrigins = [
         : []),
 ];
 
+console.log("Better Auth configuration:", {
+    vercelEnv: process.env.VERCEL_ENV,
+    vercelUrl: process.env.VERCEL_URL,
+    baseURL,
+});
+
 export const auth = betterAuth({
     baseURL: baseURL,
     trustedOrigins: trustedOrigins,

@@ -3,7 +3,7 @@ import { updateUserProfile } from "@/lib/repository/user-repository";
 import { UpdateUserProfileDTO, UserCompleteDTO } from "@/models/user";
 import { userSettingsSchema, UserSettingsSchemaType } from "@/zod-schemas/user-settings";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, PencilIcon, Save, X } from "lucide-react";
+import { PencilIcon, Save, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -13,9 +13,11 @@ import ProfileSection from "./profile-section";
 import { Button } from "@/components/ui/button";
 import PersonalProfileSectionSkeleton from "./personal-profile-section-skeleton";
 import ProfileSettingsHeader from "./header";
+import Modal from "@/components/ui/choicelog-modal";
+import { authClient } from "@/lib/auth-client";
 
 export default function PersonalProfileSection() {
-
+    const [sendEmailChangedVerification, setSendEmailChangedVerification] = useState(false);
     const {
         register,
         handleSubmit,
@@ -80,40 +82,82 @@ export default function PersonalProfileSection() {
     if (!userProfileData.data) {
         return <div><p className="text-red-500">Perfil não encontrado</p></div>;
     }
-    const onSubmit = async (data: UserSettingsSchemaType) => {
+    const onSubmit = async (newData: UserSettingsSchemaType) => {
         if (!userProfileData.data) {
-            toast.error("Os dados do usuário não estão disponíveis. Tente novamente mais tarde.");
+            toast.error("Os dados do usuário não estão disponíveis.");
             return;
         }
-        const updatingToast = toast.warning("Atualizando perfil...")
+
+        const updatingToast = toast.loading("Salvando alterações...");
+
+        const currentData = userProfileData.data;
+
+        const emailChanged = (
+            newData.email.trim().toLowerCase() !==
+            currentData.email.trim().toLowerCase()
+        );
+
         const completeData: UpdateUserProfileDTO = {
-            email: data.email,
-            name: data.username,
-            incomeRange: data.incomeRange,
-            image: data.image,
-        }
-        const result = await updateUserProfile(completeData);
-        toast.dismiss(updatingToast);
-        if (result.success) {
-            toast.success(result.message);
+            name: newData.username,
+            incomeRange: newData.incomeRange,
+            image: newData.image,
+        };
+
+        try {
+            const result = await updateUserProfile(completeData);
+
+            if (!result.success) {
+                toast.error(result.message);
+                return;
+            }
+
+            let emailVerificationSent = false;
+
+            if (emailChanged) {
+                const { error } = await authClient.changeEmail({
+                    newEmail: newData.email.trim(),
+                    callbackURL: "/dashboard/settings",
+                });
+
+                if (error) {
+                    toast.error(
+                        error.message ??
+                        "Não foi possível solicitar a alteração de e-mail."
+                    );
+                } else {
+                    emailVerificationSent = true;
+                }
+            }
+
             reset({
-                email: data.email,
-                username: data.username,
-                incomeRange: data.incomeRange,
-                image: data.image ?? undefined
-            }); // limpa dirty state
+                email: currentData.email,
+                username: newData.username,
+                incomeRange: newData.incomeRange,
+                image: newData.image ?? undefined,
+            });
+
+            setIsEditing(false);
 
             router.refresh();
-        } else {
-            toast.error(result.message);
-            reset({
-                email: userProfileData.data.email,
-                username: userProfileData.data.name,
-                incomeRange: userProfileData.data.incomeRange,
-                image: userProfileData.data.image ?? undefined
-            }); // limpa dirty state
+
+            if (emailVerificationSent) {
+                setSendEmailChangedVerification(true);
+            } else if (!emailChanged) {
+                toast.success(result.message);
+            } else {
+                toast.warning(
+                    "Perfil atualizado, mas a alteração de e-mail não foi solicitada."
+                );
+            }
+        } catch (error) {
+            console.error("Erro ao atualizar perfil:", error);
+
+            toast.error(
+                "Ocorreu um erro inesperado ao salvar as alterações."
+            );
+        } finally {
+            toast.dismiss(updatingToast);
         }
-        setIsEditing(false);
     };
     const handleCancel = () => {
         if (!userProfileData.data) return;
@@ -204,6 +248,15 @@ shadow-xl
                     watch={watch}
                 />
             </div>
+            <Modal
+                buttonText="Entendi"
+                dialogTitle="Confirme a alteração de e-mail"
+                dialogDescription="Enviamos um link de confirmação para seu endereço de e-mail atual. Acesse sua caixa de entrada para autorizar a alteração. Seu e-mail permanecerá o mesmo até que o processo seja concluído."
+                open={sendEmailChangedVerification}
+                onOpenChange={setSendEmailChangedVerification}
+                confirmButtonClassName="bg-blue-600 hover:bg-blue-700"
+                onConfirm={async () => setSendEmailChangedVerification(false)}
+            />
         </form>
     );
 }

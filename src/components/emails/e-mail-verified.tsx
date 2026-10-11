@@ -24,8 +24,8 @@ const EmailVerifiedEmail = (username: string) => {
               </Text>
 
               <Text className="mt-0 mb-[24px] text-[16px] text-gray-700 leading-[24px]">
-                {username}, thanks for signing up! Your email address has been successfully verified. You can now access all the features of ChoiceLog and 
-                start tracking your shopping experiences.
+                {username}, thanks for confirming your account! Your email address has been successfully verified. 
+                You can now access all the features of ChoiceLog and start tracking your shopping experiences.
               </Text>
 
               <Section className="mb-[32px] text-center">

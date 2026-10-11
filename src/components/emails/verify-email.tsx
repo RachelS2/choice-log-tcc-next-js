@@ -29,8 +29,8 @@ const VerifyEmail = (props: VerifyEmailProps) => {
               </Text>
 
               <Text className="mt-0 mb-[24px] text-[16px] text-gray-700 leading-[24px]">
-                {username}, thanks for signing up! To complete your registration
-                and secure your account, please verify your email address by
+                Hi, {username}!
+                To complete your registration and keep your ChoiceLog account secure, please verify your email address by
                 clicking the button below.
               </Text>
 

@@ -5,6 +5,7 @@ import { Resend } from "resend";
 import ForgotPasswordEmail from "@/components/emails/forgot-password-email";
 import VerifyEmail from "@/components/emails/verify-email";
 import EmailVerifiedEmail from "@/components/emails/e-mail-verified";
+import ChangeEmailVerification from "@/components/emails/confirm-email-change";
 const resendApiKey = process.env.RESEND_API_KEY;
 const resendFromEmail = process.env.RESEND_FROM_EMAIL;
 
@@ -42,6 +43,35 @@ export const auth = betterAuth({
     session: {
         expiresIn: 60 * 60 * 24 * 7, // 7 days if "Remember me" is enabled
         updateAge: 60 * 60 * 24, // Refresh session every 1 day
+    },
+
+    user: {
+        changeEmail: {
+            enabled: true,
+
+            sendChangeEmailVerification: async ({
+                user,
+                newEmail,
+                url,
+            }: { user: any; newEmail: string; url: string }) => {
+                const { error } = await resend.emails.send({
+                    from: resendFromEmail,
+                    to: user.email,
+                    subject: "ChoiceLog - Confirm email change",
+                    react: ChangeEmailVerification({
+                        username: user.name,
+                        newEmail,
+                        verifyUrl: url,
+                    }),
+                });
+
+                if (error) {
+                    throw new Error(
+                        `Email change verification failed: ${error.message}`
+                    );
+                }
+            },
+        },
     },
     emailAndPassword: {
         enabled: true,

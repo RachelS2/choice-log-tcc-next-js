@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 interface ModalProps {
   open: boolean;
@@ -18,6 +19,7 @@ interface ModalProps {
   dialogTitle: string;
   dialogDescription: string;
   buttonText: string;
+  confirmButtonClassName?: string;
 }
 
 export default function Modal({
@@ -25,7 +27,7 @@ export default function Modal({
   onOpenChange,
   onConfirm,
   dialogTitle,
-  dialogDescription, buttonText
+  dialogDescription, buttonText, confirmButtonClassName
 }: ModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -49,7 +51,7 @@ export default function Modal({
 
           <Button
             onClick={onConfirm}
-            className="bg-red-600 text-white hover:bg-red-700"
+            className={cn("bg-red-600 text-white hover:bg-red-700", confirmButtonClassName)}
           >
             {buttonText}
           </Button>

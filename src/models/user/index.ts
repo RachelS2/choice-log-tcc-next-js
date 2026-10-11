@@ -2,7 +2,6 @@ import { IncomeRange } from "../../../generated/prisma";
 
 export interface UpdateUserProfileDTO {
     name: string;
-    email: string;
     incomeRange: IncomeRange;
     image?: string | null;
 }

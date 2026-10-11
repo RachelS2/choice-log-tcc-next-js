@@ -71,7 +71,6 @@ export async function updateUserProfile(
             data: {
                 name: profile.name,
                 image: profile.image,
-                email: profile.email,
                 updatedAt: new Date(),
                 incomeRange: profile.incomeRange,
             },

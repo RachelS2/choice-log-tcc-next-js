@@ -1,7 +1,7 @@
 // src/lib/catalog.ts
 
 import { prisma } from "@/lib/prisma";
-import { ItemResumeModel, CategoryModel, ItemTypeEnum, BasicItemModel, ItemTypeModel, UpdatedItemModel } from "@/models/dashboard/items";
+import { ItemResumeModel, ItemTypeEnum, BasicItemModel, ItemTypeModel, UpdatedItemModel, PostItemResponseModel } from "@/models/dashboard/items";
 import { PostItemModel } from "@/models/dashboard/items";
 import { toSystemName } from "../utils";
 import { Prisma } from "../../../generated/prisma";
@@ -130,54 +130,82 @@ export async function fetchItemResumeRepository(userId: string, categoryType?: I
 }
 
 
-export async function postItemRepository(item: PostItemModel, userId: string): Promise<ItemResumeModel> {
-  const createdItem = await prisma.item.create({
-    data: {
-      friendlyName: item.friendlyName,
-      systemName: toSystemName(item.friendlyName),
-      brand: item.brand,
-      category: {
-        connect: {
-          id: item.categoryId,
+export async function postItemRepository(item: PostItemModel, userId: string): Promise<PostItemResponseModel> {
+  try {
+    const createdItem = await prisma.item.create({
+      data: {
+        friendlyName: item.friendlyName,
+        systemName: toSystemName(item.friendlyName),
+        brand: item.brand,
+        category: {
+          connect: {
+            id: item.categoryId,
+          },
+        },
+        imageUrl: item.imageUrl,
+
+        user: {
+          connect: {
+            id: userId,
+          },
         },
       },
-      imageUrl: item.imageUrl,
 
-      user: {
-        connect: {
-          id: userId,
+      include: {
+        category: {
+          include: {
+            type: true,
+          },
         },
       },
-    },
+    });
 
-    include: {
-      category: {
-        include: {
-          type: true,
-        },
-      },
-    },
-  });
+    return {
+      success: true,
+      error: null,
+      data: {
+          id: createdItem.id,
+          friendlyName: createdItem.friendlyName,
+          systemName: createdItem.systemName,
+          brand: createdItem.brand,
 
-  return {
-    id: createdItem.id,
-    friendlyName: createdItem.friendlyName,
-    systemName: createdItem.systemName,
-    brand: createdItem.brand,
+          categoryId: createdItem.category.id,
+          imageUrl: createdItem.imageUrl,
 
-    categoryId: createdItem.category.id,
-    imageUrl: createdItem.imageUrl,
+          type: createdItem.category.type.name as ItemTypeEnum,
+          typeId: createdItem.category.type.id,
+          experiences: 0,
+          // averageRating: 0,
+          lastConsumed: null,
+          updatedAt: createdItem.updatedAt,
+          totalSpent: 0,
 
-    type: createdItem.category.type.name as ItemTypeEnum,
-    typeId: createdItem.category.type.id,
-    experiences: 0,
-    // averageRating: 0,
-    lastConsumed: null,
-    updatedAt: createdItem.updatedAt,
-    totalSpent: 0,
+          categoryName: createdItem.category.name,
+        
+      }
+    };
+  }
+  catch (error: unknown) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return {
+        success: false,
+        error: "DUPLICATE_ITEM",
+        data: null
+      };
+    }
 
-    categoryName: createdItem.category.name,
-  };
+    console.error("Erro ao criar item:", error);
+
+    return {
+      success: false,
+      error: "INTERNAL_ERROR",
+      data: null
+    };
+  }
+
 }
 
 export async function deleteItemRepository(itemId: string, userId: string) {

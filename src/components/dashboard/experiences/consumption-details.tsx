@@ -482,10 +482,10 @@ export function ConsumptionDetails({
                             });
                           }}
                           selectedClassName={cn(
-                            "rounded-full border border-red-300 bg-red-100 px-3 py-1.5 text-xs font-medium text-red-700",
+                            "rounded-full border border-red-300 bg-red-100  px-3 py-1.5 text-xs font-medium text-red-700",
                             (isEditing && !loading)
                               ? "cursor-pointer hover:bg-red-200"
-                              : "cursor-default"
+                              : "cursor-default hover:bg-red-700"
                           )}
                           unselectedClassName="
           rounded-full
@@ -495,7 +495,7 @@ export function ConsumptionDetails({
           text-xs
           font-medium
           text-white 
-          hover:bg-white/20
+           hover:bg-red-500
           hover:text-white
         "
                         >

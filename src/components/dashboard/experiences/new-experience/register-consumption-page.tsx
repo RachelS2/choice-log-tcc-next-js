@@ -31,7 +31,7 @@ import { cn, getInitials } from "@/lib/utils";
 import { RatingStars } from "@/components/ui/rating-starts";
 import { DatePicker } from "@/components/ui/choicelog-date-picker";
 import ConsumptionCreatedPage from "./consumption-created-page";
-import { BasicItemModel, CategoryModel, ItemResumeModel, ItemTypeEnum, ItemTypeModel, PostItemModel } from "@/models/dashboard/items";
+import { BasicItemModel, CategoryModel, ItemTypeEnum, ItemTypeModel, PostItemModel, PostItemResponseModel } from "@/models/dashboard/items";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, CreateConsumptionModel, NegativeAspectModel } from "@/models/dashboard/consumption";
 import CreateUpdateItemModal from "../../items/create-item-modal";
 import { toast } from "sonner";
@@ -60,7 +60,7 @@ interface RegisterConsumptionProps {
   postConsumption: (
     consumption: CreateConsumptionModel
   ) => void;
-  postItem: (newItem: PostItemModel) => Promise<ItemResumeModel>;
+  postItem: (newItem: PostItemModel) => Promise<PostItemResponseModel>;
 }
 function getItemTypeId(typeName: ItemTypeEnum, itemTypes: ItemTypeModel[]): number {
   const itemTypeId: ItemTypeModel | undefined = itemTypes.find(x => x.name == typeName);
@@ -199,17 +199,19 @@ export default function RegisterConsumptionPageClient({ postItem, initialItems, 
   if (saved && selectedItem) {
     return (
 
-      <ConsumptionCreatedPage itemName={selectedItem.friendlyName} onButtonClick={() => {
-        setSaved(false);
-        setRating(0);
-        setDetails("");
-        setAddress("");
-        setReasonId(null);
-        setInfluenceId(null);
-        setPriceDigits("");
-        setWouldBuyAgain(null);
-        setAspectIds([]);
-      }} />
+      <div className="flex min-h-[calc(100dvh-100px)] items-center justify-center">
+        <ConsumptionCreatedPage itemName={selectedItem.friendlyName} onButtonClick={() => {
+          setSaved(false);
+          setRating(0);
+          setDetails("");
+          setAddress("");
+          setReasonId(null);
+          setInfluenceId(null);
+          setPriceDigits("");
+          setWouldBuyAgain(null);
+          setAspectIds([]);
+        }} />
+      </div>
     );
   }
 
@@ -665,27 +667,33 @@ export default function RegisterConsumptionPageClient({ postItem, initialItems, 
         onOpenChange={setNewItemModalOpen}
         categories={categories}
         onEditItemServer={null}
-        onCreateItemServer={async (newItem: PostItemModel) => {
+        onCreateItemServer={async (newItem: PostItemModel): Promise<PostItemResponseModel> => {
 
-          const postedItem: ItemResumeModel = await postItem(newItem);
-          setNewItemModalOpen(false);
-          const basicItemModel: BasicItemModel = {
-            categoryId: newItem.categoryId,
-            brand: newItem.brand,
-            categoryName: postedItem.categoryName,
-            type: postedItem.type,
-            typeId: postedItem.typeId,
-            id: postedItem.id,
-            friendlyName: newItem.friendlyName,
-            imageUrl: newItem.imageUrl,
+          const response: PostItemResponseModel = await postItem(newItem);
+
+          if (response.success && response.data) {
+            const postedItem = response.data;
+            setNewItemModalOpen(false);
+            const basicItemModel: BasicItemModel = {
+              categoryId: newItem.categoryId,
+              brand: newItem.brand,
+              categoryName: postedItem.categoryName,
+              type: postedItem.type,
+              typeId: postedItem.typeId,
+              id: postedItem.id,
+              friendlyName: newItem.friendlyName,
+              imageUrl: newItem.imageUrl,
+
+            }
+            setItems((currentItems) => [
+              ...currentItems,
+              basicItemModel,
+            ]);
+            selectItem(basicItemModel.id);
 
           }
-          setItems((currentItems) => [
-            ...currentItems,
-            basicItemModel,
-          ]);
-          selectItem(basicItemModel.id);
-          return postedItem
+          return response;
+
         }}
       />
     </div>

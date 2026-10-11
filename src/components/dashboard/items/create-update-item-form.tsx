@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn, formatItemTypeLabel } from '@/lib/utils';
-import type { CategoryModel, ItemResumeModel, ItemTypeEnum, PostItemModel, UpdatedItemModel } from '../../../models/dashboard/items';
+import type { CategoryModel, ItemResumeModel, ItemTypeEnum, PostItemModel, PostItemResponseModel, UpdatedItemModel } from '../../../models/dashboard/items';
 import { itemFormSchema, ItemFormSchema } from '@/zod-schemas/item-form-schema';
 
 export interface CreateUpdateItemFormProps {
@@ -22,9 +22,9 @@ export interface CreateUpdateItemFormProps {
 
   item?: ItemResumeModel;
 
-  onCreateItemServer: ((item: PostItemModel) => Promise<ItemResumeModel>) | null;
+  onCreateItemServer: ((item: PostItemModel) => Promise<PostItemResponseModel>) | null;
 
-  onEditItemServer: ((item: UpdatedItemModel) => Promise<ItemResumeModel | null> ) | null;
+  onEditItemServer: ((item: UpdatedItemModel) => Promise<ItemResumeModel | null>) | null;
 
   onOpenChange: (open: boolean) => void;
 
@@ -81,73 +81,6 @@ export default function CreateUpdateItemForm({ onOpenChange, onCreateItemServer,
 
   }, [item, reset]);
 
-  const onSubmit = async (data: ItemFormSchema) => {
-
-    setSubmitting(true);
-    setServerError(null);
-
-    try {
-
-      if (mode === "edit") {
-        if (onEditItemServer === null) {
-          throw new Error("Edit item action was not implemented!");
-        }
-
-        if (item === undefined) {
-          throw new Error("Item should exist to be updated!")
-        }
-
-        const updatedItem: UpdatedItemModel = {
-          id: item.id,
-          categoryId: data.categoryId,
-          friendlyName: data.friendlyName,
-          brand: data.brand,
-          imageUrl: data.imageUrl || null,
-        };
-
-        await onEditItemServer(updatedItem);
-      }
-      else {
-
-        if (onCreateItemServer == null) throw Error("Create item action was not implemented!")
-        const createItem: PostItemModel = {
-          categoryId: data.categoryId,
-          friendlyName: data.friendlyName,
-          brand: data.brand,
-          imageUrl: data.imageUrl || null,
-        };
-        await onCreateItemServer(createItem);
-      }
-      onOpenChange(false)
-
-
-    } catch (err) {
-      if (
-        err instanceof Error &&
-        err.message === "UNIQUE_CONSTRAINT_VIOLATION"
-      ) {
-
-        setServerError(
-          "Você já possui um item com este nome e marca."
-        );
-
-        setError("friendlyName", {
-          message: "Combinação duplicada.",
-        });
-
-        setError("brand", {
-          message: "Combinação duplicada.",
-        });
-      } else {
-        setServerError(
-          "Houve um erro inesperado. Tente novamente mais tarde."
-        );
-      }
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   const handleTypeChange = (type: ItemTypeEnum) => {
     setValue("type", type, {
       shouldValidate: true,
@@ -160,6 +93,74 @@ export default function CreateUpdateItemForm({ onOpenChange, onCreateItemServer,
     });
 
     clearErrors(["type", "categoryId"]);
+  };
+
+  const onSubmit = async (data: ItemFormSchema) => {
+
+    setSubmitting(true);
+    setServerError(null);
+
+
+    if (mode === "edit") {
+      if (onEditItemServer === null) {
+        throw new Error("Edit item action was not implemented!");
+      }
+
+      if (item === undefined) {
+        throw new Error("Item should exist to be updated!")
+      }
+
+      const updatedItem: UpdatedItemModel = {
+        id: item.id,
+        categoryId: data.categoryId,
+        friendlyName: data.friendlyName,
+        brand: data.brand,
+        imageUrl: data.imageUrl || null,
+      };
+
+      await onEditItemServer(updatedItem);
+      onOpenChange(false);
+    }
+    else {
+
+      if (onCreateItemServer == null) throw Error("Create item action was not implemented!")
+      const createItem: PostItemModel = {
+        categoryId: data.categoryId,
+        friendlyName: data.friendlyName,
+        brand: data.brand,
+        imageUrl: data.imageUrl || null,
+      };
+      const result = await onCreateItemServer(createItem);
+      setSubmitting(false);
+      if (!result.success) {
+        if (result.error === "DUPLICATE_ITEM") {
+          setServerError(
+            "Você já possui um item com este nome e marca."
+          );
+
+          setError("friendlyName", {
+            type: "server",
+            message: "Combinação duplicada.",
+          });
+
+          setError("brand", {
+            type: "server",
+            message: "Combinação duplicada.",
+          });
+
+          return;
+        }
+
+        setServerError(
+          "Houve um erro inesperado. Tente novamente mais tarde."
+        );
+
+        return;
+      }
+      onOpenChange(false);
+    }
+
+    
   };
 
   return (
@@ -328,7 +329,6 @@ export default function CreateUpdateItemForm({ onOpenChange, onCreateItemServer,
     </form>
   );
 }
-
 
 interface ItemTypeButtonProps {
   type: ItemTypeEnum;

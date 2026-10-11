@@ -3,7 +3,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import ItemsFiltersPanel, { ItemsFilters } from '@/components/dashboard/items/items-filter';
 import ItemsHeader from '@/components/dashboard/items/items-header';
 import CreateUpdateItemModal from '@/components/dashboard/items/create-item-modal';
-import { CategoryModel, ItemResumeModel, ItemTypeEnum, PostItemModel, UpdatedItemModel } from '@/models/dashboard/items';
+import { CategoryModel, ItemResumeModel, ItemTypeEnum, PostItemModel, PostItemResponseModel, UpdatedItemModel } from '@/models/dashboard/items';
 import ItemsLoadingState from '@/components/dashboard/items/items-loading-state';
 import { SortItemsOptions } from '@/models/dashboard/consumption';
 import { PackageOpen } from 'lucide-react';
@@ -20,7 +20,7 @@ interface ItemsPageProps {
     items: ItemResumeModel[];
     categories: CategoryModel[];
     onDeleteItemServer: (itemId: string) => void;
-    onCreateItemServer: (itemId: PostItemModel) => Promise<ItemResumeModel>;
+    onCreateItemServer: (itemId: PostItemModel) => Promise<PostItemResponseModel>;
     onEditItemServer: (item: UpdatedItemModel) => Promise<ItemResumeModel>;
 }
 
@@ -176,10 +176,10 @@ export default function ItemsPageClient({ categories, items, onDeleteItemServer,
                         <NotificationContent
                             icon={PackageOpen}
                             title="Nenhum item encontrado"
-                            description="Tente alterar ou remover alguns filtros.">
+                            description="Altere os filtros ou adicione seu primeiro item.">
                             <Button
                                 variant="outline"
-                                className="bg-blue-900 text-white hover:bg-blue-950 justify-center  hover:font-semibold"
+                                className="bg-blue-900 text-white hover:bg-blue-950 justify-center hover:text-offWhite"
                                 onClick={clearFilters}
                             >
                                 Limpar filtros
@@ -193,15 +193,20 @@ export default function ItemsPageClient({ categories, items, onDeleteItemServer,
                     mode="create"
                     onOpenChange={setModalOpen}
                     categories={categories}
-                    onCreateItemServer={async (item: PostItemModel) => {
-                        const itemResume = await onCreateItemServer(item);
+                    onCreateItemServer={async (item: PostItemModel): Promise<PostItemResponseModel> => {
+                        const response: PostItemResponseModel = await onCreateItemServer(item);
 
-                        setPageItems((previousItems) => [
-                            itemResume,
-                            ...previousItems,
-                        ]);
+                        if (!response.error && response.data) {
+                            const postedItem: ItemResumeModel = response.data as ItemResumeModel;
+                            // updates the page items state with the newly created item
+                            setPageItems((previousItems) => [
+                                postedItem,
+                                ...previousItems,
+                            ]);
+                        }
 
-                        return itemResume;
+                        return response;
+
                     }}
 
                     onEditItemServer={null}

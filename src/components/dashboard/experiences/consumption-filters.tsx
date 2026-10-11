@@ -8,7 +8,7 @@ import { CategoryModel } from "@/models/dashboard/items";
 import { ConsumptionInfluenceModel, ConsumptionReasonModel, SortConsumptionsOptions } from "@/models/dashboard/consumption";
 import { FiltersPanel } from "@/components/ui/choicelog-filter-painel";
 import { FiltersSearchAndButton } from "@/components/ui/choicelog-filters-and-btn";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 
 interface ConsumptionFiltersProps {
@@ -25,9 +25,9 @@ export function ConsumptionFilters({
   setExpanded,
 }: ConsumptionFiltersProps) {
   const count = activeFilterCount(filters);
-
+  const router = useRouter();
   function onButtonClick() {
-    redirect("/dashboard/experiences/new-experience")
+   router.push("/dashboard/experiences/new-experience");
   }
   return (
     <FiltersSearchAndButton btnTxt={"Nova experiência"} onButtonClick={onButtonClick} count={count} setExpanded={setExpanded} expanded={expanded} filters={filters} onChange={onChange} />

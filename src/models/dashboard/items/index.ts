@@ -6,6 +6,13 @@ export interface CategoryModel {
   type: ItemTypeEnum;
 }
 
+export interface PostItemResponseModel {
+  success: boolean;
+  error: "DUPLICATE_ITEM" | "INTERNAL_ERROR" | null;
+  data: ItemResumeModel | null;
+}
+
+
 export interface PostItemModel {
   categoryId: string;
   friendlyName: string;

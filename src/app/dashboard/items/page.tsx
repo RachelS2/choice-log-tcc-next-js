@@ -1,5 +1,5 @@
 
-import { CategoryModel, ItemResumeModel, ItemTypeEnum, PostItemModel, UpdatedItemModel } from '@/models/dashboard/items';
+import { CategoryModel, ItemResumeModel, ItemTypeEnum, PostItemModel, PostItemResponseModel, UpdatedItemModel } from '@/models/dashboard/items';
 import { ErrorNotification } from '@/components/ui/choicelog-notification-card';
 import { fetchCategoriesRepository } from '@/lib/repository/category-repository';
 import { fetchItemResumeRepository, updateItemRepository, deleteItemRepository, postItemRepository } from '@/lib/repository/item-repository';
@@ -30,7 +30,7 @@ export default async function ItemsPage() {
       await deleteItemRepository(deletedItemId, userId);
     }
 
-    async function onCreateItem(updatedItem: PostItemModel): Promise<ItemResumeModel> {
+    async function onCreateItem(updatedItem: PostItemModel): Promise<PostItemResponseModel> {
       "use server";
 
       return await postItemRepository(updatedItem, userId);

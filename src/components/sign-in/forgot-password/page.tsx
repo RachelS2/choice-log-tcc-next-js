@@ -80,7 +80,7 @@ export function ForgotPasswordPage() {
                                 type="email"
                                 required
                                 autoComplete="email"
-                                placeholder="voce@gmail.com"
+                                placeholder="voce@exemplo.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="text-xl"

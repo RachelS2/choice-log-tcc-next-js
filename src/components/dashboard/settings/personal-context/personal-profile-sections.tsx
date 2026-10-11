@@ -141,33 +141,20 @@ export default function PersonalProfileSection() {
                 <div className="flex items-center gap-3">
                     {isEditing ? (
                         <div className="flex items-center gap-2">
-                            {isDirty && (
-                                <div className="
-            flex items-center gap-2
-            h-11 px-3
-            rounded-lg
-            border border-amber-200
-            bg-amber-50
-            text-amber-700
-            text-sm
-            font-medium
-        ">
-                                    <AlertCircle className="h-4 w-4" />
-                                    Alterações não salvas
-                                </div>
-                            )}
-                            <Button type="submit" className="h-11 bg-blue-600  shadow-sm hover:bg-blue-700 text-white">
-                                <span className="flex items-center gap-2 text-md ">
-                                    <Save className="h-4 w-4" />
-                                    Salvar alterações
-                                </span>
-                            </Button>
+
+                            {isDirty ? (
+                                <Button type="submit" className="h-11 bg-blue-600  shadow-sm hover:bg-blue-700 text-white">
+                                    <span className="flex items-center gap-2 text-md ">
+                                        <Save className="h-4 w-4" />
+                                        Salvar alterações
+                                    </span>
+                                </Button>) : null}
 
                             <Button
                                 type="button"
-                                variant="ghost"
+                                variant="outline"
                                 onClick={handleCancel}
-                                className="h-11 shadow-xl border border-neutral-300 bg-white text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100"
+                                className="w-24 h-11 text-blue-500 bg-white/80 shadow-sm hover:text-blue-600"
                             >
 
                                 <X className="h-4 w-4" />

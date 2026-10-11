@@ -80,7 +80,7 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
     shadow-md
     transition-all duration-300 ease-out
     hover:-translate-y-1
-    hover:shadow-blue-900
+    hover:shadow-blue-500
     hover:shadow-lg hover:shadow-blue-100/0
   "
     >

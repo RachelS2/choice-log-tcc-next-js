@@ -22,7 +22,7 @@ export default function VerifyEmailPage({ email }: VerifyEmailPageProps) {
             }
             footer="Não recebeu? Verifique sua pasta de spam.">
 
-            <Button asChild variant="ghost" className="h-11 w-full bg-black text-white hover:bg-black">
+            <Button asChild variant="ghost" className="h-11 w-full bg-black text-white hover:text-offWhite hover:bg-black">
                 <Link href="/sign-in">
                     <ArrowLeft className="size-4" />
                     Ir para login

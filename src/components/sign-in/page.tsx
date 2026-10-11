@@ -108,7 +108,7 @@ export default function LoginForm() {
                             <Label htmlFor='email' className="text-lg">E-mail</Label>
                         </div>
 
-                        <Input id='email' type='email' placeholder='your_email@example.com' {...register('email')} className="!text-base" />
+                        <Input id='email' type='email' placeholder='voce@exemplo.com' {...register('email')} className="!text-base" />
                         <p className="text-red-600 text-base min-h-[1rem]">
                             {errors.email?.message}
                         </p>

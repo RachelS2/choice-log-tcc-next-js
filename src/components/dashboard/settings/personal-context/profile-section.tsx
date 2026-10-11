@@ -101,7 +101,7 @@ export default function ProfileSection({ isEditing, errors, register, userData, 
                             <div className="space-y-2">
 
                                 <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
+                                    <div className="text-sm font-medium text-neutral-700 flex items-center gap-2">
                                         <Label>E-mail</Label>
 
                                     </div>

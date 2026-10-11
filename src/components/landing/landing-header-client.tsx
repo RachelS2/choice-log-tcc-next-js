@@ -36,7 +36,7 @@ export default function LandingHeaderClient({ userIsLoggedIn }: { userIsLoggedIn
             <Button
               asChild
               variant="ghost"
-              className="bg-blue-600 h-10 text-lg shadow-sm text-white hover:bg-blue-700"
+              className="bg-blue-600 h-10 text-lg shadow-sm text-white hover:text-offWhite hover:bg-blue-700"
             >
               <Link href="/sign-up">Cadastre-se</Link>
             </Button>

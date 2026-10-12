@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { PanelLeftClose, PanelLeftOpen, ShoppingBag } from "lucide-react";
+import {
+    PanelLeftClose,
+    PanelLeftOpen,
+    ShoppingBag,
+} from "lucide-react";
 
 import AppLogo from "@/components/ui/choicelog-app-logo";
 import UserIcon from "@/components/ui/choicelog-user-icon";
@@ -16,55 +20,99 @@ interface SidebarShellProps {
             image?: string | null;
         };
     };
+    isCollapsed: boolean;
+    onToggle: () => void;
 }
 
-export default function SidebarShell({ session }: SidebarShellProps) {
-    const [isCollapsed, setIsCollapsed] = useState(false);
-    const sidebarWidth = isCollapsed ? 72 : 256;
+export default function SidebarShell({
+    session,
+    isCollapsed,
+    onToggle,
+}: SidebarShellProps) {
+
     const userName = session.user.name ?? "Usuário";
     const userEmail = session.user.email ?? "";
 
     return (
         <aside
-            className="relative flex h-screen shrink-0 flex-col border-r border-gray-200 bg-white transition-all duration-200"
-            style={{ width: sidebarWidth }}
+            className={`
+        fixed inset-y-0 left-0 z-40
+        flex h-dvh w-[72px] flex-col
+        border-r border-gray-200 bg-white
+        transition-[width] duration-200
+        ${isCollapsed
+                    ? "lg:w-[72px]"
+                    : "lg:w-64"
+                }
+      `}
         >
-            <div className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-3">
+            {/* HEADER */}
+            <div className="flex h-16 shrink-0 items-center justify-center border-b border-gray-200 px-3 lg:justify-between">
+
+                {/* Logo completo - desktop expandido */}
                 {!isCollapsed && (
-                    <div className="min-w-0 flex-1">
-                        <AppLogo href="/dashboard" textColor="text-gray-900" />
+                    <div className="hidden min-w-0 flex-1 lg:block">
+                        <AppLogo
+                            href="/dashboard"
+                            textColor="text-gray-900"
+                        />
                     </div>
                 )}
 
-                {isCollapsed && (
-                    <div className="mx-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-700">
-                        <ShoppingBag className="h-4 w-4 text-white" />
-                    </div>
-                )}
-
-
-            </div>
-
-            <div className="flex-1 overflow-hidden">
-                <SidebarNav collapsed={isCollapsed} />
-            </div>
-
-            <div className="border-t border-gray-200 p-3">
+                {/* Ícone compacto - mobile ou desktop recolhido */}
                 <div
-                    className={
-                        isCollapsed
-                            ? "flex flex-col items-center gap-3"
-                            : "flex items-center gap-3"
-                    }
+                    className={`
+            flex size-9 shrink-0 items-center justify-center
+            rounded-xl bg-blue-700
+            ${isCollapsed
+                            ? "lg:flex"
+                            : "lg:hidden"
+                        }
+          `}
+                >
+                    <ShoppingBag className="size-4 text-white" />
+                </div>
+            </div>
+
+            {/* NAVEGAÇÃO */}
+            <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+                {/* Mobile sempre recolhido */}
+                <div className="lg:hidden">
+                    <SidebarNav collapsed={true} />
+                </div>
+
+                {/* Desktop acompanha o estado */}
+                <div className="hidden lg:block">
+                    <SidebarNav collapsed={isCollapsed} />
+                </div>
+            </div>
+
+            {/* RODAPÉ */}
+            <div className="shrink-0 border-t border-gray-200 p-3">
+
+                {/* Mobile: somente avatar */}
+                <div className="flex justify-center lg:hidden">
+                    <UserIcon
+                        name={userName}
+                        image={session.user.image}
+                        className="size-9 shrink-0"
+                    />
+                </div>
+
+                {/* Desktop */}
+                <div
+                    className={`
+            hidden lg:flex
+            ${isCollapsed
+                            ? "flex-col items-center gap-3"
+                            : "items-center gap-3"
+                        }
+          `}
                 >
                     <UserIcon
                         name={userName}
                         image={session.user.image}
-                        className={
-                            isCollapsed
-                                ? "size-9 shrink-0"
-                                : "size-9 shrink-0"
-                        }
+                        className="size-9 shrink-0"
                     />
 
                     {!isCollapsed && (
@@ -84,12 +132,10 @@ export default function SidebarShell({ session }: SidebarShellProps) {
                         variant="ghost"
                         size="icon"
                         aria-label={
-                            isCollapsed
-                                ? "Expandir sidebar"
-                                : "Recolher sidebar"
+                            isCollapsed ? "Expandir sidebar" : "Recolher sidebar"
                         }
-                        onClick={() => setIsCollapsed((current) => !current)}
-                        className="size-9 shrink-0 cursor-pointer rounded-lg text-gray-600 shadow-none hover:bg-gray-100"
+                        onClick={onToggle}
+                        className="hidden lg:flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg text-gray-600 shadow-none hover:bg-gray-100"
                     >
                         {isCollapsed ? (
                             <PanelLeftOpen className="size-4" />

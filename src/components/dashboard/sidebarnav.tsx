@@ -11,35 +11,45 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export function SidebarNav() {
+interface SidebarNavProps {
+  collapsed?: boolean;
+}
+
+export function SidebarNav({ collapsed = false }: SidebarNavProps) {
   const pathname = usePathname();
 
   return (
     <nav className="flex-1 space-y-1 px-3 py-4 lg:space-y-1">
 
       {/* Dashboard */}
-      {buildMenuOption(pathname, "/dashboard", "Dashboard", LayoutDashboard)}
+      {buildMenuOption(pathname, "/dashboard", "Dashboard", LayoutDashboard, collapsed)}
 
       {/* Itens */}
-      {buildMenuOption(pathname, "/dashboard/items", "Itens", Box)}
+      {buildMenuOption(pathname, "/dashboard/items", "Itens", Box, collapsed)}
 
       {/* Experiences */}
-      {buildMenuOption(pathname, "/dashboard/experiences", "Experiências", ClipboardList)}
+      {buildMenuOption(pathname, "/dashboard/experiences", "Experiências", ClipboardList, collapsed)}
 
       {/* Analytics */}
-      {buildMenuOption(pathname, "/dashboard/analytics", "Análises", BarChart3)}
+      {buildMenuOption(pathname, "/dashboard/analytics", "Análises", BarChart3, collapsed)}
 
       {/* Wish List */}
       {/* {buildMenuOption(pathname, "/dashboard/wishlist", "Lista de Desejos", ShoppingCart)} */}
 
       {/* Settings */}
-      {buildMenuOption(pathname, "/dashboard/settings", "Configurações", Settings)}
+      {buildMenuOption(pathname, "/dashboard/settings", "Configurações", Settings, collapsed)}
 
     </nav>
   );
 }
 
-function buildMenuOption(pathname: string, href: string, label: string, Icon: React.ComponentType<{ className?: string }>) {
+function buildMenuOption(
+  pathname: string,
+  href: string,
+  label: string,
+  Icon: React.ComponentType<{ className?: string }>,
+  collapsed: boolean
+) {
   const getIsActive = (href: string) =>
     href === "/dashboard"
       ? pathname === "/dashboard"
@@ -47,16 +57,17 @@ function buildMenuOption(pathname: string, href: string, label: string, Icon: Re
   return (
     <Link
       href={href}
+      title={collapsed ? label : undefined}
       className={cn(
         "flex w-full touch-manipulation items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors lg:py-2",
+        collapsed ? "justify-center px-0" : "",
         getIsActive(href)
           ? "bg-blue-50 text-blue-700"
           : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
       )}
     >
       <Icon className="h-4 w-4 shrink-0" />
-      {label}
+      {!collapsed && label}
     </Link>
   )
-
 }

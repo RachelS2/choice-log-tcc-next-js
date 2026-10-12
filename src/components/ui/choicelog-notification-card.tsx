@@ -31,29 +31,32 @@ export function NotificationContent({
       className="flex w-full flex-col items-center justify-center px-4"
     >
       <Card
-        className={cn("w-full max-w-md rounded-2xl bg-blue-100 shadow-lg transition-all",
-           "duration-300 hover:-translate-y-0.5 hover:shadow-blue-500 animate-in fade-in",
-           "slide-in-from-bottom-2 sm:p-10", mainDivClassName)}
+        className={cn(
+          "w-full max-w-md rounded-2xl bg-blue-100 shadow-lg transition-all",
+          "duration-300 hover:-translate-y-0.5 hover:shadow-blue-500 animate-in fade-in",
+          "p-4 sm:p-6 md:p-8",
+          mainDivClassName,
+        )}
         style={{ boxShadow: "var(--shadow-card)" }}
       >
         <DecorativeBackground />
 
-        <div className="mb-6 flex flex-col items-center text-center">
-          <div className={cn("mb-5 grid size-14 place-items-center rounded-full bg-blue-900", iconClassName)}>
-            <Icon className="size-7 text-white" strokeWidth={2} />
+        <div className="mb-5 flex flex-col items-center text-center sm:mb-6">
+          <div className={cn("mb-4 grid size-12 place-items-center rounded-full bg-blue-900 sm:size-14", iconClassName)}>
+            <Icon className="size-5 text-white sm:size-7" strokeWidth={2} />
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-black">
+          <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight text-black">
             {title}
           </h1>
-          <p className="mt-2 text-base leading-relaxed text-muted-foreground">
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
             {description}
           </p>
         </div>
         {children && (
-          <div className="flex flex-col items-center justify-center">{children}</div>
+          <div className="flex flex-col items-center justify-center w-full">{children}</div>
         )}
         {footer ? (
-          <div className="mt-6 text-center text-xs text-muted-foreground">
+          <div className="mt-5 text-center text-[11px] text-muted-foreground sm:mt-6 sm:text-xs">
             {footer}
           </div>
         ) : null}

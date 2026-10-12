@@ -101,11 +101,11 @@ export function ChangePasswordFormSettings({
                 />
             </div>
 
-            <div className={`flex justify-${justifyButtons} pt-6 gap-2`}>
+            <div className="flex flex-col gap-2 pt-6 sm:flex-row sm:items-center sm:justify-start">
                 {onCancel ? <Button
                     type="button"
                     variant="ghost"
-                    className="w-24 h-9 text-blue-500 bg-white/80 shadow-md hover:text-blue-600"
+                    className="h-10 w-full text-blue-500 bg-white/80 shadow-md hover:text-blue-600 sm:w-auto"
                     onClick={handleCancelChangePassword}
                 >
                     Cancelar
@@ -120,7 +120,7 @@ export function ChangePasswordFormSettings({
                         isSubmitting ||
                         Object.keys(errors).length > 0
                     }
-                    className="bg-blue-600 h-9 hover:bg-blue-500 shadow-lg"
+                    className="h-10 w-full bg-blue-600 shadow-lg hover:bg-blue-500 sm:w-auto"
                 >
                     {isSubmitting ? "Atualizando..." : "Atualizar senha"}
                 </Button>

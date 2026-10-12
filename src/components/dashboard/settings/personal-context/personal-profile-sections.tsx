@@ -184,34 +184,36 @@ export default function PersonalProfileSection() {
                 <ProfileSettingsHeader />
                 <div className="flex items-center gap-3">
                     {isEditing ? (
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
 
-                            {isDirty ? (
-                                <Button type="submit" className="h-11 bg-blue-600  shadow-sm hover:bg-blue-700 text-white">
-                                    <span className="flex items-center gap-2 text-md ">
-                                        <Save className="h-4 w-4" />
-                                        Salvar alterações
-                                    </span>
-                                </Button>) : null}
+                                {isDirty ? (
+                                    <Button type="submit" className="h-11 w-full bg-blue-600 text-white shadow-sm hover:bg-blue-700 sm:w-auto">
+                                        <span className="flex items-center gap-2 text-sm sm:text-base">
+                                            <Save className="h-4 w-4" />
+                                            Salvar alterações
+                                        </span>
+                                    </Button>) : null}
 
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={handleCancel}
-                                className="w-24 h-11 text-blue-500 bg-white/80 shadow-sm hover:text-blue-600"
-                            >
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={handleCancel}
+                                    className="h-11 w-full bg-white/80 text-blue-500 shadow-sm hover:text-blue-600 sm:w-auto"
+                                >
 
-                                <X className="h-4 w-4" />
-                                Cancelar
-                            </Button>
+                                    <X className="h-4 w-4" />
+                                    Cancelar
+                                </Button>
 
+                            </div>
                         </div>
                     ) : (
                         <button
                             type="button"
                             className="
 inline-flex items-center justify-center gap-2
-h-11 px-4
+h-11 px-4 w-full
 rounded-lg
 bg-blue-600 text-white
 hover:bg-blue-700
@@ -219,6 +221,7 @@ font-medium text-sm
 transition-all
 cursor-pointer
 shadow-xl
+sm:w-auto
 "
                             onClick={() => {
                                 setIsEditing(true);

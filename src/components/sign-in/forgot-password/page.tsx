@@ -34,7 +34,7 @@ export function ForgotPasswordPage() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center px-4 py-8">
+        <div className="flex min-h-screen items-center justify-center px-3 py-6 sm:px-4 sm:py-8">
             {sent ? (
                 <NotificationContent
                     icon={MailCheck}
@@ -53,7 +53,7 @@ export function ForgotPasswordPage() {
                     footer="Não recebeu? Verifique sua pasta de spam."
                 >
                     <Button
-                        className="h-11 w-full"
+                        className="h-11 w-full text-sm sm:text-base"
                         onClick={() => setSent(false)}
                     >
                         Reenviar e-mail
@@ -69,9 +69,9 @@ export function ForgotPasswordPage() {
                     iconClassName="bg-blue-700"
                     description="Digite seu e-mail e enviaremos um link seguro para redefinir sua senha."
                 >
-                    <form onSubmit={handleSubmit} className="w-full space-y-5">
+                    <form onSubmit={handleSubmit} className="w-full space-y-4 sm:space-y-5">
                         <div className="w-full space-y-2">
-                            <Label htmlFor="email" className="text-lg">
+                            <Label htmlFor="email" className="text-sm font-medium text-blue-900 sm:text-base">
                                 E-mail
                             </Label>
 
@@ -83,13 +83,13 @@ export function ForgotPasswordPage() {
                                 placeholder="voce@exemplo.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="text-xl"
+                                className="h-11 text-base"
                             />
                         </div>
 
                         <Button
                             type="submit"
-                            className="h-11 w-full"
+                            className="h-11 w-full text-sm sm:text-base"
                             disabled={loading}
                         >
                             {loading
@@ -107,8 +107,8 @@ export function ForgotPasswordPage() {
 
 function backToLoginButton() {
     return (
-        <Button asChild variant="ghost" className="h-11 w-full  mt-4 hover:text-blue-500">
-            <Link href="/sign-in">
+        <Button asChild variant="ghost" className="mt-3 h-11 w-full text-sm hover:text-blue-500 sm:mt-4 sm:text-base">
+            <Link href="/sign-in" className="inline-flex items-center justify-center gap-2">
                 <ArrowLeft className="size-4" />
                 Voltar ao login
             </Link>

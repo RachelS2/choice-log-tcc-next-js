@@ -50,19 +50,19 @@ export default function SecuritySection() {
                 </CardDescription>
             </CardHeader>
 
-            <CardContent className="px-4 space-y-5">
+            <CardContent className="space-y-5 px-4">
 
                 {/* Password section */}
                 <div className="space-y-4">
 
                     {/* Header */}
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex min-w-0 items-center gap-3">
                             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
                                 <KeyRound className="h-4 w-4" />
                             </div>
 
-                            <div>
+                            <div className="min-w-0">
                                 <p className="font-medium">Alterar senha</p>
                                 <p className="text-sm text-neutral-500">
                                     Escolha uma senha forte para manter sua conta segura.
@@ -74,7 +74,7 @@ export default function SecuritySection() {
                             type="button"
                             variant="outline"
                             onClick={() => setShowPasswordForm(!showPasswordForm)}
-                            className="w-24 h-9 text-blue-500 bg-white/80 shadow-md hover:text-blue-600"
+                            className="h-9 w-full bg-white/80 text-blue-500 shadow-md hover:text-blue-600 sm:w-24"
                         >
                             {showPasswordForm ? "Ocultar" : "Alterar"}
                         </Button>
@@ -89,13 +89,13 @@ export default function SecuritySection() {
                 <Separator />
 
                 {/* Logout */}
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex min-w-0 items-center gap-3">
                         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100">
                             <LogOut className="h-4 w-4 text-neutral-600" />
                         </div>
 
-                        <div>
+                        <div className="min-w-0">
                             <p className="font-medium">Sair</p>
                             <p className="text-sm text-neutral-500">
                                 Encerrar sua sessão atual neste dispositivo.
@@ -103,19 +103,21 @@ export default function SecuritySection() {
                         </div>
                     </div>
 
-                    <LogoutButton />
+                    <div className="sm:ml-auto">
+                        <LogoutButton />
+                    </div>
                 </div>
 
                 <Separator />
 
                 {/* Delete account */}
-                <div className="flex items-center justify-between rounded-xl">
-                    <div className="flex items-center gap-3">
+                <div className="flex flex-col gap-3 rounded-xl sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex min-w-0 items-center gap-3">
                         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50">
                             <Trash2 className="h-4 w-4 text-red-600" />
                         </div>
 
-                        <div>
+                        <div className="min-w-0">
                             <p className="font-medium">
                                 Excluir conta
                             </p>
@@ -130,7 +132,7 @@ export default function SecuritySection() {
                             <Button
                                 type="button"
                                 variant="outline"
-                                className="w-24 h-9 text-red-500 bg-white/80 shadow-md hover:text-red-600"
+                                className="h-9 w-full bg-white/80 text-red-500 shadow-md hover:text-red-600 sm:w-24"
                             >
                                 Excluir
                             </Button>

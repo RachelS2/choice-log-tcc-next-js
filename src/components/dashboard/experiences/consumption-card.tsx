@@ -73,10 +73,10 @@ export function ConsumptionCard({
                 <div
                     className="
                     mt-4 grid
-                    grid-cols-[minmax(0,1fr)_12rem]
-                    gap-x-8
+                    grid-cols-1 gap-2
                     border-t border-border/60 pt-3
                     text-xs text-muted-foreground
+                    sm:grid-cols-[minmax(0,1fr)_12rem]
                     "
                 >
                     {/* Linha 1 / Coluna 1 */}

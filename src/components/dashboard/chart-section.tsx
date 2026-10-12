@@ -20,7 +20,7 @@ export default function ChartSection({
 }: ChartSectionProps) {
   return (
     <section className="space-y-3">
-      <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
+      <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-[2fr_1fr]">
         <SatisfactionEvolutionGraph data={satisfactionData} />
 
         <ExperienceDistributionGraph

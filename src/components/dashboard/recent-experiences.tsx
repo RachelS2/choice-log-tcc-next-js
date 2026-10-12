@@ -12,121 +12,152 @@ import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { PageHeader } from "../ui/choicelog-pages-title";
 import { cn } from "@/lib/utils";
 
-export default function RecentExperiences({ consumptions }: { consumptions: ReadConsumptionModel[] }) {
-  const gridColumns: string =
-    "grid-cols-[2fr_1.1fr_0.7fr_0.9fr_1fr_0.8fr]";
+export default function RecentExperiences({
+  consumptions,
+}: {
+  consumptions: ReadConsumptionModel[];
+}) {
+  const gridColumns =
+    "grid-cols-[minmax(180px,2fr)_minmax(120px,1.1fr)_minmax(100px,0.7fr)_minmax(110px,0.9fr)_minmax(130px,1fr)_minmax(110px,0.8fr)]";
+
   return (
-    <Card className="w-full rounded-2xl">
+    <Card className="w-full min-w-0 gap-4 rounded-2xl">
       {/* Header */}
       <CardHeader className="flex flex-row items-center justify-between">
-        <div>
-          <CardTitle className="text-base font-semibold text-slate-900">
-            <PageHeader lineBefore header="Experiências recentes" textClassName="text-sm" />
-          </CardTitle>
-
-          {/* <p className="mt-1 text-sm font-normal text-muted-foreground">
-            Seus últimos registros de consumo.
-          </p> */}
-        </div>
-
-
+        <CardTitle className="text-base font-semibold text-slate-900">
+          <PageHeader
+            lineBefore
+            header="Experiências recentes"
+            textClassName="text-sm"
+          />
+        </CardTitle>
       </CardHeader>
 
-      <CardContent className="w-full">
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-blue-600">
-          {/* Table header */}
-          <div
-            className={cn(
-              "grid items-center gap-4 border-b border-blue-400/50 px-4 py-3",
-              gridColumns
-            )}
-          >
-            <span className="text-sm font-medium text-white/90">
-              Item
-            </span>
+      <CardContent className="min-w-0 px-3 sm:px-6">
 
-            <span className="text-sm font-medium text-white/90">
-              Categoria
-            </span>
+        {/* Área com scroll horizontal */}
+        <div className="choicelog-scrollbar w-full min-w-0 overflow-x-auto rounded-xl border border-slate-200 bg-blue-50">
 
-            <span className="text-sm font-medium text-white/90">
-              Data
-            </span>
+          {/* Tabela com largura mínima */}
+          <div className="min-w-[850px] bg-blue-600">
 
-            <span className="text-sm font-medium text-white/90">
-              Valor
-            </span>
-
-            <div className="flex justify-start">
-              <span className="text-sm font-medium text-white/90">
-                Avaliação
-              </span>
-            </div>
-
-            <span className="text-sm font-medium text-white/90">
-              Recompraria
-            </span>
-          </div>
-
-          {/* Rows */}
-          {consumptions.map((consumption) => (
+            {/* Cabeçalho */}
             <div
-              key={consumption.id}
               className={cn(
-                "grid items-center gap-4 border-b border-blue-400/50",
-                "bg-blue-500 px-4 py-3",
-                "transition-colors last:border-b-0",
+                "grid items-center gap-4 border-b border-blue-400/50 px-4 py-3",
                 gridColumns
               )}
             >
-              <p className="truncate text-sm font-medium text-white">
-                {consumption.item.friendlyName}
-              </p>
+              <span className="text-sm font-medium text-white/90">
+                Item
+              </span>
 
-              <p className="truncate text-sm text-white/90">
-                {consumption.item.categoryName}
-              </p>
+              <span className="text-sm font-medium text-white/90">
+                Categoria
+              </span>
 
-              <p className="text-sm text-white/90">
-                {consumption.date.toLocaleDateString("pt-BR", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                })}
-              </p>
+              <span className="text-sm font-medium text-white/90">
+                Data
+              </span>
 
-              <p className="text-sm font-medium text-white/90">
-                {consumption.price.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
-              </p>
+              <span className="text-sm font-medium text-white/90">
+                Valor
+              </span>
 
-                <RatingStars
-                  value={consumption.rating}
-                  size="xsm"
-                  align="start"
-                />
+              <span className="text-sm font-medium text-white/90">
+                Avaliação
+              </span>
 
-              <div>
-                {consumption.wouldBuyAgain ? (
-                  <span className="inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">
-                    Sim
-                  </span>
-                ) : (
-                  <span className="inline-flex rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700">
-                    Não
-                  </span>
-                )}
-              </div>
+              <span className="text-sm font-medium text-white/90">
+                Recompraria
+              </span>
             </div>
-          ))}
+
+            {/* Linhas */}
+            {consumptions.map((consumption) => (
+              <div
+                key={consumption.id}
+                className={cn(
+                  "grid items-center gap-4 border-b border-blue-400/50 bg-blue-500 px-4 py-3 text-white transition-colors last:border-b-0 hover:bg-blue-600",
+                  gridColumns
+                )}
+              >
+                {/* Item */}
+                <div className="min-w-0">
+                  <p
+                    className="truncate text-sm font-medium text-white"
+                    title={consumption.item.friendlyName}
+                  >
+                    {consumption.item.friendlyName}
+                  </p>
+                </div>
+
+                {/* Categoria */}
+                <div className="min-w-0">
+                  <p
+                    className="truncate text-sm text-white/90"
+                    title={consumption.item.categoryName}
+                  >
+                    {consumption.item.categoryName}
+                  </p>
+                </div>
+
+                {/* Data */}
+                <p className="whitespace-nowrap text-sm text-white/90">
+                  {consumption.date.toLocaleDateString("pt-BR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })}
+                </p>
+
+                {/* Valor */}
+                <p className="whitespace-nowrap text-sm font-medium text-white/90">
+                  {consumption.price.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </p>
+
+                {/* Avaliação */}
+                <div className="flex min-w-0 items-center">
+                  <RatingStars
+                    value={consumption.rating}
+                    size="xsm"
+                    align="start"
+                  />
+                </div>
+
+                {/* Recompraria */}
+                <div>
+                  {consumption.wouldBuyAgain ? (
+                    <span className="inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                      Sim
+                    </span>
+                  ) : (
+                    <span className="inline-flex rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700">
+                      Não
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+
+          </div>
         </div>
+
+        {/* Indicação de rolagem no mobile */}
+        <p className="mt-2 text-center text-xs text-slate-500 md:hidden">
+          Deslize para os lados para visualizar todas as informações →
+        </p>
+
       </CardContent>
-      <div className="flex justify-end">
+
+      {/* Link para histórico */}
+      <div className="flex justify-end px-4 pb-4 sm:px-6">
         <Link
           href="/dashboard/experiences"
-          className="flex items-center text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
+          className="flex items-center gap-1 text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
         >
           Ver histórico completo
           <ChevronRight className="size-4" />

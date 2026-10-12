@@ -54,8 +54,8 @@ export function BuyAgainMetricCard({
             icon={<RefreshCcw className="size-5 text-emerald-600" />}
             title="Taxa de recompra"
             children={
-                <div className="mt-3 flex items-center justify-center gap-2">
-                    <div className="w-[120px]">
+                <div className="mt-3 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-2">
+                    <div className="w-full max-w-[120px] text-center sm:text-left">
                         <p className="text-sm font-medium leading-5 text-slate-700">
                             Consumiria novamente
                         </p>

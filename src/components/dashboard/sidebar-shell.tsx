@@ -75,7 +75,7 @@ export default function SidebarShell({
             </div>
 
             {/* NAVEGAÇÃO */}
-            <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+            <div className="min-h-0 flex-1 choicelog-scrollbar overflow-y-auto overflow-x-hidden">
                 {/* Mobile sempre recolhido */}
                 <div className="lg:hidden">
                     <SidebarNav collapsed={true} />

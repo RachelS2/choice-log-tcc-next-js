@@ -326,3 +326,28 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 .animate-no-feedback {
   animation: no-feedback 400ms ease-out;
 }
+
+/* Scrollbar das tabelas do ChoiceLog */
+.choicelog-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #93c5fd #eff6ff;
+}
+
+/* Chrome, Edge e Safari */
+.choicelog-scrollbar::-webkit-scrollbar {
+  height: 7px;
+}
+
+.choicelog-scrollbar::-webkit-scrollbar-track {
+  background: #eff6ff;
+  border-radius: 9999px;
+}
+
+.choicelog-scrollbar::-webkit-scrollbar-thumb {
+  background: #93c5fd;
+  border-radius: 9999px;
+}
+
+.choicelog-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #60a5fa;
+}

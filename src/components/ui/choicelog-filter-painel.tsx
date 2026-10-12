@@ -12,9 +12,9 @@ export function FiltersPanel({
     footer, mainDivClassName
 }: FilterPanelProps) {
     return (
-        <Card className="rounded-2xl bg-blue-100 p-4 shadow-sm sm:p-5" style={{ boxShadow: "var(--shadow-card)" }}
+        <Card className="rounded-2xl bg-blue-100 p-3 shadow-sm sm:p-5" style={{ boxShadow: "var(--shadow-card)" }}
         >
-            <div className={cn("grid grid-cols-1 gap-4 animate-in fade-in sm:grid-cols-2 lg:grid-cols-4", mainDivClassName)}>
+            <div className={cn("grid grid-cols-1 gap-3 animate-in fade-in sm:grid-cols-2 lg:grid-cols-4", mainDivClassName)}>
                 {children}
             </div>
 

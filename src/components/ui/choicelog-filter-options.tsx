@@ -29,7 +29,7 @@ export function SearchFilter({ value, onChange, addLabel = true, placeholder }: 
         placeholder={placeholder || "Pesquisar por nome..."}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="pl-9 text-black bg-white"
+        className="h-11 pl-9 bg-white text-black"
       />
     </div>
   )
@@ -304,82 +304,48 @@ export interface FilterOption<T extends string = string> {
   type?: TypeFilter;
 }
 
-interface FilterSelectProps<T extends string> {
+interface FilterSelectProps<T extends string>
+  extends BaseFilterProps<T> {
   label: string;
-  value: T;
   placeholder: string;
-  onChange: (value: T) => void;
   options: FilterOption<T>[];
-  addLabel: boolean,
 }
 
 function FilterSelect<T extends string>({
   label,
   value,
-  placeholder,
   onChange,
+  placeholder,
   options,
   addLabel = true,
 }: FilterSelectProps<T>) {
-  let previousType: string | undefined;
+  const hasValue = value && value !== "all";
 
   return (
-    <div className="w-full min-w-0 space-y-1.5">
+    <div className="min-w-0">
       {addLabel && (
-        <Label className="text-xs font-medium text-blue-900">
+        <Label className="mb-2 block text-xs font-medium text-blue-900/80">
           {label}
         </Label>
       )}
-
-      <div className="w-full min-w-0">
-        <Select value={value} onValueChange={onChange}>
-          <SelectTrigger
-            className={cn(
-              "h-11 w-full min-w-0 bg-white",
-              value === "ALL" || value === "recent"
-                ? "text-muted-foreground"
-                : "text-gray-900"
-            )}
-          >
-            <SelectValue placeholder={placeholder} />
-          </SelectTrigger>
-
-          <SelectContent
-            sideOffset={1}
-            position="popper"
-            className="
-              max-h-80
-              w-[var(--radix-select-trigger-width)]
-              min-w-[var(--radix-select-trigger-width)]
-              overflow-y-auto
-            "
-          >
-            {options.map((option) => {
-              const showGroupHeader =
-                option.type &&
-                option.type !== previousType;
-
-              previousType = option.type;
-
-              return (
-                <React.Fragment key={option.value}>
-                  {showGroupHeader && (
-                    <div className="px-2 py-1.5 text-[14px] font-semibold uppercase tracking-wider text-blue-900">
-                      {option.type === "PRODUCT"
-                        ? "Categorias de produtos"
-                        : "Categorias de serviços"}
-                    </div>
-                  )}
-
-                  <SelectItem value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                </React.Fragment>
-              );
-            })}
-          </SelectContent>
-        </Select>
-      </div>
+      <Select value={value || undefined} onValueChange={(newValue) => onChange(newValue as T)}>
+        <SelectTrigger
+          className={cn(
+            "h-11 w-full min-w-0 rounded-xl bg-white px-3 text-sm text-blue-900 shadow-none transition-colors focus:ring-2 focus:ring-blue-200",
+            !hasValue && "text-muted-foreground"
+          )}
+          aria-label={label}
+        >
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent className="max-w-[calc(100vw-2rem)]">
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value} className="text-sm">
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

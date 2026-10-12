@@ -577,7 +577,7 @@ export function ConsumptionDetails({
                   ) : (
                     <>
                       <Pencil className="size-4" />
-                      Editar experiência
+                      Editar
                     </>
                   )}
                 </Button>
@@ -588,14 +588,14 @@ export function ConsumptionDetails({
                 flex-1
                 border border-blue-900
                 bg-blue-100 text-blue-900
-                hover:bg-red-400c
-                hover:text-red-900
+                hover:font-semibold hover:bg-red-100
+                hover:text-red-700 hover:border-red-300
               "
                   disabled={loading}
                   onClick={() => setDeleteConsumptionModal(true)}
                 >
                   <Trash2 className="size-4" />
-                  Excluir experiência
+                  Excluir
                 </Button>
               </div>
             </div>

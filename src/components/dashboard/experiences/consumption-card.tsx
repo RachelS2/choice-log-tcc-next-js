@@ -43,7 +43,7 @@ export function ConsumptionCard({
       group flex min-h-[200px] w-full flex-col
       overflow-hidden
       rounded-2xl border border-neutral-200 bg-white
-      p-4 text-left shadow-md
+      p-3 text-left shadow-md
       transition-all duration-200 ease-out
       cursor-pointer
       hover:-translate-y-1 hover:shadow-blue-900
@@ -57,17 +57,18 @@ export function ConsumptionCard({
 
                 <ItemHero
                     item={item}
-                    avatarClassName="h-18 w-18"
+                    avatarClassName="h-16 w-16 sm:h-18 sm:w-18"
+                    friendlyNameClassName="text-md sm:text-base"
+                    brandClassName="text-xs sm:text-sm"
                     titleContent={
                         <RatingStars
                             size="xsm"
                             value={consumption.rating}
                         />
                     }
-                    topRight={CardDetails(wouldBuyAgainIcon, wouldBuyAgainStr)}
-                    middleRight={CardDetails(CalendarDays, formatDate(consumption.date.toString()))}
-
-                    bottomRight={CardDetails(Wallet, "R$ " + consumption.price.toFixed(2))}
+                    topRight={CardDetails(wouldBuyAgainIcon, wouldBuyAgainStr, "text-xs sm:text-sm")}
+                    middleRight={CardDetails(CalendarDays, formatDate(consumption.date.toString()), "text-xs sm:text-sm")}
+                    bottomRight={CardDetails(Wallet, "R$ " + consumption.price.toFixed(2), "text-xs sm:text-sm")}
                 />
 
                 <div
@@ -79,16 +80,16 @@ export function ConsumptionCard({
                     sm:grid-cols-[minmax(0,1fr)_12rem]
                     "
                 >
-                    {/* Linha 1 / Coluna 1 */}
                     {CardDetails(
                         CircleHelp,
-                        "Motivo: " + consumption.reason.friendlyName
+                        "Motivo: " + consumption.reason.friendlyName,
+                        "text-xs sm:text-sm"
                     )}
 
-                    {/* Linha 2 / Coluna 1 */}
                     {CardDetails(
                         Sparkles,
-                        "Influência: " + consumption.influence.friendlyName
+                        "Influência: " + consumption.influence.friendlyName,
+                        "text-xs sm:text-sm"
                     )}
                 </div>
             </button>
@@ -98,9 +99,9 @@ export function ConsumptionCard({
 
 function CardDetails(Icon: LucideIcon, spanContent: string, className?: string) {
     return (
-        <span className={cn("inline-flex text-sm items-center gap-1.5", className)}>
-            <Icon className={cn("size-3.5 text-blue-900", className)} />
-            <span className={cn("text-muted-foreground", className)}>
+        <span className={cn("inline-flex min-w-0 items-center gap-1.5 text-left", className)}>
+            <Icon className={cn("size-3.5 shrink-0 text-blue-900", className)} />
+            <span className={cn("min-w-0 break-words text-muted-foreground", className)}>
                 {spanContent}
             </span>
         </span>

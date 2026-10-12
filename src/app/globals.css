@@ -330,6 +330,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 /* Scrollbar das tabelas do ChoiceLog */
 .choicelog-scrollbar {
   scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
   scrollbar-color: #93c5fd #eff6ff;
 }
 
@@ -349,5 +350,5 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 .choicelog-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #60a5fa;
+  background: #3788ec;
 }

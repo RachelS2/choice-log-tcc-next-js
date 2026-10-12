@@ -121,72 +121,78 @@ export default function SignUpForm() {
     }
     return (
         !emailSent ? (
-            <form onSubmit={handleSubmit(handleOnSubmit)} className="w-full pt-8 min-w-[28rem]  flex items-center justify-center max-w-2xl">
-                <Card className="py-4 w-full rounded-3xl border border-white/10 bg-white shadow-2xl">
-                    <CardHeader className="space-y-1 text-center">
-                        <CardTitle className="text-3xl">
-                            Cadastre-se
-                        </CardTitle>
+            <form
+                onSubmit={handleSubmit(handleOnSubmit)}
+                noValidate
+                className="flex w-full min-w-[22rem] items-center justify-center"
+            >
+                <div className="w-full min-w-0">
+                    <Card className="w-full gap-5 rounded-2xl border border-white/10 bg-white py-6 shadow-2xl sm:rounded-3xl">
+                        <CardHeader className="space-y-2 px-5 text-center sm:px-8">
+                            <CardTitle className="text-2xl sm:text-3xl">
+                                Cadastre-se
+                            </CardTitle>
 
-                        <CardDescription className="text-base">
-                            Comece a acompanhar suas experiências de compra
-                        </CardDescription>
-                    </CardHeader>
+                            <CardDescription className="text-base">
+                                Comece a acompanhar suas experiências de compra
+                            </CardDescription>
+                        </CardHeader>
 
-                    <CardContent className="px-4 space-y-5 w-full">
-                        {/* <div className="grid gap-5"> */}
+                        <CardContent className="flex flex-col gap-5 px-5 sm:px-8">
+                            {/* <div className="grid gap-5"> */}
 
-                        {createLabelsAndInputs("username", "Seu nome de usuário", User, errors.username, register)}
+                            {createLabelsAndInputs("username", "Seu nome de usuário", User, errors.username, register)}
 
-                        {createLabelsAndInputs("email", "voce@exemplo.com", Mail, errors.email, register)}
+                            {createLabelsAndInputs("email", "voce@exemplo.com", Mail, errors.email, register)}
 
-                        {createLabelsAndInputs("password", "Mínimo de 8 caracteres", Lock, errors.password, register)}
+                            {createLabelsAndInputs("password", "Mínimo de 8 caracteres", Lock, errors.password, register)}
 
-                        {createLabelsAndInputs("confirmPassword", "Confirme sua senha", Lock, errors.confirmPassword, register)}
+                            {createLabelsAndInputs("confirmPassword", "Confirme sua senha", Lock, errors.confirmPassword, register)}
 
-                        {/* </div> */}
+                            {/* </div> */}
 
 
-                        {/* BUTTON */}
-                        <Button className='w-full h-11 text-base bg-blue-500 hover:bg-blue-700'
-                            type="submit"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ?
-                                (
-                                    <>
-                                        <Loader2 className="h-5 w-5 animate-spin" />
-                                        <span>Criando conta...</span>
-                                    </>
-                                ) :
-                                (
-                                    <>
-                                        Criar conta
-                                        <ArrowRightIcon className="h-5 w-5" />
-                                    </>
-                                )}
-                        </Button>
+                            {/* BUTTON */}
+                            <Button className='w-full h-11 text-base bg-blue-500 hover:bg-blue-700'
+                                type="submit"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ?
+                                    (
+                                        <>
+                                            <Loader2 className="h-5 w-5 animate-spin" />
+                                            <span>Criando conta...</span>
+                                        </>
+                                    ) :
+                                    (
+                                        <>
+                                            Criar conta
+                                            <ArrowRightIcon className="h-5 w-5" />
+                                        </>
+                                    )}
+                            </Button>
 
-                        {/* GOOGLE */}
-                        {/* <Button
+                            {/* GOOGLE */}
+                            {/* <Button
                         variant="outline"
                         className="h-11 w-full text-base"
                     >
                         Continue with Google
                     </Button> */}
 
-                        {/* FOOTER */}
-                        <p className="text-center text-sm text-muted-foreground">
-                            Já tem uma conta?{" "}
-                            <Link
-                                href="/sign-in"
-                                className="font-medium text-blue-600 hover:underline"
-                            >
-                                Entrar
-                            </Link>
-                        </p>
-                    </CardContent>
-                </Card>
+                            {/* FOOTER */}
+                            <p className="text-center text-sm text-muted-foreground">
+                                Já tem uma conta?{" "}
+                                <Link
+                                    href="/sign-in"
+                                    className="font-medium text-blue-600 hover:underline"
+                                >
+                                    Entrar
+                                </Link>
+                            </p>
+                        </CardContent>
+                    </Card>
+                </div>
             </form>) :
             (
                 <VerifyEmailPage email={email} />

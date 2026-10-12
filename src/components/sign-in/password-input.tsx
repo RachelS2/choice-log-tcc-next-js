@@ -39,21 +39,21 @@ export default function PasswordInput<
         {...register(name)}
       />
 
-      <button
+      <Button
         type="button"
-        // variant="ghost"
-        //size="icon"
-        onClick={() =>
-          setShowPassword(!showPassword)
-        }
-        className="absolute right-1 !text-base top-1/2 h-8 w-8 -translate-y-1/2 cursor-pointer hover:bg-transparent"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setShowPassword((previous) => !previous);
+        }}
+        className="absolute right-1 top-1/2 z-10 h-8 w-8 -translate-y-1/2 border-none bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0"
       >
         {showPassword ? (
-          <EyeOff className="h-5 w-5 text-neutral-800" />
+          <EyeOff className="h-5 w-5 pointer-events-none text-neutral-800" />
         ) : (
-          <Eye className="h-5 w-5 text-neutral-800" />
+          <Eye className="h-5 w-5 pointer-events-none text-neutral-800" />
         )}
-      </button>
+      </Button>
     </div>
   );
 }

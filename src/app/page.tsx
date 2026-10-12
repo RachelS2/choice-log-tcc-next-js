@@ -14,7 +14,7 @@ export default async function HomePage() {
       redirect("/dashboard")
   }
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 w-full via-white to-blue-100">
       {/* Ambient blur orb */}
       {/* Top left */}
       <div className="absolute -top-24 left-1/4 h-[280px] w-[300px] rounded-full bg-blue-300/20 blur-3xl" />

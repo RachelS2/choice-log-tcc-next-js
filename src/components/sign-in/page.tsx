@@ -93,13 +93,13 @@ export default function LoginForm() {
     const [isResendingEmail, setIsResendingEmail] = useState(false);
     // rememberMe falso = sessão acaba ao fechar navegador, true = sessão persiste por 7 dias ou até o usuário deslogar manualmente
     return (
-        <form onSubmit={handleSubmit(handleOnSubmit)} className="flex flex-col items-start w-full max-w-md min-h-[calc(100vh-96px)] justify-center p-10">
-            <Card className='w-full py-4 max-w-md rounded-3xl bg-card shadow-xl border-neutral-200'>
+        <form onSubmit={handleSubmit(handleOnSubmit)} className="flex flex-col items-start w-full max-w-md sm:max-w-md min-h-[calc(100vh-96px)] justify-center px-4 sm:px-10 py-6">
+            <Card className='w-full py-4 rounded-3xl bg-card shadow-xl border-neutral-200'>
                 <CardHeader className=' text-center'>
-                    <CardTitle className='text-3xl'>Entrar</CardTitle>
-                    <CardDescription className='text-xl'>Acesse sua conta</CardDescription>
+                    <CardTitle className='text-2xl sm:text-3xl'>Entrar</CardTitle>
+                    <CardDescription className='text-base sm:text-xl'>Acesse sua conta</CardDescription>
                 </CardHeader>
-                <CardContent className=' px-4 space-y-2'>
+                <CardContent className=' px-2 sm:px-4 space-y-2'>
 
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">

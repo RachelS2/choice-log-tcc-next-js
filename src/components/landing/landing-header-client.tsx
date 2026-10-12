@@ -1,46 +1,53 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import AppLogo from "@/components/ui/choicelog-app-logo";
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
+import AppLogo from "@/components/ui/choicelog-app-logo";
 
-export default function LandingHeaderClient({ userIsLoggedIn }: { userIsLoggedIn: boolean }) {
-  const [path, setPath] = useState("");
+interface LandingHeaderClientProps {
+  userIsLoggedIn: boolean;
+}
 
-  function handleLogoClick() {
-    if (window.history.length > 1) {
-      userIsLoggedIn ? setPath("/dashboard") : setPath("/");
-    } else {
-      setPath("/");
-    }
-  }
+export default function LandingHeaderClient({
+  userIsLoggedIn,
+}: LandingHeaderClientProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const logoHref = userIsLoggedIn ? "/dashboard" : "/";
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white border-b border-neutral-200 blackdrop-blur">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-neutral-200 bg-white">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
-        <button onClick={handleLogoClick}>
-          <AppLogo href={path} textColor="text-gray-900" />
-        </button>
+        {/* Logo */}
+        <AppLogo
+          href={logoHref}
+          textColor="text-gray-900"
+        />
 
         {!userIsLoggedIn && (
-          <nav className="flex items-center gap-2 sm:gap-4">
-            <Link
-              href="/sign-in"
-              className="hidden text-lg font-medium text-neutral-600 hover:text-blue-500 sm:inline-block"
-            >
-              Entrar
-            </Link>
+          <>
+            {/* Navegação desktop */}
+            <nav className="hidden items-center gap-4 sm:flex">
+              <Link
+                href="/sign-in"
+                className="sm:text-md lg:text-lgfont-medium text-neutral-600 hover:text-blue-500"
+              >
+                Entrar
+              </Link>
 
-            <Button
-              asChild
-              variant="ghost"
-              className="bg-blue-600 h-10 text-lg shadow-sm text-white hover:text-offWhite hover:bg-blue-700"
-            >
-              <Link href="/sign-up">Cadastre-se</Link>
-            </Button>
-          </nav>
+              <Button
+                asChild
+                className="h-10 bg-blue-600 text-white hover:bg-blue-700"
+              >
+                <Link href="/sign-up">
+                  Cadastre-se
+                </Link>
+              </Button>
+            </nav>
+          </>
         )}
       </div>
     </header>

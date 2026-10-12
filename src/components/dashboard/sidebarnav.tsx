@@ -15,7 +15,7 @@ export function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex-1 space-y-1 px-3 py-4">
+    <nav className="flex-1 space-y-1 px-3 py-4 lg:space-y-1">
 
       {/* Dashboard */}
       {buildMenuOption(pathname, "/dashboard", "Dashboard", LayoutDashboard)}
@@ -48,13 +48,13 @@ function buildMenuOption(pathname: string, href: string, label: string, Icon: Re
     <Link
       href={href}
       className={cn(
-        "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+        "flex w-full touch-manipulation items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors lg:py-2",
         getIsActive(href)
           ? "bg-blue-50 text-blue-700"
           : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
       )}
     >
-      <Icon className="h-4 w-4" />
+      <Icon className="h-4 w-4 shrink-0" />
       {label}
     </Link>
   )

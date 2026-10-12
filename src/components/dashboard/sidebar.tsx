@@ -9,13 +9,13 @@ import UserIcon from '../ui/choicelog-user-icon';
 export default async function Sidebar() {
   const session = await auth.api.getSession({
     headers: await headers(),
-});
+  });
   if (!session) {
     redirect("/sign-in");
   }
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 flex flex-col">
-      <div className="flex h-16 items-center border-b border-gray-200 bg-white px-6">
+    <aside className="w-full border-b border-gray-200 bg-white lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-64 lg:border-r lg:border-b-0 lg:flex lg:flex-col">
+      <div className="flex h-16 items-center border-b border-gray-200 bg-white px-6 lg:border-b lg:border-gray-200">
         <AppLogo
           href="/dashboard"
           textColor="text-gray-900"
@@ -24,7 +24,7 @@ export default async function Sidebar() {
 
       <SidebarNav />
 
-      <div className="p-4 border-t border-gray-200">
+      <div className="border-t border-gray-200 p-4 lg:border-t">
         <div className="flex items-center gap-3">
           <UserIcon
             name={session.user.name}
@@ -32,8 +32,8 @@ export default async function Sidebar() {
             className="h-9 w-9"
           />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">{session.user.name}</p>
-            <p className="text-xs text-gray-500 truncate">{session.user.email}</p>
+            <p className="truncate text-sm font-medium text-gray-900">{session.user.name}</p>
+            <p className="truncate text-xs text-gray-500">{session.user.email}</p>
           </div>
           {/* <div className="relative">
             <Button

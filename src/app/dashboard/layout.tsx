@@ -14,9 +14,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${kaiseiTokumin.variable} font-sans antialiased flex min-h-screen `}>
+    <div className={`${kaiseiTokumin.variable} font-sans antialiased flex min-h-screen flex-col lg:flex-row`}>
       <Sidebar />
-      <main className="ml-64 min-h-screen flex-1 relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+      <main className="relative min-h-screen flex-1 overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 lg:ml-64">
 
         {/* Grid */}
         {/* <div
@@ -30,7 +30,7 @@ export default function DashboardLayout({
           }}
         /> */}
 
-        {/* Background */} 
+        {/* Background */}
         <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-0">
 
           {/* Top left */}

@@ -320,6 +320,7 @@ function FilterSelect<T extends string>({
   addLabel = true,
 }: FilterSelectProps<T>) {
   const hasValue = value && value !== "all";
+  let previousType: string | undefined;
 
   return (
     <div className="min-w-0">
@@ -338,12 +339,39 @@ function FilterSelect<T extends string>({
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
-        <SelectContent className="max-w-[calc(100vw-2rem)]">
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value} className="text-sm">
-              {option.label}
-            </SelectItem>
-          ))}
+        <SelectContent
+          sideOffset={1}
+          position="popper"
+          className="
+              max-h-80
+              w-[var(--radix-select-trigger-width)]
+              min-w-[var(--radix-select-trigger-width)]
+              overflow-y-auto
+            "
+        >
+          {options.map((option) => {
+            const showGroupHeader =
+              option.type &&
+              option.type !== previousType;
+
+            previousType = option.type;
+
+            return (
+              <React.Fragment key={option.value}>
+                {showGroupHeader && (
+                  <div className="px-2 py-1.5 text-[14px] font-semibold uppercase tracking-wider text-blue-900">
+                    {option.type === "PRODUCT"
+                      ? "Categorias de produtos"
+                      : "Categorias de serviços"}
+                  </div>
+                )}
+
+                <SelectItem value={option.value}>
+                  {option.label}
+                </SelectItem>
+              </React.Fragment>
+            );
+          })}
         </SelectContent>
       </Select>
     </div>

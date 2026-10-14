@@ -32,8 +32,7 @@ export default function LogoutButton() {
       <Button
         variant="outline"
         type="button"
-        size="sm"
-        className="w-24 h-9 text-blue-500 bg-white/80 text-md shadow-md hover:text-blue-600"
+        className="w-full h-9 text-blue-500 bg-white/80 text-md shadow-md  sm:w-24 hover:text-blue-600"
         onClick={() => setOpen(true)}
       >
         Sair

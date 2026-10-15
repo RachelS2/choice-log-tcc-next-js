@@ -42,7 +42,7 @@ export function NotificationContent({
         <DecorativeBackground />
 
         <div className="mb-5 flex flex-col items-center text-center sm:mb-6">
-          <div className={cn("mb-4 grid size-12 place-items-center rounded-full bg-blue-900 sm:size-14", iconClassName)}>
+          <div className={cn("mb-4 grid size-12 place-items-center rounded-full bg-blue-700 sm:size-14")}>
             <Icon className="size-5 text-white sm:size-7" strokeWidth={2} />
           </div>
           <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight text-black">
@@ -87,7 +87,7 @@ export function ErrorNotification({ title, description, redirectTo, buttonText }
         description={description}
         children={
           redirectTo &&
-          <Button className="bg-blue-900 text-white hover:bg-blue-800" onClick={() => {
+          <Button className="bg-blue-700 text-white hover:bg-blue-800" onClick={() => {
             redirect(redirectTo)
           }}>
             {btnTxt}

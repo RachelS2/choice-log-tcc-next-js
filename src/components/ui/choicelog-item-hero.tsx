@@ -25,11 +25,11 @@ export function ItemHero({
     avatarClassName,
 }: ItemHeroProps) {
     return (
-        <div className="flex min-w-0 items-center gap-3">
+        <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center">
             {/* Avatar */}
             <div
                 className={cn(
-                    "flex h-14 w-14 shrink-0 items-center justify-center",
+                    "flex h-14 w-14 shrink-0 items-center transition-shadow justify-center",
                     "overflow-hidden rounded-xl",
                     "border-2 border-white shadow-md",
                     "bg-gradient-to-br from-blue-50 to-sky-50/50",
@@ -50,7 +50,7 @@ export function ItemHero({
             </div>
 
             {/* Conteúdo */}
-            <div className="flex min-w-0 flex-1 gap-9">
+            <div className="flex min-w-0 w-full flex-1 flex-col gap-3 sm:flex-row sm:gap-9">
 
                 {/* Lado esquerdo */}
                 <div className="min-w-0 flex-1">
@@ -86,13 +86,13 @@ export function ItemHero({
                     )}
 
                     {/* Badges */}
-                    <div className="mt-2 flex min-w-0 flex-1 items-center gap-2">
+                    <div className="mt-2 flex min-w-0 flex-wrap items-center gap-2">
                         <Badge
                             variant="secondary"
                             className={cn(
                                 "inline-flex shrink-0 items-center gap-1.5",
                                 "rounded-full border px-2.5 py-1",
-                                "border-blue-900 bg-blue-900/90",
+                                "border-blue-700 bg-blue-700",
                                 "text-xs font-semibold text-white shadow-none"
                             )}
                         >
@@ -110,8 +110,8 @@ export function ItemHero({
                             className={cn(
                                 "inline-flex shrink-0 items-center",
                                 "rounded-full border px-2.5 py-1",
-                                "border-blue-900 bg-white",
-                                "text-xs font-medium text-blue-900 shadow-none"
+                                "border-blue-800 bg-white",
+                                "text-xs font-medium text-blue-800 shadow-none"
                             )}
                         >
                             {item.categoryName}
@@ -120,12 +120,12 @@ export function ItemHero({
                 </div>
 
                 {/* Lado direito */}
-                <div className="flex w-48 shrink-0 flex-col items-end gap-2">
-                    <div className="">
-                        {topRight && <div>{topRight}</div>}
+                <div className="flex w-full min-w-0 shrink-0 flex-col items-start gap-2 sm:w-48 sm:items-end">
+                    <div className="w-full min-w-0 sm:w-auto">
+                        {topRight && <div className="min-w-0">{topRight}</div>}
 
-                        {middleRight && <div>{middleRight}</div>}
-                        {bottomRight && <div>{bottomRight}</div>}
+                        {middleRight && <div className="min-w-0">{middleRight}</div>}
+                        {bottomRight && <div className="min-w-0">{bottomRight}</div>}
                     </div>
 
                 </div>

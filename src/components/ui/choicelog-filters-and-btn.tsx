@@ -67,7 +67,7 @@ export function FiltersSearchAndButton({
 
                 <Button
                     onClick={onButtonClick}
-                    className="h-11 w-full bg-blue-800 text-white hover:bg-blue-900 hover:text-white sm:w-auto"
+                    className="h-11 w-full bg-blue-700 text-white hover:bg-blue-800 hover:text-white sm:w-auto"
                 >
                     <Plus className="size-4" />
                     <span className="truncate">{btnTxt}</span>

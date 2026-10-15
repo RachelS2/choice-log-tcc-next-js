@@ -180,6 +180,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   max-width: 100vw;
   overflow-x: hidden;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #dbeafe 100%);
 }
 
 /* Ensure the app fills the viewport and remove default body margins for consistent mobile layout */
@@ -188,6 +189,7 @@ body {
   min-height: 100%;
   margin: 0;
   padding: 0;
+  width: 100%;
 }
 
 body {

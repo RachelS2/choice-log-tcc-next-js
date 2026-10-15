@@ -78,7 +78,7 @@ export default function AnalyticsPageComponent({ consumptions, categories, consu
                 <NotificationContent icon={Box} title="Nada por aqui!"
                     children={
 
-                        <Button className="bg-blue-900 text-white hover:bg-blue-800" onClick={() => {
+                        <Button className="bg-blue-700 text-white hover:bg-blue-800" onClick={() => {
                             patchFilters(defaultFilters)
                         }}>
                             Limpar Filtros

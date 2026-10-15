@@ -11,7 +11,7 @@ export default function ItemsHeader() {
         <PageHeader
           header="Produtos e Serviços Registrados"
           className="justify-start"
-          lineAfter
+          lineBefore
         />
 
         <PageTitle

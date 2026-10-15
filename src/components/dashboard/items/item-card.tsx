@@ -75,16 +75,17 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
       className="
     group relative flex h-full flex-col
     overflow-hidden rounded-2xl
-    border border-neutral-200
-    bg-white
-    shadow-md
+    border-l border-b border-neutral-200
+    bg-gradient-to-br from-blue-50 to-sky-50/50
+    shadow-md 
     transition-all duration-300 ease-out
+    shadow-blue-500
     hover:-translate-y-1
-    hover:shadow-blue-500
-    hover:shadow-lg hover:shadow-blue-100/0
+    hover:bg-blue-300
+    hover:shadow-lg
   "
     >
-      <div className="flex h-full flex-col p-5">
+      <div className="flex h-full flex-col p-5 ">
         {/* Header */}
         <div className="mb-5 flex items-start justify-between">
           <ItemHero item={item} />
@@ -105,9 +106,8 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
           rounded-lg
           text-neutral-400
           transition-all
-          hover:bg-blue-50
+          hover:bg-blue-100
           hover:text-blue-600
-          hover:shadow-sm
           disabled:cursor-not-allowed
           disabled:opacity-40
         "
@@ -126,7 +126,6 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
           transition-all
           hover:bg-red-50
           hover:text-red-600
-          hover:shadow-sm
         "
               aria-label="Delete"
             >
@@ -138,7 +137,7 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
         </div>
 
         {/* Divider */}
-        <div className="mb-4 h-px bg-neutral-200" />
+        <div className="mb-4 h-px bg-offWhite" />
 
         {/* Stats */}
         <div className="flex-1 space-y-3">
@@ -167,10 +166,10 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
           transition-all duration-200
           hover:-translate-y-0.5
           hover:border-blue-900
-          hover:bg-blue-900/90
+          hover:bg-blue-800
           cursor-pointer
           hover:text-white
-          bg-blue-900
+          bg-blue-700
           border-none
           shadow-none
           hover:shadow-md

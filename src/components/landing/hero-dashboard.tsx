@@ -24,7 +24,7 @@ function GraphSubtitle({ subtitle, value }: { subtitle: string, value: string })
 }
 export default function HeroDashboardSection() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 sm:pt-30 sm:pb-24">
+    <section className="relative  overflow-hidden pt-32 pb-20 sm:pt-30 sm:pb-24">
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">

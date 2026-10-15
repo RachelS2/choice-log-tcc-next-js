@@ -72,7 +72,7 @@ export function PageTitle({
                 font-semibold
                 leading-tight
                 tracking-[-0.02em]
-                text-blue-800
+                text-blue-700
                 sm:text-4xl
                 `,
                 className

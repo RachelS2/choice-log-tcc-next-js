@@ -26,8 +26,8 @@ export default function ConsumptionCreatedPage({ itemName, onButtonClick }: Cons
                     onClick={onButtonClick}
                 >
 
-                    Registrar outro
                     <Plus className="size-4" />
+                    Registrar outra
                 </Button>
                 <Button asChild variant="ghost" className="h-11 mt-4 hover:text-blue-900 w-full">
                     <Link href="/dashboard/experiences">Ver experiência <ChevronRight className="size-4" /></Link>

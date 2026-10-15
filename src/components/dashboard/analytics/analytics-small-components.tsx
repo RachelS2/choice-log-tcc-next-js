@@ -15,8 +15,15 @@ export function InsightCard({
     return (
         <Card
             className={cn(
-                " bg-blue-50/60",
-                "shadow-md hover:-translate-y-1 hover:bg-blue-300 shadow-blue-700 border-none transition-shadow hover:shadow-lg"
+                "bg-blue-50/60 group relative flex h-full flex-col overflow-hidden rounded-2xl border-l ",
+                "border-b border-neutral-200",
+                "bg-gradient-to-br from-blue-50 to-sky-50/50",
+                "shadow-sm ",
+                "transition-all duration-300 ease-out",
+                "shadow-blue-500",
+                "hover:-translate-y-1",
+                "hover:bg-blue-300",
+                "hover:shadow-lg"
             )}
         >
             <CardContent className="p-4">

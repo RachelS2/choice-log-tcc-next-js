@@ -23,6 +23,20 @@ function GraphSubtitle({ subtitle, value }: { subtitle: string, value: string })
   );
 }
 export default function HeroDashboardSection() {
+  const categories = [
+    { name: "Alimentação", value: 15 },
+    { name: "Eletrônicos", value: 8 },
+    { name: "Cuidados Pessoais", value: 18 },
+    { name: "Casa", value: 12 },
+    { name: "Lazer", value: 6 },
+    { name: "Vestuário", value: 9 },
+    { name: "Outros", value: 14 },
+  ];
+
+  const maxValue = Math.max(
+    ...categories.map((category) => category.value),
+    1
+  );
   return (
     <section className="relative  overflow-hidden pt-32 pb-20 sm:pt-30 sm:pb-24">
 
@@ -110,21 +124,34 @@ export default function HeroDashboardSection() {
               {/* Mini chart */}
               <div className="mt-6 rounded-xl bg-neutral-50 p-4">
                 <div className="mb-3 flex items-center justify-between">
-                  <span className="text-s font-medium text-neutral-600">
-                    Sua satisfação de consumo ao longo do tempo
+                  <span className="text-sm font-medium text-neutral-600">
+                    Suas categorias mais consumidas
                   </span>
                   <TrendingUp className="h-4 w-4 text-blue-600" />
                 </div>
-                <div className="flex h-20 items-end gap-1.5">
-                  {[35, 50, 42, 65, 58, 78, 72, 88, 82, 92, 85, 95].map(
-                    (h, i) => (
-                      <div
-                        key={i}
-                        className="flex-1 rounded-t bg-gradient-to-t from-blue-500 to-blue-400"
-                        style={{ height: `${h}%` }}
-                      />
-                    ),
-                  )}
+
+                <div className="flex items-center">
+                  {categories.map((category) => (
+                    <div
+                      key={category.name}
+                      className="flex min-w-0 flex-1 flex-col items-center gap-2"
+                    >
+                      {/* Barra */}
+                      <div className="flex h-20 w-full items-end justify-center">
+                        <div
+                          className="w-3/4 rounded-t bg-gradient-to-t from-blue-500 to-blue-400"
+                          style={{
+                            height: `${(category.value / maxValue) * 100}%`,
+                          }}
+                        />
+                      </div>
+
+                      {/* Legenda no eixo X */}
+                      <span className="w-full truncate text-center text-[10px] text-neutral-600">
+                        {category.name}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 

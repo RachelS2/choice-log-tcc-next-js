@@ -1,127 +1,273 @@
+
+"use client";
+
 import {
+    ChevronRight,
     CalendarDays,
-    CircleHelp,
-    LucideIcon,
-    Sparkles,
+    Package,
     ThumbsDown,
-    ThumbsUp, Wallet
+    ThumbsUp,
+    Wrench,
 } from "lucide-react";
-import { cn, formatDate } from "@/lib/utils";
-import { ItemHero } from "@/components/ui/choicelog-item-hero";
+
+import { formatDate, getInitials } from "@/lib/utils";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
-import { BasicItemModel } from "@/models/dashboard/items";
 import { RatingStars } from "@/components/ui/rating-starts";
-import DecorativeBackground from "@/components/ui/choicelog-decorative-background";
 
 export interface ConsumptionListProps {
     consumptionAndItem: ReadConsumptionModel;
     onOpen: (c: ReadConsumptionModel) => void;
 }
 
-export function ConsumptionCard({
-    consumptionAndItem,
-    onOpen,
-}: ConsumptionListProps
-) {
-    const item: BasicItemModel = consumptionAndItem.item;
-    const consumption = consumptionAndItem;
+const currencyFormatter = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+});
 
-    let wouldBuyAgainIcon: LucideIcon = ThumbsUp;
-    let wouldBuyAgainStr: string = "Compraria novamente"
-    if (!consumption.wouldBuyAgain) {
-        wouldBuyAgainIcon = ThumbsDown;
-        wouldBuyAgainStr = "Não compraria novamente"
-    }
+
+export function ConsumptionCard({
+    consumptionAndItem: consumption,
+    onOpen,
+}: ConsumptionListProps) {
+    const { item } = consumption;
+
+    const isService = item.type === "SERVICE";
 
     return (
-        <article className="h-full">
+        <article className="group h-full min-w-0">
             <button
                 type="button"
-                onClick={() => onOpen(consumptionAndItem)}
+                onClick={() => onOpen(consumption)}
                 aria-label={`Ver detalhes de ${item.friendlyName}`}
                 className="
-      group flex min-h-[200px] w-full flex-col
-      overflow-hidden
-      rounded-2xl border border-neutral-200 bg-white
-      p-3 text-left shadow-md
-      transition-all duration-200 ease-out
-      cursor-pointer
-      hover:-translate-y-1 hover:shadow-blue-900
-      hover:shadow-lg  hover:shadow-blue-100/0
-      focus-visible:ring-2 focus-visible:ring-ring/50
-      sm:p-5
-    "
-                style={{ boxShadow: "var(--shadow-card)" }}
+        flex h-full min-w-0 w-full cursor-pointer
+        flex-col rounded-2xl
+        p-4 text-left 
+        overflow-hidden rounded-2xl shadow-b shadow-l
+        border-l border-b border-blue-200
+        shadow-sm shadow-blue-200
+        bg-white
+        transition-all duration-300 ease-out
+        hover:-translate-y-1
+        hover:bg-blue-50
+        hover:bg-gradient-to-br from-blue-50 to-sky-50/50
+        hover:shadow-blue-500
+        hover:shadow-lg
+        focus-visible:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-blue-500
+        sm:p-5
+        "
             >
-                <DecorativeBackground />
+                {/* Header */}
+                <div className="flex w-full min-w-0 items-start gap-3">
+                    {/* Avatar */}
+                    <div
+                        className="
+              flex size-14 shrink-0 items-center
+              justify-center overflow-hidden
+              rounded-xl bg-gradient-to-br
+              from-blue-500 to-indigo-500
+              text-sm font-bold text-white
+              shadow-sm sm:size-16
+            "
+                    >
+                        {item.imageUrl ? (
+                            <img
+                                src={item.imageUrl}
+                                alt=""
+                                className="h-full w-full object-cover"
+                            />
+                        ) : (
+                            getInitials(item.friendlyName)
+                        )}
+                    </div>
 
-                <ItemHero
-                    item={item}
-                    avatarClassName="h-16 w-16 sm:h-18 sm:w-18"
-                    friendlyNameClassName="text-md sm:text-base"
-                    brandClassName="text-xs sm:text-sm"
-                    titleContent={
-                        <RatingStars
-                            size="xsm"
-                            value={consumption.rating}
-                        />
-                    }
-                    topRight={CardDetails(wouldBuyAgainIcon, wouldBuyAgainStr, "text-xs sm:text-sm")}
-                    middleRight={CardDetails(CalendarDays, formatDate(consumption.date.toString()), "text-xs sm:text-sm")}
-                    bottomRight={CardDetails(Wallet, "R$ " + consumption.price.toFixed(2), "text-xs sm:text-sm")}
-                />
+                    {/* Item e preço */}
+                    <div className="flex min-w-0 flex-1 flex-col gap-2">
+                        <div className="flex min-w-0 flex-wrap items-start justify-between gap-x-3 gap-y-2">
+                            <div className="min-w-0 flex-1">
+                                <h3 className="break-words text-base font-semibold leading-snug text-slate-900">
+                                    {item.friendlyName}
+                                </h3>
 
+                                {item.brand && (
+                                    <p className="mt-0.5 break-words text-xs text-slate-500">
+                                        {item.brand}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="shrink-0 sm:text-right">
+                                <p className="text-[11px] text-slate-400">
+                                    Valor gasto
+                                </p>
+                                <p className="text-base font-bold tabular-nums text-slate-900">
+                                    {currencyFormatter.format(consumption.price)}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Tipo e categoria */}
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span
+                                className="
+                  inline-flex items-center gap-1
+                  rounded-full bg-blue-50
+                  px-2.5 py-1 text-[11px]
+                  font-semibold text-blue-700
+                "
+                            >
+                                {isService ? (
+                                    <Wrench className="size-3" />
+                                ) : (
+                                    <Package className="size-3" />
+                                )}
+
+                                {isService ? "Serviço" : "Produto"}
+                            </span>
+
+                            <span className="text-xs text-slate-500">
+                                {item.categoryName}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Avaliação e recompra */}
                 <div
                     className="
-                    mt-4 grid
-                    grid-cols-1 gap-2
-                    border-t border-border/60 pt-3
-                    text-xs text-muted-foreground
-                    sm:grid-cols-[minmax(0,1fr)_12rem]
-                    "
+            mt-4 flex w-full flex-wrap
+            items-center justify-between
+            gap-x-4 gap-y-3
+            border-t border-slate-100 pt-4
+          "
                 >
-                    {CardDetails(
-                        CircleHelp,
-                        "Motivo: " + consumption.reason.friendlyName,
-                        "text-xs sm:text-sm"
-                    )}
+                    <div className="flex items-center gap-2">
+                        <RatingStars
+                            value={consumption.rating}
+                            size="xsm"
+                        />
 
-                    {CardDetails(
-                        Sparkles,
-                        "Influência: " + consumption.influence.friendlyName,
-                        "text-xs sm:text-sm"
-                    )}
+                        <span className="text-xs font-medium text-slate-500">
+                            {consumption.rating}/5
+                        </span>
+                    </div>
+
+                    <div
+                        className={`inline-flex items-center gap-1.5 text-xs font-medium ${consumption.wouldBuyAgain
+                            ? "text-emerald-700"
+                            : "text-rose-600"
+                            }`}
+                    >
+                        {consumption.wouldBuyAgain ? (
+                            <ThumbsUp className="size-3.5" />
+                        ) : (
+                            <ThumbsDown className="size-3.5" />
+                        )}
+
+                        <span>
+                            {consumption.wouldBuyAgain
+                                ? "Compraria novamente"
+                                : "Não compraria novamente"}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Motivo e influência */}
+                <div
+                    className="
+            mt-4 grid w-full min-w-0
+            grid-cols-1 gap-3
+            rounded-xl bg-blue-50
+            p-3 sm:grid-cols-2 group-hover:bg-blue-100
+          "
+                >
+                    <div className="min-w-0">
+                        <p className="mb-1 text-[11px] text-slate-500">
+                            Motivo
+                        </p>
+                        <p className="break-words text-sm font-medium leading-snug text-blue-900">
+                            {consumption.reason.friendlyName}
+                        </p>
+                    </div>
+
+                    <div className="min-w-0">
+                        <p className="mb-1 text-[11px] text-slate-500">
+                            Influência
+                        </p>
+                        <p className="break-words text-sm font-medium leading-snug text-blue-900">
+                            {consumption.influence.friendlyName}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Footer */}
+                <div
+                    className="
+            mt-auto flex w-full flex-wrap
+            items-center justify-between
+            gap-2 pt-4
+          "
+                >
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                        <CalendarDays className="size-3.5" />
+                        <span>{formatDate(consumption.date.toString())}</span>
+                    </div>
+
+                    <div
+                        className="
+              inline-flex items-center gap-1
+              text-xs font-semibold text-blue-600
+              transition-colors
+              group-hover:text-blue-700
+            "
+                    >
+                        Ver detalhes
+                        <ChevronRight className="size-3.5" />
+                    </div>
                 </div>
             </button>
         </article>
     );
 }
 
-function CardDetails(Icon: LucideIcon, spanContent: string, className?: string) {
-    return (
-        <span className={cn("inline-flex min-w-0 items-center gap-1.5 text-left", className)}>
-            <Icon className={cn("size-3.5 shrink-0 text-blue-900", className)} />
-            <span className={cn("min-w-0 break-words text-muted-foreground", className)}>
-                {spanContent}
-            </span>
-        </span>
-    )
-}
 
 export function ConsumptionCardSkeleton() {
     return (
-        <div
-            className="rounded-2xl border border-border bg-card p-4 sm:p-5"
-            style={{ boxShadow: "var(--shadow-card)" }}
-        >
-            <div className="flex animate-pulse gap-4">
-                <div className="size-16 shrink-0 rounded-xl bg-muted sm:size-20" />
-                <div className="flex-1 space-y-2.5">
-                    <div className="h-4 w-2/5 rounded bg-muted" />
-                    <div className="h-3 w-1/4 rounded bg-muted" />
-                    <div className="h-5 w-1/3 rounded-full bg-muted" />
-                    <div className="h-3 w-3/5 rounded bg-muted" />
+        <div className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+            <div className="flex animate-pulse gap-3">
+                <div className="size-14 shrink-0 rounded-xl bg-slate-200 sm:size-16" />
+
+                <div className="flex-1 space-y-2">
+                    <div className="flex justify-between gap-3">
+                        <div className="h-4 w-2/5 rounded bg-slate-200" />
+                        <div className="h-5 w-1/4 rounded bg-slate-200" />
+                    </div>
+                    <div className="h-3 w-1/3 rounded bg-slate-100" />
+                    <div className="h-5 w-1/2 rounded-full bg-slate-100" />
                 </div>
+            </div>
+
+            <div className="mt-4 flex justify-between border-t border-slate-100 pt-4">
+                <div className="h-4 w-28 animate-pulse rounded bg-slate-200" />
+                <div className="h-4 w-32 animate-pulse rounded bg-slate-200" />
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-3 rounded-xl bg-slate-50 p-3">
+                <div className="space-y-2">
+                    <div className="h-3 w-12 animate-pulse rounded bg-slate-200" />
+                    <div className="h-4 w-full animate-pulse rounded bg-slate-200" />
+                </div>
+                <div className="space-y-2">
+                    <div className="h-3 w-12 animate-pulse rounded bg-slate-200" />
+                    <div className="h-4 w-full animate-pulse rounded bg-slate-200" />
+                </div>
+            </div>
+
+            <div className="mt-auto flex justify-between pt-4">
+                <div className="h-3 w-24 animate-pulse rounded bg-slate-100" />
+                <div className="h-3 w-20 animate-pulse rounded bg-slate-100" />
             </div>
         </div>
     );

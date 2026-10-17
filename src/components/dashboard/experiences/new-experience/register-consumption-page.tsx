@@ -293,8 +293,8 @@ export default function RegisterConsumptionPageClient({ postItem, initialItems, 
         h-10 shrink-0
         gap-2
         rounded-lg
-        bg-gradient-to-br from-blue-100 to-blue-200
-        text-blue-800
+        bg-blue-600
+        text-white
         border-blue-200 
         px-4
         shadow-sm

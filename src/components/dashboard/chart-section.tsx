@@ -51,7 +51,8 @@ export function SatisfactionEvolutionGraph({
   data,
 }: SatisfactionEvolutionGraphProps) {
   return (
-    <Card className="rounded-2xl  bg-blue-100 py-0 shadow-md hover:-translate-y-1 hover:bg-blue-300 shadow-blue-700 border-none transition-shadow hover:shadow-lg">
+    <Card className="rounded-2xl bg-blue-100 py-0 border-l border-b border-blue-300
+    hover:-translate-y-1 hover:bg-blue-200 shadow-blue-700 transition-all duration-300 ease-out hover:shadow-lg">
       <CardContent className="p-6">
         <div className="mb-5">
           <h2 className="text-base font-semibold text-slate-900">
@@ -72,38 +73,6 @@ export function SatisfactionEvolutionGraph({
         )}
       </CardContent>
     </Card>
-  );
-}
-
-interface SatisfactionTooltipProps {
-  active?: boolean;
-  payload?: {
-    value: number;
-  }[];
-  label?: string;
-}
-
-function SatisfactionTooltip({
-  active,
-  payload,
-  label,
-}: SatisfactionTooltipProps) {
-  if (!active || !payload?.length) {
-    return null;
-  }
-
-  const rating = payload[0]?.value;
-
-  return (
-    <div className="rounded-lg border bg-white px-3 py-2 shadow-md">
-      <p className="text-xs text-muted-foreground">
-        {label}
-      </p>
-
-      <p className="mt-1 text-sm font-medium text-slate-900">
-        Avaliação média: {rating.toFixed(1).replace(".", ",")} ★
-      </p>
-    </div>
   );
 }
 
@@ -132,7 +101,8 @@ export function ExperienceDistributionGraph({
   ];
 
   return (
-    <Card className="rounded-2xl  bg-blue-100 py-0 shadow-md hover:-translate-y-1 hover:bg-blue-300 shadow-blue-700 border-none transition-shadow hover:shadow-lg">
+    <Card className="rounded-2xl bg-blue-100 py-0 border-l border-b border-blue-300 hover:-translate-y-1 hover:bg-blue-200
+     shadow-blue-700 transition-all duration-300 ease-out hover:shadow-lg">
       <CardContent className="p-6">
         <div className="mb-3">
           <h2 className="text-base font-semibold text-slate-900">

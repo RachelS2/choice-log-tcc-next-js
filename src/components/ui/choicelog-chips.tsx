@@ -28,7 +28,7 @@ export function SelectableChip({
             aria-pressed={selected}
             onClick={onClick}
             className={cn(
-                "rounded-full border cursor-pointer px-4 py-2 text-sm transition-all duration-100 shadow-sm",
+                "rounded-xl border cursor-pointer px-4 py-2 text-sm transition-all duration-100 shadow-sm",
                 "hover:-translate-y-0.5 hover:bg-blue-900 hover:text-white",
                 "focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none",
 
@@ -85,17 +85,18 @@ export function ActiveFiltersChips({
             inline-flex
             items-center
             gap-1.5
-            rounded-full
-            border
-            border-primary/30
-            bg-primary/10
+            rounded-md
+            border-none
+            shadow-sm shadow-blue-500 
+            bg-blue-100
             px-3
             py-1
             text-xs
             font-medium
-            text-primary
-            hover:bg-primary/15
-            hover:text-primary
+            text-blue-900
+            hover:bg-blue-300
+            hover:font-semibold
+            hover:text-blue-900
           "
                 >
                     {chip.label}

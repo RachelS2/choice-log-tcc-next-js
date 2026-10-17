@@ -94,7 +94,7 @@ export function PageSubtitle({
     return (
         <p
             className={cn(
-                "max-w-md text-base leading-7 text-blue-900 sm:text-base",
+                "max-w-md text-base leading-7 text-blue-900 sm:text-md",
                 className
             )}
         >

@@ -19,7 +19,7 @@ export function Pagination({
     const canLoadMore = !!onLoadMore && shown < total;
 
     return (
-        <div className="flex flex-col items-center gap-4 text-muted-foreground pt-2 sm:flex-row sm:justify-between">
+        <div className="flex flex-col items-center gap-4 text-blue-900 pt-2 sm:flex-row sm:justify-between">
             <p className="text-sm">
                 Mostrando <strong className="font-medium">{shown}</strong>{" "}
                 de <strong className="font-medium">{total}</strong>{" "}
@@ -27,12 +27,12 @@ export function Pagination({
             </p>
 
             <div className="flex items-center gap-2">
-                {canLoadMore ? (
+                {/* {canLoadMore ? (
                     <Button variant="outline" onClick={onLoadMore}>
                         <Plus className="size-4" />
                         Carregar mais
                     </Button>
-                ) : null}
+                ) : null} */}
                 {pageCount > 1 ? (
                     <>
                         <Button
@@ -40,11 +40,12 @@ export function Pagination({
                             size="icon"
                             aria-label="Página anterior"
                             disabled={page <= 1}
+                            className="bg-blue-200 border-none shadow-none hover:bg-blue-300"
                             onClick={() => onPageChange(page - 1)}
                         >
-                            <ChevronLeft className="size-4" />
+                            <ChevronLeft className="size-4 text-blue-900"/>
                         </Button>
-                        <span className="min-w-24 text-center text-sm text-muted-foreground">
+                        <span className="min-w-24 text-blue-900 text-center text-sm">
                             Página {page} de {pageCount}
                         </span>
                         <Button
@@ -52,9 +53,10 @@ export function Pagination({
                             size="icon"
                             aria-label="Próxima página"
                             disabled={page >= pageCount}
+                            className="bg-blue-200 border-none hover:bg-blue-300 shadow-none"
                             onClick={() => onPageChange(page + 1)}
                         >
-                            <ChevronRight className="size-4" />
+                            <ChevronRight className="size-4 text-blue-900" />
                         </Button>
                     </>
                 ) : null}

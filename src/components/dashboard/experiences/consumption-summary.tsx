@@ -66,11 +66,10 @@ function SummaryBadge({
             className="
         inline-flex h-10 items-center gap-2
         rounded-xl
-        border border-blue-100
-        bg-blue-100
         px-3.5
         text-sm text-slate-600
-        shadow-sm
+        shadow-sm shadow-blue-500 
+        bg-blue-200
         transition-colors
       "
         >

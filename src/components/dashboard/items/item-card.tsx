@@ -74,14 +74,15 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
     <div
       className="
     group relative flex h-full flex-col
-    overflow-hidden rounded-2xl
-    border-l border-b border-neutral-200
-    bg-gradient-to-br from-blue-50 to-sky-50/50
-    shadow-md 
+    overflow-hidden rounded-2xl shadow-b shadow-l
+    border-l border-b border-blue-200
+    shadow-sm shadow-blue-200
+    bg-white
     transition-all duration-300 ease-out
-    shadow-blue-500
     hover:-translate-y-1
-    hover:bg-blue-300
+    hover:bg-blue-50
+    hover:bg-gradient-to-br from-blue-50 to-sky-50/50
+    hover:shadow-blue-500
     hover:shadow-lg
   "
     >
@@ -92,12 +93,15 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
           {/* Actions */}
           <div
             className="
-        flex shrink-0 items-center gap-1
-        opacity-0
-        transition-all duration-200
-        group-hover:opacity-100
-      "
+    flex shrink-0 items-center gap-1
+    opacity-100
+    transition-opacity duration-200
+    hover:opacity-0
+    hover:group-hover:opacity-100
+    hover:group-focus-within:opacity-100
+  "
           >
+
             <button
               disabled={loading}
               onClick={handleEditButtonClick}
@@ -106,7 +110,6 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
           rounded-lg
           text-neutral-400
           transition-all
-          hover:bg-blue-100
           hover:text-blue-600
           disabled:cursor-not-allowed
           disabled:opacity-40
@@ -124,7 +127,6 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
           rounded-lg
           text-neutral-400
           transition-all
-          hover:bg-red-50
           hover:text-red-600
         "
               aria-label="Delete"

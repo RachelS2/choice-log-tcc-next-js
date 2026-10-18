@@ -46,7 +46,6 @@ export function ItemHero({
     );
 }
 
-
 interface ItemAvatarProps {
     item: BasicItemModel;
     className?: string;
@@ -119,8 +118,6 @@ export function ItemIdentity({
         </div>
     );
 }
-
-
 
 interface ItemTypeBadgeProps extends BadgeProps {
     item: BasicItemModel;

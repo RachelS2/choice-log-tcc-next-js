@@ -4,15 +4,14 @@
 import {
     ChevronRight,
     CalendarDays,
-    Package,
     ThumbsDown,
     ThumbsUp,
-    Wrench,
 } from "lucide-react";
 
 import { formatDate, getInitials } from "@/lib/utils";
 import { ReadConsumptionModel } from "@/models/dashboard/consumption";
 import { RatingStars } from "@/components/ui/rating-starts";
+import { ItemAvatar, ItemIdentity, ItemTypeBadge } from "@/components/ui/choicelog-item-hero";
 
 export interface ConsumptionListProps {
     consumptionAndItem: ReadConsumptionModel;
@@ -30,8 +29,6 @@ export function ConsumptionCard({
     onOpen,
 }: ConsumptionListProps) {
     const { item } = consumption;
-
-    const isService = item.type === "SERVICE";
 
     return (
         <article className="group h-full min-w-0">
@@ -62,75 +59,49 @@ export function ConsumptionCard({
                 {/* Header */}
                 <div className="flex w-full min-w-0 items-start gap-3">
                     {/* Avatar */}
-                    <div
-                        className="
-              flex size-14 shrink-0 items-center
-              justify-center overflow-hidden
-              rounded-xl bg-gradient-to-br
-              from-blue-500 to-indigo-500
-              text-sm font-bold text-white
-              shadow-sm sm:size-16
-            "
-                    >
-                        {item.imageUrl ? (
-                            <img
-                                src={item.imageUrl}
-                                alt=""
-                                className="h-full w-full object-cover"
-                            />
-                        ) : (
-                            getInitials(item.friendlyName)
-                        )}
-                    </div>
+                    <ItemAvatar
+                        item={item}
+                        className="size-14 sm:size-16"
+                    />
 
                     {/* Item e preço */}
-                    <div className="flex min-w-0 flex-1 flex-col gap-2">
+                    <div className="flex min-w-0 flex-1 flex-col">
                         <div className="flex min-w-0 flex-wrap items-start justify-between gap-x-3 gap-y-2">
-                            <div className="min-w-0 flex-1">
-                                <h3 className="break-words text-base font-semibold leading-snug text-slate-900">
-                                    {item.friendlyName}
-                                </h3>
+                            {/* Nome e marca */}
+                            <ItemIdentity
+                                item={item}
+                                className="min-w-0 flex-1"
+                                nameClassName="text-base font-semibold leading-snug text-slate-900"
+                                brandClassName="mt-0.5 text-xs text-slate-500"
+                            />
 
-                                {item.brand && (
-                                    <p className="mt-0.5 break-words text-xs text-slate-500">
-                                        {item.brand}
-                                    </p>
-                                )}
-                            </div>
-
+                            {/* Valor gasto */}
                             <div className="shrink-0 sm:text-right">
                                 <p className="text-[11px] text-slate-400">
                                     Valor gasto
                                 </p>
-                                <p className="text-base font-bold tabular-nums text-slate-900">
+
+                                <p className="text-base font-bold tabular-nums text-blue-900">
                                     {currencyFormatter.format(consumption.price)}
                                 </p>
                             </div>
                         </div>
 
                         {/* Tipo e categoria */}
-                        <div className="flex flex-wrap items-center gap-2">
-                            <span
-                                className="
-                  inline-flex items-center gap-1
-                  rounded-full bg-blue-50
-                  px-2.5 py-1 text-[11px]
-                  font-semibold text-blue-700
-                "
-                            >
-                                {isService ? (
-                                    <Wrench className="size-3" />
-                                ) : (
-                                    <Package className="size-3" />
-                                )}
-
-                                {isService ? "Serviço" : "Produto"}
-                            </span>
-
-                            <span className="text-xs text-slate-500">
-                                {item.categoryName}
-                            </span>
-                        </div>
+                        <ItemTypeBadge
+                            item={item}
+                            className="mt-1 min-w-0 max-w-full gap-2"
+                            typeClassName={{
+                                badgeClassName:
+                                "border-transparent  group-hover:bg-blue-100  bg-blue-50 px-2.5 py-1 text-blue-800",
+                                textClassName: "text-[11px] font-semibold",
+                            }}
+                            categoryClassName={{
+                                badgeClassName:
+                                    "border-transparent bg-transparent px-0 py-0 text-slate-500",
+                                textClassName: "text-xs font-normal",
+                            }}
+                        />
                     </div>
                 </div>
 
@@ -155,15 +126,12 @@ export function ConsumptionCard({
                     </div>
 
                     <div
-                        className={`inline-flex items-center gap-1.5 text-xs font-medium ${consumption.wouldBuyAgain
-                            ? "text-emerald-700"
-                            : "text-rose-600"
-                            }`}
+                        className={`inline-flex items-center gap-1.5 text-xs text-slate-500`}
                     >
                         {consumption.wouldBuyAgain ? (
-                            <ThumbsUp className="size-3.5" />
+                            <ThumbsUp className="size-3.5 text-emerald-400" />
                         ) : (
-                            <ThumbsDown className="size-3.5" />
+                            <ThumbsDown className="size-3.5 text-rose-400" />
                         )}
 
                         <span>
@@ -212,15 +180,15 @@ export function ConsumptionCard({
                 >
                     <div className="flex items-center gap-1.5 text-xs text-slate-500">
                         <CalendarDays className="size-3.5" />
-                        <span>{formatDate(consumption.date.toString())}</span>
+                        <span>Data do consumo: {formatDate(consumption.date.toString())}</span>
                     </div>
 
                     <div
                         className="
               inline-flex items-center gap-1
-              text-xs font-semibold text-blue-600
+              text-xs font-semibold text-blue-900
               transition-colors
-              group-hover:text-blue-700
+              group-hover:text-blue-800
             "
                     >
                         Ver detalhes

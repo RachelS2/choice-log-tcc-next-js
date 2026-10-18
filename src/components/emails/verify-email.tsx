@@ -18,20 +18,19 @@ interface VerifyEmailProps {
 const VerifyEmail = (props: VerifyEmailProps) => {
   const { username, verifyUrl } = props;
   return (
-    <Html dir="ltr" lang="en">
+    <Html dir="ltr" lang="pt-BR">
       <Tailwind>
         <Head />
         <Body className="bg-gray-100 py-[40px] font-sans">
           <Container className="mx-auto max-w-[600px] rounded-[8px] bg-white p-[32px]">
             <Section>
               <Text className="mt-0 mb-[16px] font-bold text-[24px] text-gray-900">
-                Verify your email address
+                Confirme seu endereço de e-mail
               </Text>
 
               <Text className="mt-0 mb-[24px] text-[16px] text-gray-700 leading-[24px]">
-                Hi, {username}!
-                To complete your registration and keep your ChoiceLog account secure, please verify your email address by
-                clicking the button below.
+                Olá, {username}!
+                Para concluir seu cadastro e manter sua conta do ChoiceLog segura, confirme seu endereço de e-mail clicando no botão abaixo.
               </Text>
 
               <Section className="mb-[32px] text-center">
@@ -39,28 +38,28 @@ const VerifyEmail = (props: VerifyEmailProps) => {
                   className="box-border rounded-[6px] bg-blue-600 px-[32px] py-[12px] font-medium text-[16px] text-white no-underline"
                   href={verifyUrl}
                 >
-                  Verify Your Email Address
+                  Confirmar meu e-mail
                 </Button>
               </Section>
 
               <Text className="mt-0 mb-[24px] text-[14px] text-gray-600 leading-[20px]">
-                If the button doesn't work, you can copy and paste this
-                link into your browser:
+                Se o botão não funcionar, você pode copiar e colar este link
+                no seu navegador:
                 <br />
                 {verifyUrl}
               </Text>
 
               <Text className="mt-0 mb-[32px] text-[14px] text-gray-600 leading-[20px]">
-                This verification link will expire in 24 hours. If you
-                didn&apos;t create an account, you can safely ignore this email.
+                Este link de verificação expira em 24 horas. Se você
+                não criou uma conta, pode ignorar este e-mail com segurança.
               </Text>
 
               <Hr className="my-[24px] border-gray-200" />
 
               <Text className="m-0 text-[12px] text-gray-500 leading-[16px]">
-                Best regards,
+                Atenciosamente,
                 <br />
-                ChoiceLog team.
+                Equipe ChoiceLog.
               </Text>
             </Section>
 
@@ -68,13 +67,13 @@ const VerifyEmail = (props: VerifyEmailProps) => {
               <Text className="m-0 text-center text-[12px] text-gray-400 leading-[16px]">
                 Choice Log
                 <br />
-                Made By Rachel Barino Silva as a Final Project (TCC) for a Information Systems Degree at Universidade Federal Fluminense (UFF)
+                Feito por Rachel Barino Silva como Trabalho de Conclusão de Curso (TCC) do curso de Sistemas de Informação da Universidade Federal Fluminense (UFF)
                 <br />
-                Niterói, Rio de Janeiro - Brazil 
+                Niterói, Rio de Janeiro - Brasil
               </Text>
 
               <Text className="m-0 mt-[8px] text-center text-[12px] text-gray-400 leading-[16px]">
-                © 2026 Choice Log. All rights reserved.
+                © 2026 Choice Log. Todos os direitos reservados.
               </Text>
             </Section>
           </Container>

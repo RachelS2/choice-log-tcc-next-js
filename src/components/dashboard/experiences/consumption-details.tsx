@@ -269,7 +269,7 @@ export function ConsumptionDetails({
                   textClassName: "text-xs",
                 }}
                   categoryClassName={{
-                    badgeClassName: "border-none bg-violet-800 text-blue-100",
+                    badgeClassName: "border-none bg-blue-900 text-blue-100",
                     textClassName: "text-xs",
                   }} />
               </div>

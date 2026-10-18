@@ -1,4 +1,4 @@
-import { Pencil, Trash2, Star, Wrench, Package } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { CategoryModel, ItemResumeModel, UpdatedItemModel } from '@/models/dashboard/items';

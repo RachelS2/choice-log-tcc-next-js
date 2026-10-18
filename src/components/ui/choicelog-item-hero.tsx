@@ -138,7 +138,7 @@ export function ItemTypeBadge({
     return (
         <div
             className={cn(
-                "flex w-max max-w-none flex-nowrap items-center gap-2",
+                "flex w-max max-w-none flex-nowrap items-center gap-1",
                 className
             )}
         >

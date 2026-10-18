@@ -22,34 +22,32 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
     const { username, resetUrl, userEmail } = props;
 
     return (
-        <Html dir="ltr" lang="en">
+        <Html dir="ltr" lang="pt-BR">
             <Tailwind>
                 <Head />
-                <Preview>Reset your password - Action required</Preview>
+                <Preview>Redefina sua senha - Ação necessária</Preview>
                 <Body className="py-[40px] font-sans">
                     <Container className="mx-auto max-w-[600px] rounded-[8px] bg-white p-[40px] shadow-sm">
                         {/* Header */}
                         <Section className="mb-[32px] text-center">
                             <Heading className="m-0 mb-[8px] font-bold text-[28px] text-gray-900">
-                                Reset Your Password
+                                Redefinir sua senha
                             </Heading>
                             <Text className="m-0 text-[16px] text-gray-600">
-                                We received a request to reset your password
+                                Recebemos uma solicitação para redefinir sua senha
                             </Text>
                         </Section>
 
                         {/* Main Content */}
                         <Section className="mb-[32px]">
                             <Text className="m-0 mb-[16px] text-[16px] text-gray-700 leading-[24px]">
-                                Hello, {username}
+                                Olá, {username}
                             </Text>
                             <Text className="m-0 mb-[16px] text-[16px] text-gray-700 leading-[24px]">
-                                We received a password reset request for your account associated
-                                with <strong>{userEmail}</strong>.
+                                Recebemos uma solicitação de redefinição de senha para sua conta associada a <strong>{userEmail}</strong>.
                             </Text>
                             <Text className="m-0 mb-[24px] text-[16px] text-gray-700 leading-[24px]">
-                                Click the button below to create a new password. This link will
-                                expire in 30 minutes for security reasons.
+                                Clique no botão abaixo para criar uma nova senha. Este link expirará em 30 minutos por motivos de segurança.
                             </Text>
                         </Section>
 
@@ -59,15 +57,14 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
                                 className="box-border inline-block rounded-[8px] bg-blue-600 px-[32px] py-[16px] font-semibold text-[16px] text-white no-underline"
                                 href={resetUrl}
                             >
-                                Reset Password
+                                Redefinir senha
                             </Button>
                         </Section>
 
                         {/* Alternative Link */}
                         <Section className="mb-[32px]">
                             <Text className="m-0 mb-[8px] text-[14px] text-gray-600 leading-[20px]">
-                                If the button doesn&apos;t work, copy and paste this link into
-                                your browser:
+                                Se o botão não funcionar, copie e cole este link no seu navegador:
                             </Text>
                             <Link
                                 className="break-all text-[14px] text-blue-600"
@@ -80,29 +77,28 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
                         {/* Security Notice */}
                         <Section className="mb-[32px] rounded-[8px] bg-gray-50 p-[20px]">
                             <Text className="m-0 mb-[8px] font-semibold text-[14px] text-gray-700 leading-[20px]">
-                                Security Notice:
+                                Aviso de segurança:
                             </Text>
                             <Text className="m-0 mb-[8px] text-[14px] text-gray-600 leading-[20px]">
-                                • If you didn&apos;t request this password reset, please ignore
-                                this email
+                                • Se você não solicitou a redefinição de senha, ignore este e-mail
                             </Text>
                             <Text className="m-0 mb-[8px] text-[14px] text-gray-600 leading-[20px]">
-                                • This link will expire in 30 minutes
+                                • Este link expirará em 30 minutos
                             </Text>
                             <Text className="m-0 text-[14px] text-gray-600 leading-[20px]">
-                                • For security, never share this link with anyone
+                                • Por segurança, nunca compartilhe este link com ninguém
                             </Text>
                         </Section>
 
                         {/* Help Section */}
                         <Section className="mb-[32px]">
                             <Text className="m-0 text-[14px] text-gray-600 leading-[20px]">
-                                Need help? Contact our support team at{" "}
+                                Precisa de ajuda? Entre em contato com a desenvolvedora: {" "}
                                 <Link
                                     className="text-blue-600"
-                                    href="mailto:support@company.com"
+                                    href="mailto:rachelbs@id.uff.br"
                                 >
-                                    support@company.com
+                                    rachelbs@id.uff.br
                                 </Link>
                             </Text>
                         </Section>
@@ -112,13 +108,13 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
                             <Text className="m-0 text-center text-[12px] text-gray-400 leading-[16px]">
                                 Choice Log
                                 <br />
-                                Made By Rachel Barino Silva as a Final Project (TCC) for a Information Systems Degree at Universidade Federal Fluminense (UFF)
+                                Feito por Rachel Barino Silva como Trabalho de Conclusão de Curso (TCC) do curso de Sistemas de Informação da Universidade Federal Fluminense (UFF)
                                 <br />
-                                Niterói, Rio de Janeiro - Brazil
+                                Niterói, Rio de Janeiro - Brasil
                             </Text>
 
                             <Text className="m-0 mt-[8px] text-center text-[12px] text-gray-400 leading-[16px]">
-                                © 2026 Choice Log. All rights reserved.
+                                © 2026 Choice Log. Todos os direitos reservados.
                             </Text>
                         </Section>
                     </Container>

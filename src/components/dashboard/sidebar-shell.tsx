@@ -135,7 +135,7 @@ export default function SidebarShell({
                             isCollapsed ? "Expandir sidebar" : "Recolher sidebar"
                         }
                         onClick={onToggle}
-                        className="hidden lg:flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg text-gray-600 shadow-none hover:bg-gray-100"
+                        className="hidden lg:flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg text-gray-600 shadow-none hover:text-gray-900 hover:bg-gray-100"
                     >
                         {isCollapsed ? (
                             <PanelLeftOpen className="size-4" />

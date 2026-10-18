@@ -11,11 +11,10 @@ import { redirect } from "next/navigation"
 export default async function HomePage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (session) {
-      redirect("/dashboard")
+    redirect("/dashboard")
   }
   return (
-    <main className="relative min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100">
-      {/* Ambient blur orb */}
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 w-full via-white to-blue-100">      {/* Ambient blur orb */}
       {/* Top left */}
       <div className="absolute -top-24 left-1/4 h-[280px] w-[300px] rounded-full bg-blue-300/20 blur-3xl" />
       {/* Top right */}

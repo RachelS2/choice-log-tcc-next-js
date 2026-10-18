@@ -179,7 +179,7 @@ export default function ItemsPageClient({ categories, items, onDeleteItemServer,
                             description="Altere os filtros ou adicione seu primeiro item.">
                             <Button
                                 variant="outline"
-                                className="bg-blue-900 text-white hover:bg-blue-950 justify-center hover:text-offWhite"
+                                className="bg-blue-700 text-white hover:bg-blue-800 justify-center hover:text-offWhite"
                                 onClick={clearFilters}
                             >
                                 Limpar filtros

@@ -89,7 +89,14 @@ export default function ItemsCard({ item, onDelete, onEdit, categories }: ItemsC
       <div className="flex h-full flex-col p-5 ">
         {/* Header */}
         <div className="mb-5 flex items-start justify-between">
-          <ItemHero item={item} />
+          <ItemHero item={item} typeClassName={{
+            badgeClassName: "bg-blue-100 text-blue-900 border-blue-100",
+            textClassName: "text-xs",
+          }}
+            categoryClassName={{
+              badgeClassName: "border-none text-slate-500",
+              textClassName: "text-xs",
+            }} />
           {/* Actions */}
           <div
             className="

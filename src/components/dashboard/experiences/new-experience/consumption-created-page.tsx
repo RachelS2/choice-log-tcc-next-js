@@ -22,7 +22,7 @@ export default function ConsumptionCreatedPage({ itemName, onButtonClick }: Cons
                 }
             >
                 <Button
-                    className="h-11 bg-blue-900 hover:bg-blue-800 shadow-md w-full"
+                    className="h-11 bg-blue-700 hover:bg-blue-800 shadow-md w-full"
                     onClick={onButtonClick}
                 >
 

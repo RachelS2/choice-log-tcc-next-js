@@ -264,7 +264,14 @@ export function ConsumptionDetails({
               />
 
               <div className=" p-3 justify-center items-center bg-blue-50 shadow-md rounded-2xl ">
-                <ItemHero item={data.item} />
+                <ItemHero item={data.item} typeClassName={{
+                  badgeClassName: "bg-blue-100 text-blue-900 border-blue-100",
+                  textClassName: "text-xs",
+                }}
+                  categoryClassName={{
+                    badgeClassName: "border-none bg-violet-800 text-blue-100",
+                    textClassName: "text-xs",
+                  }} />
               </div>
               <div className="p-1 border-b border-blue-900" />
             </div>

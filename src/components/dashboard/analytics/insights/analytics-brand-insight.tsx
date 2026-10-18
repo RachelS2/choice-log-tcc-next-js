@@ -31,9 +31,9 @@ function BestBrandResult({ bestBrandsReview }: { bestBrandsReview: BrandEvaluati
     return (
         <>
             <strong>{bestBrandsNames}</strong> {message}, com média de{" "}
-            <strong>{bestBrands[0].averageRating.toFixed(1)} ★</strong> e{" "}
+            <strong>{bestBrands[0].averageRating.toFixed(1)}</strong> estrelas e{" "}
             <strong>{bestBrands[0].repurchaseRate.toFixed(0)}%</strong> de intenção
-            de consumir novamente.
+            de recompra.
         </>
     )
 }
@@ -49,7 +49,7 @@ function WorstBrandResult({ worstBrandsReview }: { worstBrandsReview: BrandEvalu
         <>
             Já <strong>{worstBrandsNames}</strong> {verb} sua
             menor avaliação média, de{" "}
-            <strong>{worstBrandsReview.brands[0].averageRating.toFixed(1)} ★</strong>.
+            <strong>{worstBrandsReview.brands[0].averageRating.toFixed(1)}</strong> estrelas.
         </>
     )
 }

@@ -12,6 +12,13 @@ import {
 } from "recharts";
 import { ChartCard } from "../analytics-small-components";
 
+const formatCurrencyShort = (value: number) =>
+    new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        notation: "compact",
+        maximumFractionDigits: 1,
+    }).format(value);
 
 interface SpendingSatisfactionScatterGraphProps {
     data: SpendingSatisfactionPointModel[];
@@ -25,14 +32,14 @@ export function SpendingSatisfactionScatterGraph({
             title="Satisfação e Valor Gasto"
             description="Veja a relação entre o valor que você gastou e a nota que você atribuiu para cada experiência."
         >
-            <div className="h-[300px] w-full">
+            <div className="h-[360px] w-full sm:h-[320px]">
                 <ResponsiveContainer width="100%" height="100%">
                     <ScatterChart
                         margin={{
-                            top: 10,
-                            right: 20,
-                            bottom: 10,
-                            left: 10,
+                            top: 12,
+                            right: 12,
+                            bottom: 32,
+                            left: 8,
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
@@ -41,13 +48,12 @@ export function SpendingSatisfactionScatterGraph({
                             type="number"
                             dataKey="price"
                             name="Valor gasto"
-                            tickFormatter={(value) =>
-                                new Intl.NumberFormat("pt-BR", {
-                                    style: "currency",
-                                    currency: "BRL",
-                                    maximumFractionDigits: 0,
-                                }).format(value)
-                            }
+                            tick={{ fontSize: 11 }}
+                            tickLine={false}
+                            axisLine={false}
+                            minTickGap={10}
+                            tickMargin={10}
+                            tickFormatter={formatCurrencyShort}
                         />
 
                         <YAxis
@@ -57,6 +63,10 @@ export function SpendingSatisfactionScatterGraph({
                             domain={[1, 5]}
                             ticks={[1, 2, 3, 4, 5]}
                             allowDecimals={false}
+                            tick={{ fontSize: 11 }}
+                            tickLine={false}
+                            axisLine={false}
+                            width={28}
                         />
 
                         <Tooltip
@@ -94,13 +104,9 @@ function SpendingSatisfactionTooltip({
 
     return (
         <div className="rounded-lg border bg-background p-3 shadow-sm">
-            <p className="font-semibold text-slate-900">
-                {experience.itemName}
-            </p>
+            <p className="font-semibold text-slate-900">{experience.itemName}</p>
 
-            <p className="text-sm text-slate-500">
-                {experience.category}
-            </p>
+            <p className="text-sm text-slate-500">{experience.category}</p>
 
             <div className="mt-2 space-y-1 text-sm">
                 <p>
